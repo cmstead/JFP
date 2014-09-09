@@ -9,12 +9,12 @@ module.exports = function(config){
         browsers: ['PhantomJS'],
 
         files: [
-            '../src/jisp.js',
-            'jisp.spec.js'
+            '../src/jfp.js',
+            'jfp.spec.js'
         ],
 
         preprocessors: {
-            '../src/jisp.js': ['coverage']
+            '../src/jfp.js': ['coverage']
         },
 
         coverageReporter: {
