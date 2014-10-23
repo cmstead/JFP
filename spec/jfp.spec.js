@@ -17,10 +17,6 @@
                 expect(typeof j.rpartial(function(){})).toBe('function');
             });
 
-            it('should throw an error if the first argument is not a function', function(){
-                expect(function(){j.rpartial()}).toThrow();
-            });
-
             it('should return curried function', function(){
                 var spy = jasmine.createSpy('curriedFn');
 
@@ -114,6 +110,93 @@
                 j.recur(1, 2, "test", "vars", spy);
 
                 expect(spy).toHaveBeenCalledWith(1, 2, "test", "vars");
+            });
+
+        });
+
+        describe('map', function(){
+
+            function userFn(value){
+                return value
+            } //Use this when testing collection-related stuff
+
+            it("should return an array when an array is passed", function(){
+                var returnedCollection = j.map(userFn, []);
+
+                expect(Object.prototype.toString.call(returnedCollection)).toBe('[object Array]');
+            });
+
+            it("should return an object when a non-array object is passed", function(){
+                var returnedCollection = j.map(userFn, {});
+
+                expect(Object.prototype.toString.call(returnedCollection)).not.toBe('[object Array]');
+            });
+
+            it("should not return the same collection as was passed", function(){
+                var passedCollection = [1, 2, 3, 4],
+                    returnedCollection = j.map(userFn, passedCollection);
+
+                expect(returnedCollection).not.toBe(passedCollection);
+            });
+
+            it("should map a function on to an array", function(){
+                var expectedCollection = [3, 6, 9, 12],
+                    returnedCollection;
+
+                function deltaFunction(value){
+                    return value * 3;
+                }
+
+                returnedCollection = j.map(deltaFunction, [1, 2, 3, 4]);
+
+                expect(JSON.stringify(expectedCollection)).toBe(JSON.stringify(returnedCollection));
+            });
+
+            it("should map a function on to an object", function(){
+                var expectedCollection = {
+                        'one': 3,
+                        'two': 6,
+                        'three': 9,
+                        'four': 12
+                    },
+                    returnedCollection;
+
+                function deltaFunction(value){
+                    return 3 * value;
+                }
+
+                returnedCollection = j.map(deltaFunction, {
+                    'one': 1,
+                    'two': 2,
+                    'three': 3,
+                    'four': 4
+                })
+
+                expect(JSON.stringify(returnedCollection)).toBe(JSON.stringify(expectedCollection));
+            });
+
+        });
+
+        describe('filter', function(){
+
+            it('should return an array', function(){
+                var returnedCollection = j.filter(function(){}, []),
+                    typeValue = Object.prototype.toString.call(returnedCollection);
+
+                expect(typeValue).toBe('[object Array]');
+            });
+
+            it('should filter an array with a comparator function', function(){
+                var expectedCollection = [3, 6, 9],
+                    returnedCollection;
+
+                function comparator(value){
+                    return (value % 3) === 0;
+                }
+
+                returnedCollection = j.filter(comparator, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+                expect(JSON.stringify(expectedCollection)).toBe(JSON.stringify(returnedCollection));
             });
 
         });

@@ -4,12 +4,9 @@ var JFP,
 (function(){
     'use strict';
 
+    //Internal functions
     function generalPartial(direction, userFn){
         var appliedArgs = Array.prototype.slice.call(arguments, 2)
-
-        if(typeof userFn !== 'function'){
-            throw new TypeError("Expected first argument to be a function but actually got " + typeof userFn);
-        }
 
         return function(){
             var finalArgs = (direction === "left") ?
@@ -20,6 +17,40 @@ var JFP,
         }
     }
 
+    function mapArray(userFn, collection){
+        var newCollection = [];
+
+        collection.forEach(function(value){
+            newCollection.push(userFn(value));
+        });
+
+        return newCollection;
+    }
+
+    function mapObject(userFn, collection){
+        var newCollection = {},
+            key;
+
+        for(key in collection){
+            newCollection[key] = userFn(collection[key]);
+        }
+
+        return newCollection;
+    }
+
+    //External finctions
+    function filter(comparator, collection){
+        var newCollection = [];
+
+        collection.forEach(function(value){
+            if(comparator(value)){
+                newCollection.push(value);
+            }
+        });
+
+        return newCollection;
+    }
+
     function rpartial(){
         var args = Array.prototype.slice.call(arguments, 0);
         return generalPartial.apply(window, ["left"].concat(args));
@@ -28,6 +59,19 @@ var JFP,
     function lpartial(userFn){
         var args = Array.prototype.slice.call(arguments, 0);
         return generalPartial.apply(window, ["right"].concat(args));
+    }
+
+    function map(userFn, collection){
+        var isArray = (Object.prototype.toString.call(collection) === '[object Array]');
+
+        return (isArray) ? mapArray(userFn, collection) : mapObject(userFn, collection);
+    }
+
+    function recur(){
+        var args = Array.prototype.slice.call(arguments),
+            userFn = args.pop();
+
+        userFn.apply(window, args);
     }
 
     function thread(value){
@@ -41,18 +85,13 @@ var JFP,
         return returnedValue;
     }
 
-    function recur(){
-        var args = Array.prototype.slice.call(arguments),
-            userFn = args.pop();
-
-        userFn.apply(window, args);
-    }
-
     JFP = {
-        recur: recur,
+        filter: filter,
         lpartial: lpartial,
         partial: rpartial,
         rpartial: rpartial,
+        map: map,
+        recur: recur,
         thread: thread
     };
 
