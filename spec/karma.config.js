@@ -9,12 +9,12 @@ module.exports = function(config){
         browsers: ['PhantomJS'],
 
         files: [
-            '../src/jfp.js',
-            'jfp.spec.js'
+            '../scripts/src/**/*.js',
+            './**/*.spec.js'
         ],
 
         preprocessors: {
-            '../src/jfp.js': ['coverage']
+            '../scripts/src/**/*.js': ['coverage']
         },
 
         coverageReporter: {
@@ -23,8 +23,8 @@ module.exports = function(config){
 
         colors: true,
 
-        autoWatch: true,
-        singleRun: false
+        autoWatch: false,
+        singleRun: true
     });
 
 

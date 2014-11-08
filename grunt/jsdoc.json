@@ -1,0 +1,6 @@
+{
+    "dist" : {
+        "src": ["./scripts/src/*.js", "./spec/*.js"],
+        "dest": "doc"
+    }
+}

@@ -1,206 +1,421 @@
-(function(){
+(function(jasmine, jfp){
     'use strict';
 
-    describe('JFP', function(){
+    describe('JFP', function (){
 
-        it('should be a global object', function(){
-            expect(typeof JFP).toBe('object');
+        it('should be an object', function(){
+            expect(typeof jfp).toBe('object');
         });
 
-        describe('rpartial', function(){
+        describe('isObject', function(){
 
-            it("should be a function", function(){
-                expect(typeof j.rpartial).toBe('function');
+            it('should return true if value is an object', function(){
+                expect(jfp.isObject({})).toBe(true);
             });
+
+            it('should return false if value is not an object', function(){
+                expect(jfp.isObject('test')).toBe(false);
+            });
+
+        });
+
+        describe('isArray', function(){
+
+            it('should return true if value passed is an array', function(){
+                expect(jfp.isArray([])).toBe(true);
+            });
+
+            it('should return false if value passed is not an array', function(){
+                expect(jfp.isArray({})).toBe(false);
+            });
+
+        });
+
+        describe('identity', function(){
+
+            it('should return the value it is passed', function(){
+                var testObj = {};
+                expect(jfp.identity(testObj)).toBe(testObj);
+            });
+
+        });
+
+        describe('when', function(){
+
+            it('should execute the passed function when predicate is true', function(){
+                var spy = jasmine.createSpy('callback');
+                jfp.when(true, spy);
+                expect(spy).toHaveBeenCalled();
+            });
+
+            it('should not execute the passed function when predicate is false', function(){
+                var spy = jasmine.createSpy('callback');
+                jfp.when(false, spy);
+                expect(spy).not.toHaveBeenCalled();
+            });
+
+        });
+
+        describe('iif', function(){
+
+            it('should execute success function when predicate is true', function(){
+                var success = jasmine.createSpy('success'),
+                    failure = jasmine.createSpy('failure');
+
+                jfp.iif(true, success, failure);
+
+                expect(success).toHaveBeenCalled();
+            });
+
+            it('should execute failure function when predicate is false', function(){
+                var success = jasmine.createSpy('success'),
+                    failure = jasmine.createSpy('failure');
+
+                jfp.iif(false, success, failure);
+
+                expect(failure).toHaveBeenCalled();
+            });
+
+        });
+
+        describe('partial', function(){
 
             it('should return a function', function(){
-                expect(typeof j.rpartial(function(){})).toBe('function');
+                var returnedValue = jfp.partial(function(){});
+
+                expect(typeof returnedValue).toBe('function');
             });
 
-            it('should return curried function', function(){
-                var spy = jasmine.createSpy('curriedFn');
+            it('should execute the passed function when returned function is called', function(){
+                var spy = jasmine.createSpy('userFn'),
+                    returnedFn = jfp.partial(spy);
 
-                j.rpartial(spy)();
+                returnedFn();
 
                 expect(spy).toHaveBeenCalled();
             });
 
-            it('should execute curried function with provided arguments', function(){
-                var spy = jasmine.createSpy('curriedFn');
+            it('should call spy with set values', function(){
+                var spy = jasmine.createSpy('userFn'),
+                    returnedFn = jfp.partial(spy, 1, 2);
 
-                j.rpartial(spy, "test")();
+                returnedFn();
 
-                expect(spy).toHaveBeenCalledWith("test");
+                expect(spy).toHaveBeenCalledWith(1, 2);
             });
 
-            it('should execute curried function with new arguments appended to provided args', function(){
-                var spy = jasmine.createSpy('curriedFn');
+            it('should call spy with set and new values', function(){
+                var spy = jasmine.createSpy('userFn'),
+                    returnedFn = jfp.partial(spy, 1, 2);
 
-                j.rpartial(spy, "this", "is", "a")("test");
+                returnedFn(3, 4);
 
-                expect(spy).toHaveBeenCalledWith("this", "is", "a", "test")
+                expect(spy).toHaveBeenCalledWith(1, 2, 3, 4);
+            });
+
+        });
+
+        describe('rpartial', function(){
+
+            it('should call spy with set and new values', function(){
+                var spy = jasmine.createSpy('userFn'),
+                    returnedFn = jfp.rpartial(spy, 1, 2);
+
+                returnedFn(3, 4);
+
+                expect(spy).toHaveBeenCalledWith(1, 2, 3, 4);
             });
 
         });
 
         describe('lpartial', function(){
-            it('should execute curried function with new arguments appended to provided args', function(){
-                var spy = jasmine.createSpy('curriedFn');
 
-                j.lpartial(spy, "is", "a", "test")("this");
+            it('should call spy with set and new values', function(){
+                var spy = jasmine.createSpy('userFn'),
+                    returnedFn = jfp.lpartial(spy, 1, 2);
 
-                expect(spy).toHaveBeenCalledWith("this", "is", "a", "test")
+                returnedFn(3, 4);
+
+                expect(spy).toHaveBeenCalledWith(3, 4, 1, 2);
             });
 
         });
 
-        describe('thread', function(){
-            var partial = j.partial;
+        describe('copy', function(){
 
-            it("should be a function", function(){
-                expect(typeof j.thread).toBe('function');
+            it('should return an object when an object is passed', function(){
+                var returnedCollection = jfp.copy({});
+
+                expect(jfp.isObject(returnedCollection)).toBe(true);
             });
 
-            it("should execute a function with an argument", function(){
-                var spy = jasmine.createSpy('spy');
+            it('should return a new object', function(){
+                var testObject = { 1: 1, 2: 2, 3: 3, 4: 4 },
+                    returnedObject = jfp.copy(testObject);
 
-                j.thread(5, spy);
-
-                expect(spy).toHaveBeenCalledWith(5);
+                expect(returnedObject).not.toBe(testObject);
             });
 
-            it('should call multiple functions passing the last value into the next', function(){
-                var spy = jasmine.createSpy('spy');
+            it('should return a matching object', function(){
+                var testObject = { 1: 1, 2: 2, 3: 3, 4: 4 },
+                    returnedObject = jfp.copy(testObject);
 
-                function addEight(value){
-                    return value + 8;
-                }
-
-                j.thread(5, addEight, spy);
-
-                expect(spy).toHaveBeenCalledWith(13);
+                expect(JSON.stringify(testObject)).toBe(JSON.stringify(returnedObject));
             });
 
-            it('should return the value returned by the final function', function(){
-                var finalValue = j.thread(5, function(value){ return value + 8; },
-                                             function(value){ return value - 3; },
-                                             function(value){ return value * value; });
+            it('should return an array when an array is passed', function(){
+                var returnedCollection = jfp.copy([]);
 
-                expect(finalValue).toBe(100);
+                expect(jfp.isArray(returnedCollection)).toBe(true);
             });
+
+            it('should return a new array', function(){
+                var testArray = [1, 2, 3, 4],
+                    returnedArray = jfp.copy(testArray);
+
+                expect(returnedArray).not.toBe(testArray);
+            });
+
+            it('should return a matching array', function(){
+                var testArray = [1, 2, 3, 4],
+                    returnedArray = jfp.copy(testArray);
+
+                expect(JSON.stringify(returnedArray)).toBe(JSON.stringify(testArray));
+            });
+
         });
 
-        describe('recur', function(){
+        describe('each', function(){
 
-            it('should be a function', function(){
-                expect(typeof j.recur).toBe('function');
+            it('should execute a function with passed array value', function(){
+                var testArray = [1],
+                    spy = jasmine.createSpy('userFn');
+                jfp.each(testArray, spy);
+
+                expect(spy).toHaveBeenCalledWith(1, 0);
             });
 
-            it('should execute passed function', function(){
-                var spy = jasmine.createSpy('callableFunction');
+            it('should execute a function once for each element in array', function(){
+                var testArray = [1, 2, 3, 4],
+                    spy = jasmine.createSpy('userFn');
+                jfp.each(testArray, spy);
 
-                j.recur(spy);
-
-                expect(spy).toHaveBeenCalled();
+                expect(spy.callCount).toBe(4);
             });
 
-            it('should execute passed function with all passed arguments', function(){
-                var spy = jasmine.createSpy('callableFunction');
+            it('should execute function passed object value', function(){
+                var testObj = { 1: 1 },
+                    spy = jasmine.createSpy('userFn');
 
-                j.recur(1, 2, "test", "vars", spy);
+                jfp.each(testObj, spy);
 
-                expect(spy).toHaveBeenCalledWith(1, 2, "test", "vars");
+                expect(spy).toHaveBeenCalledWith(1, '1');
+            });
+
+            it('should execute function once for each element in object', function(){
+                var testObj = { 1: 1, 2: 2, 3: 3, 4: 4 },
+                    spy = jasmine.createSpy('userFn');
+
+                jfp.each(testObj, spy);
+
+                expect(spy.callCount).toBe(4);
             });
 
         });
 
         describe('map', function(){
 
-            function userFn(value){
-                return value
-            } //Use this when testing collection-related stuff
+            it('should call passed function for each array element', function(){
+                var testArray = [1, 2, 3, 4],
+                    spy = jasmine.createSpy('userFn');
 
-            it("should return an array when an array is passed", function(){
-                var returnedCollection = j.map(userFn, []);
+                jfp.map(testArray, spy);
 
-                expect(Object.prototype.toString.call(returnedCollection)).toBe('[object Array]');
+                expect(spy.callCount).toBe(4);
             });
 
-            it("should return an object when a non-array object is passed", function(){
-                var returnedCollection = j.map(userFn, {});
+            it('should return a mapped array', function(){
 
-                expect(Object.prototype.toString.call(returnedCollection)).not.toBe('[object Array]');
-            });
+                var testArray = [1, 2, 3, 4],
+                    returnedArray;
 
-            it("should not return the same collection as was passed", function(){
-                var passedCollection = [1, 2, 3, 4],
-                    returnedCollection = j.map(userFn, passedCollection);
-
-                expect(returnedCollection).not.toBe(passedCollection);
-            });
-
-            it("should map a function on to an array", function(){
-                var expectedCollection = [3, 6, 9, 12],
-                    returnedCollection;
-
-                function deltaFunction(value){
-                    return value * 3;
-                }
-
-                returnedCollection = j.map(deltaFunction, [1, 2, 3, 4]);
-
-                expect(JSON.stringify(expectedCollection)).toBe(JSON.stringify(returnedCollection));
-            });
-
-            it("should map a function on to an object", function(){
-                var expectedCollection = {
-                        'one': 3,
-                        'two': 6,
-                        'three': 9,
-                        'four': 12
-                    },
-                    returnedCollection;
-
-                function deltaFunction(value){
+                function mappingFn(value){
                     return 3 * value;
                 }
 
-                returnedCollection = j.map(deltaFunction, {
-                    'one': 1,
-                    'two': 2,
-                    'three': 3,
-                    'four': 4
-                })
+                returnedArray = jfp.map(testArray, mappingFn);
 
-                expect(JSON.stringify(returnedCollection)).toBe(JSON.stringify(expectedCollection));
+                expect(JSON.stringify(returnedArray)).toBe('[3,6,9,12]');
+
+            });
+
+            it('should call passed function for each array element', function(){
+                var testObj = {1: 1, 2: 2, 3: 3, 4: 4},
+                    spy = jasmine.createSpy('userFn');
+
+                jfp.map(testObj, spy);
+
+                expect(spy.callCount).toBe(4);
+            });
+
+            it('should return a mapped object', function(){
+                var testObj = {1: 1, 2: 2, 3: 3, 4: 4},
+                    returnedObj;
+
+                function mappingFn(value){
+                    return 3 * value;
+                }
+
+                returnedObj = jfp.map(testObj, mappingFn);
+
+                expect(JSON.stringify(returnedObj)).toBe('{"1":3,"2":6,"3":9,"4":12}');
             });
 
         });
 
         describe('filter', function(){
 
-            it('should return an array', function(){
-                var returnedCollection = j.filter(function(){}, []),
-                    typeValue = Object.prototype.toString.call(returnedCollection);
+            it('should call passed function for each array element', function(){
+                var testArray = [1, 2, 3, 4],
+                    spy = jasmine.createSpy('filerFn');
 
-                expect(typeValue).toBe('[object Array]');
+                jfp.filter(testArray, spy);
+
+                expect(spy.callCount).toBe(4);
             });
 
-            it('should filter an array with a comparator function', function(){
-                var expectedCollection = [3, 6, 9],
-                    returnedCollection;
+            it('should return a filtered array', function(){
+                var testArray = [1, 2, 3, 4],
+                    returnedArray;
 
-                function comparator(value){
-                    return (value % 3) === 0;
+                function filterFn(value){
+                    return value % 2 === 0;
                 }
 
-                returnedCollection = j.filter(comparator, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+                returnedArray = jfp.filter(testArray, filterFn);
 
-                expect(JSON.stringify(expectedCollection)).toBe(JSON.stringify(returnedCollection));
+                expect(JSON.stringify(returnedArray)).toBe('[2,4]');
+            });
+
+            it('should return a filtered object', function(){
+                var testObj = { 1:1, 2:2, 3:3, 4:4 },
+                    returnedObj;
+
+                function filterFn(value){
+                    return value % 2 === 0;
+                }
+
+                returnedObj = jfp.filter(testObj, filterFn);
+
+                expect(JSON.stringify(returnedObj)).toBe('{"2":2,"4":4}');
+            });
+
+        });
+
+        describe('curry', function(){
+
+            it('should return a function', function(){
+                var returnedValue = jfp.curry(function(){});
+
+                expect(typeof returnedValue).toBe('function');
+            });
+
+            it('should return a partially applied function', function(){
+                var spy = jasmine.createSpy('userFn'),
+                    partialFn = jfp.curry(spy);
+
+                partialFn();
+
+                expect(spy).toHaveBeenCalled();
+            });
+
+            it('should call spy only when arguments are satisfied', function(){
+                var spy = jasmine.createSpy('userFn'),
+                    partialFn;
+
+                function testFn(a, b, c, d){
+                    spy(a, b, c, d);
+                }
+
+                partialFn = jfp.curry(testFn, 1);
+
+                partialFn(2)(3)(4);
+
+                expect(spy).toHaveBeenCalledWith(1, 2, 3, 4);
+            });
+
+            it('should should only take first argument on curried function', function(){
+                var spy = jasmine.createSpy('userFn'),
+                    partialFn;
+
+                function testFn(a, b){
+                    var args = Array.prototype.slice.call(arguments, 0);
+                    spy.apply(null, args);
+                }
+
+                partialFn = jfp.curry(testFn, 1);
+
+                partialFn(2, 3);
+
+                expect(spy).toHaveBeenCalledWith(1, 2);
+            });
+
+        });
+
+        describe('thread', function(){
+
+            it('should return the passed value if no function is passed', function(){
+                var testCollection = [1, 2, 3, 4],
+                    returnedValue = jfp.thread(testCollection);
+
+                expect(returnedValue).toBe(testCollection);
+            });
+
+            it('should execute a function and return the result', function(){
+                //I broke here
+            });
+
+        });
+
+        describe('recur', function(){
+
+            it('should call the calling function', function(){
+                var spy = jasmine.createSpy('functionSpy');
+
+                function testRecurer(recurOk){
+                    j.when(recurOk, function(){
+                        spy();
+                        jfp.recur(testRecurer, false);
+                    });
+                }
+
+                testRecurer(true);
+
+                expect(spy).toHaveBeenCalled;
+
+            });
+
+            it('should call calling function with passed arguments', function(){
+                var spy = jasmine.createSpy('functionSpy');
+
+                function testRecurer(recurOk, value){
+                    j.iif(recurOk,
+                        function(){
+                            jfp.recur(testRecurer, false, value);
+                        },
+                        function(){
+                            spy(value);
+                        });
+                }
+
+                testRecurer(true, 'test');
+
+                expect(spy).toHaveBeenCalledWith('test');
+
             });
 
         });
 
     });
 
-})();
+})(jasmine, jfp);

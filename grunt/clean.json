@@ -1,0 +1,3 @@
+{
+    "clean": ["scripts/min", "doc"]
+}

@@ -1,2 +1,11 @@
-node_modules/**
+#Special files
 .idea
+.sass_cache
+
+#directories
+node_modules/
+spec/coverage/
+scripts/min/
+doc/
+dist/
+spec/coverage/
