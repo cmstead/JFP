@@ -1,6 +1,7 @@
 #Special files
 .idea
 .sass_cache
+.DS_Store
 
 #directories
 node_modules/
