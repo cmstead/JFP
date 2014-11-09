@@ -441,6 +441,50 @@
 
         });
 
+        describe('add', function(){
+
+            it('should return 0 when no arguments are passed', function(){
+                var returnedValue = j.add();
+
+                expect(returnedValue).toBe(0);
+            });
+
+            it('should return passed value when a sigle value is provided', function(){
+                var returnedValue = j.add(5);
+
+                expect(returnedValue).toBe(5);
+            });
+
+            it('should return a sum if multiple values are passed', function(){
+                var returnedValue = j.add(1, 2, 3, 4);
+
+                expect(returnedValue).toBe(10);
+            });
+
+        });
+
+        describe('multiply', function(){
+
+            it('should return 1 if no arguments are passed', function(){
+                var returnedValue = j.multiply();
+
+                expect(returnedValue).toBe(1);
+            });
+
+            it('should return value if a single value is passed', function(){
+                var returnedValue = j.multiply(5);
+
+                expect(returnedValue).toBe(5);
+            });
+
+            it('should return a product with multiple arguments', function(){
+                var returnedValue = j.multiply(1, 2, 3, 4);
+
+                expect(returnedValue).toBe(24);
+            });
+
+        });
+
     });
 
 })(jasmine, jfp);
