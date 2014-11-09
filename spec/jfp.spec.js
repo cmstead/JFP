@@ -371,8 +371,33 @@
                 expect(returnedValue).toBe(testCollection);
             });
 
-            it('should execute a function and return the result', function(){
-                //I broke here
+            it('should execute a function', function(){
+                var spy = jasmine.createSpy('userFn');
+
+                j.thread('test', spy);
+
+                expect(spy).toHaveBeenCalledWith('test');
+            });
+
+            it('should execute functions with previous returned value', function(){
+                var returnedValue;
+
+                function firstFn(value){
+                    return value + 1
+                }
+
+                function secondFn(value){
+                    return value * 2;
+                }
+
+                function thirdFn(value){
+                    return value / 3;
+                }
+
+                returnedValue = j.thread(5, firstFn, secondFn, thirdFn);
+
+                expect(returnedValue).toBe(4);
+
             });
 
         });

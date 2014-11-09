@@ -1,6 +1,3 @@
-var jfp,
-    j;
-
 var j,
     jfp = (function(){
     'use strict';
@@ -8,15 +5,34 @@ var j,
     var JFP;
 
     //Predicates
+    /**
+     * @function isObject
+     * @param {*} value A value to be tested
+     * @returns {boolean}
+     * @description Predicate function to test whether a value is an object
+     */
     function isObject(value){
         return typeof value === 'object';
     }
 
+    /**
+     * @function isArray
+     * @param {*} value A value to be tested
+     * @returns {boolean}
+     * @description Predicate function to test whether a value is an array
+     */
     function isArray(value){
         return (isObject(value) &&
             Object.prototype.toString.call(value) === '[object Array]');
     }
 
+    /**
+     * @function when
+     * @param {boolean} predicate Truey/falsey value
+     * @param {function} userFn executes when predicate is true
+     * @returns {*}
+     * @description Executes userFn when predicate evaluates to true
+     */
     function when(predicate, userFn){
         var value = null;
 
@@ -27,6 +43,14 @@ var j,
         return value;
     }
 
+    /**
+     * @function iif
+     * @param {boolean} predicate Truey/falsey value
+     * @param {function} success Function to execute on predate truey
+     * @param {function} failure Function to execute on predicate falsey
+     * @returns {*}
+     * @description Executes success on true, failure on false
+     */
     function iif(predicate, success, failure){
         var value = null;
 
@@ -42,6 +66,12 @@ var j,
     }
 
     //Utility
+    /**
+     * @function identity
+     * @param {*} obj Data to return
+     * @returns {*}
+     * @description Returns provided value unaltered
+     */
     function identity(obj){
         return obj;
     }
@@ -59,6 +89,12 @@ var j,
         };
     }
 
+    /**
+     * @function lpartial
+     * @param {function} userFn Function to apply arguments to
+     * @returns {*}
+     * @description Performs a left-partial application of arguments
+     */
     function lpartial(userFn){
         var partialArgs = [userFn, 'left'],
             args = Array.prototype.slice.call(arguments, 1);
@@ -68,6 +104,12 @@ var j,
         return partial.apply(null, partialArgs);
     }
 
+    /**
+     * @function rpartial
+     * @param {function} userFn Function to apply arguments to
+     * @returns {*}
+     * @description Performs a right-partial application of arguments
+     */
     function rpartial(userFn){
         var partialArgs = [userFn, 'right'],
             args = Array.prototype.slice.call(arguments, 1);
@@ -90,6 +132,12 @@ var j,
         return params;
     }
 
+    /**
+     * @function curry
+     * @param {function} userFn Function for curried application
+     * @returns {function}
+     * @description Provides single-value currying
+     */
     function curry(userFn){
         var params = getFunctionArgs(userFn),
             args = Array.prototype.slice.call(arguments, 1);
@@ -108,8 +156,22 @@ var j,
         return currier;
     }
 
+    /**
+     * @function thread
+     * @param {*} value
+     * @param {function} userFn optionally multiple functions can be passed in for resolution
+     * @returns {*}
+     * @description Threads values through each provided function and returns the result
+     */
     function thread(value){
-        return value;
+        var finalValue = value,
+            functions = Array.prototype.slice.call(arguments, 1);
+
+        functions.forEach(function(userFn){
+            finalValue = userFn(finalValue);
+        });
+
+        return finalValue;
     }
 
     //Collections
@@ -134,6 +196,12 @@ var j,
         return returnableObject;
     }
 
+    /**
+     * @function copy
+     * @param {object} collection object/array
+     * @returns {*}
+     * @description Returns a copy of array or object
+     */
     function copy(collection){
         var returnableCollection = collection;
 
@@ -172,6 +240,13 @@ var j,
         return collection;
     }
 
+    /**
+     * @function each
+     * @param {object} collection object/array
+     * @param {function} userFn
+     * @returns {*}
+     * @description Performs provided function on each element of collection
+     */
     function each(collection, userFn){
         var newCollection = copy(collection);
 
@@ -182,11 +257,18 @@ var j,
         });
     }
 
-    function filter(collection, filterFn){
+    /**
+     * @function filter
+     * @param {object} collection object/array
+     * @param {function} predicate Function that returns a boolean
+     * @returns {Array}
+     * @description returns collection of elements which evaluate true for predicate function
+     */
+    function filter(collection, predicate){
         var newCollection = (isArray(collection)) ? [] : {};
 
         function filterer(value, key){
-            when(filterFn(value), function(){
+            when(predicate(value), function(){
                 iif(isArray(collection), function(){
                     newCollection.push(value);
                 }, function(){
@@ -200,6 +282,13 @@ var j,
         return newCollection;
     }
 
+    /**
+     * @function map
+     * @param {object} collection object/array
+     * @param {function} mappingFn Function to map onto collection elements
+     * @returns {object}
+     * @description Returns new object with mapping function applied to each object.
+     */
     function map(collection, mappingFn){
         var newCollection = (isArray(collection)) ? [] : {};
 
@@ -216,6 +305,11 @@ var j,
         return newCollection;
     }
 
+    /**
+     * @function recur
+     * @param {function} userFn
+     * @description Calls passed function with all arguments - use for mutual recursion
+     */
     function recur(userFn){
         var args = Array.prototype.slice.call(arguments, 1);
         userFn.apply(null, args);
