@@ -144,7 +144,7 @@ var j,
 
             function currier(){
                 var newArgs = Array.prototype.slice.call(arguments, 0);
-                args = args.concat(newArgs[0]);
+                args = args.concat(newArgs);
 
                 return iif(args.length >= params.length, function(){
                     userFn.apply(null, args);

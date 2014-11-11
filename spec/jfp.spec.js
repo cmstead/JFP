@@ -344,7 +344,7 @@
                 expect(spy).toHaveBeenCalledWith(1, 2, 3, 4);
             });
 
-            it('should should only take first argument on curried function', function(){
+            it('should apply all passed arguments', function(){
                 var spy = jasmine.createSpy('userFn'),
                     partialFn;
 
@@ -357,7 +357,7 @@
 
                 partialFn(2, 3);
 
-                expect(spy).toHaveBeenCalledWith(1, 2);
+                expect(spy).toHaveBeenCalledWith(1, 2, 3);
             });
 
         });
