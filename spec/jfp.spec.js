@@ -485,6 +485,102 @@
 
         });
 
+        describe('either', function(){
+            
+            it('should return provided value if value is truey', function(){
+                var returnedValue = jfp.either('default', 'foo');
+                    
+                expect(returnedValue).toBe('foo');
+            });
+            
+            it('should return default value if value is null', function(){
+                var returnedValue = jfp.either('default', null);
+                
+                expect(returnedValue).toBe('default');
+            });
+            
+            it('should return default value if value is undefined', function(){
+                var returnedValue = jfp.either('default', null);
+                
+                expect(returnedValue).toBe('default');
+            });
+            
+            it('should return 0 when provided as 0 should not be treated as falsey', function(){
+                var returnedValue = jfp.either('default', 0);
+                
+                expect(returnedValue).toBe(0);
+            });
+            
+        });
+        
+        describe('maybe', function(){
+            
+            it('should return the default value when that is the only value provided', function(){
+                var returnedValue = jfp.maybe('default');
+                
+                expect(returnedValue).toBe('default');
+            });
+            
+            it('should return maybe value when it is truey and function is identity', function(){
+                var returnedValue = jfp.maybe('default', j.identity, 'foo');
+                
+                expect(returnedValue).toBe('foo');
+            });
+            
+            it('should return 5 when passed a multiply function and 1', function(){
+                var returnedValue = jfp.maybe(0, function(a){ return a * 5; }, 1);
+                
+                expect(returnedValue).toBe(5);
+            });
+            
+        });
+        
+        describe('compose', function(){
+            
+            it('should return a function', function(){
+                var returnedValue = jfp.compose();
+                
+                expect(typeof returnedValue).toBe('function');
+            });
+            
+            it('should call spy when returned function is executed', function(){
+                var spy = jasmine.createSpy('myFn');
+                
+                jfp.compose(spy)();
+                
+                expect(spy).toHaveBeenCalled();
+            });
+            
+            it('should perform functional composition on multiple arguments, right to left', function(){
+                var spy = jasmine.createSpy('myFn');
+                
+                function firstFn(){
+                    return 5;
+                }
+                
+                function secondFn(value){
+                    return value * 5;
+                }
+                
+                jfp.compose(spy, secondFn, firstFn)();
+                
+                expect(spy).toHaveBeenCalledWith(25);
+            });
+            
+            it('should return computed value', function(){
+                function firstFn(value){
+                    return value + 3;
+                }
+                
+                function secondFn(value){
+                    return value * 3;
+                }
+                
+                expect(jfp.compose(secondFn, firstFn)(3)).toBe(18);
+            });
+            
+        });
+        
     });
 
 })(jasmine, jfp);

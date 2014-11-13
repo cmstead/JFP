@@ -66,16 +66,30 @@ var j,
         }
 
         //Utility
+
+        function compose(){
+            var args = Array.prototype.slice.call(arguments, 0);
+            
+            return function(){
+                var finalValue = Array.prototype.slice.call(arguments, 0),
+                    userFn;
+                
+                while(args.length > 0){
+                    userFn = args.pop();
+                    finalValue = [userFn.apply(null, finalValue)];
+                }
+                
+                //final value should always be an array containing the last result.
+                return finalValue[0];
+            };
+        }
+
         /**
          * @function identity
          * @param {*} obj Data to return
          * @returns {*}
          * @description Returns provided value unaltered
          */
-        function identity(obj){
-            return obj;
-        }
-
         function partial(userFn, direction){
             var args = Array.prototype.slice.call(arguments, 2);
             return function(){
@@ -314,6 +328,22 @@ var j,
             var args = Array.prototype.slice.call(arguments, 1);
             userFn.apply(null, args);
         }
+        
+        /* Data functions */
+        
+        function either(defaultValue, testValue){
+            return (!!testValue || testValue === 0) ? testValue : defaultValue;
+        }
+        
+        function identity(obj){
+            return obj;
+        }
+
+        function maybe(defaultValue, userFn, maybeValue){
+            return (either(defaultValue, maybeValue) === defaultValue) ?
+                defaultValue :
+                userFn(maybeValue);
+        }
 
         /* Reduce-safe function */
 
@@ -341,9 +371,11 @@ var j,
 
         return {
             add: add,
+            compose: compose,
             copy: copy,
             curry: curry,
             each: each,
+            either: either,
             filter: filter,
             identity: identity,
             iif: iif,
@@ -351,6 +383,7 @@ var j,
             isObject: isObject,
             lpartial: lpartial,
             map: map,
+            maybe: maybe,
             multiply: multiply,
             partial: rpartial,
             recur: recur,
