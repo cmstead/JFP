@@ -229,7 +229,7 @@
                 var testArray = [1, 2, 3, 4],
                     spy = jasmine.createSpy('userFn');
 
-                jfp.map(testArray, spy);
+                jfp.map(spy, testArray);
 
                 expect(spy.callCount).toBe(4);
             });
@@ -243,7 +243,7 @@
                     return 3 * value;
                 }
 
-                returnedArray = jfp.map(testArray, mappingFn);
+                returnedArray = jfp.map(mappingFn, testArray);
 
                 expect(JSON.stringify(returnedArray)).toBe('[3,6,9,12]');
 
@@ -253,7 +253,7 @@
                 var testObj = {1: 1, 2: 2, 3: 3, 4: 4},
                     spy = jasmine.createSpy('userFn');
 
-                jfp.map(testObj, spy);
+                jfp.map(spy, testObj);
 
                 expect(spy.callCount).toBe(4);
             });
@@ -266,7 +266,7 @@
                     return 3 * value;
                 }
 
-                returnedObj = jfp.map(testObj, mappingFn);
+                returnedObj = jfp.map(mappingFn, testObj);
 
                 expect(JSON.stringify(returnedObj)).toBe('{"1":3,"2":6,"3":9,"4":12}');
             });
@@ -279,7 +279,7 @@
                 var testArray = [1, 2, 3, 4],
                     spy = jasmine.createSpy('filerFn');
 
-                jfp.filter(testArray, spy);
+                jfp.filter(spy, testArray);
 
                 expect(spy.callCount).toBe(4);
             });
@@ -292,7 +292,7 @@
                     return value % 2 === 0;
                 }
 
-                returnedArray = jfp.filter(testArray, filterFn);
+                returnedArray = jfp.filter(filterFn, testArray);
 
                 expect(JSON.stringify(returnedArray)).toBe('[2,4]');
             });
@@ -305,7 +305,7 @@
                     return value % 2 === 0;
                 }
 
-                returnedObj = jfp.filter(testObj, filterFn);
+                returnedObj = jfp.filter(filterFn, testObj);
 
                 expect(JSON.stringify(returnedObj)).toBe('{"2":2,"4":4}');
             });
@@ -579,6 +579,30 @@
                 expect(jfp.compose(secondFn, firstFn)(3)).toBe(18);
             });
             
+        });
+
+        describe('isEven', function(){
+
+            it('should return true if passed number is even', function(){
+                expect(j.isEven(2)).toBe(true);
+            });
+
+            it('should return false if passed number is false', function(){
+                expect(j.isEven(3)).toBe(false);
+            });
+
+        });
+
+        describe('not', function(){
+
+            it('should return false when passed true', function(){
+                expect(j.not(true)).toBe(false);
+            });
+
+            it('should return true when passed false', function(){
+                expect(j.not(false)).toBe(true);
+            });
+
         });
         
     });

@@ -5,6 +5,14 @@ var j,
         var JFP;
 
         //Predicates
+        function not(value){
+            return !value;
+        }
+
+        function isEven(value){
+            return value % 2 === 0;
+        }
+
         /**
          * @function isObject
          * @param {*} value A value to be tested
@@ -278,7 +286,7 @@ var j,
          * @returns {Array}
          * @description returns collection of elements which evaluate true for predicate function
          */
-        function filter(collection, predicate){
+        function filter(predicate, collection){
             var newCollection = (isArray(collection)) ? [] : {};
 
             function filterer(value, key){
@@ -303,7 +311,7 @@ var j,
          * @returns {object}
          * @description Returns new object with mapping function applied to each object.
          */
-        function map(collection, mappingFn){
+        function map(mappingFn, collection){
             var newCollection = (isArray(collection)) ? [] : {};
 
             function mapper(value, key){
@@ -368,7 +376,7 @@ var j,
 
             return product;
         }
-
+        
         return {
             add: add,
             compose: compose,
@@ -380,11 +388,13 @@ var j,
             identity: identity,
             iif: iif,
             isArray: isArray,
+            isEven: isEven,
             isObject: isObject,
             lpartial: lpartial,
             map: map,
             maybe: maybe,
             multiply: multiply,
+            not: not,
             partial: rpartial,
             recur: recur,
             rpartial: rpartial,
