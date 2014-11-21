@@ -12,6 +12,18 @@ var j,
         function isEven(value){
             return value % 2 === 0;
         }
+        
+        function isGreater(a, b){
+            return a > b;
+        }
+        
+        function isLess(a, b){
+            return a < b;
+        }
+        
+        function isEqual(a, b){
+            return a === b;
+        }
 
         /**
          * @function isObject
@@ -326,6 +338,10 @@ var j,
 
             return newCollection;
         }
+        
+        function pick(key, obj){
+            return obj[key];
+        }
 
         /**
          * @function recur
@@ -389,6 +405,9 @@ var j,
             iif: iif,
             isArray: isArray,
             isEven: isEven,
+            isEqual: isEqual,
+            isGreater: isGreater,
+            isLess: isLess,
             isObject: isObject,
             lpartial: lpartial,
             map: map,
@@ -396,6 +415,7 @@ var j,
             multiply: multiply,
             not: not,
             partial: rpartial,
+            pick: pick,
             recur: recur,
             rpartial: rpartial,
             thread: thread,
