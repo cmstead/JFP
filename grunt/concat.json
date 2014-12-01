@@ -1,0 +1,12 @@
+{
+    "options": {
+        "separator": "\n\n"
+    },
+    "dist": {
+        "src": [
+            "scripts/src/jfp.js",
+            "scripts/src/modules/core.js"
+        ],
+        "dest": "scripts/concat/jfp.js"
+    }
+}
