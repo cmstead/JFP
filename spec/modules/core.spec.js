@@ -1,6 +1,33 @@
 (function(){
     'use strict';
 
+    describe('apply', function(){
+
+        it('should call the passed function', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.apply(spy);
+
+            expect(spy).toHaveBeenCalled();
+        });
+
+        it('should return function return value', function(){
+            function returnFive(){
+                return 5;
+            }
+
+            expect(j.apply(returnFive)).toBe(5);
+        });
+
+        it('should apply passed values', function(){
+            function add(a, b){
+                return a + b;
+            }
+
+            expect(j.apply(add, [1, 2])).toBe(3);
+        });
+
+    });
+
     describe('identity', function(){
 
         it('should return a passed object', function(){

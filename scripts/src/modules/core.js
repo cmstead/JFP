@@ -13,6 +13,11 @@
         return maybe(defaultValue, identity, optionValue);
     }
 
+    function apply(userFn, values){
+        return userFn.apply(null, either([], values));
+    }
+
+    j.apply = apply;
     j.either = either;
     j.identity = identity;
     j.maybe = maybe;
