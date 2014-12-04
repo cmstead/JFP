@@ -34,5 +34,49 @@
         });
 
     });
+    
+    describe('each', function(){
+        
+        it('should return an array', function(){
+            expect(JSON.stringify(j.each())).toBe('[]');
+        });
+        
+        it('should call passed function with a single value', function(){
+            var spy = jasmine.createSpy('callback');
+            j.each(spy, [1]);
+            expect(spy).toHaveBeenCalledWith(1);
+        });
+        
+        it('should call passed function for each value in array', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.each(spy, [1, 2, 3, 4]);
+            expect(spy.callCount).toBe(4);
+        });
+        
+    });
+    
+    describe('map', function(){
+        
+        it('should return an array', function(){
+            expect(JSON.stringify(j.map())).toBe('[]');
+        });
+        
+        it('should call function for each element in array argument', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.map(spy, [1, 2, 3, 4]);
+            expect(spy.callCount).toBe(4);
+        });
+        
+        it('should return a function with mapped values', function(){
+            var output;
+            
+            function add5(value){
+                return value + 5;
+            }
+            
+            expect(JSON.stringify(j.map(add5, [0, 1, 2, 3]))).toBe('[5,6,7,8]');
+        });
+        
+    });
 
 })();

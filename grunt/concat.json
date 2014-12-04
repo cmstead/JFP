@@ -6,6 +6,7 @@
         "src": [
             "scripts/src/jfp.js",
             "scripts/src/modules/core.js",
+            "scripts/src/modules/predicate.js",
             "scripts/src/modules/array.js"
         ],
         "dest": "scripts/concat/jfp.js"

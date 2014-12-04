@@ -55,7 +55,13 @@
             j.maybe('test', spy, testObj);
             expect(spy).toHaveBeenCalledWith(testObj);
         });
-
+        
+        it('should execute the passed function if 0 is passed', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.maybe(0, spy, 0);
+            expect(spy).toHaveBeenCalledWith(0);
+        });
+        
     });
 
     describe('either', function(){

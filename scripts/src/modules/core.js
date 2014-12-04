@@ -6,7 +6,9 @@
     }
 
     function maybe(defaultValue, userFn, optionValue){
-        return (!!optionValue) ? userFn(optionValue) : defaultValue;
+        return (!(optionValue === undefined || optionValue === null || optionValue === '')) ?
+                userFn(optionValue) : 
+                defaultValue;
     }
 
     function either(defaultValue, optionValue){

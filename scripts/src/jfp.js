@@ -5,4 +5,4 @@ jfp = (function(){
 
 })();
 
-j = jfp;
+var j = jfp;
