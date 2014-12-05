@@ -77,5 +77,73 @@
         });
 
     });
+    
+    describe('partial', function(){
+        
+        it('should return a function', function(){
+            expect(typeof j.partial()).toBe('function');
+        });
+        
+        it('should call spy when returned function is called', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.partial(spy)();
+            expect(spy).toHaveBeenCalled();
+        });
+        
+        it('should call spy with applied values', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.partial(spy, 1, 2)();
+            expect(spy).toHaveBeenCalledWith(1, 2);
+        });
+        
+        it('should call spy with applied and new arguments', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.partial(spy, 1, 2)(3, 4);
+            expect(spy).toHaveBeenCalledWith(1, 2, 3, 4);
+        });
+        
+        it('should return returned functionValue', function(){
+            function add(a, b){
+                return a + b;
+            }
+            
+            expect(j.partial(add, 3)(2)).toBe(5);
+        });
+        
+    });
+
+    describe('rpartial', function(){
+        
+        it('should return a function', function(){
+            expect(typeof j.rpartial()).toBe('function');
+        });
+        
+        it('should call spy when returned function is called', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.rpartial(spy)();
+            expect(spy).toHaveBeenCalled();
+        });
+        
+        it('should call spy with applied values', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.rpartial(spy, 1, 2)();
+            expect(spy).toHaveBeenCalledWith(1, 2);
+        });
+        
+        it('should call spy with applied and new arguments', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.rpartial(spy, 1, 2)(3, 4);
+            expect(spy).toHaveBeenCalledWith(3, 4, 1, 2);
+        });
+        
+        it('should return returned functionValue', function(){
+            function divide(a, b){
+                return a / b;
+            }
+            
+            expect(j.rpartial(divide, 2)(6)).toBe(3);
+        });
+        
+    });
 
 })();
