@@ -28,6 +28,22 @@
 
     });
 
+    describe('concat', function(){
+
+        it('should return an array', function(){
+            expect(JSON.stringify(j.concat())).toBe('[]');
+        });
+
+        it('should return a matching array when called with one array', function(){
+            expect(JSON.stringify(j.concat([1, 2, 3]))).toBe('[1,2,3]');
+        });
+
+        it('should return two arrays, concatenated', function(){
+            expect(JSON.stringify(j.concat([1, 2], [3, 4]))).toBe('[1,2,3,4]');
+        });
+
+    });
+
     describe('identity', function(){
 
         it('should return a passed object', function(){
