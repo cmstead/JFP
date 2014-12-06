@@ -5,7 +5,7 @@
 
         it('should call the passed function', function(){
             var spy = jasmine.createSpy('userFn');
-            j.apply(spy);
+            j.apply(null, spy);
 
             expect(spy).toHaveBeenCalled();
         });
@@ -15,7 +15,7 @@
                 return 5;
             }
 
-            expect(j.apply(returnFive)).toBe(5);
+            expect(j.apply(null, returnFive)).toBe(5);
         });
 
         it('should apply passed values', function(){
@@ -23,7 +23,7 @@
                 return a + b;
             }
 
-            expect(j.apply(add, [1, 2])).toBe(3);
+            expect(j.apply([1, 2], add)).toBe(3);
         });
 
     });
@@ -160,6 +160,36 @@
             expect(j.rpartial(divide, 2)(6)).toBe(3);
         });
         
+    });
+
+    describe('compose', function(){
+
+        it('should call function passed into compose', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.compose(spy)();
+            expect(spy).toHaveBeenCalled();
+        });
+
+        it('should call two functions in serial', function(){
+            var spy = jasmine.createSpy('userFn');
+
+            function userFn(){
+                return 'test';
+            }
+
+            j.compose(spy, userFn)();
+
+            expect(spy).toHaveBeenCalledWith('test');
+        });
+
+        it('should return the result of the composed functions', function(){
+            function add3(value){
+                return value + 3;
+            }
+
+            expect(j.compose(add3, add3, add3)(5)).toBe(14);
+        });
+
     });
 
 })();

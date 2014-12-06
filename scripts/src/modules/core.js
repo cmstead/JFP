@@ -15,11 +15,11 @@
         return result;
     }
     
-    function slice(valueSet, index){
+    function slice(index, valueSet){
         return Array.prototype.slice.call(valueSet, index);
     }
 
-    //Begin function-relative core code
+    //Begin function-related core code
     function identity(value){
         return value;
     }
@@ -34,28 +34,44 @@
         return maybe(defaultValue, identity, optionValue);
     }
 
-    function apply(userFn, values){
+    function apply(values, userFn){
         return userFn.apply(null, either([], values));
     }
     
-    //Todo: pull shared logic out of partials
     function partial(userFn){
-        var args = slice(arguments, 1);
+        var args = slice(1, arguments);
         
         return function appliedFn(){
-            return userFn.apply(null, concat(args, slice(arguments, 0)));
+            return apply(concat(args, slice(0, arguments)), userFn);
         };
     }
 
     function rpartial(userFn){
-        var args = slice(arguments, 1);
+        var args = slice(1, arguments);
         
         return function appliedFn(){
-            return userFn.apply(null, concat(slice(arguments, 0), args));
+            return apply(concat(slice(0, arguments), args), userFn);
+        };
+    }
+
+    function compose(userFn){
+        var userFns = slice(0, arguments);
+
+        return function(){
+            var args = slice(0, arguments),
+                result = either([], args),
+                userFn;
+
+            while(!!(userFn = userFns.pop())){
+                result = [apply(result, userFn)];
+            }
+
+            return either([], result)[0];
         };
     }
 
     j.apply = apply;
+    j.compose = compose;
     j.concat = concat;
     j.either = either;
     j.identity = identity;
