@@ -1,5 +1,27 @@
 (function(){
 
+    describe('conj', function(){
+
+        it('should return an empty array when no arguments are passed', function(){
+            expect(JSON.stringify(j.conj())).toBe('[]');
+        });
+
+        it('should return an array of one element if only a single value is passed', function(){
+            expect(JSON.stringify(j.conj('test'))).toBe('["test"]');
+        });
+
+        it('should return an array of elements with new element appended', function(){
+            expect(JSON.stringify(j.conj(4, [1, 2, 3]))).toBe('[1,2,3,4]');
+        });
+
+        it('should not alter the original array', function(){
+            var myArray = [1, 2, 3];
+            j.conj(4, myArray);
+            expect(myArray.length).toBe(3);
+        });
+
+    });
+
     describe('cons', function(){
 
         it('should return an empty array when no arguments are passed', function(){

@@ -1,6 +1,16 @@
 (function(j){
     'use strict';
 
+    function conj(value, dest){
+        var destination = j.slice(0, j.either([], dest));
+
+        if(value){
+            destination.push(value);
+        }
+
+        return destination;
+    }
+
     function cons(value, source){
         var baseArray = (!!value) ? [value] : [];
         return j.concat(baseArray, source);
@@ -31,6 +41,7 @@
         return finalArray;
     }
 
+    j.conj = conj;
     j.cons = cons;
     j.each = each;
     j.map = map;
