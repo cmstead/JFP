@@ -44,6 +44,47 @@
 
     });
 
+    describe('slice', function(){
+
+        it('should return an array', function(){
+            expect(JSON.stringify(j.slice())).toBe('[]');
+        });
+
+        it('should return array matching original when slicing at 0', function(){
+            expect(JSON.stringify(j.slice(0, [1, 2, 3, 4]))).toBe('[1,2,3,4]');
+        });
+
+        it('should return a copy of the original array', function(){
+            var testArray = [1, 2, 3, 4];
+            expect(j.slice(0, testArray)).not.toBe(testArray);
+        });
+
+        it('should slice the first n objects off passed array', function(){
+            expect(JSON.stringify(j.slice(2, [1, 2, 3, 4]))).toBe('[3,4]');
+        });
+
+    });
+
+    describe('countArguments', function(){
+
+        it('should return 0 when no function is passed', function(){
+            expect(j.countArguments()).toBe(0);
+        });
+
+        it('should return 0 if a function with no arguments is passed', function(){
+            expect(j.countArguments(function(){})).toBe(0);
+        });
+
+        it('should return 1 if function has one argument', function(){
+            expect(j.countArguments(function(value){})).toBe(1);
+        });
+
+        it('should return count of n arguments', function(){
+            expect(j.countArguments(function(value1, value2, value3){})).toBe(3);
+        });
+
+    });
+
     describe('identity', function(){
 
         it('should return a passed object', function(){
@@ -188,6 +229,53 @@
             }
 
             expect(j.compose(add3, add3, add3)(5)).toBe(14);
+        });
+
+    });
+
+    describe('curry', function(){
+
+        it('should return null if no function is passed', function(){
+            expect(j.curry()).toBe(null);
+        });
+
+        it('should return a function if all arguments are not satisfied', function(){
+            function test(value){}
+
+            expect(typeof j.curry(test)).toBe('function');
+        });
+
+        it('should call the passed function if all arguments are satisfied', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.curry(spy);
+            expect(spy).toHaveBeenCalled();
+        });
+
+        it('should return null if function arguments are satisfied', function(){
+            function test(value1){}
+            expect(j.curry(test, 1)).toBe(null);
+        });
+
+        it('should call function with all passed args when function is called', function(){
+            var spy = jasmine.createSpy('sumSpy');
+
+            function sum(a, b, c, d){
+                spy(a, b, c, d);
+            }
+
+            j.curry(sum, 1)(2, 3)(4);
+
+            expect(spy).toHaveBeenCalledWith(1, 2, 3, 4);
+        });
+
+        it('should return the result of the called function', function(){
+            var spy = jasmine.createSpy('sumSpy');
+
+            function sum(a, b, c, d){
+                return a + b + c + d;
+            }
+
+            expect(j.curry(sum, 1)(2, 3)(4)).toBe(10);
         });
 
     });

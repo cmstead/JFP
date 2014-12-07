@@ -34,6 +34,17 @@
         return maybe(defaultValue, identity, optionValue);
     }
 
+    function countArguments(userFn){
+        var params = either(function(){}, userFn).toString()
+            .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
+            .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
+            .split(/,/);
+
+        params = (params.length === 1 && params[0] === '') ? [] : params;
+
+        return params.length;
+    }
+
     function apply(values, userFn){
         return userFn.apply(null, either([], values));
     }
@@ -70,8 +81,20 @@
         };
     }
 
+    //This is complicated and I don't expect people to grok it on first read.
+    function curry(userFn){
+        var args = slice(1, arguments),
+            argumentCount = maybe(0, countArguments, userFn),
+            appliedFn = (args.length < argumentCount) ? apply(concat([curry], slice(0, arguments)), partial) : null,
+            result = (!!userFn && args.length >= argumentCount) ? apply(args, userFn) : null;
+
+        return j.either(appliedFn, result);
+    }
+
     j.apply = apply;
     j.compose = compose;
+    j.countArguments = countArguments;
+    j.curry = curry;
     j.concat = concat;
     j.either = either;
     j.identity = identity;
