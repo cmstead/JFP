@@ -50,7 +50,13 @@
         it('should call passed function with a single value', function(){
             var spy = jasmine.createSpy('callback');
             j.each(spy, [1]);
-            expect(spy).toHaveBeenCalledWith(1);
+            expect(spy).toHaveBeenCalledWith(1, 0);
+        });
+
+        it('should exit if function returns false', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.each(function(){ spy(); return false; }, [1, 2, 3, 4]);
+            expect(spy.callCount).toBe(1);
         });
         
         it('should call passed function for each value in array', function(){
@@ -83,6 +89,106 @@
             expect(JSON.stringify(j.map(add5, [0, 1, 2, 3]))).toBe('[5,6,7,8]');
         });
         
+    });
+
+    describe('first', function(){
+
+        it('should return null if no arguments are passed', function(){
+            expect(j.first()).toBe(null);
+        });
+
+        it('should return null if first value does not exist', function(){
+            expect(j.first([])).toBe(null);
+        });
+
+        it('should return the first element of an array', function(){
+            expect(j.first([1, 2, 3])).toBe(1);
+        });
+
+    });
+
+    describe('rest', function(){
+
+        it('should return an array', function(){
+            expect(j.isArray(j.rest())).toBe(true);
+        });
+
+        it('should return all elements of an array except the first', function(){
+            expect(JSON.stringify(j.rest([1, 2, 3, 4]))).toBe('[2,3,4]');
+        });
+
+    });
+
+    describe('reduce', function(){
+
+        it('should return null when no argument is passed', function(){
+            expect(j.reduce()).toBe(null);
+        });
+
+        it('should return null if only a function is passed', function(){
+            expect(j.reduce(function(){})).toBe(null);
+        });
+
+        it('should call passed function with the first two elements of passed array', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.reduce(spy, [1, 2, 3, 4]);
+            expect(spy).toHaveBeenCalledWith(1, 2);
+        });
+
+        it('should return the value in a single-valued array', function(){
+            function add(a, b){
+                return a + b;
+            }
+
+            expect(j.reduce(add, [1])).toBe(1);
+        });
+
+        it('should return the reduced result of an array and a function', function(){
+            function multiply(a, b){
+                return a * b;
+            }
+
+            expect(j.reduce(multiply, [1, 2, 3, 4])).toBe(24);
+        });
+
+    });
+
+    describe('take', function(){
+
+        it('should return null if called without arguments', function(){
+            expect(j.take()).toBe(null);
+        });
+
+        it('should return the first 3 elements of an array', function(){
+            expect(JSON.stringify(j.take(3, [1, 2, 3, 4]))).toBe('[1,2,3]');
+        });
+
+        it('should return entire set of values if count is greater than array length', function(){
+            expect(JSON.stringify(j.take(5, [1, 2, 3]))).toBe('[1,2,3]');
+        });
+
+    });
+
+    describe('filter', function(){
+
+        it('should return an array', function(){
+            expect(j.isArray(j.filter())).toBe(true);
+        });
+
+        it('should call filter function for each element', function(){
+            var spy = jasmine.createSpy('filterPredicate');
+            j.filter(spy, [1, 2, 3]);
+            expect(spy.callCount).toBe(3);
+        });
+
+        it('should filter array based on filter predicate', function(){
+            function isEven(value){
+                return value % 2 === 0;
+            }
+
+            expect(JSON.stringify(j.filter(isEven, [1, 2, 3, 4]))).toBe('[2,4]');
+        });
+
     });
 
 })();
