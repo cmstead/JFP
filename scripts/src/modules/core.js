@@ -15,8 +15,9 @@
         return result;
     }
     
-    function slice(index, valueSet){
-        return Array.prototype.slice.call(valueSet, index);
+    function slice(begin, valueSet, end){
+        return (!end) ? Array.prototype.slice.call(valueSet, begin) :
+                        Array.prototype.slice.call(valueSet, begin, end);
     }
 
     //Begin function-related core code
