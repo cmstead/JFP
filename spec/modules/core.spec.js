@@ -280,4 +280,51 @@
 
     });
 
+    describe('recur', function(){
+
+        it('should not throw an error if no function is provided', function(){
+            expect(j.partial(j.recur)).not.toThrow();
+        });
+
+        it('should call passed function', function(){
+            var spy = jasmine.createSpy('userFn');
+            j.recur(spy);
+            expect(spy).toHaveBeenCalled();
+        });
+
+        it('should call passed function when it returns a recursion', function(){
+            var spy = jasmine.createSpy('userFnSpy');
+
+            function recursiveFn(recur, index){
+                var localIndex = j.either(0, index);
+                spy();
+                return (++localIndex < 2) ? recur(localIndex) : localIndex;
+            }
+
+            j.recur(recursiveFn);
+            expect(spy.callCount).toBe(2);
+        });
+
+        it('should call passed function with initial values', function(){
+            var spy = jasmine.createSpy('userFn');
+
+            function userFn(recur, a, b){
+                spy(a, b);
+            }
+
+            j.recur(userFn, 1, 2);
+            expect(spy).toHaveBeenCalledWith(1, 2);
+        });
+
+        it('should return result of recursion', function(){
+            function factorial(recur, value, product){
+                var newProduct = j.either(1, product) * value;
+                return (--value > 0) ? recur(value, newProduct) : newProduct;
+            }
+
+            expect(j.recur(factorial, 5)).toBe(120);
+        });
+
+    });
+
 })();

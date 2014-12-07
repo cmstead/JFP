@@ -91,6 +91,19 @@
         return j.either(appliedFn, result);
     }
 
+    //zOMG! TAIL RECURSION
+    function recur(userFn){
+        var recurFn = either(identity, userFn),
+            recurser = function(){
+                return apply(concat([recurFn], slice(0, arguments)), rpartial);
+            },
+            recurValue = apply(slice(1, arguments), recurser);
+
+        while(typeof (recurValue = recurValue(recurser)) === 'function' && recurFn !== identity);
+
+        return recurValue;
+    }
+
     j.apply = apply;
     j.compose = compose;
     j.countArguments = countArguments;
@@ -100,6 +113,7 @@
     j.identity = identity;
     j.maybe = maybe;
     j.partial = partial;
+    j.recur = recur;
     j.rpartial = rpartial;
     j.slice = slice;
 
