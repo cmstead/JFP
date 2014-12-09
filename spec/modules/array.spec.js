@@ -107,6 +107,72 @@
 
     });
 
+    describe('last', function(){
+
+        it('should return null if no array is sent', function(){
+            expect(j.last()).toBe(null);
+        });
+
+        it('should return the last element of an array', function(){
+            expect(j.last([1, 2, 3, 4])).toBe(4);
+        });
+
+    });
+
+    describe('lastIndex', function(){
+        it('should return null if no array is passed', function(){
+            expect(j.lastIndex()).toBe(null);
+        });
+
+        it('should return the last index of an array', function(){
+            expect(j.lastIndex([1, 2, 3, 4])).toBe(3);
+        });
+    });
+
+    describe('drop', function(){
+
+        it('should return an array', function(){
+            expect(JSON.stringify(j.drop())).toBe('[]');
+        });
+
+        it('should remove first element from passed array', function(){
+            expect(JSON.stringify(j.drop(0, [1, 2, 3, 4]))).toBe('[2,3,4]');
+        });
+
+        it('shouldremove the last element from passed array', function(){
+            expect(JSON.stringify(j.drop(3, [1, 2, 3, 4]))).toBe('[1,2,3]');
+        });
+
+        it('should remove a middle element from passed array', function(){
+            expect(JSON.stringify(j.drop(2, [1, 2, 3, 4]))).toBe('[1,3,4]');
+        });
+
+    });
+
+    describe('dropFirst', function(){
+
+        it('should drop the first element', function(){
+            expect(JSON.stringify(j.dropFirst([1, 2, 3, 4]))).toBe('[2,3,4]');
+        });
+
+    });
+
+    describe('dropFirst', function(){
+
+        it('should drop the first element', function(){
+            expect(JSON.stringify(j.dropFirst([1, 2, 3, 4]))).toBe('[2,3,4]');
+        });
+
+    });
+
+    describe('dropLast', function(){
+
+        it('should drop the last element', function(){
+            expect(JSON.stringify(j.dropLast([1, 2, 3, 4]))).toBe('[1,2,3]');
+        });
+
+    });
+
     describe('rest', function(){
 
         it('should return an array', function(){
