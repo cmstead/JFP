@@ -92,6 +92,10 @@
         return j.either(appliedFn, result);
     }
 
+    function applyCurry(userFn, args){
+        return apply(concat([userFn], slice(0, args)), curry);
+    }
+
     //zOMG! TAIL RECURSION
     function recur(userFn){
         var recurFn = either(identity, userFn),
@@ -109,6 +113,7 @@
     j.compose = compose;
     j.countArguments = countArguments;
     j.curry = curry;
+    j.applyCurry = applyCurry;
     j.concat = concat;
     j.either = either;
     j.identity = identity;
