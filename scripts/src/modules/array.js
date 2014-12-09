@@ -45,8 +45,7 @@
     }
 
     function find(userFn, valueSet){
-        var finalValue = null,
-            argsFulfilled = !!userFn && !!valueSet;
+        var finalValue = null;
 
         function findFn(value){
             var returnValue = true; //Continue
@@ -59,11 +58,9 @@
             return returnValue;
         }
 
-        if(argsFulfilled){
-            each(findFn, valueSet);
-        }
+        each(findFn, j.either([], valueSet));
 
-        return (argsFulfilled) ? finalValue : j.applyCurry(find, arguments);
+        return finalValue;
     }
 
     function first(values){
@@ -111,6 +108,7 @@
     }
     
     function nth(index, valueSet){
+        var argsFulfilled = j.slice(0, arguments).length >= 2;
         return j.either(null, j.either([], valueSet)[index]);
     }
 

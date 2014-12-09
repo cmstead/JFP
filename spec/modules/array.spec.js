@@ -259,12 +259,12 @@
 
     describe('find', function(){
 
-        it('should return a function with no arguments', function(){
-            expect(typeof j.find()).toBe('function');
+        it('should return null if no arguments are sent', function(){
+            expect(j.find()).toBe(null);
         });
 
-        it('should return a function with just a function passed in', function(){
-            expect(typeof j.find(function(){})).toBe('function');
+        it('should return null with just a function passed in', function(){
+            expect(j.find(function(){})).toBe(null);
         });
 
         it('should return null if value is not found', function(){
@@ -286,10 +286,6 @@
     });
     
     describe('nth', function(){
-        it('should return null if no array is provided', function(){
-            expect(j.nth(0)).toBe(null);
-        });
-        
         it('should return null if no value exists at nth position', function(){
             expect(j.nth(4, [1, 2, 3])).toBe(null);
         });

@@ -58,10 +58,6 @@
         return j.either(appliedFn, result);
     }
 
-    function applyCurry(userFn, args){
-        return apply(j.concat([userFn], j.slice(0, args)), curry);
-    }
-
     //zOMG! TAIL RECURSION
     function verifyRecurValue(recurValue){
         var isRecursor = typeof recurValue === 'function';
@@ -89,7 +85,6 @@
     j.apply = apply;
     j.countArguments = countArguments;
     j.curry = curry;
-    j.applyCurry = applyCurry;
     j.either = either;
     j.identity = identity;
     j.maybe = maybe;
