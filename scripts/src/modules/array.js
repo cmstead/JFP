@@ -120,6 +120,7 @@
                         recur(userFn(reduction, first(collection)), rest(collection)) :
                         reduction;
         }
+        
         return (!!values && values.length > 0) ? j.recur(reducer, first(values), rest(values)) : null;
     }
 

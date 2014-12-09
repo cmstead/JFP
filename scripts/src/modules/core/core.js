@@ -2,24 +2,6 @@
     'use strict';
 
     //These array-related functions are critical to core behaviors
-    function concat(original, extension){
-        var result = j.either([], original),
-            sanitizedExtension = j.either([], extension),
-            i;
-
-        //This is the most performant way to perform this concatenation. Trust me.
-        for(i = 0; i < sanitizedExtension.length; i++){
-            result.push(sanitizedExtension[i]);
-        }
-
-        return result;
-    }
-    
-    function slice(begin, valueSet, end){
-        return (!end) ? Array.prototype.slice.call(valueSet, begin) :
-                        Array.prototype.slice.call(valueSet, begin, end);
-    }
-
     //Begin function-related core code
     function identity(value){
         return value;
@@ -51,76 +33,68 @@
     }
     
     function partial(userFn){
-        var args = slice(1, arguments);
+        var args = j.slice(1, arguments);
         
         return function appliedFn(){
-            return apply(concat(args, slice(0, arguments)), userFn);
+            return apply(j.concat(args, j.slice(0, arguments)), userFn);
         };
     }
 
     function rpartial(userFn){
-        var args = slice(1, arguments);
+        var args = j.slice(1, arguments);
         
         return function appliedFn(){
-            return apply(concat(slice(0, arguments), args), userFn);
-        };
-    }
-
-    function compose(userFn){
-        var userFns = slice(0, arguments);
-
-        return function(){
-            var args = slice(0, arguments),
-                result = either([], args),
-                userFn;
-
-            while(!!(userFn = userFns.pop())){
-                result = [apply(result, userFn)];
-            }
-
-            return either([], result)[0];
+            return apply(j.concat(j.slice(0, arguments), args), userFn);
         };
     }
 
     //This is complicated and I don't expect people to grok it on first read.
     function curry(userFn){
-        var args = slice(1, arguments),
+        var args = j.slice(1, arguments),
             argumentCount = maybe(0, countArguments, userFn),
-            appliedFn = (args.length < argumentCount) ? apply(concat([curry, userFn], args), partial) : null,
+            appliedFn = (args.length < argumentCount) ? apply(j.concat([curry, userFn], args), partial) : null,
             result = (!!userFn && args.length >= argumentCount) ? apply(args, userFn) : null;
 
         return j.either(appliedFn, result);
     }
 
     function applyCurry(userFn, args){
-        return apply(concat([userFn], slice(0, args)), curry);
+        return apply(j.concat([userFn], j.slice(0, args)), curry);
     }
 
     //zOMG! TAIL RECURSION
+    function verifyRecurValue(recurValue){
+        var isRecursor = typeof recurValue === 'function';
+        return (isRecursor && recurValue.toString().match('recursorFn'));
+    }
+
     function recur(userFn){
         var recurFn = either(identity, userFn),
-            recurser = function(){
-                return apply(concat([recurFn], slice(0, arguments)), rpartial);
+            recursor = function recursor(){
+                var args = j.slice(0, arguments);
+                
+                //This is to make the returned function distinct and identifiable.
+                return function recursorFn(){
+                    return apply(j.slice(0, arguments), 
+                                 apply(j.concat([recurFn], args), rpartial));
+                };
             },
-            recurValue = apply(slice(1, arguments), recurser);
-
-        while(typeof (recurValue = recurValue(recurser)) === 'function' && recurFn !== identity);
+            recurValue = apply(j.slice(1, arguments), recursor);
+        
+        while(verifyRecurValue(recurValue = recurValue(recursor)) && recurFn !== identity);
 
         return recurValue;
     }
 
     j.apply = apply;
-    j.compose = compose;
     j.countArguments = countArguments;
     j.curry = curry;
     j.applyCurry = applyCurry;
-    j.concat = concat;
     j.either = either;
     j.identity = identity;
     j.maybe = maybe;
     j.partial = partial;
     j.recur = recur;
     j.rpartial = rpartial;
-    j.slice = slice;
 
 })(jfp);

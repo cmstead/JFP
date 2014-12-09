@@ -10,9 +10,11 @@ module.exports = function(config){
 
         files: [
             '../scripts/src/jfp.js',
+            '../scripts/src/modules/core/core.js',
+            '../scripts/src/modules/core/array.js',
             '../scripts/src/modules/predicate.js',
-            '../scripts/src/modules/core.js',
             '../scripts/src/modules/array.js',
+            '../scripts/src/modules/composite.js',
             '../scripts/src/jfp.expose.js',
             './**/*.spec.js'
         ],
