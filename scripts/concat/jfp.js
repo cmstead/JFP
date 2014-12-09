@@ -6,9 +6,7 @@ jfp = (function(){
 })();
 
 (function(j){
-    'use strict';
 
-    //These array-related functions are critical to core behaviors
     function concat(original, extension){
         var result = j.either([], original),
             sanitizedExtension = j.either([], extension),
@@ -27,6 +25,15 @@ jfp = (function(){
                         Array.prototype.slice.call(valueSet, begin, end);
     }
 
+    j.concat = concat;
+    j.slice = slice;
+
+})(jfp);
+
+(function(j){
+    'use strict';
+
+    //These array-related functions are critical to core behaviors
     //Begin function-related core code
     function identity(value){
         return value;
@@ -58,72 +65,64 @@ jfp = (function(){
     }
     
     function partial(userFn){
-        var args = slice(1, arguments);
+        var args = j.slice(1, arguments);
         
         return function appliedFn(){
-            return apply(concat(args, slice(0, arguments)), userFn);
+            return apply(j.concat(args, j.slice(0, arguments)), userFn);
         };
     }
 
     function rpartial(userFn){
-        var args = slice(1, arguments);
+        var args = j.slice(1, arguments);
         
         return function appliedFn(){
-            return apply(concat(slice(0, arguments), args), userFn);
-        };
-    }
-
-    function compose(userFn){
-        var userFns = slice(0, arguments);
-
-        return function(){
-            var args = slice(0, arguments),
-                result = either([], args),
-                userFn;
-
-            while(!!(userFn = userFns.pop())){
-                result = [apply(result, userFn)];
-            }
-
-            return either([], result)[0];
+            return apply(j.concat(j.slice(0, arguments), args), userFn);
         };
     }
 
     //This is complicated and I don't expect people to grok it on first read.
     function curry(userFn){
-        var args = slice(1, arguments),
+        var args = j.slice(1, arguments),
             argumentCount = maybe(0, countArguments, userFn),
-            appliedFn = (args.length < argumentCount) ? apply(concat([curry], slice(0, arguments)), partial) : null,
+            appliedFn = (args.length < argumentCount) ? apply(j.concat([curry, userFn], args), partial) : null,
             result = (!!userFn && args.length >= argumentCount) ? apply(args, userFn) : null;
 
         return j.either(appliedFn, result);
     }
 
     //zOMG! TAIL RECURSION
+    function verifyRecurValue(recurValue){
+        var isRecursor = typeof recurValue === 'function';
+        return (isRecursor && recurValue.toString().match('recursorFn'));
+    }
+
     function recur(userFn){
         var recurFn = either(identity, userFn),
-            recurser = function(){
-                return apply(concat([recurFn], slice(0, arguments)), rpartial);
+            recursor = function recursor(){
+                var args = j.slice(0, arguments);
+                
+                //This is to make the returned function distinct and identifiable.
+                return function recursorFn(){
+                    return apply(j.slice(0, arguments), 
+                                 apply(j.concat([recurFn], args), rpartial));
+                };
             },
-            recurValue = apply(slice(1, arguments), recurser);
-
-        while(typeof (recurValue = recurValue(recurser)) === 'function' && recurFn !== identity);
+            recurValue = apply(j.slice(1, arguments), recursor);
+        
+        while(verifyRecurValue(recurValue = recurValue(recursor)) && recurFn !== identity);
 
         return recurValue;
     }
 
     j.apply = apply;
-    j.compose = compose;
     j.countArguments = countArguments;
     j.curry = curry;
-    j.concat = concat;
     j.either = either;
     j.identity = identity;
     j.maybe = maybe;
     j.partial = partial;
     j.recur = recur;
     j.rpartial = rpartial;
-    j.slice = slice;
 
 })(jfp);
 
@@ -230,8 +229,54 @@ jfp = (function(){
         return result;
     }
 
+    function find(userFn, valueSet){
+        var finalValue = null;
+
+        function findFn(value){
+            var returnValue = true; //Continue
+
+            if(userFn(value)){
+                finalValue = value;
+                returnValue = false;
+            }
+
+            return returnValue;
+        }
+
+        each(findFn, j.either([], valueSet));
+
+        return finalValue;
+    }
+
     function first(values){
         return (!values) ? null : j.either(null, values[0]);
+    }
+
+    function last(valueSet){
+        return (!!valueSet) ? valueSet[valueSet.length - 1] : null;
+    }
+
+    function lastIndex(valueSet){
+        return (!!valueSet) ? valueSet.length - 1 : null;
+    }
+
+    function drop(index, valueSet){
+        var finalIndex = lastIndex(valueSet),
+
+            sanitizedIndex = (index === 0 || index === finalIndex) ?
+                index : j.either(1, index) - 1,
+
+            firstArray = (sanitizedIndex === 0) ?
+                [] : j.slice(0, valueSet, sanitizedIndex),
+
+            secondArray = (sanitizedIndex === finalIndex)?
+                [] : j.slice(sanitizedIndex + 1, valueSet);
+
+        return j.concat(firstArray, secondArray);
+    }
+
+    function dropLast(valueSet){
+        return drop(lastIndex(valueSet), valueSet);
     }
     
     function map(userFn, userArray){
@@ -246,6 +291,11 @@ jfp = (function(){
             
         return finalArray;
     }
+    
+    function nth(index, valueSet){
+        var argsFulfilled = j.slice(0, arguments).length >= 2;
+        return j.either(null, j.either([], valueSet)[index]);
+    }
 
     function rest(values){
         return j.slice(1, values);
@@ -257,6 +307,7 @@ jfp = (function(){
                         recur(userFn(reduction, first(collection)), rest(collection)) :
                         reduction;
         }
+        
         return (!!values && values.length > 0) ? j.recur(reducer, first(values), rest(values)) : null;
     }
 
@@ -266,13 +317,39 @@ jfp = (function(){
 
     j.conj = conj;
     j.cons = cons;
+    j.drop = drop;
+    j.dropFirst = j.partial(drop, 0);
+    j.dropLast = dropLast;
     j.each = each;
     j.filter = filter;
+    j.find = find;
     j.first = first;
+    j.last = last;
+    j.lastIndex = lastIndex;
     j.map = map;
+    j.nth = nth;
     j.reduce = reduce;
     j.rest = rest;
     j.take = take;
+
+})(jfp);
+
+(function(j){
+    'use strict';
+    
+    //Produces a function that returns f(g(x))
+    function compositor(f, g){
+        return function(){
+            return f(j.apply(j.slice(0, arguments), g));
+        };
+    }
+    
+    function compose(){
+        var args = j.slice(0, arguments);
+        return (args.length >= 1) ? j.reduce(compositor, args) : j.identity;
+    }
+
+    j.compose = compose;
 
 })(jfp);
 
