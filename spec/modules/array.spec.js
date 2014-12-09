@@ -284,5 +284,19 @@
         });
 
     });
+    
+    describe('nth', function(){
+        it('should return null if no array is provided', function(){
+            expect(j.nth(0)).toBe(null);
+        });
+        
+        it('should return null if no value exists at nth position', function(){
+            expect(j.nth(4, [1, 2, 3])).toBe(null);
+        });
+        
+        it('should return nth value of array', function(){
+            expect(j.nth(1, [1, 2, 3])).toBe(2);
+        });
+    });
 
 })();

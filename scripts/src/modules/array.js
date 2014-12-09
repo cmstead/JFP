@@ -109,6 +109,10 @@
             
         return finalArray;
     }
+    
+    function nth(index, valueSet){
+        return j.either(null, j.either([], valueSet)[index]);
+    }
 
     function rest(values){
         return j.slice(1, values);
@@ -140,6 +144,7 @@
     j.last = last;
     j.lastIndex = lastIndex;
     j.map = map;
+    j.nth = nth;
     j.reduce = reduce;
     j.rest = rest;
     j.take = take;
