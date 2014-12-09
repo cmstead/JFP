@@ -279,7 +279,23 @@
                 return a + b + c + d;
             }
 
-            expect(j.curry(sum, 1)(2, 3)(4)).toBe(10);
+            expect(j.curry(sum)(1)(2, 3)(4)).toBe(10);
+        });
+
+        it('should work with function and value arguments', function(){
+            var curriedFn;
+
+            function testFn(userFn, valueSet){
+                return userFn(valueSet);
+            }
+
+            function add(valueSet){
+                return valueSet[0] + valueSet[1];
+            }
+
+            curriedFn = j.curry(testFn);
+
+            expect(curriedFn(add)([5, 6])).toBe(11);
         });
 
     });

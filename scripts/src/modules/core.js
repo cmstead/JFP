@@ -86,7 +86,7 @@
     function curry(userFn){
         var args = slice(1, arguments),
             argumentCount = maybe(0, countArguments, userFn),
-            appliedFn = (args.length < argumentCount) ? apply(concat([curry], slice(0, arguments)), partial) : null,
+            appliedFn = (args.length < argumentCount) ? apply(concat([curry, userFn], args), partial) : null,
             result = (!!userFn && args.length >= argumentCount) ? apply(args, userFn) : null;
 
         return j.either(appliedFn, result);

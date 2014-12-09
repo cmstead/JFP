@@ -257,4 +257,32 @@
 
     });
 
+    describe('find', function(){
+
+        it('should return a function with no arguments', function(){
+            expect(typeof j.find()).toBe('function');
+        });
+
+        it('should return a function with just a function passed in', function(){
+            expect(typeof j.find(function(){})).toBe('function');
+        });
+
+        it('should return null if value is not found', function(){
+            function isEven(value){
+                return !(value & 1);
+            }
+
+            expect(j.find(isEven, [1, 3, 5, 7])).toBe(null);
+        });
+
+        it('should return first matching value', function(){
+            function isEven(value){
+                return !(value & 1);
+            }
+
+            expect(j.find(isEven, [1 ,2, 3, 4])).toBe(2);
+        });
+
+    });
+
 })();

@@ -44,6 +44,31 @@
         return result;
     }
 
+    function find(userFn, valueSet){
+        var finalValue = null;
+
+        function findFn(value){
+            var returnValue = true; //Continue
+
+            if(userFn(value)){
+                finalValue = value;
+                returnValue = false;
+            }
+
+            return returnValue;
+        }
+
+        if(!!userFn && !!valueSet){
+            each(findFn, valueSet);
+        } else if(!!userFn) {
+            finalValue = j.curry(find, userFn);
+        } else {
+            finalValue = j.curry(find);
+        }
+
+        return finalValue;
+    }
+
     function first(values){
         return (!values) ? null : j.either(null, values[0]);
     }
@@ -112,6 +137,7 @@
     j.dropLast = dropLast;
     j.each = each;
     j.filter = filter;
+    j.find = find;
     j.first = first;
     j.last = last;
     j.lastIndex = lastIndex;
