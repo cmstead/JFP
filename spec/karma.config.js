@@ -13,7 +13,9 @@ module.exports = function(config){
             '../scripts/src/modules/core/core.js',
             '../scripts/src/modules/core/array.js',
             '../scripts/src/modules/predicate.js',
+            '../scripts/src/modules/convert.js',
             '../scripts/src/modules/array.js',
+            '../scripts/src/modules/object.js',
             '../scripts/src/modules/composite.js',
             '../scripts/src/jfp.expose.js',
             './**/*.spec.js'
