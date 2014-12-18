@@ -1,4 +1,5 @@
 var cleanConfig = require('./grunt/clean.json'),
+    concatConfig = require('./grunt/concat.json'),
     jsdocConfig = require('./grunt/jsdoc.json'),
     jshintConfig = require('./grunt/jshint.json'),
     karmaConfig = require('./grunt/karma.json'),
@@ -9,6 +10,7 @@ module.exports = function(grunt){
         pkg: grunt.file.readJSON('package.json'),
 
         clean: cleanConfig,
+        concat: concatConfig,
         jsdoc : jsdocConfig,
         jshint: jshintConfig,
         karma: karmaConfig,
@@ -18,6 +20,7 @@ module.exports = function(grunt){
     /* Load grunt task adapters */
 
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-jsdoc');
@@ -26,9 +29,9 @@ module.exports = function(grunt){
     /* Register composite grunt tasks */
 
     grunt.registerTask('test', ['jshint', 'karma']);
-    grunt.registerTask('document', ['jsdoc'])
+    grunt.registerTask('document', ['jsdoc']);
 
-    grunt.registerTask('buildjs', ['uglify'])
+    grunt.registerTask('buildjs', ['uglify']);
     grunt.registerTask('build', ['clean', 'test', 'buildjs', 'document']);
 
     grunt.registerTask('default', ['test']);
