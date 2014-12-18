@@ -1,7 +1,7 @@
 {
   "name": "JFP",
   "description": "Javascript Function Processor",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha1",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
