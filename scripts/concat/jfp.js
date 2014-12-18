@@ -186,6 +186,33 @@ jfp = (function(){
 (function(j){
     'use strict';
 
+    function toValues(valueMap){
+        var finalArray = (j.isObject(valueMap)) ? [] : null,
+            key;
+
+        if(!!finalArray){
+            for(key in valueMap){
+                if(valueMap.hasOwnProperty(key) && !!valueMap[key]){
+                    finalArray.push(valueMap[key]);
+                }
+            }
+        }
+
+        return finalArray;
+    }
+
+    function toDec(value){
+        return (j.isNumeric(value)) ? parseInt(value, 10) : null;
+    }
+
+    j.toDec = toDec;
+    j.toValues = toValues;
+
+})(jfp);
+
+(function(j){
+    'use strict';
+
     function conj(value, dest){
         var destination = j.slice(0, j.either([], dest));
 
@@ -331,6 +358,39 @@ jfp = (function(){
     j.reduce = reduce;
     j.rest = rest;
     j.take = take;
+
+})(jfp);
+
+(function(j){
+    'use strict';
+
+    function pick(key, valueMap){
+        return j.either(null, j.either({}, valueMap)[key]);
+    }
+
+    function pluckKeys(keys, valueMap){
+        var finalOutput = {},
+            sanitizedKeys = j.either([], keys),
+            sanitizedValueMap = j.either({}, valueMap);
+
+        function captureValue(key){
+            if(sanitizedValueMap[key]){
+                finalOutput[key] = sanitizedValueMap[key];
+            }
+        }
+
+        j.each(captureValue, sanitizedKeys);
+
+        return finalOutput;
+    }
+
+    function pluck(key, valueMap){
+        return pluckKeys([key], valueMap);
+    }
+
+    j.pick = pick;
+    j.pluck = pluck;
+    j.pluckKeys = pluckKeys;
 
 })(jfp);
 

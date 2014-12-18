@@ -27,10 +27,18 @@
 
     });
 
-    describe('toNumber', function(){
+    describe('toDec', function(){
 
         it('should return null if passed value is not numeric', function(){
-            
+            expect(j.toDec()).toBe(null);
+        });
+
+        it('should return original value if it is a number', function(){
+            expect(j.toDec(0x123)).toBe(0x123);
+        });
+
+        it('should convert string to number if string is numeric', function(){
+            expect(j.toDec('123')).toBe(123);
         });
 
     });
