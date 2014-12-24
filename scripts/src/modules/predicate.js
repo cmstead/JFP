@@ -42,6 +42,29 @@
         return !value;
     }
     
+    //Performs 'and' operation on valueSet
+    function ander(recur, current, valueSet){
+        return (valueSet.length === 0) ? 
+                current : 
+                recur(current && !!j.first(valueSet), j.rest(valueSet));
+    }
+    
+    function and(){
+        return j.recur(ander, true, j.slice(0, arguments));
+    }
+    
+    //Performs 'or' operation on valueSet
+    function orer(recur, current, valueSet){
+        return (valueSet.length === 0) ?
+                current :
+                recur(current || !!j.first(valueSet), j.rest(valueSet));
+    }
+    
+    function or(){
+        return j.recur(orer, false, j.slice(0, arguments));
+    }
+    
+    j.and = and;
     j.isArray = isArray;
     j.isBoolean = isBoolean;
     j.isNull = isNull;
@@ -52,5 +75,6 @@
     j.isTruthy = isTruthy;
     j.isUndefined = isUndefined;
     j.not = not;
+    j.or = or;
     
 })(jfp);

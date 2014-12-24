@@ -151,6 +151,38 @@
             
         });
         
+        describe('and', function(){
+            
+            it('should return true by default', function(){
+                expect(j.and()).toBe(true);
+            });
+            
+            it('should return false if passed value is false', function(){
+                expect(j.and(false)).toBe(false);
+            });
+            
+            it('should resolve a set of truey/falsey values', function(){
+                expect(j.and(true, 1, 'foo', 0, false)).toBe(false);
+            });
+            
+        });
+        
+        describe('or', function(){
+            
+            it('should return false by default', function(){
+                expect(j.or()).toBe(false);
+            });
+            
+            it('should return true if passed value is true', function(){
+                expect(j.or(true)).toBe(true);
+            });
+            
+            it('should resolve a set of truey/falsey values', function(){
+                expect(j.or(0, false, null, 1, true)).toBe(true);
+            });
+            
+        });
+        
     });
     
 })();
