@@ -16,6 +16,7 @@ module.exports = function(config){
             '../scripts/src/modules/convert.js',
             '../scripts/src/modules/array.js',
             '../scripts/src/modules/object.js',
+            '../scripts/src/modules/math.js',
             '../scripts/src/modules/composite.js',
             '../scripts/src/jfp.expose.js',
             './**/*.spec.js'
