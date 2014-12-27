@@ -73,11 +73,11 @@
     }
     
     function leq(a, b){
-        return less(a, b) || equal(a, b);
+        return j.not(greater(a, b));
     }
     
     function geq(a, b){
-        return greater(a, b) || equal(a, b);
+        return j.not(less(a, b));
     }
 
     //This is a recursive constructor function for ranges
@@ -93,6 +93,10 @@
                        j.either(0, b));
     }
 
+    function mod(a, b){
+        return j.isUndefined(b) ? j.either(0, a) : a%b;
+    }
+
     j.add = add;
     j.divide = divide;
     j.equal = equal;
@@ -100,6 +104,7 @@
     j.greater = greater;
     j.leq = leq;
     j.less = less;
+    j.mod = mod;
     j.multiply = multiply;
     j.range = range;
     j.subtract = subtract;

@@ -186,6 +186,23 @@
             
         });
 
+        describe('mod', function(){
+
+            it('should return 0 when no arguments are passed', function(){
+                expect(j.mod()).toBe(0);
+            });
+
+            it('should return passed value when one argument is passed', function(){
+                expect(j.mod(5)).toBe(5);
+            });
+
+            it('should return a%b when two arguments are passed', function(){
+                expect(j.mod(5, 2)).toBe(1);
+            });
+
+        });
+	
+
     });
     
 })();
