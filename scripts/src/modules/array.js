@@ -4,7 +4,7 @@
     function conj(value, dest){
         var destination = j.slice(0, j.either([], dest));
 
-        if(value){
+        if(j.compose(j.not, j.isUndefined)(value)){
             destination.push(value);
         }
 

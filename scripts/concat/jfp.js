@@ -239,7 +239,7 @@ jfp = (function(){
     function conj(value, dest){
         var destination = j.slice(0, j.either([], dest));
 
-        if(value){
+        if(j.compose(j.not, j.isUndefined)(value)){
             destination.push(value);
         }
 
@@ -500,16 +500,30 @@ jfp = (function(){
     }
 
     //This is a recursive constructor function for ranges
-    function rangeBuilder(recur, currentRange, m, n){
-        currentRange = (m <= n) ? j.conj(m, currentRange) : currentRange;
-        return (++m <= n) ? recur(currentRange, m ,n) : currentRange;
+    function rangeRecurCheck(m, n, inc){
+        return inc > 0 ? (m + inc) < n : (m + inc) > n;
     }
     
-    function range(a, b){
+    function rangeBuilder(recur, currentRange, m, n, inc){
+        var finalRange = rangeRecurCheck(m - inc, n, inc) ?
+                            j.conj(m, currentRange) :
+                            currentRange;
+        
+        return rangeRecurCheck(m, n, inc) ?
+                recur(finalRange, m + inc, n, inc) :
+                finalRange;
+    }
+    
+    function range(a, b, inc){
+        var start = j.isUndefined(b) ? 0 : a,
+            end = j.isUndefined(b) ? j.either(0, a) : b,
+            increment = (!inc) ? 1 : inc;
+            
         return j.recur(rangeBuilder,
-                       j.conj(a),
-                       j.either(0, a) + 1,
-                       j.either(0, b));
+                       [],
+                       j.either(0, start),
+                       j.either(0, end),
+                       increment);
     }
 
     function mod(a, b){

@@ -10,11 +10,19 @@
             });
             
             it('should return an array of a single element if only a single element is provided', function(){
-                expect(JSON.stringify(j.range(5))).toBe('[5]');
+                expect(JSON.stringify(j.range(5))).toBe('[0,1,2,3,4]');
             });
             
             it('should return an array containing range a to b', function(){
-                expect(JSON.stringify(j.range(5, 10))).toBe('[5,6,7,8,9,10]');
+                expect(JSON.stringify(j.range(5, 10))).toBe('[5,6,7,8,9]');
+            });
+            
+            it('should take an incremental value', function(){
+                expect(JSON.stringify(j.range(1, 10, 3))).toBe('[1,4,7]');
+            });
+
+            it('should properly handle a decremental value', function(){
+                expect(JSON.stringify(j.range(10, -3, -3))).toBe('[10,7,4,1,-2]');
             });
         });
         
