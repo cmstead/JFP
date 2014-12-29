@@ -34,6 +34,22 @@
         });
 
     });
+    
+    describe('pipline', function(){
+        
+        it('should return a function', function(){
+            expect(typeof j.pipeline()).toBe('function');
+        });
+        
+        it('should execute composed functions in left-right order', function(){
+            var add5 = j.partial(j.add, 5),
+                multiply2 = j.partial(j.multiply, 2),
+                add2 = j.partial(j.add, 2);
+                
+            expect(j.pipeline(add5, multiply2, add2)(0)).toBe(12)
+        });
+        
+    });
 
 
 })();
