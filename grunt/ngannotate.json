@@ -1,0 +1,14 @@
+{
+    "options": {
+        "singleQuotes": true
+    },
+    "controllers": {
+        "files": [
+            {
+                "expand": true,
+                "src": ["app/scripts/controllers/**/*.js"],
+                "ext": ".annotated.js"
+            }
+        ]
+    }
+}

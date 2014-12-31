@@ -1,0 +1,42 @@
+body{
+  color: $text-color;
+  font-family: helvetica, arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+h1{
+  font-size: 32px;
+  font-weight: normal;
+  line-height: 2em;
+
+  a{
+    color: $text-color;
+    text-decoration: none;
+  }
+}
+
+h2{
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.8em;
+}
+
+a{
+  color: $link-color;
+}
+
+p{
+  line-height: 1.4em;
+  margin-bottom: 15px;
+
+  &:last-child{
+    margin-bottom: 0px;
+  }
+}
+
+.body-container{
+  margin: 45px auto 0 auto;
+  text-align: left;
+  width: 960px;
+}

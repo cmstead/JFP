@@ -1,0 +1,14 @@
+{
+    "options": {
+        "stripBanners": true,
+        "banner": "/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today('yyyy-mm-dd') %> */"
+    },
+    "dist": {
+        "src": [
+            "./min/JFP.config.min.js",
+            "./min/JFP.controllers.min.js",
+            "./min/JFP.app.min.js"
+        ],
+        "dest": "./dist/app.js"
+    }
+}

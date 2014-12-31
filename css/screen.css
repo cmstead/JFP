@@ -1,0 +1,166 @@
+/* Grays */
+/* Blues */
+/* Oranges */
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+/* line 6, ../app/scss/partials/_reset.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+/* line 27, ../app/scss/partials/_reset.scss */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+/* line 31, ../app/scss/partials/_reset.scss */
+body {
+  line-height: 1;
+}
+
+/* line 34, ../app/scss/partials/_reset.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 37, ../app/scss/partials/_reset.scss */
+blockquote, q {
+  quotes: none;
+}
+
+/* line 40, ../app/scss/partials/_reset.scss */
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+/* line 45, ../app/scss/partials/_reset.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 1, ../app/scss/partials/_base.scss */
+body {
+  color: #666666;
+  font-family: helvetica, arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* line 8, ../app/scss/partials/_base.scss */
+h1 {
+  font-size: 32px;
+  font-weight: normal;
+  line-height: 2em;
+}
+/* line 13, ../app/scss/partials/_base.scss */
+h1 a {
+  color: #666666;
+  text-decoration: none;
+}
+
+/* line 19, ../app/scss/partials/_base.scss */
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.8em;
+}
+
+/* line 25, ../app/scss/partials/_base.scss */
+a {
+  color: #2B547E;
+}
+
+/* line 29, ../app/scss/partials/_base.scss */
+p {
+  line-height: 1.4em;
+  margin-bottom: 15px;
+}
+/* line 33, ../app/scss/partials/_base.scss */
+p:last-child {
+  margin-bottom: 0px;
+}
+
+/* line 38, ../app/scss/partials/_base.scss */
+.body-container {
+  margin: 45px auto 0 auto;
+  text-align: left;
+  width: 960px;
+}
+
+/* line 1, ../app/scss/partials/_head.scss */
+.head-wrapper {
+  box-sizing: border-box;
+  height: 120px;
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+  width: 960px;
+}
+/* line 9, ../app/scss/partials/_head.scss */
+.head-wrapper .lambda {
+  color: #FA8258;
+  font-size: 124px;
+  font-weight: bold;
+  position: absolute;
+  z-index: -1;
+  -moz-transform: scale(1.25, 1);
+  -ms-transform: scale(1.25, 1);
+  -webkit-transform: scale(1.25, 1);
+  transform: scale(1.25, 1);
+}
+/* line 19, ../app/scss/partials/_head.scss */
+.head-wrapper h1 {
+  padding: 25px;
+}
+/* line 22, ../app/scss/partials/_head.scss */
+.head-wrapper h1 a {
+  color: #333333;
+  text-shadow: 3px 3px 10px #666666;
+  text-shadow: 3px 3px 10px 3px #666666;
+}
+
+/* line 29, ../app/scss/partials/_head.scss */
+.menu-wrapper {
+  background-color: #CEE3F6;
+  border-bottom: 3px solid #FA8258;
+  display: block;
+  padding: 15px;
+}
+/* line 35, ../app/scss/partials/_head.scss */
+.menu-wrapper li {
+  display: inline-block;
+  font-size: 22px;
+  padding-left: 30px;
+}
+/* line 40, ../app/scss/partials/_head.scss */
+.menu-wrapper li a {
+  text-decoration: none;
+}
+/* line 45, ../app/scss/partials/_head.scss */
+.menu-wrapper li:first-child {
+  padding-left: 0px;
+}

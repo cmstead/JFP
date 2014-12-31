@@ -1,0 +1,31 @@
+{
+    "config": {
+        "options": {
+            "banner": "/*! <%= pkg.name %>.config <%= grunt.template.today('dd-mm-yyyy') %> */\n",
+            "sourceMap": false
+        },
+        "files": {
+            "./min/<%= pkg.name %>.config.min.js": ["./app/scripts/core/config.js"]
+        }
+    },
+
+    "controllers": {
+        "options": {
+            "banner": "/*! <%= pkg.name %>.controllers <%= grunt.template.today('dd-mm-yyyy') %> */\n",
+            "sourceMap": false
+        },
+        "files": {
+            "./min/<%= pkg.name %>.controllers.min.js": ["./app/scripts/controllers/**/*.annotated.js"]
+        }
+    },
+
+    "app": {
+        "options": {
+            "banner": "/*! <%= pkg.name %>.app <%= grunt.template.today('dd-mm-yyyy') %> */\n",
+            "sourceMap": false
+        },
+        "files": {
+            "./min/<%= pkg.name %>.app.min.js": ["./app/scripts/core/app.js"]
+        }
+    }
+}
