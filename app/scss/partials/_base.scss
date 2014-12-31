@@ -5,6 +5,25 @@ body{
   text-align: center;
 }
 
+a{
+  color: $link-color;
+}
+
+dl{
+  margin-bottom: 15px;
+}
+
+dt{
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 2em;
+}
+
+dd{
+  line-height: 1.6em;
+  margin-left: 15px;
+}
+
 h1{
   font-size: 32px;
   font-weight: normal;
@@ -22,12 +41,8 @@ h2{
   line-height: 1.8em;
 }
 
-a{
-  color: $link-color;
-}
-
 p{
-  line-height: 1.4em;
+  line-height: 1.6em;
   margin-bottom: 15px;
 
   &:last-child{
@@ -35,8 +50,28 @@ p{
   }
 }
 
+ul, ol{
+  margin-left: 20px;
+  li{
+    list-style-position: outside;
+    line-height: 1.6em;
+  }
+}
+
+ul{
+  li{
+    list-style: disc;
+  }
+}
+
+ol{
+  li{
+    list-style: decimal;
+  }
+}
+
 .body-container{
-  margin: 45px auto 0 auto;
+  margin: 45px auto 45px auto;
   text-align: left;
   width: 960px;
 }

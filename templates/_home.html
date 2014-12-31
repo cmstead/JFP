@@ -8,6 +8,44 @@
 </p>
 
 <p>
+    The driving principles of JFP are as follows:
 
+    <ol>
+        <li>Be JFP all the way down</li>
+        <li>Design the interface to answer common needs first</li>
+        <li>Be the least surprising to the user</li>
+    </ol>
 </p>
 
+
+<p>
+    To be JFP all the way down, the library should either solve a problem in the best way possible and
+    only solve the problem once. Each subsequent time the solution is needed, JFP should look inward
+    to use the abstraction already created to expose the same efficiencies.  Beyond this, by
+    using JFP to solve the problems needed to extend the library, it introduces a guarantee
+    that the internals of JFP are used early so problems and needs are resolved as soon as possible.
+</p>
+
+<p>
+    JFP dogfoods JFP.
+</p>
+
+<p>
+    JFP is designed with common uses and needs addressed first.  This means even if the interface may seem
+    ordered in an unexpected way, the goal is to make it easier to accomplish tasks and create useful abstractions
+    with less effort.  Ideally, using JFP should simplify programs and clarify your workflow.
+</p>
+
+<p>
+    JFP is designed for ease of use.
+</p>
+
+<p>
+    When JFP is used, function interactions should not surprise you. Given a particular input, every JFP
+    function should produce what the user expects. If something doesn't resolve as expected, it is less likely
+    the function is doing something intentionally surprising and more likely the result of a bug.
+</p>
+
+<p>
+    JFP is as transparent as possible.
+</p>

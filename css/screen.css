@@ -71,42 +71,80 @@ body {
 }
 
 /* line 8, ../app/scss/partials/_base.scss */
+a {
+  color: #2B547E;
+}
+
+/* line 12, ../app/scss/partials/_base.scss */
+dl {
+  margin-bottom: 15px;
+}
+
+/* line 16, ../app/scss/partials/_base.scss */
+dt {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 2em;
+}
+
+/* line 22, ../app/scss/partials/_base.scss */
+dd {
+  line-height: 1.6em;
+  margin-left: 15px;
+}
+
+/* line 27, ../app/scss/partials/_base.scss */
 h1 {
   font-size: 32px;
   font-weight: normal;
   line-height: 2em;
 }
-/* line 13, ../app/scss/partials/_base.scss */
+/* line 32, ../app/scss/partials/_base.scss */
 h1 a {
   color: #666666;
   text-decoration: none;
 }
 
-/* line 19, ../app/scss/partials/_base.scss */
+/* line 38, ../app/scss/partials/_base.scss */
 h2 {
   font-size: 24px;
   font-weight: bold;
   line-height: 1.8em;
 }
 
-/* line 25, ../app/scss/partials/_base.scss */
-a {
-  color: #2B547E;
-}
-
-/* line 29, ../app/scss/partials/_base.scss */
+/* line 44, ../app/scss/partials/_base.scss */
 p {
-  line-height: 1.4em;
+  line-height: 1.6em;
   margin-bottom: 15px;
 }
-/* line 33, ../app/scss/partials/_base.scss */
+/* line 48, ../app/scss/partials/_base.scss */
 p:last-child {
   margin-bottom: 0px;
 }
 
-/* line 38, ../app/scss/partials/_base.scss */
+/* line 53, ../app/scss/partials/_base.scss */
+ul, ol {
+  margin-left: 20px;
+}
+/* line 55, ../app/scss/partials/_base.scss */
+ul li, ol li {
+  list-style-position: outside;
+  line-height: 1.6em;
+}
+
+/* line 62, ../app/scss/partials/_base.scss */
+ul li {
+  list-style: disc;
+}
+
+/* line 68, ../app/scss/partials/_base.scss */
+ol li {
+  list-style: decimal;
+}
+
+/* line 73, ../app/scss/partials/_base.scss */
 .body-container {
-  margin: 45px auto 0 auto;
+  margin: 45px auto 45px auto;
   text-align: left;
   width: 960px;
 }

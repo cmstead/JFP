@@ -1,1 +1,78 @@
 <h2>Core Functions</h2>
+
+<dl>
+    <dt>apply</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {array} values, {function} userFn</dd>
+    <dd>Description: Calls provided function with values in passed array</dd>
+</dl>
+
+<dl>
+    <dt>compose</dt>
+    <dd>Performance: O(n) on setup where n is the function count, O(1) at execution time</dd>
+    <dd>Arguments: {function} [arguments]</dd>
+    <dd>Description: Performs function composition on functions provided</dd>
+</dl>
+
+<dl>
+    <dt>countArguments</dt>
+    <dd>Performance: unmeasured</dd>
+    <dd>Arguments: {function} userFn</dd>
+    <dd>Description: Counts the number of arguments required for a function</dd>
+</dl>
+
+<dl>
+    <dt>curry</dt>
+    <dd>Performance: unmeasured - requires on countArguments</dd>
+    <dd>Arguments: {function} userFn, [optional] arguments</dd>
+    <dd>Description: Curries function based on argument count -- partial application special case</dd>
+</dl>
+
+<dl>
+    <dt>either</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {any} defaultValue, {any, nullable} optionValue</dd>
+    <dd>Description: Returns defaultValue on falsey optionValue or optionValue if it is truthy</dd>
+</dl>
+
+<dl>
+    <dt>identity</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {any} value</dd>
+    <dd>Description: Returns value passed in, via direct return</dd>
+</dl>
+
+<dl>
+    <dt>maybe</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {any} defaultValue, {function} userFn, {any, nullable} optionValue</dd>
+    <dd>Description: Returns default value on falsey optionValue or userFn(optionValue) if optionValue is truthy</dd>
+</dl>
+
+<dl>
+    <dt>partial</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {function} userFn, [optional] arguments</dd>
+    <dd>Description: Generalized partial application function.</dd>
+</dl>
+
+<dl>
+    <dt>pipeline</dt>
+    <dd>Performance: O(n) on setup where n is the argument count, O(1) on execution</dd>
+    <dd>Arguments: {function} [arguments]</dd>
+    <dd>Description: Executes functions in left-to-right order pipelining the output from current to the next</dd>
+</dl>
+
+<dl>
+    <dt>recur</dt>
+    <dd>Performance: O(n) - best case, depends on outside operations</dd>
+    <dd>Arguments: {function} userFn, [optional] arguments</dd>
+    <dd>Description: Tail-optimized recursion function</dd>
+</dl>
+
+<dl>
+    <dt>rpartial</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {function} userFn, [optional] arguments</dd>
+    <dd>Description: partial application, applies initial arguments to the right-most position of userFn</dd>
+</dl>
