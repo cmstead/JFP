@@ -113,36 +113,42 @@ h2 {
 }
 
 /* line 44, ../app/scss/partials/_base.scss */
+h4 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* line 49, ../app/scss/partials/_base.scss */
 p {
   line-height: 1.6em;
   margin-bottom: 15px;
 }
-/* line 48, ../app/scss/partials/_base.scss */
+/* line 53, ../app/scss/partials/_base.scss */
 p:last-child {
   margin-bottom: 0px;
 }
 
-/* line 53, ../app/scss/partials/_base.scss */
+/* line 58, ../app/scss/partials/_base.scss */
 ul, ol {
   margin-left: 20px;
 }
-/* line 55, ../app/scss/partials/_base.scss */
+/* line 60, ../app/scss/partials/_base.scss */
 ul li, ol li {
   list-style-position: outside;
   line-height: 1.6em;
 }
 
-/* line 62, ../app/scss/partials/_base.scss */
+/* line 67, ../app/scss/partials/_base.scss */
 ul li {
   list-style: disc;
 }
 
-/* line 68, ../app/scss/partials/_base.scss */
+/* line 73, ../app/scss/partials/_base.scss */
 ol li {
   list-style: decimal;
 }
 
-/* line 73, ../app/scss/partials/_base.scss */
+/* line 78, ../app/scss/partials/_base.scss */
 .body-container {
   margin: 45px auto 45px auto;
   text-align: left;

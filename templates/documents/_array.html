@@ -7,12 +7,32 @@
     <dd>Description: Extends original array with values from extension array</dd>
 </dl>
 
+<h4>Concat Example:</h4>
+
+<pre>
+    <code>
+        j.concat([1, 2, 3], [4, 5, 6]);
+
+        // [ 1, 2, 3, 4, 5, 6 ]
+    </code>
+</pre>
+
 <dl>
     <dt>conj</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {any} value, {array} destination</dd>
     <dd>Description: Returns new array with value postpended</dd>
 </dl>
+
+<h4>Conj Example:</h4>
+
+<pre>
+    <code>
+        j.conj(4, [1, 2, 3]);
+
+        // [ 1, 2, 3, 4 ]
+    </code>
+</pre>
 
 <dl>
     <dt>cons</dt>
@@ -21,12 +41,40 @@
     <dd>Description: Returns new array beginning with value and extended with source array</dd>
 </dl>
 
+<h4>Cons Example:</h4>
+
+<pre>
+    <code>
+        j.cons(4, [1, 2, 3]);
+
+        // [ 4, 1, 2, 3 ]
+    </code>
+</pre>
+
 <dl>
     <dt>drop</dt>
     <dd>Performance: O(n)</dd>
     <dd>Arguments: {int} index, {array} valueSet</dd>
     <dd>Description: Returns new array with value at the provided index removed</dd>
 </dl>
+
+<h4>Drop Example:</h4>
+
+<pre>
+    <code>
+        j.drop(0, [1, 2, 3, 4, 5]);
+
+        // [ 2, 3, 4, 5 ]
+
+        j.drop(4, [1, 2, 3, 4, 5]);
+
+        // [ 1, 2, 3, 4 ]
+
+        j.drop(2, [1, 2, 3, 4, 5]);
+
+        // [ 1, 2, 4, 5 ]
+    </code>
+</pre>
 
 <dl>
     <dt>dropFirst</dt>
@@ -35,12 +83,32 @@
     <dd>Description: Returns new array with first value removed</dd>
 </dl>
 
+<h4>DropFirst Example:</h4>
+
+<pre>
+    <code>
+        j.dropFirst([1, 2, 3, 4, 5]);
+
+        // [ 2, 3, 4, 5 ]
+    </code>
+</pre>
+
 <dl>
     <dt>dropLast</dt>
     <dd>Performance: O(n)</dd>
     <dd>Arguments: {array} valueSet</dd>
     <dd>Description: Returns new array with last value removed</dd>
 </dl>
+
+<h4>DropLast Example:</h4>
+
+<pre>
+    <code>
+        j.dropLast([1, 2, 3, 4, 5]);
+
+        // [ 1, 2, 3, 4 ]
+    </code>
+</pre>
 
 <dl>
     <dt>each</dt>
@@ -49,12 +117,36 @@
     <dd>Description: Performs userFn on each element of userArray</dd>
 </dl>
 
+<h4>Each Example:</h4>
+
+<pre>
+    <code>
+        j.each(function(value){ console.log(value); }, [1, 2, 3, 4, 5]);
+
+        // 1
+        // 2
+        // 3
+        // 4
+        // 5
+    </code>
+</pre>
+
 <dl>
     <dt>filter</dt>
     <dd>Performance: O(n)</dd>
     <dd>Arguments: {function} predicate, {array} userArray</dd>
     <dd>Description: Returns array containing values which pass predicate test</dd>
 </dl>
+
+<h4>Filter Example:</h4>
+
+<pre>
+    <code>
+        j.filter(function(value){ return value % 2 === 0; }, [1, 2, 3, 4, 5, 6]);
+
+        // [ 2, 4, 6 ]
+    </code>
+</pre>
 
 <dl>
     <dt>find</dt>
@@ -63,12 +155,32 @@
     <dd>Description: Returns first value that passes predicate function</dd>
 </dl>
 
+<h4>Find Example:</h4>
+
+<pre>
+    <code>
+        j.find(function(value){ return value % 2 === 0; }, [1, 2, 3, 4, 5, 6]);
+
+        // 2
+    </code>
+</pre>
+
 <dl>
     <dt>first</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {array} values</dd>
     <dd>Description: Returns first value in array</dd>
 </dl>
+
+<h4>First Example:</h4>
+
+<pre>
+    <code>
+        j.first([1, 2, 3, 4, 5, 6]);
+
+        // 1
+    </code>
+</pre>
 
 <dl>
     <dt>last</dt>
@@ -77,12 +189,32 @@
     <dd>Description: Returns last value in array</dd>
 </dl>
 
+<h4>Last Example:</h4>
+
+<pre>
+    <code>
+        j.first([1, 2, 3, 4, 5, 6]);
+
+        // 6
+    </code>
+</pre>
+
 <dl>
     <dt>lastIndex</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {array} values</dd>
     <dd>Description: Returns index of last element in array</dd>
 </dl>
+
+<h4>LastIndex Example:</h4>
+
+<pre>
+    <code>
+        j.first([1, 2, 3, 4, 5, 6]);
+
+        // 5
+    </code>
+</pre>
 
 <dl>
     <dt>map</dt>
@@ -91,12 +223,40 @@
     <dd>Description: Returns new array containing values mapped through userFn</dd>
 </dl>
 
+<h4>Map Example:</h4>
+
+<pre>
+    <code>
+        j.map(function(value){ return value * 3; }, [1, 2, 3, 4, 5, 6]);
+
+        // [ 3, 6, 9, 12, 15, 18 ]
+    </code>
+</pre>
+
 <dl>
     <dt>nth</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {int} index, {array} valueSet</dd>
     <dd>Description: Returns value at nth position of valueSet</dd>
 </dl>
+
+<h4>Nth Example:</h4>
+
+<pre>
+    <code>
+        j.nth(0, [1, 2, 3, 4, 5, 6]);
+
+        // 1
+
+        j.nth(5, [1, 2, 3, 4, 5, 6]);
+
+        // 6
+
+        j.nth(3, [1, 2, 3, 4, 5, 6]);
+
+        // 4
+    </code>
+</pre>
 
 <dl>
     <dt>reduce</dt>
@@ -105,12 +265,32 @@
     <dd>Description: Reduces array to single element of any type through application of userFn</dd>
 </dl>
 
+<h4>Reduce Example:</h4>
+
+<pre>
+    <code>
+        j.reduce(function(a, b){ return a + b; }, [1, 2, 3, 4, 5]);
+
+        //15
+    </code>
+</pre>
+
 <dl>
     <dt>rest</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {array} values</dd>
     <dd>Description: Returns new array without first element</dd>
 </dl>
+
+<h4>Rest Example:</h4>
+
+<pre>
+    <code>
+        j.rest([1, 2, 3, 4, 5]);
+
+        // [ 2, 3, 4, 5 ]
+    </code>
+</pre>
 
 <dl>
     <dt>slice</dt>
@@ -119,9 +299,38 @@
     <dd>Description: Returns slice of provided array</dd>
 </dl>
 
+<h4>Slice Example:</h4>
+
+<pre>
+    <code>
+        j.slice(0, [1, 2, 3, 4, 5]);
+
+        // [ 1, 2, 3, 4, 5 ]
+
+        j.slice(2, [1, 2, 3, 4, 5]);
+
+        // [ 4, 5 ]
+
+        j.slice(2, [1, 2, 3, 4, 5], 3);
+
+        // [ 4 ]
+    </code>
+</pre>
+
 <dl>
     <dt>take</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {int} count, {array} values</dd>
     <dd>Description: returns first n values of array where n is provided count</dd>
 </dl>
+
+<h4>Take Example:</h4>
+
+<pre>
+    <code>
+        j.take(3, [1, 2, 3, 4, 5]);
+
+        // [ 1, 2, 3 ]
+    </code>
+</pre>
+
