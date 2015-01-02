@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310aac75-0a95-4070-987d-aa2ce4eb906d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/b3678f7d8e562084d61f9a21c21eefbc0021bcb0/_head.scssc" afterPath="$PROJECT_DIR$/.sass-cache/b3678f7d8e562084d61f9a21c21eefbc0021bcb0/_head.scssc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/b3678f7d8e562084d61f9a21c21eefbc0021bcb0/_vars.scssc" afterPath="$PROJECT_DIR$/.sass-cache/b3678f7d8e562084d61f9a21c21eefbc0021bcb0/_vars.scssc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/7420f5cf5ad181c5bd3e046e1a859148eb1d7098/screen.scssc" afterPath="$PROJECT_DIR$/.sass-cache/7420f5cf5ad181c5bd3e046e1a859148eb1d7098/screen.scssc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scss/partials/_head.scss" afterPath="$PROJECT_DIR$/app/scss/partials/_head.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scss/partials/_vars.scss" afterPath="$PROJECT_DIR$/app/scss/partials/_vars.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/screen.css" afterPath="$PROJECT_DIR$/css/screen.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scss/screen.scss" afterPath="$PROJECT_DIR$/app/scss/screen.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_predicate.html" afterPath="$PROJECT_DIR$/templates/documents/_predicate.html" />
     </list>
     <ignored path="JFP.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,29 +25,44 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="_head.scss" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/scss/partials/_head.scss">
+      <file leaf-file-name="_predicate.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/documents/_predicate.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="74" column="12" selection-start="1174" selection-end="1174" vertical-scroll-proportion="0.38172042" vertical-offset="897" max-vertical-offset="1470">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_vars.scss" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/scss/partials/_vars.scss">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="16" selection-start="88" selection-end="88" vertical-scroll-proportion="-2.5" vertical-offset="0" max-vertical-offset="255">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="74" selection-start="573" selection-end="573" vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="930">
-              <folding />
+            <state line="86" column="15" selection-start="1319" selection-end="1319" vertical-scroll-proportion="0.53405017" vertical-offset="482" max-vertical-offset="1785">
+              <folding>
+                <element signature="tag#pre#0" expanded="false" />
+                <element signature="tag#code#0;tag#pre#0" expanded="false" />
+                <element signature="tag#pre#1" expanded="false" />
+                <element signature="tag#code#0;tag#pre#1" expanded="false" />
+                <element signature="tag#pre#2" expanded="false" />
+                <element signature="tag#code#0;tag#pre#2" expanded="false" />
+                <element signature="tag#pre#4" expanded="false" />
+                <element signature="tag#code#0;tag#pre#4" expanded="false" />
+                <element signature="tag#dl#5" expanded="false" />
+                <element signature="tag#pre#5" expanded="false" />
+                <element signature="tag#code#0;tag#pre#5" expanded="false" />
+                <element signature="tag#dl#6" expanded="false" />
+                <element signature="tag#pre#6" expanded="false" />
+                <element signature="tag#code#0;tag#pre#6" expanded="false" />
+                <element signature="tag#dl#7" expanded="false" />
+                <element signature="tag#pre#7" expanded="false" />
+                <element signature="tag#code#0;tag#pre#7" expanded="false" />
+                <element signature="tag#dl#8" expanded="false" />
+                <element signature="tag#pre#8" expanded="false" />
+                <element signature="tag#code#0;tag#pre#8" expanded="false" />
+                <element signature="tag#dl#9" expanded="false" />
+                <element signature="tag#pre#9" expanded="false" />
+                <element signature="tag#code#0;tag#pre#9" expanded="false" />
+                <element signature="tag#dl#10" expanded="false" />
+                <element signature="tag#pre#10" expanded="false" />
+                <element signature="tag#code#0;tag#pre#10" expanded="false" />
+                <element signature="tag#dl#11" expanded="false" />
+                <element signature="tag#pre#11" expanded="false" />
+                <element signature="tag#code#0;tag#pre#11" expanded="false" />
+                <element signature="tag#dl#12" expanded="false" />
+                <element signature="tag#pre#12" expanded="false" />
+                <element signature="tag#code#0;tag#pre#12" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -113,7 +121,6 @@
         <option value="$PROJECT_DIR$/app/scss/partials/_menu.scss" />
         <option value="$PROJECT_DIR$/templates/_home.html" />
         <option value="$PROJECT_DIR$/app/scss/partials/_base.scss" />
-        <option value="$PROJECT_DIR$/templates/documents/_predicate.html" />
         <option value="$PROJECT_DIR$/templates/documents/_array.html" />
         <option value="$PROJECT_DIR$/templates/documents/_conversion.html" />
         <option value="$PROJECT_DIR$/templates/documents/_core.html" />
@@ -123,6 +130,7 @@
         <option value="$PROJECT_DIR$/app/scss/partials/_vars.scss" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/app/scss/partials/_head.scss" />
+        <option value="$PROJECT_DIR$/templates/documents/_predicate.html" />
       </list>
     </option>
   </component>
@@ -157,6 +165,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -204,20 +213,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="documents" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="min" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -323,7 +318,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -342,14 +336,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
-      <method />
-    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -360,15 +346,23 @@
       <option name="showConsoleOnStdOut" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
+      <envs />
+      <method />
+    </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
       <setting name="configLocationType" value="CONFIG_FILE" />
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="CHROME" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
@@ -425,6 +419,27 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/scss/partials/_head.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="74" column="12" selection-start="1174" selection-end="1174" vertical-scroll-proportion="0.0" vertical-offset="897" max-vertical-offset="1470">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scss/partials/_vars.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="16" selection-start="88" selection-end="88" vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="255">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="74" selection-start="573" selection-end="573" vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="930">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="0" selection-start="173" selection-end="173" vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="495">
@@ -489,25 +504,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Gruntfile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="44" selection-start="1236" selection-end="1236" vertical-scroll-proportion="0.8505155" vertical-offset="0" max-vertical-offset="600">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/min/JFP.controllers.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="569">
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
+        <state line="33" column="44" selection-start="1236" selection-end="1236" vertical-scroll-proportion="0.8505155" vertical-offset="0" max-vertical-offset="600" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grunt/uglify.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="629" selection-end="629" vertical-scroll-proportion="0.53763443" vertical-offset="0" max-vertical-offset="558">
-          <folding />
-        </state>
+        <state line="20" column="0" selection-start="629" selection-end="629" vertical-scroll-proportion="0.53763443" vertical-offset="0" max-vertical-offset="558" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dist/app.js">
@@ -547,78 +549,97 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/scss/partials/_base.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="20" selection-start="534" selection-end="534" vertical-scroll-proportion="0.5628518" vertical-offset="375" max-vertical-offset="1305">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/documents/_predicate.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="275" column="0" selection-start="4158" selection-end="4158" vertical-scroll-proportion="0.66071427" vertical-offset="3792" max-vertical-offset="4350">
-          <folding />
-        </state>
+        <state line="45" column="20" selection-start="534" selection-end="534" vertical-scroll-proportion="0.5628518" vertical-offset="375" max-vertical-offset="1305" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/documents/_array.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="327" column="0" selection-start="6016" selection-end="6016" vertical-scroll-proportion="9.732142" vertical-offset="0" max-vertical-offset="5130">
-          <folding />
-        </state>
+        <state line="327" column="0" selection-start="6016" selection-end="6016" vertical-scroll-proportion="9.732142" vertical-offset="0" max-vertical-offset="5130" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/documents/_core.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="242" column="2" selection-start="4744" selection-end="4744" vertical-scroll-proportion="6.5053763" vertical-offset="0" max-vertical-offset="3870">
-          <folding />
-        </state>
+        <state line="242" column="2" selection-start="4744" selection-end="4744" vertical-scroll-proportion="6.5053763" vertical-offset="0" max-vertical-offset="3870" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/documents/_conversion.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="3" selection-start="588" selection-end="588" vertical-scroll-proportion="0.9677419" vertical-offset="0" max-vertical-offset="825">
-          <folding />
-        </state>
+        <state line="36" column="3" selection-start="588" selection-end="588" vertical-scroll-proportion="0.9677419" vertical-offset="0" max-vertical-offset="825" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/documents/_math.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="271" column="2" selection-start="3998" selection-end="3998" vertical-scroll-proportion="-169.375" vertical-offset="0" max-vertical-offset="4440">
-          <folding />
-        </state>
+        <state line="271" column="2" selection-start="3998" selection-end="3998" vertical-scroll-proportion="-169.375" vertical-offset="0" max-vertical-offset="4440" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/documents/_object.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="26" selection-start="778" selection-end="778" vertical-scroll-proportion="0.059139784" vertical-offset="537" max-vertical-offset="1095">
-          <folding />
-        </state>
+        <state line="38" column="26" selection-start="778" selection-end="778" vertical-scroll-proportion="0.059139784" vertical-offset="537" max-vertical-offset="1095" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/scss/screen.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="25" selection-start="63" selection-end="63" vertical-scroll-proportion="0.02688172" vertical-offset="0" max-vertical-offset="558">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="74" selection-start="573" selection-end="573" vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="930">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scss/partials/_vars.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="16" selection-start="88" selection-end="88" vertical-scroll-proportion="-2.5" vertical-offset="0" max-vertical-offset="255">
-          <folding />
-        </state>
+        <state line="1" column="25" selection-start="63" selection-end="63" vertical-scroll-proportion="0.02688172" vertical-offset="0" max-vertical-offset="558" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/scss/partials/_head.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state line="74" column="12" selection-start="1174" selection-end="1174" vertical-scroll-proportion="0.38172042" vertical-offset="897" max-vertical-offset="1470">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scss/partials/_vars.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="16" selection-start="88" selection-end="88" vertical-scroll-proportion="0.10752688" vertical-offset="0" max-vertical-offset="558">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="74" selection-start="573" selection-end="573" vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="930">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/documents/_predicate.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="86" column="15" selection-start="1319" selection-end="1319" vertical-scroll-proportion="0.53405017" vertical-offset="482" max-vertical-offset="1785">
+          <folding>
+            <element signature="tag#pre#0" expanded="false" />
+            <element signature="tag#code#0;tag#pre#0" expanded="false" />
+            <element signature="tag#pre#1" expanded="false" />
+            <element signature="tag#code#0;tag#pre#1" expanded="false" />
+            <element signature="tag#pre#2" expanded="false" />
+            <element signature="tag#code#0;tag#pre#2" expanded="false" />
+            <element signature="tag#pre#4" expanded="false" />
+            <element signature="tag#code#0;tag#pre#4" expanded="false" />
+            <element signature="tag#dl#5" expanded="false" />
+            <element signature="tag#pre#5" expanded="false" />
+            <element signature="tag#code#0;tag#pre#5" expanded="false" />
+            <element signature="tag#dl#6" expanded="false" />
+            <element signature="tag#pre#6" expanded="false" />
+            <element signature="tag#code#0;tag#pre#6" expanded="false" />
+            <element signature="tag#dl#7" expanded="false" />
+            <element signature="tag#pre#7" expanded="false" />
+            <element signature="tag#code#0;tag#pre#7" expanded="false" />
+            <element signature="tag#dl#8" expanded="false" />
+            <element signature="tag#pre#8" expanded="false" />
+            <element signature="tag#code#0;tag#pre#8" expanded="false" />
+            <element signature="tag#dl#9" expanded="false" />
+            <element signature="tag#pre#9" expanded="false" />
+            <element signature="tag#code#0;tag#pre#9" expanded="false" />
+            <element signature="tag#dl#10" expanded="false" />
+            <element signature="tag#pre#10" expanded="false" />
+            <element signature="tag#code#0;tag#pre#10" expanded="false" />
+            <element signature="tag#dl#11" expanded="false" />
+            <element signature="tag#pre#11" expanded="false" />
+            <element signature="tag#code#0;tag#pre#11" expanded="false" />
+            <element signature="tag#dl#12" expanded="false" />
+            <element signature="tag#pre#12" expanded="false" />
+            <element signature="tag#code#0;tag#pre#12" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
