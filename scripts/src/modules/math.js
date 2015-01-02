@@ -48,43 +48,12 @@
             first = args.length ? j.first(args) : 0;
         return j.recur(subtractor, first, j.rest(args));
     }
-    
-    function equal(a, b){
-        var isNotUndefined = j.compose(j.not, j.isUndefined);
-        
-        return (j.and(isNotUndefined(a), 
-                      isNotUndefined(b))) ? a === b : false;
-    }
-    
-    function greater(a, b){
-        if(j.isUndefined(a) || j.isUndefined(b)){
-            throw new TypeError('Greater requires two variables for comparison');
-        }
-        
-        return a > b;
-    }
-    
-    function less(a, b){
-        if(j.isUndefined(a) || j.isUndefined(b)){
-            throw new TypeError('Less requires two variables for comparison');
-        }
-        
-        return a < b;
-    }
-    
-    function leq(a, b){
-        return j.not(greater(a, b));
-    }
-    
-    function geq(a, b){
-        return j.not(less(a, b));
-    }
 
     //This is a recursive constructor function for ranges
     function rangeRecurCheck(m, n, inc){
         return inc > 0 ? (m + inc) < n : (m + inc) > n;
     }
-    
+
     function rangeBuilder(recur, currentRange, m, n, inc){
         var finalRange = rangeRecurCheck(m - inc, n, inc) ?
                             j.conj(m, currentRange) :
@@ -111,16 +80,16 @@
         return j.isUndefined(b) ? j.either(0, a) : a%b;
     }
 
+    function truncate(value){
+        return (value > 0) ? Math.floor(value) : Math.floor(value) + 1;
+    }
+
     j.add = add;
     j.divide = divide;
-    j.equal = equal;
-    j.geq = geq;
-    j.greater = greater;
-    j.leq = leq;
-    j.less = less;
     j.mod = mod;
     j.multiply = multiply;
     j.range = range;
     j.subtract = subtract;
-    
+    j.truncate = truncate;
+
 })(jfp);

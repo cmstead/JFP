@@ -26,94 +26,6 @@
             });
         });
         
-        describe('equal', function(){
-            
-            it('should return falseif less than two values provided', function(){
-                expect(j.equal()).toBe(false);
-            });
-            
-            it('should return true if both values are equal', function(){
-                expect(j.equal(0, 0)).toBe(true);
-            });
-            
-            it('should return false if both values are not equal', function(){
-                expect(j.equal(0, 1)).toBe(false);
-            });
-            
-        });
-        
-        describe('less', function(){
-            
-            it('should throw if two values are not provided', function(){
-                function testLess(){
-                    j.less();
-                }
-                
-                expect(testLess).toThrow();
-            });
-            
-            it('should return true if first value is less than second', function(){
-                expect(j.less(1, 2)).toBe(true);
-            });
-            
-            it('should return false if first value is greater than or equal to second', function(){
-                expect(j.less(2, 1)).toBe(false);
-            });
-            
-        });
-        
-        describe('greater', function(){
-            
-            it('should throw if two values are not provided', function(){
-                function testGreater(){
-                    j.greater();
-                }
-                
-                expect(testGreater).toThrow();
-            });
-            
-            it('should return true if first value is greater than second', function(){
-                expect(j.greater(2, 1)).toBe(true);
-            });
-            
-            it('should return false if first value is less than second', function(){
-                expect(j.greater(1, 2)).toBe(false);
-            });
-            
-        });
-        
-        describe('leq', function(){
-            
-            it('should return true if values satisfy less', function(){
-                expect(j.leq(1, 2)).toBe(true);
-            });
-            
-            it('should return false if values satisfy greater', function(){
-                expect(j.leq(2, 1)).toBe(false);
-            });
-            
-            it('should return true if values satisfy equal', function(){
-                expect(j.leq(1, 1)).toBe(true);
-            });
-            
-        });
-        
-        describe('geq', function(){
-            
-            it('should return true if values satisfy greater', function(){
-                expect(j.geq(2, 1)).toBe(true);
-            });
-            
-            it('should return false if values satisfy less', function(){
-                expect(j.geq(1, 2)).toBe(false);
-            });
-            
-            it('should return true if values satisfy equal', function(){
-                expect(j.geq(1, 1)).toBe(true);
-            });
-            
-        });
-        
         describe('add', function(){
             
             it('should return 0 if no values are passed', function(){
@@ -210,6 +122,21 @@
 
         });
 	
+        describe('truncate', function(){
+
+            it('should return same value if value is an integer', function(){
+                expect(j.truncate(5)).toBe(5);
+            });
+
+            it('should return integer value when float is passed', function(){
+                expect(j.truncate(1.234)).toBe(1);
+            });
+
+            it('should return negative number up-wards when float is passed', function(){
+                expect(j.truncate(-1.234)).toBe(-1);
+            });
+
+        });
 
     });
     
