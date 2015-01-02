@@ -3,7 +3,7 @@ JFP - Javascript Function Processor
 
 Library documentation:
 
-(http://cmstead.github.io/JFP)
+http://cmstead.github.io/JFP
 
 Javascript Function Processor is a functional library built around the idea that functional
 programming shouldn't require special objects or OO paradigms to play well. Chaining shouldn't
