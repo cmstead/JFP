@@ -7,12 +7,56 @@
     <dd>Description: Returns the sum of all numbers passed to add</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.add();
+
+        //0
+
+        j.add(1);
+
+        //1
+
+        j.add(1, 2);
+
+        //3
+
+        j.add(1, 2, 3, 4, 5);
+
+        //15
+    </code>
+</pre>
+
 <dl>
     <dt>divide</dt>
     <dd>Performance: O(n)</dd>
     <dd>Arguments: [optional] arguments</dd>
     <dd>Description: divides first value by each other value passed to divide</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.divide();
+
+        //1
+
+        j.divide(12);
+
+        //1
+
+        j.divide(12, 2);
+
+        //6
+
+        j.divide(12, 2, 3);
+
+        //2
+    </code>
+</pre>
 
 <dl>
     <dt>equal</dt>
@@ -21,12 +65,44 @@
     <dd>Description: returns true if a and b are strictly equal, false otherwise</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.equal(1, 1);
+
+        //true
+
+        j.equal(1, 2);
+
+        //false
+    </code>
+</pre>
+
 <dl>
     <dt>geq</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {number} a, {number} b</dd>
     <dd>Description: Returns true if a is greater or equal to b, false otherwise</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.equal(1, 1);
+
+        //true
+
+        j.equal(2, 1);
+
+        //true
+
+        j.equal(1, 2);
+
+        //false
+    </code>
+</pre>
 
 <dl>
     <dt>greater</dt>
@@ -35,12 +111,48 @@
     <dd>Description: Returns true if a is greater than b, false otherwise</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.greater(2, 1);
+
+        //true
+
+        j.greater(1, 1);
+
+        //false
+
+        j.greater(1, 2);
+
+        //false
+    </code>
+</pre>
+
 <dl>
     <dt>leq</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {number} a, {number} b</dd>
     <dd>Description: Returns true if a is less or equal to b, false otherwise</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.leq(1, 2);
+
+        //true
+
+        j.leq(1, 1);
+
+        //true
+
+        j.leq(2, 1);
+
+        //false
+    </code>
+</pre>
 
 <dl>
     <dt>less</dt>
@@ -49,12 +161,44 @@
     <dd>Description: Returns true if a is less than b, false otherwise</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.leq(1, 2);
+
+        //true
+
+        j.leq(1, 1);
+
+        //true
+
+        j.leq(2, 1);
+
+        //false
+    </code>
+</pre>
+
 <dl>
     <dt>mod</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {number} a, {number} b</dd>
     <dd>Description: Returns the modulus of a and b</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.mod(4, 2);
+
+        //0
+
+        j.mod(11, 4);
+
+        //3
+    </code>
+</pre>
 
 <dl>
     <dt>multiply</dt>
@@ -63,6 +207,29 @@
     <dd>Description: Returns the product of all values passed to multiply</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.multiply();
+
+        //1
+
+        j.multiply(2);
+
+        //2
+
+        j.multiply(2, 3);
+
+        //6
+
+        j.multiply(2, 3, 4, 5);
+
+        //120
+
+    </code>
+</pre>
+
 <dl>
     <dt>range</dt>
     <dd>Performance: O(n)</dd>
@@ -70,9 +237,55 @@
     <dd>Description: returns range from a to b, excluding b, incremented by inc</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.range(4);
+
+        //[0, 1, 2, 3]
+
+        j.range(2, 10);
+
+        //[2, 3, 4, 5, 6, 7, 8, 9]
+
+        j.range(0, 20, 4);
+
+        //[0, 4, 8, 12, 16]
+
+        j.range(100, 0, -10);
+
+        //[100, 90, 80, 70, 60, 50, 40, 30, 20, 10]
+
+    </code>
+</pre>
+
 <dl>
     <dt>subtract</dt>
     <dd>Performance: O(n)</dd>
     <dd>Arguments: [optional] arguments</dd>
     <dd>Description: Returns sum of the first value and the negative of all other provided values</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.subtract();
+
+        //0
+
+        j.subtract(1);
+
+        //1
+
+        j.subtract(3, 2);
+
+        //1
+
+        j.subtract(8, 5, 3, 2, 1);
+
+        //-3
+
+    </code>
+</pre>

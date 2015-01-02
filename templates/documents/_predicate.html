@@ -7,12 +7,44 @@
     <dd>Description: Checks that all provided values are truthy</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.and();
+
+        //true
+
+        j.and(true, 1);
+
+        //true
+
+        j.and(true, false);
+
+        //false
+    </code>
+</pre>
+
 <dl>
     <dt>isArray</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {any} value</dd>
     <dd>Description: Returns true if value is an array, otherwise false</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.isArray([]);
+
+        //true
+
+        j.isArray({});
+
+        //false
+    </code>
+</pre>
 
 <dl>
     <dt>isBoolean</dt>
@@ -21,12 +53,40 @@
     <dd>Description: Returns true if value is a boolean value, otherwise false</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.isBoolean(false);
+
+        //true
+
+        j.isBoolean('true');
+
+        //false
+    </code>
+</pre>
+
 <dl>
     <dt>isNull</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {any} value</dd>
     <dd>Description: Returns true if value is null, otherwise false</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.isNull(null);
+
+        //true
+
+        j.isNull(undefined);
+
+        //false
+    </code>
+</pre>
 
 <dl>
     <dt>isNumber</dt>
@@ -35,12 +95,48 @@
     <dd>Description: Returns true if value is a number, otherwise false</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.isNumber(1234);
+
+        //true
+
+        j.isNumber(0x1A);
+
+        //true
+
+        j.isNumber('1234);
+
+        //false
+    </code>
+</pre>
+
 <dl>
     <dt>isNumeric</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {any} value</dd>
     <dd>Description: Returns true if value is a number or a string matching a numeric pattern, otherwise false</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.isNumeric(1234.33);
+
+        //true
+
+        j.isNumeric('0x1A');
+
+        //true
+
+        j.isNumeric('1234');
+
+        //false
+    </code>
+</pre>
 
 <dl>
     <dt>isObject</dt>
@@ -49,12 +145,44 @@
     <dd>Description: Returns true if value is an object, otherwise false</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.isObject({});
+
+        //true
+
+        j.isObject([]);
+
+        //true
+
+        j.isObject(undefined);
+
+        //false
+    </code>
+</pre>
+
 <dl>
     <dt>isString</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {any} value</dd>
     <dd>Description: Returns true if value is a string, otherwise false</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.isString('A string');
+
+        //true
+
+        j.isString([]);
+
+        //false
+    </code>
+</pre>
 
 <dl>
     <dt>isTruthy</dt>
@@ -63,12 +191,48 @@
     <dd>Description: Returns true if value resolves to truthy, otherwise false</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.isTruthy(true);
+
+        //true
+
+        j.isTruthy(1);
+
+        //true
+
+        j.isTruthy('I am a string.');
+
+        //true
+
+        j.isTruthy(null);
+
+        //false
+    </code>
+</pre>
+
 <dl>
     <dt>isUndefined</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {any} value</dd>
     <dd>Description: Returns true if value is undefined, otherwise false</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.isUndefined(undefined);
+
+        //true
+
+        j.isUndefined(null);
+
+        //false
+    </code>
+</pre>
 
 <dl>
     <dt>not</dt>
@@ -77,6 +241,20 @@
     <dd>Description: Returns true if value is falsey, otherwise false</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.not(true);
+
+        //false
+
+        j.not(0);
+
+        //true
+    </code>
+</pre>
+
 <dl>
     <dt>or</dt>
     <dd>Performance: O(n)</dd>
@@ -84,3 +262,24 @@
     <dd>Description: Checks that any of the provided values are truthy</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.or();
+
+        //false
+
+        j.or(true);
+
+        //true
+
+        j.or(true, false, 'true');
+
+        //true
+
+        j.or(0, false, null);
+
+        //false
+    </code>
+</pre>

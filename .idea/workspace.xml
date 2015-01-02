@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310aac75-0a95-4070-987d-aa2ce4eb906d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/b3678f7d8e562084d61f9a21c21eefbc0021bcb0/_base.scssc" afterPath="$PROJECT_DIR$/.sass-cache/b3678f7d8e562084d61f9a21c21eefbc0021bcb0/_base.scssc" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_array.html" afterPath="$PROJECT_DIR$/templates/documents/_array.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scss/partials/_base.scss" afterPath="$PROJECT_DIR$/app/scss/partials/_base.scss" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_conversion.html" afterPath="$PROJECT_DIR$/templates/documents/_conversion.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/app.js" afterPath="$PROJECT_DIR$/dist/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower.json" afterPath="$PROJECT_DIR$/bower.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/controllers/headController.annotated.js" afterPath="$PROJECT_DIR$/app/scripts/controllers/headController.annotated.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/screen.css" afterPath="$PROJECT_DIR$/css/screen.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_core.html" afterPath="$PROJECT_DIR$/templates/documents/_core.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_math.html" afterPath="$PROJECT_DIR$/templates/documents/_math.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_object.html" afterPath="$PROJECT_DIR$/templates/documents/_object.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_predicate.html" afterPath="$PROJECT_DIR$/templates/documents/_predicate.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="JFP.iws" />
@@ -34,10 +31,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="_conversion.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/documents/_conversion.html">
+      <file leaf-file-name="_object.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/documents/_object.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="54" selection-start="811" selection-end="811" vertical-scroll-proportion="0.9731183" vertical-offset="132" max-vertical-offset="825">
+            <state line="38" column="26" selection-start="778" selection-end="778" vertical-scroll-proportion="0.059139784" vertical-offset="537" max-vertical-offset="1095">
               <folding />
             </state>
           </provider>
@@ -99,14 +96,14 @@
         <option value="$PROJECT_DIR$/app/scss/screen.scss" />
         <option value="$PROJECT_DIR$/app/scss/partials/_head.scss" />
         <option value="$PROJECT_DIR$/templates/_home.html" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/app/scss/partials/_base.scss" />
+        <option value="$PROJECT_DIR$/templates/documents/_predicate.html" />
+        <option value="$PROJECT_DIR$/templates/documents/_array.html" />
+        <option value="$PROJECT_DIR$/templates/documents/_conversion.html" />
         <option value="$PROJECT_DIR$/templates/documents/_core.html" />
         <option value="$PROJECT_DIR$/templates/documents/_math.html" />
         <option value="$PROJECT_DIR$/templates/documents/_object.html" />
-        <option value="$PROJECT_DIR$/templates/documents/_predicate.html" />
-        <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/app/scss/partials/_base.scss" />
-        <option value="$PROJECT_DIR$/templates/documents/_array.html" />
-        <option value="$PROJECT_DIR$/templates/documents/_conversion.html" />
       </list>
     </option>
   </component>
@@ -572,26 +569,6 @@
         <state line="12" column="7" selection-start="503" selection-end="503" vertical-scroll-proportion="-7.5" vertical-offset="0" max-vertical-offset="840" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/documents/_core.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="109" selection-start="2083" selection-end="2083" vertical-scroll-proportion="0.5913978" vertical-offset="600" max-vertical-offset="1245" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/documents/_math.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="97" selection-start="2090" selection-end="2090" vertical-scroll-proportion="-22.0" vertical-offset="612" max-vertical-offset="1245" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/documents/_object.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="84" selection-start="636" selection-end="636" vertical-scroll-proportion="0.53763443" vertical-offset="0" max-vertical-offset="558" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/documents/_predicate.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="63" selection-start="2210" selection-end="2210" vertical-scroll-proportion="0.8655914" vertical-offset="762" max-vertical-offset="1380" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="10" selection-start="446" selection-end="446" vertical-scroll-proportion="0.19354838" vertical-offset="87" max-vertical-offset="645">
@@ -606,16 +583,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/documents/_predicate.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="275" column="0" selection-start="4158" selection-end="4158" vertical-scroll-proportion="0.66071427" vertical-offset="3792" max-vertical-offset="4350">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/documents/_array.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="294" column="0" selection-start="5316" selection-end="5437" vertical-scroll-proportion="0.37096775" vertical-offset="4203" max-vertical-offset="5130">
+        <state line="327" column="0" selection-start="6016" selection-end="6016" vertical-scroll-proportion="9.732142" vertical-offset="0" max-vertical-offset="5130">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/documents/_core.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="242" column="2" selection-start="4744" selection-end="4744" vertical-scroll-proportion="6.5053763" vertical-offset="0" max-vertical-offset="3870">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/documents/_conversion.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="54" selection-start="811" selection-end="811" vertical-scroll-proportion="0.9731183" vertical-offset="132" max-vertical-offset="825">
+        <state line="36" column="3" selection-start="588" selection-end="588" vertical-scroll-proportion="0.9677419" vertical-offset="0" max-vertical-offset="825">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/documents/_math.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="271" column="2" selection-start="3998" selection-end="3998" vertical-scroll-proportion="-169.375" vertical-offset="0" max-vertical-offset="4440">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/documents/_object.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="26" selection-start="778" selection-end="778" vertical-scroll-proportion="0.059139784" vertical-offset="537" max-vertical-offset="1095">
           <folding />
         </state>
       </provider>

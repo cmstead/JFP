@@ -7,6 +7,24 @@
     <dd>Description: Returns value at key in valueMap</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.pick('test1', {
+            'test1': 'test value 1',
+            'test2': 'test value 2',
+            'test3': 'test value 3',
+        });
+
+        //test value 1
+
+        j.pick('test1', { 'test2': 'not returned' });
+
+        //null
+    </code>
+</pre>
+
 <dl>
     <dt>pluck</dt>
     <dd>Performance: O(1)</dd>
@@ -14,9 +32,37 @@
     <dd>Description: Returns object containing key and value from valueMap at key</dd>
 </dl>
 
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.pluck('test1', {
+            'test1': 'test value 1',
+            'test2': 'test value 2',
+            'test3': 'test value 3',
+        });
+
+        //{ 'test1': 'test value 1' }
+    </code>
+</pre>
+
 <dl>
     <dt>pluckKeys</dt>
     <dd>Performance: O(n)</dd>
     <dd>Arguments: {array of strings or numbers} keys, {map} valueMap</dd>
     <dd>Description: Returns object containing keys and values from valueMap at keys</dd>
 </dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code>
+        j.pluckKeys(['test1', 'test3'], {
+            'test1': 'test value 1',
+            'test2': 'test value 2',
+            'test3': 'test value 3',
+        });
+
+        //{ 'test1': 'test value 1', 'test3': 'test value 3' }
+    </code>
+</pre>
