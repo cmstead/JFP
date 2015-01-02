@@ -156,6 +156,51 @@ ol li {
 }
 
 /* line 1, ../app/scss/partials/_head.scss */
+.link-wrapper {
+  margin: 0 auto;
+  text-align: left;
+  width: 960px;
+}
+/* line 6, ../app/scss/partials/_head.scss */
+.link-wrapper .library-links {
+  background-color: #CEE3F6;
+  border: 1px solid #2B547E;
+  border-top: 0;
+  float: right;
+  padding: 15px;
+}
+/* line 13, ../app/scss/partials/_head.scss */
+.link-wrapper .library-links div {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: top;
+}
+/* line 18, ../app/scss/partials/_head.scss */
+.link-wrapper .library-links div:first-child {
+  margin-left: 0px;
+}
+/* line 22, ../app/scss/partials/_head.scss */
+.link-wrapper .library-links div.release {
+  padding-right: 15px;
+  text-align: center;
+}
+/* line 27, ../app/scss/partials/_head.scss */
+.link-wrapper .library-links div a {
+  color: #2B547E;
+  display: block;
+  margin-bottom: 5px;
+}
+/* line 32, ../app/scss/partials/_head.scss */
+.link-wrapper .library-links div a i {
+  padding-right: 7px;
+}
+/* line 37, ../app/scss/partials/_head.scss */
+.link-wrapper .library-links div span {
+  color: #666666;
+  font-size: 12px;
+}
+
+/* line 45, ../app/scss/partials/_head.scss */
 .head-wrapper {
   box-sizing: border-box;
   height: 120px;
@@ -164,7 +209,7 @@ ol li {
   text-align: left;
   width: 960px;
 }
-/* line 9, ../app/scss/partials/_head.scss */
+/* line 53, ../app/scss/partials/_head.scss */
 .head-wrapper .lambda {
   color: #FA8258;
   font-size: 124px;
@@ -176,35 +221,36 @@ ol li {
   -webkit-transform: scale(1.25, 1);
   transform: scale(1.25, 1);
 }
-/* line 19, ../app/scss/partials/_head.scss */
+/* line 63, ../app/scss/partials/_head.scss */
 .head-wrapper h1 {
   padding: 25px;
 }
-/* line 22, ../app/scss/partials/_head.scss */
+/* line 66, ../app/scss/partials/_head.scss */
 .head-wrapper h1 a {
   color: #333333;
   text-shadow: 3px 3px 10px #666666;
   text-shadow: 3px 3px 10px 3px #666666;
 }
 
-/* line 29, ../app/scss/partials/_head.scss */
+/* line 73, ../app/scss/partials/_head.scss */
 .menu-wrapper {
   background-color: #CEE3F6;
+  border-top: 1px solid #2B547E;
   border-bottom: 3px solid #FA8258;
   display: block;
   padding: 15px;
 }
-/* line 35, ../app/scss/partials/_head.scss */
+/* line 80, ../app/scss/partials/_head.scss */
 .menu-wrapper li {
   display: inline-block;
   font-size: 22px;
   padding-left: 30px;
 }
-/* line 40, ../app/scss/partials/_head.scss */
+/* line 85, ../app/scss/partials/_head.scss */
 .menu-wrapper li a {
   text-decoration: none;
 }
-/* line 45, ../app/scss/partials/_head.scss */
+/* line 90, ../app/scss/partials/_head.scss */
 .menu-wrapper li:first-child {
   padding-left: 0px;
 }

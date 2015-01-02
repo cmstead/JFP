@@ -2,13 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310aac75-0a95-4070-987d-aa2ce4eb906d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_array.html" afterPath="$PROJECT_DIR$/templates/documents/_array.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_conversion.html" afterPath="$PROJECT_DIR$/templates/documents/_conversion.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_core.html" afterPath="$PROJECT_DIR$/templates/documents/_core.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_math.html" afterPath="$PROJECT_DIR$/templates/documents/_math.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_object.html" afterPath="$PROJECT_DIR$/templates/documents/_object.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_predicate.html" afterPath="$PROJECT_DIR$/templates/documents/_predicate.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/b3678f7d8e562084d61f9a21c21eefbc0021bcb0/_head.scssc" afterPath="$PROJECT_DIR$/.sass-cache/b3678f7d8e562084d61f9a21c21eefbc0021bcb0/_head.scssc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/b3678f7d8e562084d61f9a21c21eefbc0021bcb0/_vars.scssc" afterPath="$PROJECT_DIR$/.sass-cache/b3678f7d8e562084d61f9a21c21eefbc0021bcb0/_vars.scssc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/7420f5cf5ad181c5bd3e046e1a859148eb1d7098/screen.scssc" afterPath="$PROJECT_DIR$/.sass-cache/7420f5cf5ad181c5bd3e046e1a859148eb1d7098/screen.scssc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scss/partials/_head.scss" afterPath="$PROJECT_DIR$/app/scss/partials/_head.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scss/partials/_vars.scss" afterPath="$PROJECT_DIR$/app/scss/partials/_vars.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/screen.css" afterPath="$PROJECT_DIR$/css/screen.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scss/screen.scss" afterPath="$PROJECT_DIR$/app/scss/screen.scss" />
     </list>
     <ignored path="JFP.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,10 +32,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="_object.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/documents/_object.html">
+      <file leaf-file-name="_head.scss" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/scss/partials/_head.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="26" selection-start="778" selection-end="778" vertical-scroll-proportion="0.059139784" vertical-offset="537" max-vertical-offset="1095">
+            <state line="74" column="12" selection-start="1174" selection-end="1174" vertical-scroll-proportion="0.38172042" vertical-offset="897" max-vertical-offset="1470">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_vars.scss" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/scss/partials/_vars.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="16" selection-start="88" selection-end="88" vertical-scroll-proportion="-2.5" vertical-offset="0" max-vertical-offset="255">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="14" column="74" selection-start="573" selection-end="573" vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="930">
               <folding />
             </state>
           </provider>
@@ -92,11 +111,7 @@
         <option value="$PROJECT_DIR$/app/scripts/controllers/headController.js" />
         <option value="$PROJECT_DIR$/app/scss/partials/_reset.scss" />
         <option value="$PROJECT_DIR$/app/scss/partials/_menu.scss" />
-        <option value="$PROJECT_DIR$/app/scss/partials/_vars.scss" />
-        <option value="$PROJECT_DIR$/app/scss/screen.scss" />
-        <option value="$PROJECT_DIR$/app/scss/partials/_head.scss" />
         <option value="$PROJECT_DIR$/templates/_home.html" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/app/scss/partials/_base.scss" />
         <option value="$PROJECT_DIR$/templates/documents/_predicate.html" />
         <option value="$PROJECT_DIR$/templates/documents/_array.html" />
@@ -104,6 +119,10 @@
         <option value="$PROJECT_DIR$/templates/documents/_core.html" />
         <option value="$PROJECT_DIR$/templates/documents/_math.html" />
         <option value="$PROJECT_DIR$/templates/documents/_object.html" />
+        <option value="$PROJECT_DIR$/app/scss/screen.scss" />
+        <option value="$PROJECT_DIR$/app/scss/partials/_vars.scss" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/app/scss/partials/_head.scss" />
       </list>
     </option>
   </component>
@@ -299,32 +318,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -547,33 +540,9 @@
         <state line="9" column="38" selection-start="239" selection-end="239" vertical-scroll-proportion="0.24193548" vertical-offset="0" max-vertical-offset="558" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/scss/screen.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="33" selection-start="107" selection-end="107" vertical-scroll-proportion="0.056285176" vertical-offset="0" max-vertical-offset="533" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scss/partials/_vars.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="20" selection-start="49" selection-end="49" vertical-scroll-proportion="-0.6122449" vertical-offset="0" max-vertical-offset="240">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scss/partials/_head.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="0" selection-start="517" selection-end="517" vertical-scroll-proportion="0.38086304" vertical-offset="262" max-vertical-offset="795" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/_home.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="7" selection-start="503" selection-end="503" vertical-scroll-proportion="-7.5" vertical-offset="0" max-vertical-offset="840" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="10" selection-start="446" selection-end="446" vertical-scroll-proportion="0.19354838" vertical-offset="87" max-vertical-offset="645">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/scss/partials/_base.scss">
@@ -621,6 +590,34 @@
     <entry file="file://$PROJECT_DIR$/templates/documents/_object.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="38" column="26" selection-start="778" selection-end="778" vertical-scroll-proportion="0.059139784" vertical-offset="537" max-vertical-offset="1095">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scss/screen.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="25" selection-start="63" selection-end="63" vertical-scroll-proportion="0.02688172" vertical-offset="0" max-vertical-offset="558">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="74" selection-start="573" selection-end="573" vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="930">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scss/partials/_vars.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="16" selection-start="88" selection-end="88" vertical-scroll-proportion="-2.5" vertical-offset="0" max-vertical-offset="255">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scss/partials/_head.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="74" column="12" selection-start="1174" selection-end="1174" vertical-scroll-proportion="0.38172042" vertical-offset="897" max-vertical-offset="1470">
           <folding />
         </state>
       </provider>

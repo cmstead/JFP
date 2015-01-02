@@ -1,3 +1,47 @@
+.link-wrapper{
+  margin: 0 auto;
+  text-align: left;
+  width: 960px;
+
+  .library-links{
+    background-color: $menu-background;
+    border: 1px solid $link-color;
+    border-top: 0;
+    float: right;
+    padding: 15px;
+
+    div{
+      display: inline-block;
+      margin-left: 10px;
+      vertical-align: top;
+
+      &:first-child{
+        margin-left: 0px;
+      }
+
+      &.release{
+        padding-right: 15px;
+        text-align: center;
+      }
+
+      a{
+        color: $link-color;
+        display: block;
+        margin-bottom: 5px;
+
+        i{
+          padding-right: 7px;
+        }
+      }
+
+      span{
+        color: $text-color;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
 .head-wrapper{
   box-sizing: border-box;
   height: 120px;
@@ -28,6 +72,7 @@
 
 .menu-wrapper{
   background-color: $menu-background;
+  border-top: 1px solid $link-color;
   border-bottom: 3px solid $menu-border;
   display: block;
   padding: 15px;
