@@ -17,11 +17,15 @@
         return maybe(defaultValue, identity, optionValue);
     }
 
+    function captureArguments(userFn){
+        return userFn.toString()
+                     .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
+                     .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
+                     .split(/,/);
+    }
+
     function countArguments(userFn){
-        var params = either(function(){}, userFn).toString()
-            .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
-            .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-            .split(/,/);
+        var params = maybe([], captureArguments, userFn);
 
         params = (params.length === 1 && params[0] === '') ? [] : params;
 
@@ -59,25 +63,28 @@
     }
 
     //zOMG! TAIL RECURSION
-    function verifyRecurValue(recurValue){
-        var isRecursor = typeof recurValue === 'function';
-        return (isRecursor && recurValue.toString().match('recursorFn'));
+    function recursor(recurFn){
+        var args = j.slice(1, arguments);
+
+        //This is to make the returned function distinct and identifiable.
+        return function recursorFn(localRecursor){
+            return apply(j.concat([localRecursor], args), recurFn);
+        };
     }
 
+    function verifyRecurValue(recurValue){
+        return typeof recurValue === 'function' &&
+               recurValue.toString().match('recursorFn');
+    }
+
+    //Tail optimization with managed recursion is really complicated.
+    //Please don't muck with this unless you TRULY understand what is happening.
     function recur(userFn){
-        var recurFn = either(identity, userFn),
-            recursor = function recursor(){
-                var args = j.slice(0, arguments);
-                
-                //This is to make the returned function distinct and identifiable.
-                return function recursorFn(){
-                    return apply(j.slice(0, arguments), 
-                                 apply(j.concat([recurFn], args), rpartial));
-                };
-            },
-            recurValue = apply(j.slice(1, arguments), recursor);
-        
-        while(verifyRecurValue(recurValue = recurValue(recursor)) && recurFn !== identity);
+        var recursingFn = either(identity, userFn),
+            localRecursor = partial(recursor, recursingFn),
+            recurValue = apply(j.slice(1, arguments), localRecursor);
+
+        while(verifyRecurValue(recurValue = recurValue(localRecursor)) && recursingFn !== identity);
 
         return recurValue;
     }

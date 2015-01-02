@@ -10,8 +10,8 @@ module.exports = function(config){
 
         files: [
             '../scripts/src/jfp.js',
-            '../scripts/src/modules/core/core.js',
             '../scripts/src/modules/core/array.js',
+            '../scripts/src/modules/core/core.js',
             '../scripts/src/modules/predicate.js',
             '../scripts/src/modules/convert.js',
             '../scripts/src/modules/array.js',
@@ -24,7 +24,7 @@ module.exports = function(config){
         ],
 
         preprocessors: {
-            '../scripts/src/modules/*.js': ['coverage']
+            '../scripts/src/modules/**/*.js': ['coverage']
         },
 
         coverageReporter: {

@@ -1,7 +1,12 @@
 (function(j){
 
+    function slice(begin, valueSet, end){
+        return (!end) ? Array.prototype.slice.call(valueSet, begin) :
+                        Array.prototype.slice.call(valueSet, begin, end);
+    }
+
     function concat(original, extension){
-        var result = j.either([], original),
+        var result = j.slice(0, j.either([], original)),
             sanitizedExtension = j.either([], extension),
             i;
 
@@ -11,11 +16,6 @@
         }
 
         return result;
-    }
-    
-    function slice(begin, valueSet, end){
-        return (!end) ? Array.prototype.slice.call(valueSet, begin) :
-                        Array.prototype.slice.call(valueSet, begin, end);
     }
 
     j.concat = concat;

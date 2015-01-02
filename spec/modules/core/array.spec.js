@@ -15,6 +15,14 @@
             expect(JSON.stringify(j.concat([1, 2], [3, 4]))).toBe('[1,2,3,4]');
         });
 
+        it('should not modify original array', function(){
+            var originalArray = [1, 2, 3];
+
+            j.concat(originalArray, [4, 5]);
+
+            expect(JSON.stringify(originalArray)).toBe('[1,2,3]');
+        });
+
     });
 
     describe('slice', function(){
