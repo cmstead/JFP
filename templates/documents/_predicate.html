@@ -10,7 +10,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.and();
 
         //true
@@ -35,7 +35,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.isArray([]);
 
         //true
@@ -56,7 +56,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.isBoolean(false);
 
         //true
@@ -77,12 +77,129 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.isEven(2);
 
         //true
 
         j.isEven(3);
+
+        //false
+    </code>
+</pre>
+
+<dl>
+    <dt>isInt</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} value</dd>
+    <dd>Description: returns true if number is an integer, otherwise false</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.isInt(2);
+
+        //true
+
+        j.isInt(3.14159);
+
+        //false
+    </code>
+</pre>
+
+<dl>
+    <dt>isNegative</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} value</dd>
+    <dd>Description: returns true if number is less than 0, otherwise false</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.isNegative(-2);
+
+        //true
+
+        j.isNegative(5);
+
+        //false
+    </code>
+</pre>
+
+<dl>
+    <dt>isNonNegative</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} value</dd>
+    <dd>Description: returns true if number is 0 or greater, otherwise false</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.isNonNegative(0);
+
+        //true
+
+        j.isNonNegative(3);
+
+        //true
+
+        j.isNonNegative(-5);
+
+        //false
+    </code>
+</pre>
+
+<dl>
+    <dt>isNonPositive</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} value</dd>
+    <dd>Description: returns true if number is 0 or less, otherwise false</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.isNonPositive(0);
+
+        //true
+
+        j.isNonPositive(-2);
+
+        //true
+
+        j.isNonPositive(7);
+
+        //false
+    </code>
+</pre>
+
+<dl>
+    <dt>isNonZero</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} value</dd>
+    <dd>Description: returns true if number is not 0, otherwise false</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.isNonZero(6);
+
+        //true
+
+        j.isNonZero(-2.85);
+
+        //true
+
+        j.isNonZero(0);
 
         //false
     </code>
@@ -98,7 +215,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.isNull(null);
 
         //true
@@ -119,7 +236,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.isNumber(1234);
 
         //true
@@ -144,7 +261,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.isNumeric(1234.33);
 
         //true
@@ -169,7 +286,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.isObject({});
 
         //true
@@ -185,6 +302,48 @@
 </pre>
 
 <dl>
+    <dt>isOdd</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} value</dd>
+    <dd>Description: returns true if number is odd, otherwise false</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.isOdd(3);
+
+        //true
+
+        j.isOdd(10);
+
+        //false
+    </code>
+</pre>
+
+<dl>
+    <dt>isPositive</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} value</dd>
+    <dd>Description: returns true if number greater than 0, otherwise false</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.isPositive(3);
+
+        //true
+
+        j.isPositive(-2.414);
+
+        //false
+    </code>
+</pre>
+
+<dl>
     <dt>isString</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {any} value</dd>
@@ -194,7 +353,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.isString('A string');
 
         //true
@@ -215,7 +374,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.isTruthy(true);
 
         //true
@@ -244,12 +403,33 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.isUndefined(undefined);
 
         //true
 
         j.isUndefined(null);
+
+        //false
+    </code>
+</pre>
+
+<dl>
+    <dt>isZero</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} value</dd>
+    <dd>Description: returns true if number is 0, otherwise false</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.isZero(0);
+
+        //true
+
+        j.isZero(1);
 
         //false
     </code>
@@ -265,7 +445,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.not(true);
 
         //false
@@ -286,7 +466,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.or();
 
         //false
@@ -304,3 +484,5 @@
         //false
     </code>
 </pre>
+
+<highlight></highlight>

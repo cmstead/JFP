@@ -19,6 +19,16 @@
         }
     },
 
+    "directives": {
+        "options": {
+            "banner": "/*! <%= pkg.name %>.directives <%= grunt.template.today('dd-mm-yyyy') %> */\n",
+            "sourceMap": false
+        },
+        "files": {
+            "./min/<%= pkg.name %>.directives.min.js": ["./app/scripts/directives/**/*.annotated.js"]
+        }
+    },
+
     "app": {
         "options": {
             "banner": "/*! <%= pkg.name %>.app <%= grunt.template.today('dd-mm-yyyy') %> */\n",

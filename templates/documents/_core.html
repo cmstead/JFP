@@ -10,7 +10,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         function add(a, b){
             return a + b;
         }
@@ -31,7 +31,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         function isUndefined(value){
             return typeof value === 'undefined';
         }
@@ -62,7 +62,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.countArguments(function(arg1, arg2, arg3){});
 
         //3
@@ -79,7 +79,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         function add(a, b);
 
         j.curry(add)(1)(2);
@@ -106,7 +106,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.either('default', null);
 
         //default
@@ -127,7 +127,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         j.identity('my value');
 
         //my value
@@ -144,7 +144,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         function multiplyBy2(value){
             return value * 2;
         }
@@ -173,7 +173,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         function divide(a, b){
             return a / b;
         }
@@ -194,7 +194,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         function add(a, b){
             return a + b;
         }
@@ -219,7 +219,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         function factorial(recur, base, result){
             var sanitizedResult = j.either(1, result);
             return (base >= 0) ? recur(base - 1, sanitizedResult * base) : sanitizedResult;
@@ -241,7 +241,7 @@
 <h4>Example</h4>
 
 <pre>
-    <code>
+    <code class="javascript">
         function divide(a, b){
             return a / b;
         }
@@ -251,3 +251,5 @@
         //0.5
     </code>
 </pre>
+
+<highlight></highlight>

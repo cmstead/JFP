@@ -6,7 +6,10 @@
         "files": [
             {
                 "expand": true,
-                "src": ["app/scripts/controllers/**/*.js"],
+                "src": [
+                            "app/scripts/controllers/**/*.js",
+                            "app/scripts/directives/**/*.js"
+                       ],
                 "ext": ".annotated.js"
             }
         ]

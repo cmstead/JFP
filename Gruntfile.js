@@ -1,5 +1,6 @@
 module.exports = function(grunt){
-    var compassConfig = require('./grunt/compass.json'),
+    var cleanConfig = require('./grunt/clean.json'),
+        compassConfig = require('./grunt/compass.json'),
         concatConfig = require('./grunt/concat.json'),
         devserverConfig = require('./grunt/devserver'),
         jshintConfig = require('./grunt/jshint.json'),
@@ -9,6 +10,7 @@ module.exports = function(grunt){
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        clean: cleanConfig,
         compass: compassConfig,
         concat: concatConfig,
         devserver: devserverConfig,
@@ -18,7 +20,7 @@ module.exports = function(grunt){
     });
 
     /* Load grunt task adapters */
-
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -29,7 +31,7 @@ module.exports = function(grunt){
     /* Register composite grunt tasks */
     grunt.registerTask('run', ['devserver']);
     grunt.registerTask('test', ['jshint']);
-    grunt.registerTask('build', ['test', 'compass', 'ngAnnotate', 'uglify', 'concat']);
+    grunt.registerTask('build', ['clean', 'test', 'compass', 'ngAnnotate', 'uglify', 'concat']);
 
     grunt.registerTask('default', ['test']);
 };
