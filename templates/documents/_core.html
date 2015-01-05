@@ -3,7 +3,7 @@
 <dl>
     <dt>apply</dt>
     <dd>Performance: O(1)</dd>
-    <dd>Arguments: {array} values, {function} userFn</dd>
+    <dd>Arguments: {function} userFn, {array} values</dd>
     <dd>Description: Calls provided function with values in passed array</dd>
 </dl>
 
@@ -15,7 +15,7 @@
             return a + b;
         }
 
-        j.apply([1, 2], add);
+        j.apply(add, [1, 2]);
 
         //3
     </code>
