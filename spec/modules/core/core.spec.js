@@ -5,7 +5,7 @@
 
         it('should call the passed function', function(){
             var spy = jasmine.createSpy('userFn');
-            j.apply(null, spy);
+            j.apply(spy);
 
             expect(spy).toHaveBeenCalled();
         });
@@ -15,7 +15,7 @@
                 return 5;
             }
 
-            expect(j.apply(null, returnFive)).toBe(5);
+            expect(j.apply(returnFive)).toBe(5);
         });
 
         it('should apply passed values', function(){
@@ -23,7 +23,7 @@
                 return a + b;
             }
 
-            expect(j.apply([1, 2], add)).toBe(3);
+            expect(j.apply(add, [1, 2])).toBe(3);
         });
 
     });

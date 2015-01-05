@@ -4,7 +4,7 @@
     //Produces a function that returns f(g(x))
     function compositor(f, g){
         return function(){
-            return f(j.apply(j.slice(0, arguments), g));
+            return f(j.apply(g, j.slice(0, arguments)));
         };
     }
     
@@ -14,7 +14,7 @@
     }
     
     function pipeline(){
-        return j.apply(j.slice(0, arguments).reverse(), compose);
+        return j.apply(compose, j.slice(0, arguments).reverse());
     }
 
     j.compose = compose;

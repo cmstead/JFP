@@ -32,7 +32,7 @@
         return params.length;
     }
 
-    function apply(values, userFn){
+    function apply(userFn, values){
         return userFn.apply(null, either([], values));
     }
     
@@ -40,7 +40,7 @@
         var args = j.slice(1, arguments);
         
         return function appliedFn(){
-            return apply(j.concat(args, j.slice(0, arguments)), userFn);
+            return apply(userFn, j.concat(args, j.slice(0, arguments)));
         };
     }
 
@@ -48,7 +48,7 @@
         var args = j.slice(1, arguments);
         
         return function appliedFn(){
-            return apply(j.concat(j.slice(0, arguments), args), userFn);
+            return apply(userFn, j.concat(j.slice(0, arguments), args));
         };
     }
 
@@ -56,8 +56,8 @@
     function curry(userFn){
         var args = j.slice(1, arguments),
             argumentCount = maybe(0, countArguments, userFn),
-            appliedFn = (args.length < argumentCount) ? apply(j.concat([curry, userFn], args), partial) : null,
-            result = (!!userFn && args.length >= argumentCount) ? apply(args, userFn) : null;
+            appliedFn = (args.length < argumentCount) ? apply(partial, j.concat([curry, userFn], args)) : null,
+            result = (!!userFn && args.length >= argumentCount) ? apply(userFn, args) : null;
 
         return j.either(appliedFn, result);
     }
@@ -68,7 +68,7 @@
 
         //This is to make the returned function distinct and identifiable.
         return function recursorFn(localRecursor){
-            return apply(j.concat([localRecursor], args), recurFn);
+            return apply(recurFn, j.concat([localRecursor], args));
         };
     }
 
@@ -82,7 +82,7 @@
     function recur(userFn){
         var recursingFn = either(identity, userFn),
             localRecursor = partial(recursor, recursingFn),
-            recurValue = apply(j.slice(1, arguments), localRecursor);
+            recurValue = apply(localRecursor, j.slice(1, arguments));
 
         while(verifyRecurValue(recurValue = recurValue(localRecursor)) && recursingFn !== identity);
 
