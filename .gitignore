@@ -5,8 +5,8 @@
 
 #directories
 node_modules/
+min/
 spec/coverage/
 scripts/min/
 doc/
-dist/
 spec/coverage/
