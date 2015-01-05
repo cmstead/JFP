@@ -6,8 +6,13 @@ jfp = (function(){
 
 (function(j){
 
+    function slice(begin, valueSet, end){
+        return (!end) ? Array.prototype.slice.call(valueSet, begin) :
+                        Array.prototype.slice.call(valueSet, begin, end);
+    }
+
     function concat(original, extension){
-        var result = j.either([], original),
+        var result = j.slice(0, j.either([], original)),
             sanitizedExtension = j.either([], extension),
             i;
 
@@ -17,11 +22,6 @@ jfp = (function(){
         }
 
         return result;
-    }
-    
-    function slice(begin, valueSet, end){
-        return (!end) ? Array.prototype.slice.call(valueSet, begin) :
-                        Array.prototype.slice.call(valueSet, begin, end);
     }
 
     j.concat = concat;
@@ -48,18 +48,22 @@ jfp = (function(){
         return maybe(defaultValue, identity, optionValue);
     }
 
+    function captureArguments(userFn){
+        return userFn.toString()
+                     .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
+                     .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
+                     .split(/,/);
+    }
+
     function countArguments(userFn){
-        var params = either(function(){}, userFn).toString()
-            .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
-            .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-            .split(/,/);
+        var params = maybe([], captureArguments, userFn);
 
         params = (params.length === 1 && params[0] === '') ? [] : params;
 
         return params.length;
     }
 
-    function apply(values, userFn){
+    function apply(userFn, values){
         return userFn.apply(null, either([], values));
     }
     
@@ -67,7 +71,7 @@ jfp = (function(){
         var args = j.slice(1, arguments);
         
         return function appliedFn(){
-            return apply(j.concat(args, j.slice(0, arguments)), userFn);
+            return apply(userFn, j.concat(args, j.slice(0, arguments)));
         };
     }
 
@@ -75,7 +79,7 @@ jfp = (function(){
         var args = j.slice(1, arguments);
         
         return function appliedFn(){
-            return apply(j.concat(j.slice(0, arguments), args), userFn);
+            return apply(userFn, j.concat(j.slice(0, arguments), args));
         };
     }
 
@@ -83,32 +87,35 @@ jfp = (function(){
     function curry(userFn){
         var args = j.slice(1, arguments),
             argumentCount = maybe(0, countArguments, userFn),
-            appliedFn = (args.length < argumentCount) ? apply(j.concat([curry, userFn], args), partial) : null,
-            result = (!!userFn && args.length >= argumentCount) ? apply(args, userFn) : null;
+            appliedFn = (args.length < argumentCount) ? apply(partial, j.concat([curry, userFn], args)) : null,
+            result = (!!userFn && args.length >= argumentCount) ? apply(userFn, args) : null;
 
         return j.either(appliedFn, result);
     }
 
     //zOMG! TAIL RECURSION
-    function verifyRecurValue(recurValue){
-        var isRecursor = typeof recurValue === 'function';
-        return (isRecursor && recurValue.toString().match('recursorFn'));
+    function recursor(recurFn){
+        var args = j.slice(1, arguments);
+
+        //This is to make the returned function distinct and identifiable.
+        return function recursorFn(localRecursor){
+            return apply(recurFn, j.concat([localRecursor], args));
+        };
     }
 
+    function verifyRecurValue(recurValue){
+        return typeof recurValue === 'function' &&
+               recurValue.toString().match('recursorFn');
+    }
+
+    //Tail optimization with managed recursion is really complicated.
+    //Please don't muck with this unless you TRULY understand what is happening.
     function recur(userFn){
-        var recurFn = either(identity, userFn),
-            recursor = function recursor(){
-                var args = j.slice(0, arguments);
-                
-                //This is to make the returned function distinct and identifiable.
-                return function recursorFn(){
-                    return apply(j.slice(0, arguments), 
-                                 apply(j.concat([recurFn], args), rpartial));
-                };
-            },
-            recurValue = apply(j.slice(1, arguments), recursor);
-        
-        while(verifyRecurValue(recurValue = recurValue(recursor)) && recurFn !== identity);
+        var recursingFn = either(identity, userFn),
+            localRecursor = partial(recursor, recursingFn),
+            recurValue = apply(localRecursor, j.slice(1, arguments));
+
+        while(verifyRecurValue(recurValue = recurValue(localRecursor)) && recursingFn !== identity);
 
         return recurValue;
     }
@@ -467,43 +474,12 @@ jfp = (function(){
             first = args.length ? j.first(args) : 0;
         return j.recur(subtractor, first, j.rest(args));
     }
-    
-    function equal(a, b){
-        var isNotUndefined = j.compose(j.not, j.isUndefined);
-        
-        return (j.and(isNotUndefined(a), 
-                      isNotUndefined(b))) ? a === b : false;
-    }
-    
-    function greater(a, b){
-        if(j.isUndefined(a) || j.isUndefined(b)){
-            throw new TypeError('Greater requires two variables for comparison');
-        }
-        
-        return a > b;
-    }
-    
-    function less(a, b){
-        if(j.isUndefined(a) || j.isUndefined(b)){
-            throw new TypeError('Less requires two variables for comparison');
-        }
-        
-        return a < b;
-    }
-    
-    function leq(a, b){
-        return j.not(greater(a, b));
-    }
-    
-    function geq(a, b){
-        return j.not(less(a, b));
-    }
 
     //This is a recursive constructor function for ranges
     function rangeRecurCheck(m, n, inc){
         return inc > 0 ? (m + inc) < n : (m + inc) > n;
     }
-    
+
     function rangeBuilder(recur, currentRange, m, n, inc){
         var finalRange = rangeRecurCheck(m - inc, n, inc) ?
                             j.conj(m, currentRange) :
@@ -530,18 +506,18 @@ jfp = (function(){
         return j.isUndefined(b) ? j.either(0, a) : a%b;
     }
 
+    function truncate(value){
+        return (value > 0) ? Math.floor(value) : Math.floor(value) + 1;
+    }
+
     j.add = add;
     j.divide = divide;
-    j.equal = equal;
-    j.geq = geq;
-    j.greater = greater;
-    j.leq = leq;
-    j.less = less;
     j.mod = mod;
     j.multiply = multiply;
     j.range = range;
     j.subtract = subtract;
-    
+    j.truncate = truncate;
+
 })(jfp);
 
 
@@ -551,7 +527,7 @@ jfp = (function(){
     //Produces a function that returns f(g(x))
     function compositor(f, g){
         return function(){
-            return f(j.apply(j.slice(0, arguments), g));
+            return f(j.apply(g, j.slice(0, arguments)));
         };
     }
     
@@ -561,7 +537,7 @@ jfp = (function(){
     }
     
     function pipeline(){
-        return j.apply(j.slice(0, arguments).reverse(), compose);
+        return j.apply(compose, j.slice(0, arguments).reverse());
     }
 
     j.compose = compose;
