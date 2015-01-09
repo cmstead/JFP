@@ -427,6 +427,30 @@ jfp = (function(){
 (function(j){
     'use strict';
     
+    //Produces a function that returns f(g(x))
+    function compositor(f, g){
+        return function(){
+            return f(j.apply(g, j.slice(0, arguments)));
+        };
+    }
+    
+    function compose(){
+        var args = j.slice(0, arguments);
+        return (args.length >= 1) ? j.reduce(compositor, args) : j.identity;
+    }
+    
+    function pipeline(){
+        return j.apply(compose, j.slice(0, arguments).reverse());
+    }
+
+    j.compose = compose;
+    j.pipeline = pipeline;
+
+})(jfp);
+
+(function(j){
+    'use strict';
+    
     //This is a recursive add fn
     function adder(recur, current, valueSet){
         return (valueSet.length === 0) ?
@@ -579,30 +603,6 @@ jfp = (function(){
     j.greater = greater;
     j.leq = j.compose(j.not, greater);
     j.less = j.compose(j.not, geq);
-
-})(jfp);
-
-(function(j){
-    'use strict';
-    
-    //Produces a function that returns f(g(x))
-    function compositor(f, g){
-        return function(){
-            return f(j.apply(g, j.slice(0, arguments)));
-        };
-    }
-    
-    function compose(){
-        var args = j.slice(0, arguments);
-        return (args.length >= 1) ? j.reduce(compositor, args) : j.identity;
-    }
-    
-    function pipeline(){
-        return j.apply(compose, j.slice(0, arguments).reverse());
-    }
-
-    j.compose = compose;
-    j.pipeline = pipeline;
 
 })(jfp);
 
