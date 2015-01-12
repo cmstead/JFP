@@ -381,6 +381,7 @@ jfp = (function(){
     j.filter = filter;
     j.find = find;
     j.first = first;
+    j.init = j.dropLast;
     j.last = last;
     j.lastIndex = lastIndex;
     j.map = map;
@@ -390,6 +391,7 @@ jfp = (function(){
     j.take = take;
 
 })(jfp);
+
 
 (function(j){
     'use strict';
@@ -630,25 +632,27 @@ jfp = (function(){
 
 })(jfp);
 
-(function(j, window){
+//(function(j){
 
-    function shimMode(){
-        for(var key in j){
-            window[key] = j[key];
-        }
-    }
+    //function shimMode(){
+    //    for(var key in j){
+    //        window[key] = j[key];
+    //    }
+    //}
 
     //This provides the option to run this library without the j object declared.
     //This WILL dirty up the window object and potentially collide with reused names.
     //This might change the way you code forever.
-    if(typeof window !== 'undefined'){
-        j.shimMode = shimMode;
-    }
+    //if(!!window){
+    //    j.shimMode = shimMode;
+    //}
 
-    if(typeof module !== 'undefined'){
-        module.exports = j;
-    }
-
-})(jfp, window);
+//})(jfp);
 
 var j = jfp;
+
+if(typeof module !== 'undefined' && !!module.exports){
+    module.exports = j;
+}
+
+
