@@ -7,6 +7,6 @@
 node_modules/
 spec/coverage/
 scripts/min/
+min/
 doc/
-dist/
 spec/coverage/

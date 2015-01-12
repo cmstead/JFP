@@ -10,19 +10,21 @@ module.exports = function(config){
 
         files: [
             '../scripts/src/jfp.js',
-            '../scripts/src/modules/core/core.js',
             '../scripts/src/modules/core/array.js',
+            '../scripts/src/modules/core/core.js',
             '../scripts/src/modules/predicate.js',
             '../scripts/src/modules/convert.js',
             '../scripts/src/modules/array.js',
             '../scripts/src/modules/object.js',
             '../scripts/src/modules/composite.js',
+            '../scripts/src/modules/math.js',
+            '../scripts/src/modules/math-predicate.js',
             '../scripts/src/jfp.expose.js',
             './**/*.spec.js'
         ],
 
         preprocessors: {
-            '../scripts/src/modules/*.js': ['coverage']
+            '../scripts/src/modules/**/*.js': ['coverage']
         },
 
         coverageReporter: {
