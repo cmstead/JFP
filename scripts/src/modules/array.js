@@ -139,6 +139,7 @@
     j.filter = filter;
     j.find = find;
     j.first = first;
+    j.init = j.dropLast;
     j.last = last;
     j.lastIndex = lastIndex;
     j.map = map;
