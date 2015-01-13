@@ -121,6 +121,18 @@
             });
 
         });
+
+        describe('modulo', function(){
+
+            it('should return the modulo of two positive numbers', function(){
+                expect(j.modulo(5, 4)).toBe(1);
+            });
+
+            it('should return the modulo of a negative and a positive number', function(){
+                expect(j.modulo(-5, 4)).toBe(3);
+            });
+
+        });
 	
         describe('truncate', function(){
 
@@ -134,6 +146,26 @@
 
             it('should return negative number up-wards when float is passed', function(){
                 expect(j.truncate(-1.234)).toBe(-1);
+            });
+
+        });
+
+        describe('inc', function(){
+
+            it('should increment provided number', function(){
+                expect(j.inc(5)).toBe(6);
+            });
+
+        });
+
+        describe('fac', function(){
+
+            it('should take the factorial of any positive number', function(){
+                expect(j.fac(5)).toBe(120);
+            });
+
+            it('should return 1 when 0 is passed', function(){
+                expect(j.fac(0)).toBe(1);
             });
 
         });

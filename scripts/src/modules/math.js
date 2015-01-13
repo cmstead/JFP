@@ -1,7 +1,7 @@
 (function(j){
     'use strict';
-    
-    //This is a recursive add fn
+
+//This is a recursive add fn
     function adder(recur, current, valueSet){
         return (valueSet.length === 0) ?
                 current :
@@ -80,13 +80,29 @@
         return j.isUndefined(b) ? j.either(0, a) : a%b;
     }
 
+    function modulo(a, b){
+        var _a = j.either(0, a),
+            _b = j.either(0, b);
+
+        return (_a > 0) ? mod(_a, _b) : _b * (Math.floor(Math.abs(_a)/_b) + 1) + _a;
+    }
+
     function truncate(value){
         return (value > 0) ? Math.floor(value) : Math.floor(value) + 1;
     }
 
+    function fac(value){
+        return (!value) ? 1 : j.compose(j.partial(j.reduce, j.multiply),
+                                        j.partial(j.range, 1),
+                                        j.partial(j.add, 1))(value);
+    }
+
     j.add = add;
     j.divide = divide;
+    j.fac = fac;
+    j.inc = j.partial(j.add, 1);
     j.mod = mod;
+    j.modulo = modulo;
     j.multiply = multiply;
     j.range = range;
     j.subtract = subtract;
