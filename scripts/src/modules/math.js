@@ -83,9 +83,33 @@
     function truncate(value){
         return (value > 0) ? Math.floor(value) : Math.floor(value) + 1;
     }
+    
+    function max(a, b){
+        var _a = j.isUndefined(a) ? Number.MIN_VALUE : a,
+            _b = j.isUndefined(b) ? Number.MIN_VALUE : b,
+            maxValue = Number.MIN_VALUE;
+            
+        maxValue = (_a > maxValue) ? _a : maxValue;
+        maxValue = (_b > maxValue) ? _b : maxValue;
+        
+        return maxValue;
+    }
+    
+    function min(a, b){
+        var _a = j.isUndefined(a) ? Number.MAX_VALUE : a,
+            _b = j.isUndefined(b) ? Number.MAX_VALUE : b,
+            minValue = Number.MAX_VALUE;
+        
+        minValue = (_a < minValue) ? _a : minValue;
+        minValue = (_b < minValue) ? _b : minValue;
+        
+        return minValue;
+    }
 
     j.add = add;
     j.divide = divide;
+    j.max = max;
+    j.min = min;
     j.mod = mod;
     j.multiply = multiply;
     j.range = range;

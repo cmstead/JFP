@@ -137,6 +137,38 @@
             });
 
         });
+        
+        describe('max', function(){
+            
+            it('should return Number.MIN_VALUE if no values are passed', function(){
+                expect(j.max()).toBe(Number.MIN_VALUE);
+            });
+            
+            it('should return passed value if only one value is passed', function(){
+                expect(j.max(4)).toBe(4);
+            });
+            
+            it('should return the max of a and b when two values are passed', function(){
+                expect(j.max(3, 5)).toBe(5);
+            });
+            
+        });
+        
+        describe('min', function(){
+            
+            it('should return Number.Max_VALUE if no values are passed', function(){
+                expect(j.min()).toBe(Number.MAX_VALUE);
+            });
+            
+            it('should return passed valie if only one value is passed', function(){
+                expect(j.min(4)).toBe(4);
+            });
+            
+            it('should return min of a and b when two values are passed', function(){
+                expect(j.min(4, 3)).toBe(3);
+            });
+            
+        });
 
     });
     
