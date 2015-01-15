@@ -11,3 +11,9 @@ be limited to functions in the library.
 
 Programmers should be able to extend their libraries easily. Programmers should be able
 to bend their environment to their own will, not the other way around. This is what JFP gives you.
+
+Upcoming to do items:
+
+- [ ] Create when function to handle single-case conditionals
+- [ ] min and max for identifying minima and maxima
+- [ ] fac for computing factorials
