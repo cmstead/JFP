@@ -183,6 +183,30 @@
             
         });
         
+        describe('xor', function(){
+            
+            it('should return false by default', function(){
+                expect(j.xor()).toBe(false);
+            });
+            
+            it('should return true if a single true is passed', function(){
+                expect(j.xor(true)).toBe(true);
+            });
+            
+            it('should return false if a single false is passed', function(){
+                expect(j.xor(false)).toBe(false);
+            });
+            
+            it('should return true if true and false are passed', function(){
+                expect(j.xor(false, true)).toBe(true);
+            });
+            
+            it('should return false if true is passed for both values', function(){
+                expect(j.xor(true, true)).toBe(false);
+            });
+            
+        });
+        
     });
     
 })();

@@ -198,6 +198,10 @@ jfp = (function(){
         return j.recur(orer, false, j.slice(0, arguments));
     }
     
+    function xor(a, b){
+        return !!(or(a, b) && not(a === b));
+    }
+    
     j.and = and;
     j.isArray = isArray;
     j.isBoolean = isBoolean;
@@ -210,6 +214,7 @@ jfp = (function(){
     j.isUndefined = isUndefined;
     j.not = not;
     j.or = or;
+    j.xor = xor;
     
 })(jfp);
 
