@@ -141,7 +141,7 @@
         describe('max', function(){
             
             it('should return Number.MIN_VALUE if no values are passed', function(){
-                expect(j.max()).toBe(Number.MIN_VALUE);
+                expect(j.max()).toBe(-Number.MAX_VALUE);
             });
             
             it('should return passed value if only one value is passed', function(){

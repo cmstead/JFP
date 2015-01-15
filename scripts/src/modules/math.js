@@ -85,9 +85,9 @@
     }
     
     function max(a, b){
-        var _a = j.isUndefined(a) ? Number.MIN_VALUE : a,
-            _b = j.isUndefined(b) ? Number.MIN_VALUE : b,
-            maxValue = Number.MIN_VALUE;
+        var maxValue = -Number.MAX_VALUE,
+            _a = j.isUndefined(a) ? maxValue : a,
+            _b = j.isUndefined(b) ? maxValue : b;
             
         maxValue = (_a > maxValue) ? _a : maxValue;
         maxValue = (_b > maxValue) ? _b : maxValue;
@@ -96,9 +96,9 @@
     }
     
     function min(a, b){
-        var _a = j.isUndefined(a) ? Number.MAX_VALUE : a,
-            _b = j.isUndefined(b) ? Number.MAX_VALUE : b,
-            minValue = Number.MAX_VALUE;
+        var minValue = Number.MAX_VALUE,
+            _a = j.isUndefined(a) ? minValue : a,
+            _b = j.isUndefined(b) ? minValue : b;
         
         minValue = (_a < minValue) ? _a : minValue;
         minValue = (_b < minValue) ? _b : minValue;
