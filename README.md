@@ -14,6 +14,10 @@ to bend their environment to their own will, not the other way around. This is w
 
 Upcoming to do items:
 
-- [ ] Create when function to handle single-case conditionals
-- [ ] min and max for identifying minima and maxima
-- [ ] fac for computing factorials
+- [ ] when (Executes as a single-case conditional, i.e. if without an else)
+- [ ] max
+- [ ] min
+- [ ] fac (factorial)
+- [ ] xor
+- [ ] unique (Requires array of sortable and comparable datatypes)
+- [ ] compact (Removes all falsey values from an array)
