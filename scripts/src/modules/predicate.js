@@ -65,7 +65,7 @@
     }
     
     function xor(a, b){
-        return !!(or(a, b) && not(a === b));
+        return !!(or(a, b) && not(isTruthy(a) === isTruthy(b)));
     }
     
     j.and = and;
