@@ -89,6 +89,11 @@
         return recurValue;
     }
 
+    function when(checkValue, userFn){
+        var args = j.slice(2, arguments);
+        return (checkValue) ? apply(userFn, args) : null;
+    }
+
     j.apply = apply;
     j.countArguments = countArguments;
     j.curry = curry;
@@ -98,5 +103,6 @@
     j.partial = partial;
     j.recur = recur;
     j.rpartial = rpartial;
+    j.when = when;
 
 })(jfp);

@@ -276,4 +276,45 @@
 
     });
 
+    describe('when', function(){
+    
+        it('should execute passed function when value evaluates to true', function(){
+            var spy = jasmine.createSpy('spy');
+            j.when(true, spy);
+            expect(spy).toHaveBeenCalled();
+        });
+
+        it('should not execute passed function when value evaluates to false', function(){
+            var spy = jasmine.createSpy('spy');
+            j.when(false, spy);
+            expect(spy).not.toHaveBeenCalled();
+        });
+
+        it('should return result of executed function if value evaluates to true', function(){
+            var returnedValue;
+            
+            function return5(){
+                return 5;
+            }
+
+            returnedValue = j.when(true, return5);
+
+            expect(returnedValue).toBe(5);
+        });
+
+        it('should return null when value evaluates to false', function(){
+            var returnedValue = j.when(false, j.identity);
+            expect(returnedValue).toBe(null);
+        });
+        
+        it('should call passed function with provided arguments if value is true', function(){
+            var spy = jasmine.createSpy('spy');
+
+            j.when(true, spy, 1, 2, 3);
+
+            expect(spy).toHaveBeenCalledWith(1, 2, 3);
+        });
+
+    });
+
 })();
