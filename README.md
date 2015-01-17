@@ -15,6 +15,7 @@ to bend their environment to their own will, not the other way around. This is w
 Upcoming to do items:
 
 - [ ] when (Executes as a single-case conditional, i.e. if without an else)
+- [ ] eitherWhen (performs either on the result of a conditional expression)
 - [ ] max
 - [ ] min
 - [ ] fac (factorial)
