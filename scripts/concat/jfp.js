@@ -199,7 +199,7 @@ jfp = (function(){
     }
     
     function xor(a, b){
-        return !!(or(a, b) && not(a === b));
+        return !!(or(a, b) && not(isTruthy(a) === isTruthy(b)));
     }
     
     j.and = and;
@@ -217,6 +217,7 @@ jfp = (function(){
     j.xor = xor;
     
 })(jfp);
+
 
 (function(j){
     'use strict';
@@ -449,11 +450,13 @@ jfp = (function(){
     function pipeline(){
         return j.apply(compose, j.slice(0, arguments).reverse());
     }
-
+    
+    j.compact = j.partial(j.filter, j.isTruthy);
     j.compose = compose;
     j.pipeline = pipeline;
 
 })(jfp);
+
 
 (function(j){
     'use strict';

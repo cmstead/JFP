@@ -51,5 +51,14 @@
         
     });
 
+    describe('compact', function(){
+        
+        it('should remove falsey values from an array', function(){
+            var testArray = [1, 2, 0, false, undefined, null, true];
+
+            expect(JSON.stringify(j.compact(testArray))).toBe('[1,2,true]');
+        });
+
+    });
 
 })();

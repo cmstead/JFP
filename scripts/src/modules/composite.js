@@ -16,7 +16,8 @@
     function pipeline(){
         return j.apply(compose, j.slice(0, arguments).reverse());
     }
-
+    
+    j.compact = j.partial(j.filter, j.isTruthy);
     j.compose = compose;
     j.pipeline = pipeline;
 
