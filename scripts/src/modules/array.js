@@ -130,6 +130,21 @@
         return (!!values) ? j.slice(0, values, count) : null;
     }
 
+    function unique(valueSet){
+        var values = j.slice(0, valueSet).sort(),
+            finalValues = [];
+            
+        function operator(value){
+            finalValues = j.eitherWhen(finalValues,
+                                       conj(value, finalValues),
+                                       function(){ return value !== last(finalValues); });
+        }
+
+        each(operator, values);
+
+        return finalValues;
+    }
+
     j.conj = conj;
     j.cons = cons;
     j.drop = drop;
@@ -147,5 +162,6 @@
     j.reduce = reduce;
     j.rest = rest;
     j.take = take;
+    j.unique = unique;
 
 })(jfp);

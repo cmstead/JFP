@@ -120,17 +120,32 @@ jfp = (function(){
         return recurValue;
     }
 
+    function when(checkValue, userFn){
+        var args = j.slice(2, arguments);
+        return (checkValue) ? apply(userFn, args) : null;
+    }
+
+    function eitherWhen(defaultValue, testValue, predicate){
+        var args = j.slice(3, arguments),
+            safePredicate = either(partial(identity, true), predicate);
+
+        return j.either(defaultValue, when(apply(safePredicate, args), identity, testValue));
+    }
+
     j.apply = apply;
     j.countArguments = countArguments;
     j.curry = curry;
     j.either = either;
+    j.eitherWhen = eitherWhen;
     j.identity = identity;
     j.maybe = maybe;
     j.partial = partial;
     j.recur = recur;
     j.rpartial = rpartial;
+    j.when = when;
 
 })(jfp);
+
 
 (function(j){
     'use strict';
@@ -378,6 +393,21 @@ jfp = (function(){
         return (!!values) ? j.slice(0, values, count) : null;
     }
 
+    function unique(valueSet){
+        var values = j.slice(0, valueSet).sort(),
+            finalValues = [];
+            
+        function operator(value){
+            finalValues = j.eitherWhen(finalValues,
+                                       conj(value, finalValues),
+                                       function(){ return value !== last(finalValues); });
+        }
+
+        each(operator, values);
+
+        return finalValues;
+    }
+
     j.conj = conj;
     j.cons = cons;
     j.drop = drop;
@@ -395,6 +425,7 @@ jfp = (function(){
     j.reduce = reduce;
     j.rest = rest;
     j.take = take;
+    j.unique = unique;
 
 })(jfp);
 

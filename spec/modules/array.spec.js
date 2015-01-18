@@ -295,4 +295,16 @@
         });
     });
 
+    describe('unique', function(){
+        
+        it('should return a sorted array', function(){
+            expect(JSON.stringify(j.unique([5, 2, 4, 3, 1]))).toBe('[1,2,3,4,5]');
+        });
+
+        it('should remove all duplicate values', function(){
+            expect(JSON.stringify(j.unique([1, 2, 3, 2, 4, 3, 3, 5]))).toBe('[1,2,3,4,5]');
+        });
+
+    });
+
 })();

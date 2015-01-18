@@ -94,10 +94,18 @@
         return (checkValue) ? apply(userFn, args) : null;
     }
 
+    function eitherWhen(defaultValue, testValue, predicate){
+        var args = j.slice(3, arguments),
+            safePredicate = either(partial(identity, true), predicate);
+
+        return j.either(defaultValue, when(apply(safePredicate, args), identity, testValue));
+    }
+
     j.apply = apply;
     j.countArguments = countArguments;
     j.curry = curry;
     j.either = either;
+    j.eitherWhen = eitherWhen;
     j.identity = identity;
     j.maybe = maybe;
     j.partial = partial;
