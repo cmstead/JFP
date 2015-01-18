@@ -1,22 +1,24 @@
 (function(j){
 
+    function throwWhenNotComparable(a, b){
+        j.when(j.isUndefined(a) || j.isUndefined(b), function(){
+            throw new TypeError('Inequality comparisons require two values');
+        });
+    }
+
     function equal(a, b){
         var isNotUndefined = j.compose(j.not, j.isUndefined);
-
-        return (j.and(isNotUndefined(a),
-            isNotUndefined(b))) ? a === b : false;
+        return (isNotUndefined(a) && isNotUndefined(b)) ? a === b : false;
     }
 
     function greater(a, b){
-        if(j.or(j.isUndefined(a), j.isUndefined(b))){
-            throw new TypeError('Inequality comparisons require two values');
-        }
-
+        throwWhenNotComparable(a, b);
         return a > b;
     }
 
-    function geq(a, b){
-        return j.or(equal(a, b), greater(a, b));
+    function less(a, b){
+        throwWhenNotComparable(a, b);
+        return a < b;
     }
 
     function isEven(value){
@@ -52,9 +54,9 @@
     //Special case predicate naming is intended for these functions
     //There is a general expectation that these not be named with 'is'
     j.equal = equal;
-    j.geq = geq;
+    j.geq = j.compose(j.not, less);
     j.greater = greater;
     j.leq = j.compose(j.not, greater);
-    j.less = j.compose(j.not, geq);
+    j.less = less;
 
 })(jfp);

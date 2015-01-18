@@ -1,5 +1,23 @@
 (function(){
 
+    describe('copyArray', function(){
+
+        it('should return a matching array', function(){
+            expect(JSON.stringify(j.copyArray([1, 2, 3, 4]))).toBe('[1,2,3,4]');
+        });
+
+        it('should return a new array', function(){
+            var testArray = [1, 2, 3, 4];
+
+            expect(j.copyArray(testArray)).not.toBe(testArray);
+        });
+
+        it('should return an array when called with no arguments', function(){
+            expect(JSON.stringify(j.copyArray())).toBe('[]');
+        });
+
+    });
+
     describe('conj', function(){
 
         it('should return an empty array when no arguments are passed', function(){

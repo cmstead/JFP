@@ -54,6 +54,22 @@
             });
             
         });
+
+        describe('isEmptyString', function(){
+
+            it('should return true if string and string is empty', function(){
+                expect(j.isEmptyString('')).toBe(true);
+            });
+
+            it('should return false if value is not a string', function(){
+                expect(j.isEmptyString(5)).toBe(false);
+            });
+
+            it('should return false if value is string and not empty', function(){
+                expect(j.isEmptyString('test')).toBe(false);
+            });
+
+        });
         
         describe('isNull', function(){
             

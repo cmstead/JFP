@@ -16,6 +16,10 @@
     function isString(value){
         return typeof value === 'string';
     }
+
+    function isEmptyString(value){
+        return isString(value) && value === '';
+    }
     
     function isNull(value){
         return value === null;
@@ -37,40 +41,14 @@
     function isUndefined(value){
         return value === undefined;
     }
-    
+
     function not(value){
         return !value;
     }
-    
-    //Performs 'and' operation on valueSet
-    function ander(recur, current, valueSet){
-        return (valueSet.length === 0) ? 
-                current : 
-                recur(current && !!j.first(valueSet), j.rest(valueSet));
-    }
-    
-    function and(){
-        return j.recur(ander, true, j.slice(0, arguments));
-    }
-    
-    //Performs 'or' operation on valueSet
-    function orer(recur, current, valueSet){
-        return (valueSet.length === 0) ?
-                current :
-                recur(current || !!j.first(valueSet), j.rest(valueSet));
-    }
-    
-    function or(){
-        return j.recur(orer, false, j.slice(0, arguments));
-    }
-    
-    function xor(a, b){
-        return !!(or(a, b) && not(isTruthy(a) === isTruthy(b)));
-    }
-    
-    j.and = and;
+
     j.isArray = isArray;
     j.isBoolean = isBoolean;
+    j.isEmptyString = isEmptyString;
     j.isNull = isNull;
     j.isNumber = isNumber;
     j.isNumeric = isNumeric;
@@ -79,7 +57,5 @@
     j.isTruthy = isTruthy;
     j.isUndefined = isUndefined;
     j.not = not;
-    j.or = or;
-    j.xor = xor;
-    
+
 })(jfp);

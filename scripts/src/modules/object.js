@@ -11,9 +11,7 @@
             sanitizedValueMap = j.either({}, valueMap);
 
         function captureValue(key){
-            if(sanitizedValueMap[key]){
-                finalOutput[key] = sanitizedValueMap[key];
-            }
+            finalOutput[key] = sanitizedValueMap[key];
         }
 
         j.each(captureValue, sanitizedKeys);

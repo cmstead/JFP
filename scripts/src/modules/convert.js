@@ -2,18 +2,18 @@
     'use strict';
 
     function toValues(valueMap){
-        var finalArray = (j.isObject(valueMap)) ? [] : null,
+        var finalArray = [],
             key;
 
-        if(!!finalArray){
+        j.when(j.isObject(valueMap), function(){
             for(key in valueMap){
-                if(valueMap.hasOwnProperty(key) && !!valueMap[key]){
-                    finalArray.push(valueMap[key]);
+                if(valueMap.hasOwnProperty(key) && j.isTruthy(valueMap[key])){
+                    finalArray = j.conj(valueMap[key], finalArray);
                 }
             }
-        }
+        });
 
-        return finalArray;
+        return j.either(null, j.when(j.isObject(valueMap), function(){ return finalArray; }));
     }
 
     function toDec(value){

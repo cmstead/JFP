@@ -1,27 +1,65 @@
 (function(j){
     'use strict';
 
-    //These array-related functions are critical to core behaviors
-    //Begin function-related core code
     function identity(value){
         return value;
     }
 
-    function maybe(defaultValue, userFn, optionValue){
-        return (!(optionValue === undefined || optionValue === null || optionValue === '')) ?
-                userFn(optionValue) : 
-                defaultValue;
+    function slice(begin, valueSet, end){
+        return j.not(j.isTruthy(end)) ?
+                    Array.prototype.slice.call(valueSet, begin) :
+                    Array.prototype.slice.call(valueSet, begin, end);
     }
 
-    function either(defaultValue, optionValue){
-        return maybe(defaultValue, identity, optionValue);
+    function maybe(defaultValue, userFn, testValue){
+        return (j.not(j.isUndefined(testValue) || j.isNull(testValue) || j.isEmptyString(testValue))) ?
+            userFn(testValue) :
+            defaultValue;
+    }
+
+    function either(defaultValue, testValue){
+        return maybe(defaultValue, identity, testValue);
+    }
+
+    function apply(userFn, args){
+        return userFn.apply(null, args);
+    }
+
+    function when(checkValue, userFn){
+        var args = slice(2, arguments);
+        return j.isTruthy(checkValue) ? apply(userFn, args) : null;
+    }
+
+    function concat(original, extension){
+        var result = slice(0, either([], original)),
+            sanitizedExtension = either([], extension),
+            i;
+
+        //This is the most performant way to handle concatenation. Trust me.
+        for(i = 0; i < sanitizedExtension.length; i++){
+            result.push(sanitizedExtension[i]);
+        }
+
+        return result;
+    }
+
+    function basePartial(direction, userFn){
+        var args = slice(2, arguments);
+
+        return function appliedFunction(){
+            var applicationArgs = (direction === 'left') ?
+                                    concat(args, slice(0, arguments)) :
+                                    concat(slice(0, arguments), args);
+
+            return apply(userFn, applicationArgs);
+        };
     }
 
     function captureArguments(userFn){
         return userFn.toString()
-                     .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
-                     .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-                     .split(/,/);
+            .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
+            .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
+            .split(/,/);
     }
 
     function countArguments(userFn){
@@ -32,85 +70,15 @@
         return params.length;
     }
 
-    function apply(userFn, values){
-        return userFn.apply(null, either([], values));
-    }
-    
-    function partial(userFn){
-        var args = j.slice(1, arguments);
-        
-        return function appliedFn(){
-            return apply(userFn, j.concat(args, j.slice(0, arguments)));
-        };
-    }
-
-    function rpartial(userFn){
-        var args = j.slice(1, arguments);
-        
-        return function appliedFn(){
-            return apply(userFn, j.concat(j.slice(0, arguments), args));
-        };
-    }
-
-    //This is complicated and I don't expect people to grok it on first read.
-    function curry(userFn){
-        var args = j.slice(1, arguments),
-            argumentCount = maybe(0, countArguments, userFn),
-            appliedFn = (args.length < argumentCount) ? apply(partial, j.concat([curry, userFn], args)) : null,
-            result = (!!userFn && args.length >= argumentCount) ? apply(userFn, args) : null;
-
-        return j.either(appliedFn, result);
-    }
-
-    //zOMG! TAIL RECURSION
-    function recursor(recurFn){
-        var args = j.slice(1, arguments);
-
-        //This is to make the returned function distinct and identifiable.
-        return function recursorFn(localRecursor){
-            return apply(recurFn, j.concat([localRecursor], args));
-        };
-    }
-
-    function verifyRecurValue(recurValue){
-        return typeof recurValue === 'function' &&
-               recurValue.toString().match('recursorFn');
-    }
-
-    //Tail optimization with managed recursion is really complicated.
-    //Please don't muck with this unless you TRULY understand what is happening.
-    function recur(userFn){
-        var recursingFn = either(identity, userFn),
-            localRecursor = partial(recursor, recursingFn),
-            recurValue = apply(localRecursor, j.slice(1, arguments));
-
-        while(verifyRecurValue(recurValue = recurValue(localRecursor)) && recursingFn !== identity);
-
-        return recurValue;
-    }
-
-    function when(checkValue, userFn){
-        var args = j.slice(2, arguments);
-        return (checkValue) ? apply(userFn, args) : null;
-    }
-
-    function eitherWhen(defaultValue, testValue, predicate){
-        var args = j.slice(3, arguments),
-            safePredicate = either(partial(identity, true), predicate);
-
-        return j.either(defaultValue, when(apply(safePredicate, args), identity, testValue));
-    }
-
     j.apply = apply;
+    j.concat = concat;
     j.countArguments = countArguments;
-    j.curry = curry;
     j.either = either;
-    j.eitherWhen = eitherWhen;
     j.identity = identity;
     j.maybe = maybe;
-    j.partial = partial;
-    j.recur = recur;
-    j.rpartial = rpartial;
+    j.partial = basePartial('left', basePartial, 'left');
+    j.rpartial = basePartial('left', basePartial, 'right');
+    j.slice = slice;
     j.when = when;
 
 })(jfp);

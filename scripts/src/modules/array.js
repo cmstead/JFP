@@ -1,19 +1,20 @@
 (function(j){
     'use strict';
 
+    function copyArray(valueSet){
+        return j.slice(0, valueSet);
+    }
+
+    function makeValueArray(value){
+        return j.isTruthy(value) || value === 0 ? [value] : [];
+    }
+
     function conj(value, dest){
-        var destination = j.slice(0, j.either([], dest));
-
-        if(j.compose(j.not, j.isUndefined)(value)){
-            destination.push(value);
-        }
-
-        return destination;
+        return j.concat(copyArray(dest), makeValueArray(value));
     }
 
     function cons(value, source){
-        var baseArray = (!!value) ? [value] : [];
-        return j.concat(baseArray, source);
+        return j.concat(makeValueArray(value), source);
     }
     
     function each(userFn, userArray){
@@ -34,9 +35,9 @@
         var result = [];
 
         function filterFn(value){
-            if(predicate(value)){
-                result.push(value);
-            }
+            j.when(predicate(value), function(){
+                result = conj(value, result);
+            });
         }
 
         each(filterFn, userArray);
@@ -44,18 +45,14 @@
         return result;
     }
 
-    function find(userFn, valueSet){
+    function find(predicate, valueSet){
         var finalValue = null;
 
         function findFn(value){
-            var returnValue = true; //Continue
-
-            if(userFn(value)){
-                finalValue = value;
-                returnValue = false;
-            }
-
-            return returnValue;
+            return j.not(j.when(predicate(value), function(){
+                            finalValue = value;
+                            return true;
+                         }));
         }
 
         each(findFn, j.either([], valueSet));
@@ -64,15 +61,15 @@
     }
 
     function first(values){
-        return (!values) ? null : j.either(null, values[0]);
+        return j.isArray(values) ? j.either(null, values[0]) : null;
     }
 
-    function last(valueSet){
-        return (!!valueSet) ? valueSet[valueSet.length - 1] : null;
+    function lastIndex(values){
+        return j.isArray(values) ? values.length - 1 : null;
     }
 
-    function lastIndex(valueSet){
-        return (!!valueSet) ? valueSet.length - 1 : null;
+    function last(values){
+        return j.isArray(values) ? values[lastIndex(values)] : null;
     }
 
     function drop(index, valueSet){
@@ -95,11 +92,10 @@
     }
     
     function map(userFn, userArray){
-        var sanitizedFn = j.either(j.identity, userFn),
-            finalArray = [];
+        var finalArray = [];
             
         function mapFn(value){
-            finalArray.push(sanitizedFn(value));
+            finalArray = conj(userFn(value), finalArray);
         }
             
         each(mapFn, userArray);
@@ -108,7 +104,6 @@
     }
     
     function nth(index, valueSet){
-        var argsFulfilled = j.slice(0, arguments).length >= 2;
         return j.either(null, j.either([], valueSet)[index]);
     }
 
@@ -116,37 +111,13 @@
         return j.slice(1, values);
     }
 
-    function reduce(userFn, values){
-        function reducer(recur, reduction, collection){
-            return (collection.length) ?
-                        recur(userFn(reduction, first(collection)), rest(collection)) :
-                        reduction;
-        }
-        
-        return (!!values && values.length > 0) ? j.recur(reducer, first(values), rest(values)) : null;
-    }
-
     function take(count, values){
-        return (!!values) ? j.slice(0, values, count) : null;
-    }
-
-    function unique(valueSet){
-        var values = j.slice(0, valueSet).sort(),
-            finalValues = [];
-            
-        function operator(value){
-            finalValues = j.eitherWhen(finalValues,
-                                       conj(value, finalValues),
-                                       function(){ return value !== last(finalValues); });
-        }
-
-        each(operator, values);
-
-        return finalValues;
+        return j.isArray(values) ? j.slice(0, values, count) : null;
     }
 
     j.conj = conj;
     j.cons = cons;
+    j.copyArray = copyArray;
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
@@ -159,9 +130,7 @@
     j.lastIndex = lastIndex;
     j.map = map;
     j.nth = nth;
-    j.reduce = reduce;
     j.rest = rest;
     j.take = take;
-    j.unique = unique;
 
 })(jfp);
