@@ -12,13 +12,13 @@ be limited to functions in the library.
 Programmers should be able to extend their libraries easily. Programmers should be able
 to bend their environment to their own will, not the other way around. This is what JFP gives you.
 
-Upcoming to do items:
+Upcoming to do items (work done in next-version branch):
 
-- [ ] when (Executes as a single-case conditional, i.e. if without an else)
-- [ ] eitherWhen (performs either on the result of a conditional expression)
-- [ ] max
-- [ ] min
-- [ ] fac (factorial)
-- [ ] xor
-- [ ] unique (Requires array of sortable and comparable datatypes)
-- [ ] compact (Removes all falsey values from an array)
+- [x] when (Executes as a single-case conditional, i.e. if without an else)
+- [x] eitherWhen (performs either on the result of a conditional expression)
+- [x] max
+- [x] min
+- [x] fac (factorial)
+- [x] xor
+- [x] unique (Requires array of sortable and comparable datatypes)
+- [x] compact (Removes all falsey values from an array)
