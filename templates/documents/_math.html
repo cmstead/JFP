@@ -80,6 +80,27 @@
 </pre>
 
 <dl>
+    <dt>fac</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} </dd>
+    <dd>Description: returns true if a and b are strictly equal, false otherwise</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.equal(1, 1);
+
+        //true
+
+        j.equal(1, 2);
+
+        //false
+    </code>
+</pre>
+
+<dl>
     <dt>geq</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {number} a, {number} b</dd>
@@ -176,6 +197,56 @@
         j.leq(2, 1);
 
         //false
+    </code>
+</pre>
+
+<dl>
+    <dt>max</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} a, {number} b</dd>
+    <dd>Description: returns the max of either a or b. If no values are passed, max returns -Number.MAX_VALUE</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.max();
+
+        //-1.7976931348623157e+308
+
+        j.max(5);
+
+        //5
+
+        j.max(5, 6);
+
+        //6
+    </code>
+</pre>
+
+<dl>
+    <dt>min</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {number} a, {number} b</dd>
+    <dd>Description: returns the minimum of either a or b. If no values are passed, min returns Number.MAX_VALUE</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.min();
+
+        //1.7976931348623157e+308
+
+        j.min(5);
+
+        //5
+
+        j.min(5, 6);
+
+        //5
     </code>
 </pre>
 

@@ -118,6 +118,31 @@
 </pre>
 
 <dl>
+    <dt>eitherWhen</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {any} defaultValue, {any, nullable} testValue, {boolean} predicate</dd>
+    <dd>Description: Returns defaultValue on falsey optionValue or false predicate or optionValue if it is truthy and predicate is true</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.eitherWhen('default', 'yay!', true);
+
+        //yay!
+
+        j.eitherWhen('default', null, true);
+
+        //default
+
+        j.eitherWhen('default', 'yay!', false);
+
+        //default
+    </code>
+</pre>
+
+<dl>
     <dt>identity</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {any} value</dd>
@@ -243,12 +268,29 @@
 <pre>
     <code class="javascript">
         function divide(a, b){
-            return a / b;
+        return a / b;
         }
 
         j.rpartial(divide, 4)(2);
 
         //0.5
+    </code>
+</pre>
+
+<dl>
+    <dt>when</dt>
+    <dd>Performance: O(1) function execution varies on implementation</dd>
+    <dd>Arguments: {boolean} checkValue, {function} userFn, [optional] arguments</dd>
+    <dd>Description: executes function with passed arguments on a truthy checkValue</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        when(true, function(myValue){ console.log(myValue); }, "Hello, world!");
+
+        //Hello, world!
     </code>
 </pre>
 
