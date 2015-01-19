@@ -10,6 +10,10 @@ jfp = (function(){
     function isBoolean(value){
         return typeof value === 'boolean';
     }
+
+    function isFunction(testFn){
+        return typeof testFn === 'function';
+    }
     
     function isObject(value){
         return (typeof value == 'object');
@@ -55,6 +59,7 @@ jfp = (function(){
     j.isArray = isArray;
     j.isBoolean = isBoolean;
     j.isEmptyString = isEmptyString;
+    j.isFunction = isFunction;
     j.isNull = isNull;
     j.isNumber = isNumber;
     j.isNumeric = isNumeric;
@@ -81,7 +86,7 @@ jfp = (function(){
     }
 
     function maybe(defaultValue, userFn, testValue){
-        return (j.not(j.isUndefined(testValue) || j.isNull(testValue) || j.isEmptyString(testValue))) ?
+        return (j.isTruthy(testValue) || testValue === 0) ?
             userFn(testValue) :
             defaultValue;
     }
@@ -351,11 +356,16 @@ jfp = (function(){
 (function(j){
     'use strict';
 
-    function eitherWhen(defaultValue, testValue, predicate){
-        var args = j.slice(3, arguments),
-            safePredicate = j.either(j.partial(j.identity, true), predicate);
+    function eitherIf(defaultValue, testValue, predicateValue){
+        var safePredicate = j.isUndefined(predicateValue) ? true : predicateValue;
 
-        return j.either(defaultValue, j.when(j.apply(safePredicate, args), j.identity, testValue));
+        return j.either(defaultValue, j.when(safePredicate, j.partial(j.identity, testValue)));
+    }
+
+    function eitherWhen(defaultValue, predicateValue, userFn){
+        var sanitizedFn = eitherIf(j.identity, userFn, j.isFunction(userFn));
+
+        return j.either(defaultValue, j.when(predicateValue, sanitizedFn));
     }
 
     //This is complicated and I don't expect people to grok it on first read.
@@ -452,10 +462,11 @@ jfp = (function(){
             finalValues = [];
 
         function operator(value){
-            finalValues = j.eitherWhen(finalValues,
-                                       j.conj(value, finalValues),
-                                       j.compose(j.not, j.partial(j.equal, value), j.last),
-                                       finalValues);
+            finalValues = j.eitherIf(finalValues,
+                                     j.conj(value, finalValues),
+                                     j.compose(j.not,
+                                               j.partial(j.equal, value),
+                                               j.last)(finalValues));
         }
 
         j.each(operator, values);
@@ -467,6 +478,7 @@ jfp = (function(){
     j.compact = j.partial(j.filter, j.isTruthy);
     j.compose = compose;
     j.curry = curry;
+    j.eitherIf = eitherIf;
     j.eitherWhen = eitherWhen;
     j.or = or;
     j.pipeline = pipeline;
