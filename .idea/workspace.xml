@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310aac75-0a95-4070-987d-aa2ce4eb906d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_core.html" afterPath="$PROJECT_DIR$/templates/documents/_core.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_math.html" afterPath="$PROJECT_DIR$/templates/documents/_math.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/core/app.js" afterPath="$PROJECT_DIR$/app/scripts/core/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/app.js" afterPath="$PROJECT_DIR$/dist/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="JFP.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,19 +25,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="0" selection-start="1417" selection-end="1417" vertical-scroll-proportion="-5.75" vertical-offset="417" max-vertical-offset="975">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/scripts/core/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="62" selection-start="896" selection-end="896" vertical-scroll-proportion="0.5103093" vertical-offset="138" max-vertical-offset="960">
+            <state line="15" column="28" selection-start="609" selection-end="609" vertical-scroll-proportion="0.21505377" vertical-offset="105" max-vertical-offset="975">
               <folding />
             </state>
           </provider>
@@ -110,8 +96,8 @@
         <option value="$PROJECT_DIR$/templates/documents/_math.html" />
         <option value="$PROJECT_DIR$/templates/documents/_core.html" />
         <option value="$PROJECT_DIR$/templates/documents/_conditional.html" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/app/scripts/core/app.js" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -567,16 +553,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
+    <entry file="file://$PROJECT_DIR$/app/scripts/core/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="0" selection-start="1417" selection-end="1417" vertical-scroll-proportion="-5.75" vertical-offset="417" max-vertical-offset="975">
+        <state line="29" column="62" selection-start="896" selection-end="896" vertical-scroll-proportion="0.5103093" vertical-offset="138" max-vertical-offset="960">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/core/app.js">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="62" selection-start="896" selection-end="896" vertical-scroll-proportion="0.5103093" vertical-offset="138" max-vertical-offset="960">
+        <state line="15" column="28" selection-start="609" selection-end="609" vertical-scroll-proportion="0.21505377" vertical-offset="105" max-vertical-offset="975">
           <folding />
         </state>
       </provider>
