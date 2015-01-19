@@ -1,0 +1,6 @@
+.gitignore
+Gruntfile.js
+spec/
+scripts/
+grunt/
+dist/*.min.js

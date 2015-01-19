@@ -5,138 +5,14 @@ jfp = (function(){
 })();
 
 (function(j){
-
-    function slice(begin, valueSet, end){
-        return (!end) ? Array.prototype.slice.call(valueSet, begin) :
-                        Array.prototype.slice.call(valueSet, begin, end);
-    }
-
-    function concat(original, extension){
-        var result = j.slice(0, j.either([], original)),
-            sanitizedExtension = j.either([], extension),
-            i;
-
-        //This is the most performant way to perform this concatenation. Trust me.
-        for(i = 0; i < sanitizedExtension.length; i++){
-            result.push(sanitizedExtension[i]);
-        }
-
-        return result;
-    }
-
-    j.concat = concat;
-    j.slice = slice;
-
-})(jfp);
-
-(function(j){
-    'use strict';
-
-    //These array-related functions are critical to core behaviors
-    //Begin function-related core code
-    function identity(value){
-        return value;
-    }
-
-    function maybe(defaultValue, userFn, optionValue){
-        return (!(optionValue === undefined || optionValue === null || optionValue === '')) ?
-                userFn(optionValue) : 
-                defaultValue;
-    }
-
-    function either(defaultValue, optionValue){
-        return maybe(defaultValue, identity, optionValue);
-    }
-
-    function captureArguments(userFn){
-        return userFn.toString()
-                     .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
-                     .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-                     .split(/,/);
-    }
-
-    function countArguments(userFn){
-        var params = maybe([], captureArguments, userFn);
-
-        params = (params.length === 1 && params[0] === '') ? [] : params;
-
-        return params.length;
-    }
-
-    function apply(userFn, values){
-        return userFn.apply(null, either([], values));
-    }
-    
-    function partial(userFn){
-        var args = j.slice(1, arguments);
-        
-        return function appliedFn(){
-            return apply(userFn, j.concat(args, j.slice(0, arguments)));
-        };
-    }
-
-    function rpartial(userFn){
-        var args = j.slice(1, arguments);
-        
-        return function appliedFn(){
-            return apply(userFn, j.concat(j.slice(0, arguments), args));
-        };
-    }
-
-    //This is complicated and I don't expect people to grok it on first read.
-    function curry(userFn){
-        var args = j.slice(1, arguments),
-            argumentCount = maybe(0, countArguments, userFn),
-            appliedFn = (args.length < argumentCount) ? apply(partial, j.concat([curry, userFn], args)) : null,
-            result = (!!userFn && args.length >= argumentCount) ? apply(userFn, args) : null;
-
-        return j.either(appliedFn, result);
-    }
-
-    //zOMG! TAIL RECURSION
-    function recursor(recurFn){
-        var args = j.slice(1, arguments);
-
-        //This is to make the returned function distinct and identifiable.
-        return function recursorFn(localRecursor){
-            return apply(recurFn, j.concat([localRecursor], args));
-        };
-    }
-
-    function verifyRecurValue(recurValue){
-        return typeof recurValue === 'function' &&
-               recurValue.toString().match('recursorFn');
-    }
-
-    //Tail optimization with managed recursion is really complicated.
-    //Please don't muck with this unless you TRULY understand what is happening.
-    function recur(userFn){
-        var recursingFn = either(identity, userFn),
-            localRecursor = partial(recursor, recursingFn),
-            recurValue = apply(localRecursor, j.slice(1, arguments));
-
-        while(verifyRecurValue(recurValue = recurValue(localRecursor)) && recursingFn !== identity);
-
-        return recurValue;
-    }
-
-    j.apply = apply;
-    j.countArguments = countArguments;
-    j.curry = curry;
-    j.either = either;
-    j.identity = identity;
-    j.maybe = maybe;
-    j.partial = partial;
-    j.recur = recur;
-    j.rpartial = rpartial;
-
-})(jfp);
-
-(function(j){
     'use strict';
     
     function isBoolean(value){
         return typeof value === 'boolean';
+    }
+
+    function isFunction(testFn){
+        return typeof testFn === 'function';
     }
     
     function isObject(value){
@@ -149,6 +25,10 @@ jfp = (function(){
     
     function isString(value){
         return typeof value === 'string';
+    }
+
+    function isEmptyString(value){
+        return isString(value) && value === '';
     }
     
     function isNull(value){
@@ -171,36 +51,15 @@ jfp = (function(){
     function isUndefined(value){
         return value === undefined;
     }
-    
+
     function not(value){
         return !value;
     }
-    
-    //Performs 'and' operation on valueSet
-    function ander(recur, current, valueSet){
-        return (valueSet.length === 0) ? 
-                current : 
-                recur(current && !!j.first(valueSet), j.rest(valueSet));
-    }
-    
-    function and(){
-        return j.recur(ander, true, j.slice(0, arguments));
-    }
-    
-    //Performs 'or' operation on valueSet
-    function orer(recur, current, valueSet){
-        return (valueSet.length === 0) ?
-                current :
-                recur(current || !!j.first(valueSet), j.rest(valueSet));
-    }
-    
-    function or(){
-        return j.recur(orer, false, j.slice(0, arguments));
-    }
-    
-    j.and = and;
+
     j.isArray = isArray;
     j.isBoolean = isBoolean;
+    j.isEmptyString = isEmptyString;
+    j.isFunction = isFunction;
     j.isNull = isNull;
     j.isNumber = isNumber;
     j.isNumeric = isNumeric;
@@ -209,26 +68,111 @@ jfp = (function(){
     j.isTruthy = isTruthy;
     j.isUndefined = isUndefined;
     j.not = not;
-    j.or = or;
-    
+
+})(jfp);
+
+
+(function(j){
+    'use strict';
+
+    function identity(value){
+        return value;
+    }
+
+    function slice(begin, valueSet, end){
+        return j.not(j.isTruthy(end)) ?
+                    Array.prototype.slice.call(valueSet, begin) :
+                    Array.prototype.slice.call(valueSet, begin, end);
+    }
+
+    function maybe(defaultValue, userFn, testValue){
+        return (j.isTruthy(testValue) || testValue === 0) ?
+            userFn(testValue) :
+            defaultValue;
+    }
+
+    function either(defaultValue, testValue){
+        return maybe(defaultValue, identity, testValue);
+    }
+
+    function apply(userFn, args){
+        return userFn.apply(null, args);
+    }
+
+    function when(checkValue, userFn){
+        var args = slice(2, arguments);
+        return j.isTruthy(checkValue) ? apply(userFn, args) : null;
+    }
+
+    function concat(original, extension){
+        var result = slice(0, either([], original)),
+            sanitizedExtension = either([], extension),
+            i;
+
+        //This is the most performant way to handle concatenation. Trust me.
+        for(i = 0; i < sanitizedExtension.length; i++){
+            result.push(sanitizedExtension[i]);
+        }
+
+        return result;
+    }
+
+    function basePartial(direction, userFn){
+        var args = slice(2, arguments);
+
+        return function appliedFunction(){
+            var applicationArgs = (direction === 'left') ?
+                                    concat(args, slice(0, arguments)) :
+                                    concat(slice(0, arguments), args);
+
+            return apply(userFn, applicationArgs);
+        };
+    }
+
+    function captureArguments(userFn){
+        return userFn.toString()
+            .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
+            .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
+            .split(/,/);
+    }
+
+    function countArguments(userFn){
+        var params = maybe([], captureArguments, userFn);
+
+        params = (params.length === 1 && params[0] === '') ? [] : params;
+
+        return params.length;
+    }
+
+    j.apply = apply;
+    j.concat = concat;
+    j.countArguments = countArguments;
+    j.either = either;
+    j.identity = identity;
+    j.maybe = maybe;
+    j.partial = basePartial('left', basePartial, 'left');
+    j.rpartial = basePartial('left', basePartial, 'right');
+    j.slice = slice;
+    j.when = when;
+
 })(jfp);
 
 (function(j){
     'use strict';
 
     function toValues(valueMap){
-        var finalArray = (j.isObject(valueMap)) ? [] : null,
+        var finalArray = [],
             key;
 
-        if(!!finalArray){
+        j.when(j.isObject(valueMap), function(){
             for(key in valueMap){
-                if(valueMap.hasOwnProperty(key) && !!valueMap[key]){
-                    finalArray.push(valueMap[key]);
+                if(valueMap.hasOwnProperty(key) && j.isTruthy(valueMap[key])){
+                    finalArray = j.conj(valueMap[key], finalArray);
                 }
             }
-        }
+        });
 
-        return finalArray;
+        return j.either(null, j.when(j.isObject(valueMap), function(){ return finalArray; }));
     }
 
     function toDec(value){
@@ -243,19 +187,20 @@ jfp = (function(){
 (function(j){
     'use strict';
 
+    function copyArray(valueSet){
+        return j.slice(0, valueSet);
+    }
+
+    function makeValueArray(value){
+        return j.isTruthy(value) || value === 0 ? [value] : [];
+    }
+
     function conj(value, dest){
-        var destination = j.slice(0, j.either([], dest));
-
-        if(j.compose(j.not, j.isUndefined)(value)){
-            destination.push(value);
-        }
-
-        return destination;
+        return j.concat(copyArray(dest), makeValueArray(value));
     }
 
     function cons(value, source){
-        var baseArray = (!!value) ? [value] : [];
-        return j.concat(baseArray, source);
+        return j.concat(makeValueArray(value), source);
     }
     
     function each(userFn, userArray){
@@ -276,9 +221,9 @@ jfp = (function(){
         var result = [];
 
         function filterFn(value){
-            if(predicate(value)){
-                result.push(value);
-            }
+            j.when(predicate(value), function(){
+                result = conj(value, result);
+            });
         }
 
         each(filterFn, userArray);
@@ -286,18 +231,14 @@ jfp = (function(){
         return result;
     }
 
-    function find(userFn, valueSet){
+    function find(predicate, valueSet){
         var finalValue = null;
 
         function findFn(value){
-            var returnValue = true; //Continue
-
-            if(userFn(value)){
-                finalValue = value;
-                returnValue = false;
-            }
-
-            return returnValue;
+            return j.not(j.when(predicate(value), function(){
+                            finalValue = value;
+                            return true;
+                         }));
         }
 
         each(findFn, j.either([], valueSet));
@@ -306,15 +247,15 @@ jfp = (function(){
     }
 
     function first(values){
-        return (!values) ? null : j.either(null, values[0]);
+        return j.isArray(values) ? j.either(null, values[0]) : null;
     }
 
-    function last(valueSet){
-        return (!!valueSet) ? valueSet[valueSet.length - 1] : null;
+    function lastIndex(values){
+        return j.isArray(values) ? values.length - 1 : null;
     }
 
-    function lastIndex(valueSet){
-        return (!!valueSet) ? valueSet.length - 1 : null;
+    function last(values){
+        return j.isArray(values) ? values[lastIndex(values)] : null;
     }
 
     function drop(index, valueSet){
@@ -337,11 +278,10 @@ jfp = (function(){
     }
     
     function map(userFn, userArray){
-        var sanitizedFn = j.either(j.identity, userFn),
-            finalArray = [];
+        var finalArray = [];
             
         function mapFn(value){
-            finalArray.push(sanitizedFn(value));
+            finalArray = conj(userFn(value), finalArray);
         }
             
         each(mapFn, userArray);
@@ -350,7 +290,6 @@ jfp = (function(){
     }
     
     function nth(index, valueSet){
-        var argsFulfilled = j.slice(0, arguments).length >= 2;
         return j.either(null, j.either([], valueSet)[index]);
     }
 
@@ -358,22 +297,13 @@ jfp = (function(){
         return j.slice(1, values);
     }
 
-    function reduce(userFn, values){
-        function reducer(recur, reduction, collection){
-            return (collection.length) ?
-                        recur(userFn(reduction, first(collection)), rest(collection)) :
-                        reduction;
-        }
-        
-        return (!!values && values.length > 0) ? j.recur(reducer, first(values), rest(values)) : null;
-    }
-
     function take(count, values){
-        return (!!values) ? j.slice(0, values, count) : null;
+        return j.isArray(values) ? j.slice(0, values, count) : null;
     }
 
     j.conj = conj;
     j.cons = cons;
+    j.copyArray = copyArray;
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
@@ -386,7 +316,6 @@ jfp = (function(){
     j.lastIndex = lastIndex;
     j.map = map;
     j.nth = nth;
-    j.reduce = reduce;
     j.rest = rest;
     j.take = take;
 
@@ -406,9 +335,7 @@ jfp = (function(){
             sanitizedValueMap = j.either({}, valueMap);
 
         function captureValue(key){
-            if(sanitizedValueMap[key]){
-                finalOutput[key] = sanitizedValueMap[key];
-            }
+            finalOutput[key] = sanitizedValueMap[key];
         }
 
         j.each(captureValue, sanitizedKeys);
@@ -428,7 +355,92 @@ jfp = (function(){
 
 (function(j){
     'use strict';
-    
+
+    function eitherIf(defaultValue, testValue, predicateValue){
+        var safePredicate = j.isUndefined(predicateValue) ? true : predicateValue;
+
+        return j.either(defaultValue, j.when(safePredicate, j.partial(j.identity, testValue)));
+    }
+
+    function eitherWhen(defaultValue, predicateValue, userFn){
+        var sanitizedFn = eitherIf(j.identity, userFn, j.isFunction(userFn));
+
+        return j.either(defaultValue, j.when(predicateValue, sanitizedFn));
+    }
+
+    //This is complicated and I don't expect people to grok it on first read.
+    function curry(userFn){
+        var args = j.slice(1, arguments),
+            argumentCount = j.maybe(0, j.countArguments, userFn),
+            appliedFn = (args.length < argumentCount) ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
+            result = (!!userFn && args.length >= argumentCount) ? j.apply(userFn, args) : null;
+
+        return j.either(appliedFn, result);
+    }
+
+    //zOMG! TAIL RECURSION
+    function recursor(recurFn){
+        var args = j.slice(1, arguments);
+
+        //This is to make the returned function distinct and identifiable.
+        return function recursorFn(localRecursor){
+            return j.apply(recurFn, j.concat([localRecursor], args));
+        };
+    }
+
+    function verifyRecurValue(recurValue){
+        return typeof recurValue === 'function' &&
+            recurValue.toString().match('recursorFn');
+    }
+
+    //Tail optimization with managed recursion is really complicated.
+    //Please don't muck with this unless you TRULY understand what is happening.
+    function recur(userFn){
+        var recursingFn = j.either(j.identity, userFn),
+            localRecursor = j.partial(recursor, recursingFn),
+            recurValue = j.apply(localRecursor, j.slice(1, arguments));
+
+        while(verifyRecurValue(recurValue = recurValue(localRecursor)) && recursingFn !== j.identity);
+
+        return recurValue;
+    }
+
+    function reduce(userFn, values){
+        function reducer(recur, reduction, collection){
+            return (collection.length) ?
+                recur(userFn(reduction, j.first(collection)), j.rest(collection)) :
+                reduction;
+        }
+
+        return (!!values && values.length > 0) ? recur(reducer, j.first(values), j.rest(values)) : null;
+    }
+
+    //Performs 'and' operation on valueSet
+    function ander(recur, current, valueSet){
+        return (valueSet.length === 0) ?
+            current :
+            recur(current && !!j.first(valueSet), j.rest(valueSet));
+    }
+
+    function and(){
+        return recur(ander, true, j.slice(0, arguments));
+    }
+
+    //Performs 'or' operation on valueSet
+    function orer(recur, current, valueSet){
+        return (valueSet.length === 0) ?
+            current :
+            recur(current || !!j.first(valueSet), j.rest(valueSet));
+    }
+
+    function or(){
+        return recur(orer, false, j.slice(0, arguments));
+    }
+
+    function xor(a, b){
+        return !!(or(a, b) && j.not(j.isTruthy(a) === j.isTruthy(b)));
+    }
+
     //Produces a function that returns f(g(x))
     function compositor(f, g){
         return function(){
@@ -438,17 +450,45 @@ jfp = (function(){
     
     function compose(){
         var args = j.slice(0, arguments);
-        return (args.length >= 1) ? j.reduce(compositor, args) : j.identity;
+        return (args.length >= 1) ? reduce(compositor, args) : j.identity;
     }
     
     function pipeline(){
         return j.apply(compose, j.slice(0, arguments).reverse());
     }
 
+    function unique(valueSet){
+        var values = j.slice(0, valueSet).sort(),
+            finalValues = [];
+
+        function operator(value){
+            finalValues = j.eitherIf(finalValues,
+                                     j.conj(value, finalValues),
+                                     j.compose(j.not,
+                                               j.partial(j.equal, value),
+                                               j.last)(finalValues));
+        }
+
+        j.each(operator, values);
+
+        return finalValues;
+    }
+
+    j.and = and;
+    j.compact = j.partial(j.filter, j.isTruthy);
     j.compose = compose;
+    j.curry = curry;
+    j.eitherIf = eitherIf;
+    j.eitherWhen = eitherWhen;
+    j.or = or;
     j.pipeline = pipeline;
+    j.recur = recur;
+    j.reduce = reduce;
+    j.unique = unique;
+    j.xor = xor;
 
 })(jfp);
+
 
 (function(j){
     'use strict';
@@ -535,9 +575,42 @@ jfp = (function(){
     function truncate(value){
         return (value > 0) ? Math.floor(value) : Math.floor(value) + 1;
     }
+    
+    function max(a, b){
+        var maxValue = -Number.MAX_VALUE,
+            _a = j.isUndefined(a) ? maxValue : a,
+            _b = j.isUndefined(b) ? maxValue : b;
+            
+        maxValue = (_a > maxValue) ? _a : maxValue;
+        maxValue = (_b > maxValue) ? _b : maxValue;
+        
+        return maxValue;
+    }
+    
+    function min(a, b){
+        var minValue = Number.MAX_VALUE,
+            _a = j.isUndefined(a) ? minValue : a,
+            _b = j.isUndefined(b) ? minValue : b;
+        
+        minValue = (_a < minValue) ? _a : minValue;
+        minValue = (_b < minValue) ? _b : minValue;
+        
+        return minValue;
+    }
+
+    function fac(value){
+        var factorial = j.compose(j.partial(j.reduce, multiply),
+                                  j.partial(range, 1),
+                                  j.partial(add, 1));
+
+        return j.either(1, j.when(j.greater(value, 0), factorial, value));
+    }
 
     j.add = add;
     j.divide = divide;
+    j.fac = fac;
+    j.max = max;
+    j.min = min;
     j.mod = mod;
     j.multiply = multiply;
     j.range = range;
@@ -549,23 +622,25 @@ jfp = (function(){
 
 (function(j){
 
+    function throwWhenNotComparable(a, b){
+        j.when(j.isUndefined(a) || j.isUndefined(b), function(){
+            throw new TypeError('Inequality comparisons require two values');
+        });
+    }
+
     function equal(a, b){
         var isNotUndefined = j.compose(j.not, j.isUndefined);
-
-        return (j.and(isNotUndefined(a),
-            isNotUndefined(b))) ? a === b : false;
+        return (isNotUndefined(a) && isNotUndefined(b)) ? a === b : false;
     }
 
     function greater(a, b){
-        if(j.or(j.isUndefined(a), j.isUndefined(b))){
-            throw new TypeError('Inequality comparisons require two values');
-        }
-
+        throwWhenNotComparable(a, b);
         return a > b;
     }
 
-    function geq(a, b){
-        return j.or(equal(a, b), greater(a, b));
+    function less(a, b){
+        throwWhenNotComparable(a, b);
+        return a < b;
     }
 
     function isEven(value){
@@ -601,10 +676,10 @@ jfp = (function(){
     //Special case predicate naming is intended for these functions
     //There is a general expectation that these not be named with 'is'
     j.equal = equal;
-    j.geq = geq;
+    j.geq = j.compose(j.not, less);
     j.greater = greater;
     j.leq = j.compose(j.not, greater);
-    j.less = j.compose(j.not, geq);
+    j.less = less;
 
 })(jfp);
 

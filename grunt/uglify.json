@@ -2,11 +2,11 @@
     "options": {
         "banner": "/*! <%= pkg.name %> <%= grunt.template.today('dd-mm-yyyy') %> */\n",
         "sourceMap": true,
-        "sourceMapName": "scripts/min/<%= pkg.name %>.map"
+        "sourceMapName": "scripts/min/jfp.map"
     },
     "dist": {
         "files": {
-            "scripts/min/<%= pkg.name %>.min.js": ["./scripts/src/**/*.js"]
+            "dist/jfp.min.js": ["./scripts/concat/jfp.js"]
         }
     }
 }

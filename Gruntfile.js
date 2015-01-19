@@ -1,7 +1,6 @@
 var cleanConfig = require('./grunt/clean.json'),
     concatConfig = require('./grunt/concat.json'),
-    //copyConfig = require('./grunt/copy.json'),
-    jsdocConfig = require('./grunt/jsdoc.json'),
+    copyConfig = require('./grunt/copy.json'),
     jshintConfig = require('./grunt/jshint.json'),
     karmaConfig = require('./grunt/karma.json'),
     uglifyConfig = require('./grunt/uglify.json');
@@ -12,8 +11,7 @@ module.exports = function(grunt){
 
         clean: cleanConfig,
         concat: concatConfig,
-        //copy: copyConfig,
-        jsdoc : jsdocConfig,
+        copy: copyConfig,
         jshint: jshintConfig,
         karma: karmaConfig,
         uglify: uglifyConfig
@@ -23,19 +21,17 @@ module.exports = function(grunt){
 
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    //grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-karma');
 
     /* Register composite grunt tasks */
 
     grunt.registerTask('test', ['jshint', 'karma']);
-    grunt.registerTask('document', ['jsdoc']);
 
-    grunt.registerTask('buildjs', ['uglify']);
-    grunt.registerTask('build', ['clean', 'test', 'buildjs', 'document']);
+    grunt.registerTask('buildjs', ['concat', 'uglify']);
+    grunt.registerTask('build', ['clean', 'test', 'buildjs', 'copy']);
 
     grunt.registerTask('default', ['test']);
 };

@@ -1,12 +1,12 @@
 {
-  "main": {
-    "files": [
-      {
-        "expand": true,
-        "flatten": true,
-        "src": ["scripts/concat/jfp.js"],
-        "dest": "dist/"
-      }
-    ]
-  }
+    "main": {
+        "files": [
+            {
+                "expand": true,
+                "flatten": true,
+                "src": ["scripts/concat/jfp.js"],
+                "dest": "dist/"
+            }
+        ]
+    }
 }

@@ -1,29 +1,30 @@
 {
-  "name": "JFP",
-  "description": "Javascript Function Processor",
-  "version": "1.1.1-RC2",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cmstead/JFP.git"
-  },
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-concat": "^0.5.0",
-    "grunt-contrib-copy": "^0.7.0",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-uglify": "^0.6.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-jsdoc": "^0.5.7",
-    "grunt-karma": "^0.9.0",
-    "jsdoc": "~3.2.2",
-    "jshint": "^2.5.6",
-    "karma": "^0.12.24",
-    "karma-coverage": "^0.2.6",
-    "karma-jasmine": "^0.1.5",
-    "karma-phantomjs-launcher": "^0.1.4",
-    "lodash": "^2.4.1",
-    "phantomjs": "^1.9.10",
-    "uglify-js": "^2.4.15"
-  }
+    "name": "jfp",
+    "description": "Javascript Function Processor",
+    "main": "dist/jfp.js",
+    "version": "1.1.1-RC2",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cmstead/JFP.git"
+    },
+    "devDependencies": {
+        "grunt": "^0.4.5",
+        "grunt-contrib-clean": "^0.6.0",
+        "grunt-contrib-concat": "^0.5.0",
+        "grunt-contrib-copy": "^0.7.0",
+        "grunt-contrib-jshint": "^0.10.0",
+        "grunt-contrib-uglify": "^0.6.0",
+        "grunt-contrib-watch": "^0.6.1",
+        "grunt-jsdoc": "^0.5.7",
+        "grunt-karma": "^0.9.0",
+        "jsdoc": "~3.2.2",
+        "jshint": "^2.5.6",
+        "karma": "^0.12.24",
+        "karma-coverage": "^0.2.6",
+        "karma-jasmine": "^0.1.5",
+        "karma-phantomjs-launcher": "^0.1.4",
+        "lodash": "^2.4.1",
+        "phantomjs": "^1.9.10",
+        "uglify-js": "^2.4.15"
+    }
 }
