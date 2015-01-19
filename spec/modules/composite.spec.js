@@ -61,4 +61,51 @@
 
     });
 
+    describe('eitherIf', function(){
+
+        it('should return default value when nothing else is passed', function(){
+            expect(j.eitherIf('default')).toBe('default');
+        });
+
+        it('should return test value when default and test value are passed', function(){
+            expect(j.eitherIf('default', 'test')).toBe('test');
+        });
+
+        it('should return default value when predicateValue is false', function(){
+            expect(j.eitherIf('default', 'test', false)).toBe('default');
+        });
+
+        it('should return test value when passed predicateValue is true', function(){
+            expect(j.eitherIf('default', 'test', true)).toBe('test');
+        });
+
+    });
+
+    describe('eitherWhen', function(){
+
+        it('should return default when only a default value is passed', function(){
+            expect(j.eitherWhen('default')).toBe('default');
+        });
+
+        it('should return default if only default and predicate value are passed', function(){
+            expect(j.eitherWhen('default', true)).toBe('default');
+        });
+
+        it('should return result of function when predicate value is true and function result is truthy', function(){
+            expect(j.eitherWhen('default', true, j.partial(j.identity, 5))).toBe(5);
+        });
+
+        it('should return default if result of function is falsey', function(){
+            expect(j.eitherWhen('default', true, j.partial(j.identity, false))).toBe('default');
+        });
+
+        it('should not call passed function if predicate value is false', function(){
+            var spy = jasmine.createSpy('spy');
+            j.eitherWhen('default', false, spy);
+
+            expect(spy).not.toHaveBeenCalled();
+        });
+
+    });
+
 })();

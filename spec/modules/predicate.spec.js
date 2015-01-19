@@ -70,6 +70,18 @@
             });
 
         });
+
+        describe('isFunction', function(){
+
+            it('should return true if value is a function', function(){
+                expect(j.isFunction(j.identity)).toBe(true);
+            });
+
+            it('should return false if value is not a function', function(){
+                expect(j.isFunction('foo')).toBe(false);
+            });
+
+        });
         
         describe('isNull', function(){
             

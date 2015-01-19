@@ -12,7 +12,7 @@
     }
 
     function maybe(defaultValue, userFn, testValue){
-        return (j.not(j.isUndefined(testValue) || j.isNull(testValue) || j.isEmptyString(testValue))) ?
+        return (j.isTruthy(testValue) || testValue === 0) ?
             userFn(testValue) :
             defaultValue;
     }

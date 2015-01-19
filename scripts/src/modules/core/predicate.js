@@ -4,6 +4,10 @@
     function isBoolean(value){
         return typeof value === 'boolean';
     }
+
+    function isFunction(testFn){
+        return typeof testFn === 'function';
+    }
     
     function isObject(value){
         return (typeof value == 'object');
@@ -49,6 +53,7 @@
     j.isArray = isArray;
     j.isBoolean = isBoolean;
     j.isEmptyString = isEmptyString;
+    j.isFunction = isFunction;
     j.isNull = isNull;
     j.isNumber = isNumber;
     j.isNumeric = isNumeric;

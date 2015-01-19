@@ -1,11 +1,16 @@
 (function(j){
     'use strict';
 
-    function eitherWhen(defaultValue, testValue, predicate){
-        var args = j.slice(3, arguments),
-            safePredicate = j.either(j.partial(j.identity, true), predicate);
+    function eitherIf(defaultValue, testValue, predicateValue){
+        var safePredicate = j.isUndefined(predicateValue) ? true : predicateValue;
 
-        return j.either(defaultValue, j.when(j.apply(safePredicate, args), j.identity, testValue));
+        return j.either(defaultValue, j.when(safePredicate, j.partial(j.identity, testValue)));
+    }
+
+    function eitherWhen(defaultValue, predicateValue, userFn){
+        var sanitizedFn = eitherIf(j.identity, userFn, j.isFunction(userFn));
+
+        return j.either(defaultValue, j.when(predicateValue, sanitizedFn));
     }
 
     //This is complicated and I don't expect people to grok it on first read.
@@ -102,10 +107,11 @@
             finalValues = [];
 
         function operator(value){
-            finalValues = j.eitherWhen(finalValues,
-                                       j.conj(value, finalValues),
-                                       j.compose(j.not, j.partial(j.equal, value), j.last),
-                                       finalValues);
+            finalValues = j.eitherIf(finalValues,
+                                     j.conj(value, finalValues),
+                                     j.compose(j.not,
+                                               j.partial(j.equal, value),
+                                               j.last)(finalValues));
         }
 
         j.each(operator, values);
@@ -117,6 +123,7 @@
     j.compact = j.partial(j.filter, j.isTruthy);
     j.compose = compose;
     j.curry = curry;
+    j.eitherIf = eitherIf;
     j.eitherWhen = eitherWhen;
     j.or = or;
     j.pipeline = pipeline;

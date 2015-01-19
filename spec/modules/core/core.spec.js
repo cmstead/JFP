@@ -317,24 +317,4 @@
 
     });
 
-    describe('eitherWhen', function(){
-        
-        it('should return default value when nothing else is passed', function(){
-            expect(j.eitherWhen('default')).toBe('default');
-        });
-        
-        it('should return test value when default and test value are passed', function(){
-            expect(j.eitherWhen('default', 'test')).toBe('test');
-        });
-
-        it('should return default value when passed function evaluates to false', function(){
-            expect(j.eitherWhen('default', 'test', j.identity, false)).toBe('default');
-        });
-
-        it('should return test value when passed function evaluates to true', function(){
-            expect(j.eitherWhen('default', 'test', j.identity, true)).toBe('test');
-        });
-            
-    });
-
 })();
