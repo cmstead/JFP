@@ -1,0 +1,120 @@
+<h2>Conditional Functions</h2>
+
+<dl>
+    <dt>either</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {any} defaultValue, {any, nullable} optionValue</dd>
+    <dd>Description: Returns defaultValue on falsey optionValue or optionValue if it is truthy</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.either('default', null);
+
+        //default
+
+        j.either('default', 'my string');
+
+        //my string
+    </code>
+</pre>
+
+<dl>
+    <dt>eitherIf</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {any} defaultValue, {any, nullable} testValue, {boolean} predicate</dd>
+    <dd>Description: Returns defaultValue on falsey optionValue or false predicate or optionValue if it is truthy and predicate is true</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.eitherWhen('default', 'yay!', true);
+
+        //yay!
+
+        j.eitherWhen('default', null, true);
+
+        //default
+
+        j.eitherWhen('default', 'yay!', false);
+
+        //default
+    </code>
+</pre>
+
+<dl>
+    <dt>eitherWhen</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {any} defaultValue, {boolean} predicateValue, {function} userFn</dd>
+    <dd>Description: returns userFn output on true predicateValue and truthy otherwise default value</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.eitherWhen('default', false, j.identity);
+
+        //default
+
+        j.eitherWhen('default', true, j.partial(j.identity, false));
+
+        //default
+
+        j.eitherWhen('default', true, j.partial(j.identity, 'yay!'));
+
+        //yay!
+    </code>
+</pre>
+
+<dl>
+    <dt>maybe</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {any} defaultValue, {function} userFn, {any, nullable} optionValue</dd>
+    <dd>Description: Returns default value on falsey optionValue or userFn(optionValue) if optionValue is truthy</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        function multiplyBy2(value){
+        return value * 2;
+        }
+
+        j.maybe(1, multiplyBy2, null);
+
+        //1
+
+        j.maybe(1, multiplyBy2, 0);
+
+        //0
+
+        j.maybe(1, multiplyBy2, 2);
+
+        //4
+    </code>
+</pre>
+
+<dl>
+    <dt>when</dt>
+    <dd>Performance: O(1) function execution varies on implementation</dd>
+    <dd>Arguments: {boolean} checkValue, {function} userFn, [optional] arguments</dd>
+    <dd>Description: executes function with passed arguments on a truthy checkValue</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        when(true, function(myValue){ console.log(myValue); }, "Hello, world!");
+
+        //Hello, world!
+    </code>
+</pre>
+
+<highlight></highlight>

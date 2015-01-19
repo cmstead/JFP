@@ -3,6 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="310aac75-0a95-4070-987d-aa2ce4eb906d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_core.html" afterPath="$PROJECT_DIR$/templates/documents/_core.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/documents/_math.html" afterPath="$PROJECT_DIR$/templates/documents/_math.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/core/app.js" afterPath="$PROJECT_DIR$/app/scripts/core/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/app.js" afterPath="$PROJECT_DIR$/dist/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="JFP.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,10 +30,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="_core.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/documents/_core.html">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="165" column="14" selection-start="3437" selection-end="3437" vertical-scroll-proportion="0.86238533" vertical-offset="2005" max-vertical-offset="4905">
+            <state line="37" column="0" selection-start="1417" selection-end="1417" vertical-scroll-proportion="-5.75" vertical-offset="417" max-vertical-offset="975">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/scripts/core/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="29" column="62" selection-start="896" selection-end="896" vertical-scroll-proportion="0.5103093" vertical-offset="138" max-vertical-offset="960">
               <folding />
             </state>
           </provider>
@@ -47,7 +61,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/spec/modules/core.spec.js" />
         <option value="$PROJECT_DIR$/scripts/src/modules/array.js" />
         <option value="$PROJECT_DIR$/spec/modules/array.spec.js" />
         <option value="$PROJECT_DIR$/spec/modules/object.spec.js" />
@@ -72,7 +85,6 @@
         <option value="$PROJECT_DIR$/templates/_object.html" />
         <option value="$PROJECT_DIR$/templates/_predicate.html" />
         <option value="$PROJECT_DIR$/templates/_documents.html" />
-        <option value="$PROJECT_DIR$/app/scripts/core/app.js" />
         <option value="$PROJECT_DIR$/dist/app.js" />
         <option value="$PROJECT_DIR$/app/scripts/controllers/head.controller.js" />
         <option value="$PROJECT_DIR$/app/scripts/controllers/headController.js" />
@@ -90,14 +102,16 @@
         <option value="$PROJECT_DIR$/grunt/clean.json" />
         <option value="$PROJECT_DIR$/bower_components/highlight.js/src/highlight.js" />
         <option value="$PROJECT_DIR$/app/scripts/directives/highlight.js" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/templates/documents/_conversion.html" />
         <option value="$PROJECT_DIR$/templates/documents/_object.html" />
         <option value="$PROJECT_DIR$/bower.json" />
         <option value="$PROJECT_DIR$/templates/documents/_predicate.html" />
-        <option value="$PROJECT_DIR$/templates/documents/_math.html" />
         <option value="$PROJECT_DIR$/templates/documents/_array.html" />
+        <option value="$PROJECT_DIR$/templates/documents/_math.html" />
         <option value="$PROJECT_DIR$/templates/documents/_core.html" />
+        <option value="$PROJECT_DIR$/templates/documents/_conditional.html" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/app/scripts/core/app.js" />
       </list>
     </option>
   </component>
@@ -132,7 +146,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -193,35 +206,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="grunt" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bower_components" />
+              <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -239,29 +224,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="scss" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scss" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="partials" />
+              <option name="myItemId" value="scripts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -283,30 +246,13 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="directives" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JFP" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
+              <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -325,14 +271,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
-      <method />
-    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -343,15 +281,23 @@
       <option name="showConsoleOnStdOut" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
+      <envs />
+      <method />
+    </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
       <setting name="configLocationType" value="CONFIG_FILE" />
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="CHROME" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
@@ -388,11 +334,11 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295082" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -414,11 +360,16 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/documents/_array.html">
+    <entry file="file://$PROJECT_DIR$/templates/documents/_core.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="28" selection-start="334" selection-end="334" vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="5640">
+        <state line="165" column="14" selection-start="3437" selection-end="3437" vertical-scroll-proportion="0.0" vertical-offset="2005" max-vertical-offset="4905">
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/documents/_array.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="28" selection-start="334" selection-end="334" vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="5640" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/documents/_math.html">
@@ -501,11 +452,6 @@
         <state line="47" column="1" selection-start="1102" selection-end="1102" vertical-scroll-proportion="0.9437148" vertical-offset="202" max-vertical-offset="795" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/_home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="7" selection-start="503" selection-end="503" vertical-scroll-proportion="-7.5" vertical-offset="0" max-vertical-offset="840" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/scss/partials/_base.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state line="45" column="20" selection-start="534" selection-end="534" vertical-scroll-proportion="0.5628518" vertical-offset="375" max-vertical-offset="1305" />
@@ -556,11 +502,6 @@
         <state line="17" column="37" selection-start="696" selection-end="696" vertical-scroll-proportion="0.43814433" vertical-offset="0" max-vertical-offset="630" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="270" selection-end="270" vertical-scroll-proportion="0.13440861" vertical-offset="0" max-vertical-offset="945" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bower_components/angular/angular.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6463" column="75" selection-start="216214" selection-end="216214" vertical-scroll-proportion="0.21441124" vertical-offset="96823" max-vertical-offset="391125" />
@@ -586,21 +527,56 @@
         <state line="512" column="15" selection-start="8114" selection-end="8114" vertical-scroll-proportion="0.94623655" vertical-offset="7152" max-vertical-offset="7830" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/documents/_math.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="11" selection-start="1457" selection-end="1457" vertical-scroll-proportion="0.5967742" vertical-offset="1152" max-vertical-offset="5535" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/documents/_array.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="28" selection-start="334" selection-end="334" vertical-scroll-proportion="-1.451613" vertical-offset="1035" max-vertical-offset="5640">
+        <state line="15" column="28" selection-start="334" selection-end="334" vertical-scroll-proportion="-1.451613" vertical-offset="1035" max-vertical-offset="5640" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/documents/_math.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="116" column="0" selection-start="1694" selection-end="1694" vertical-scroll-proportion="-72.5" vertical-offset="0" max-vertical-offset="5790">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/documents/_conditional.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="119" column="11" selection-start="2650" selection-end="2650" vertical-scroll-proportion="-74.375" vertical-offset="0" max-vertical-offset="1875">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/documents/_core.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="165" column="14" selection-start="3437" selection-end="3437" vertical-scroll-proportion="0.86238533" vertical-offset="2005" max-vertical-offset="4905">
+        <state line="204" column="0" selection-start="4099" selection-end="4099" vertical-scroll-proportion="0.8655914" vertical-offset="2577" max-vertical-offset="3150">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/_home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="7" selection-start="503" selection-end="503" vertical-scroll-proportion="0.32258064" vertical-offset="0" max-vertical-offset="840">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/core/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="582">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="0" selection-start="1417" selection-end="1417" vertical-scroll-proportion="-5.75" vertical-offset="417" max-vertical-offset="975">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/core/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="62" selection-start="896" selection-end="896" vertical-scroll-proportion="0.5103093" vertical-offset="138" max-vertical-offset="960">
           <folding />
         </state>
       </provider>

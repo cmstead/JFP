@@ -25,6 +25,10 @@
                 url: '/array',
                 templateUrl: 'templates/documents/_array.html'
             })
+            .state('documents.conditional', {
+                url: '/conditional',
+                templateUrl: 'templates/documents/_conditional.html'
+            })
             .state('documents.conversion', {
                 url: '/conversion',
                 templateUrl: 'templates/documents/_conversion.html'
