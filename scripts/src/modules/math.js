@@ -121,12 +121,6 @@
         return j.either(1, j.when(j.greater(value, 0), factorial, value));
     }
 
-    function fac(value){
-        return (!value) ? 1 : j.compose(j.partial(j.reduce, j.multiply),
-                                        j.partial(j.range, 1),
-                                        j.partial(j.add, 1))(value);
-    }
-
     j.add = add;
     j.divide = divide;
     j.fac = fac;
