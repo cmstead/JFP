@@ -118,7 +118,7 @@
 </pre>
 
 <dl>
-    <dt>eitherWhen</dt>
+    <dt>eitherIf</dt>
     <dd>Performance: O(1)</dd>
     <dd>Arguments: {any} defaultValue, {any, nullable} testValue, {boolean} predicate</dd>
     <dd>Description: Returns defaultValue on falsey optionValue or false predicate or optionValue if it is truthy and predicate is true</dd>
@@ -139,6 +139,31 @@
         j.eitherWhen('default', 'yay!', false);
 
         //default
+    </code>
+</pre>
+
+<dl>
+    <dt>eitherWhen</dt>
+    <dd>Performance: O(1)</dd>
+    <dd>Arguments: {any} defaultValue, {boolean} predicateValue, {function} userFn</dd>
+    <dd>Description: returns userFn output on true predicateValue and truthy otherwise default value</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.eitherWhen('default', false, j.identity);
+
+        //default
+
+        j.eitherWhen('default', true, j.partial(j.identity, false));
+
+        //default
+
+        j.eitherWhen('default', true, j.partial(j.identity, 'yay!'));
+
+        //yay!
     </code>
 </pre>
 
