@@ -106,8 +106,17 @@
         return minValue;
     }
 
+    function fac(value){
+        var factorial = j.compose(j.partial(j.reduce, multiply),
+                                  j.partial(range, 1),
+                                  j.partial(add, 1));
+
+        return j.either(1, j.when(j.greater(value, 0), factorial, value));
+    }
+
     j.add = add;
     j.divide = divide;
+    j.fac = fac;
     j.max = max;
     j.min = min;
     j.mod = mod;

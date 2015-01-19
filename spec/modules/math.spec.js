@@ -170,6 +170,17 @@
             
         });
 
+        describe('fac', function(){
+
+            it('should return 1 when passed 0', function(){
+                expect(j.fac(0)).toBe(1);
+            });
+
+            it('should return n factorial', function(){
+                expect(j.fac(5)).toBe(120);
+            });
+        });
+
     });
     
 })();
