@@ -81,22 +81,22 @@
 
 <dl>
     <dt>fac</dt>
-    <dd>Performance: O(1)</dd>
-    <dd>Arguments: {number} </dd>
-    <dd>Description: returns true if a and b are strictly equal, false otherwise</dd>
+    <dd>Performance: O(n)</dd>
+    <dd>Arguments: {number} value</dd>
+    <dd>Description: returns factorial of value</dd>
 </dl>
 
 <h4>Example</h4>
 
 <pre>
     <code class="javascript">
-        j.equal(1, 1);
+        j.fac(0);
 
-        //true
+        //1
 
-        j.equal(1, 2);
+        j.fac(5);
 
-        //false
+        //120
     </code>
 </pre>
 

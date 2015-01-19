@@ -1,6 +1,23 @@
 <h2>Array Functions</h2>
 
 <dl>
+    <dt>compact</dt>
+    <dd>Performance: O(n)</dd>
+    <dd>Arguments: {array} values</dd>
+    <dd>Description: Removes all falsey values from array</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.compact(['my string', false, 0, 52, undefined]);
+
+        // [ 'my string', 52 ]
+    </code>
+</pre>
+
+<dl>
     <dt>concat</dt>
     <dd>Performance: O(n)</dd>
     <dd>Arguments: {array} original, {array} extension</dd>
@@ -331,6 +348,23 @@
         j.take(3, [1, 2, 3, 4, 5]);
 
         // [ 1, 2, 3 ]
+    </code>
+</pre>
+
+<dl>
+    <dt>unique</dt>
+    <dd>Performance: O(n*log(n))</dd>
+    <dd>Arguments: {array of comparable} valueSet</dd>
+    <dd>Description: returns a sorted array of unique values</dd>
+</dl>
+
+<h4>Example</h4>
+
+<pre>
+    <code class="javascript">
+        j.unique([2, 5, 2, 3, 2, 4, 3, 1]);
+
+        // [ 1, 2, 3, 4, 5 ]
     </code>
 </pre>
 
