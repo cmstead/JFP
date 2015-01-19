@@ -16,7 +16,7 @@ Upcoming to do items (work done in next-version branch):
 
 - [x] when (Executes as a single-case conditional, i.e. if without an else)
 - [x] eitherIf (performs either on the result of a conditional value)
-- [ ] eitherWhen (performs either on the result of a function output, executed on a conditional value)
+- [x:] eitherWhen (performs either on the result of a function output, executed on a conditional value)
 - [x] max
 - [x] min
 - [x] fac (factorial)
