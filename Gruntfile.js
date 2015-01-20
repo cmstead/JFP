@@ -28,10 +28,13 @@ module.exports = function(grunt){
 
     /* Register composite grunt tasks */
 
-    grunt.registerTask('test', ['jshint', 'karma']);
+    grunt.registerTask('test', ['jshint', 'karma:dev']);
+    grunt.registerTask('test-concat', ['karma:concat']);
+    grunt.registerTask('test-min', ['karma:min']);
+    grunt.registerTask('test-build', ['karma:concat', 'karma:min']);
 
     grunt.registerTask('buildjs', ['concat', 'uglify']);
-    grunt.registerTask('build', ['clean', 'test', 'buildjs', 'copy']);
+    grunt.registerTask('build', ['clean', 'test', 'buildjs', 'copy', 'test-build']);
 
     grunt.registerTask('default', ['test']);
 };

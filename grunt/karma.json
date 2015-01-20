@@ -1,5 +1,11 @@
 {
-    "unit": {
+    "dev": {
         "configFile": "./spec/karma.config.js"
+    },
+    "concat": {
+        "configFile": "./spec/karma.concat.config.js"
+    },
+    "min": {
+        "configFile": "./spec/karma.min.config.js"
     }
 }
