@@ -1,6 +1,7 @@
 {
     "options": {
         "banner": "/*! <%= pkg.name %> <%= grunt.template.today('dd-mm-yyyy') %> */\n",
+        "mangle": false,
         "sourceMap": true,
         "sourceMapName": "scripts/min/jfp.map"
     },
