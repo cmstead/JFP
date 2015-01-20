@@ -2,7 +2,8 @@
     'use strict';
 
     function pick(key, valueMap){
-        return j.either(null, j.either({}, valueMap)[key]);
+        var pickResult = j.either({}, valueMap)[key];
+        return j.isUndefined(pickResult) ? null : pickResult;
     }
 
     function pluckKeys(keys, valueMap){

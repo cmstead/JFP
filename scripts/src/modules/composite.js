@@ -1,18 +1,6 @@
 (function(j){
     'use strict';
 
-    function eitherIf(defaultValue, testValue, predicateValue){
-        var safePredicate = j.isUndefined(predicateValue) ? true : predicateValue;
-
-        return j.either(defaultValue, j.when(safePredicate, j.partial(j.identity, testValue)));
-    }
-
-    function eitherWhen(defaultValue, predicateValue, userFn){
-        var sanitizedFn = eitherIf(j.identity, userFn, j.isFunction(userFn));
-
-        return j.either(defaultValue, j.when(predicateValue, sanitizedFn));
-    }
-
     //This is complicated and I don't expect people to grok it on first read.
     function curry(userFn){
         var args = j.slice(1, arguments),
@@ -123,8 +111,6 @@
     j.compact = j.partial(j.filter, j.isTruthy);
     j.compose = compose;
     j.curry = curry;
-    j.eitherIf = eitherIf;
-    j.eitherWhen = eitherWhen;
     j.or = or;
     j.pipeline = pipeline;
     j.recur = recur;

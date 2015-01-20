@@ -30,6 +30,18 @@
         return j.isTruthy(checkValue) ? apply(userFn, args) : null;
     }
 
+    function eitherIf(defaultValue, testValue, predicateValue){
+        var safePredicate = j.isUndefined(predicateValue) ? true : predicateValue;
+
+        return j.either(defaultValue, j.when(safePredicate, j.partial(j.identity, testValue)));
+    }
+
+    function eitherWhen(defaultValue, predicateValue, userFn){
+        var sanitizedFn = eitherIf(j.identity, userFn, j.isFunction(userFn));
+
+        return j.either(defaultValue, j.when(predicateValue, sanitizedFn));
+    }
+
     function concat(original, extension){
         var result = slice(0, either([], original)),
             sanitizedExtension = either([], extension),
@@ -74,6 +86,8 @@
     j.concat = concat;
     j.countArguments = countArguments;
     j.either = either;
+    j.eitherIf = eitherIf;
+    j.eitherWhen = eitherWhen;
     j.identity = identity;
     j.maybe = maybe;
     j.partial = basePartial('left', basePartial, 'left');

@@ -15,8 +15,21 @@
             expect(j.pick('test', { 'test': 'test value' })).toBe('test value');
         });
 
-        it('should return null if key is not found.', function(){
+        it('should return null if object.key is undefined.', function(){
             expect(j.pick('test', {})).toBe(null);
+        });
+        
+        //These are to ensure falsey values are preserved, except undefined
+        it('should return false if object.key is false', function(){
+            expect(j.pick('test', { test: false })).toBe(false);
+        });
+
+        it('should return false if object.key is 0', function(){
+            expect(j.pick('test', { test: 0 })).toBe(0);
+        });
+
+        it('should return false if object.key is ""', function(){
+            expect(j.pick('test', { test: "" })).toBe("");
         });
 
     });
