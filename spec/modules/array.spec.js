@@ -421,4 +421,20 @@
 
     });
 
+    describe('contains', function(){
+    
+        it('should return true if array contains an element which satisfies provided predicate', function(){
+            var testArray = [1, 3, 5, 6, 7];
+
+            expect(j.contains(j.isEven, testArray)).toBe(true);
+        });
+
+        it('should return false if array does not contain an element which satisfies provided predicate', function(){
+            var testArray = [1, 3, 5, 7];
+
+            expect(j.contains(j.isEven, testArray)).toBe(false);
+        });
+
+    });
+
 })();
