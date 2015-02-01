@@ -128,6 +128,31 @@
         return satisfied;
     }
 
+    function every(predicate, valueSet){
+        var satisfied = false;
+
+        function everyFn(value){
+            satisfied = predicate(value);
+            return satisfied;
+        }
+
+        each(everyFn, valueSet);
+
+        return satisfied;
+    }
+
+    function numberOf(predicate, valueSet){
+        var accumulator = 0;
+
+        function accumulate(value){
+            accumulator += predicate(value) ? 1 : 0;
+        }
+
+        each(accumulate, valueSet);
+
+        return accumulator;
+    }
+
     j.conj = conj;
     j.cons = cons;
     j.contains = contains;
@@ -136,6 +161,7 @@
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
     j.each = each;
+    j.every = every;
     j.filter = filter;
     j.find = find;
     j.first = first;
@@ -144,6 +170,7 @@
     j.lastIndex = lastIndex;
     j.map = map;
     j.nth = nth;
+    j.numberOf = numberOf;
     j.rest = rest;
     j.take = take;
 
