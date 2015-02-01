@@ -115,8 +115,22 @@
         return j.isArray(values) ? j.slice(0, values, count) : null;
     }
 
+    function contains(predicate, valueSet){
+        var satisfied = false;
+
+        function containsFn(value){
+            satisfied = predicate(value);
+            return !satisfied;
+        }
+
+        each(containsFn, valueSet);
+
+        return satisfied;
+    }
+
     j.conj = conj;
     j.cons = cons;
+    j.contains = contains;
     j.copyArray = copyArray;
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
