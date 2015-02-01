@@ -18,7 +18,7 @@ to bend their environment to their own will, not the other way around. This is w
 
 ##To Dos (All completed are in v1.2.0 branch)
 
-- [ ] Contains (predicate, array) -- verifies there exists at least one element matching predicate function
+- [x] Contains (predicate, array) -- verifies there exists at least one element matching predicate function
 - [ ] Every (predicate, array) -- verifies all elements match predicate function
 - [ ] NumberOf (predicate, array) -- Returns count of elements matching predicate
 - [ ] Merge (defaultObject, object) -- Merges values left to right, Right object properties win
