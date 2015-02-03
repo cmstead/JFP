@@ -21,8 +21,8 @@ to bend their environment to their own will, not the other way around. This is w
 - [x] Contains (predicate, array) -- verifies there exists at least one element matching predicate function
 - [x] Every (predicate, array) -- verifies all elements match predicate function
 - [x] NumberOf (predicate, array) -- Returns count of elements matching predicate
+- [x] Sort ([comparator,] array) -- Sorts values with natural comparison or comparator if available
 - [ ] Merge (defaultObject, object) -- Merges values left to right, Right object properties win
-- [ ] Sort ([comparator,] array) -- Sorts values with natural comparison or comparator if available
 - [ ] Union (array, array[, comparator]) -- takes the union of two arrays
 - [ ] Intersect (array, array[, comparator]) -- takes the intersection of two arrays
 - [ ] Difference (array, arrray[, comparator]) -- Takes the difference of two arrays
