@@ -58,13 +58,13 @@
         });
 
     });
-    
+
     describe('each', function(){
-        
+
         it('should return an array', function(){
             expect(JSON.stringify(j.each())).toBe('[]');
         });
-        
+
         it('should call passed function with a single value', function(){
             var spy = jasmine.createSpy('callback');
             j.each(spy, [1]);
@@ -76,37 +76,37 @@
             j.each(function(){ spy(); return false; }, [1, 2, 3, 4]);
             expect(spy.callCount).toBe(1);
         });
-        
+
         it('should call passed function for each value in array', function(){
             var spy = jasmine.createSpy('userFn');
             j.each(spy, [1, 2, 3, 4]);
             expect(spy.callCount).toBe(4);
         });
-        
+
     });
-    
+
     describe('map', function(){
-        
+
         it('should return an array', function(){
             expect(JSON.stringify(j.map())).toBe('[]');
         });
-        
+
         it('should call function for each element in array argument', function(){
             var spy = jasmine.createSpy('userFn');
             j.map(spy, [1, 2, 3, 4]);
             expect(spy.callCount).toBe(4);
         });
-        
+
         it('should return a function with mapped values', function(){
             var output;
-            
+
             function add5(value){
                 return value + 5;
             }
-            
+
             expect(JSON.stringify(j.map(add5, [0, 1, 2, 3]))).toBe('[5,6,7,8]');
         });
-        
+
     });
 
     describe('first', function(){
@@ -302,19 +302,19 @@
         });
 
     });
-    
+
     describe('nth', function(){
         it('should return null if no value exists at nth position', function(){
             expect(j.nth(4, [1, 2, 3])).toBe(null);
         });
-        
+
         it('should return nth value of array', function(){
             expect(j.nth(1, [1, 2, 3])).toBe(2);
         });
     });
 
     describe('unique', function(){
-        
+
         it('should return a sorted array', function(){
             expect(JSON.stringify(j.unique([5, 2, 4, 3, 1]))).toBe('[1,2,3,4,5]');
         });
@@ -326,7 +326,7 @@
     });
 
     describe('contains', function(){
-    
+
         it('should return true if array contains an element which satisfies provided predicate', function(){
             var testArray = [1, 3, 5, 6, 7];
 
@@ -342,7 +342,7 @@
     });
 
     describe('every', function(){
-    
+
         it('should return true if every element of array satisfies predicate', function(){
             var testArray = [2, 4, 6, 8];
 
@@ -358,7 +358,7 @@
     });
 
     describe('numberOf', function(){
-    
+
         it('should return correct count of 1', function(){
             var testArray = [2];
 
@@ -375,6 +375,48 @@
             var testArray = [2, 4, 6, 7, 8];
 
             expect(j.numberOf(j.isEven, testArray)).toBe(4);
+        });
+
+    });
+
+    describe('sort', function(){
+
+        it('should perform a natural sort by default', function(){
+            var testArray = [3, 4, 2, 5, 1];
+
+            expect(JSON.stringify(j.sort(testArray))).toBe('[1,2,3,4,5]');
+        });
+
+        it('should not modify the original array', function(){
+            var testArray = [3, 4, 2, 5, 1];
+
+            j.sort(testArray);
+
+            expect(JSON.stringify(testArray)).not.toBe('[1,2,3,4,5]');
+        });
+
+        it('should sort with a sorting function', function(){
+            var testArray = [{ value: 3 },
+                             { value: 2 },
+                             { value: 5 },
+                             { value: 1 },
+                             { value: 4 }],
+                expectedValue = [{ value: 1 },
+                                 { value: 2 },
+                                 { value: 3 },
+                                 { value: 4 },
+                                 { value: 5 }];
+
+            function comparator(a, b){
+                var comparison = 0;
+
+                comparison = a.value < b.value ? -1 : comparison;
+                comparison = b.value < a.value ? 1 : comparison;
+
+                return comparison;
+            }
+
+            expect(JSON.stringify(j.sort(comparator, testArray))).toBe(JSON.stringify(expectedValue));
         });
 
     });
