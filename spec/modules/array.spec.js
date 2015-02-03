@@ -438,7 +438,7 @@
     });
 
     describe('every', function(){
-    
+
         it('should return true if every element of array satisfies predicate', function(){
             var testArray = [2, 4, 6, 8];
 
@@ -454,7 +454,7 @@
     });
 
     describe('numberOf', function(){
-    
+
         it('should return correct count of 1', function(){
             var testArray = [2];
 
@@ -471,6 +471,48 @@
             var testArray = [2, 4, 6, 7, 8];
 
             expect(j.numberOf(j.isEven, testArray)).toBe(4);
+        });
+
+    });
+
+    describe('sort', function(){
+
+        it('should perform a natural sort by default', function(){
+            var testArray = [3, 4, 2, 5, 1];
+
+            expect(JSON.stringify(j.sort(testArray))).toBe('[1,2,3,4,5]');
+        });
+
+        it('should not modify the original array', function(){
+            var testArray = [3, 4, 2, 5, 1];
+
+            j.sort(testArray);
+
+            expect(JSON.stringify(testArray)).not.toBe('[1,2,3,4,5]');
+        });
+
+        it('should sort with a sorting function', function(){
+            var testArray = [{ value: 3 },
+                             { value: 2 },
+                             { value: 5 },
+                             { value: 1 },
+                             { value: 4 }],
+                expectedValue = [{ value: 1 },
+                                 { value: 2 },
+                                 { value: 3 },
+                                 { value: 4 },
+                                 { value: 5 }];
+
+            function comparator(a, b){
+                var comparison = 0;
+
+                comparison = a.value < b.value ? -1 : comparison;
+                comparison = b.value < a.value ? 1 : comparison;
+
+                return comparison;
+            }
+
+            expect(JSON.stringify(j.sort(comparator, testArray))).toBe(JSON.stringify(expectedValue));
         });
 
     });
