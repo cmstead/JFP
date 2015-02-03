@@ -216,7 +216,7 @@ jfp = (function(){
     function cons(value, source){
         return j.concat(makeValueArray(value), source);
     }
-    
+
     function each(userFn, userArray){
         var sanitizedArray = j.either([], userArray),
             sanitizedFn = j.either(j.identity, userFn),
@@ -227,7 +227,7 @@ jfp = (function(){
                 break;
             }
         }
-            
+
         return sanitizedArray;
     }
 
@@ -290,19 +290,19 @@ jfp = (function(){
     function dropLast(valueSet){
         return drop(lastIndex(valueSet), valueSet);
     }
-    
+
     function map(userFn, userArray){
         var finalArray = [];
-            
+
         function mapFn(value){
             finalArray = conj(userFn(value), finalArray);
         }
-            
+
         each(mapFn, userArray);
-            
+
         return finalArray;
     }
-    
+
     function nth(index, valueSet){
         return j.either(null, j.either([], valueSet)[index]);
     }
@@ -353,6 +353,18 @@ jfp = (function(){
         return accumulator;
     }
 
+    function naturalComparator(a, b){
+        var comparison = a < b ? -1 : 1;
+        return a === b ? 0 : comparison;
+    }
+
+    function sort(optionValue, valueSet){
+        var comparator = j.isFunction(optionValue) ? optionValue : naturalComparator,
+            finalSet = j.isArray(optionValue) ? j.slice(0, optionValue) : j.slice(0, valueSet);
+
+        return finalSet.sort(comparator);
+    }
+
     j.conj = conj;
     j.cons = cons;
     j.contains = contains;
@@ -372,6 +384,7 @@ jfp = (function(){
     j.nth = nth;
     j.numberOf = numberOf;
     j.rest = rest;
+    j.sort = sort;
     j.take = take;
 
 })(jfp);
