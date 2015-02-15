@@ -25,4 +25,5 @@ to bend their environment to their own will, not the other way around. This is w
 - [ ] Merge (defaultObject, object) -- Merges values left to right, Right object properties win
 - [ ] Union (array, array[, comparator]) -- takes the union of two arrays
 - [ ] Intersect (array, array[, comparator]) -- takes the intersection of two arrays
-- [ ] Difference (array, arrray[, comparator]) -- Takes the difference of two arrays
+- [ ] Difference (array, array[, comparator]) -- Takes the difference of two arrays
+- [ ] SymmetricDifference (array, array[, comparator]) -- Takes the symmetric difference of two arrays
