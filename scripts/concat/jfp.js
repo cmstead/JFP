@@ -416,11 +416,28 @@ jfp = (function(){
         return pluckKeys([key], valueMap);
     }
 
+    function merge(defaultObj, mergeData){
+        var finalObj = {},
+            key;
+
+        for(key in j.either({}, defaultObj)){
+            finalObj[key] = defaultObj[key];
+        }
+
+        for(key in j.either({}, mergeData)){
+            finalObj[key] = mergeData[key];
+        }
+
+        return j.eitherIf(null, finalObj, j.isTruthy(defaultObj));
+    }
+
+    j.merge = merge;
     j.pick = pick;
     j.pluck = pluck;
     j.pluckKeys = pluckKeys;
 
 })(jfp);
+
 
 (function(j){
     'use strict';
