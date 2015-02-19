@@ -365,6 +365,10 @@ jfp = (function(){
         return finalSet.sort(comparator);
     }
 
+    function union(set1, set2){
+        return j.compose(j.unique, j.concat)(set1, set2);
+    }
+
     j.conj = conj;
     j.cons = cons;
     j.contains = contains;
@@ -386,6 +390,7 @@ jfp = (function(){
     j.rest = rest;
     j.sort = sort;
     j.take = take;
+    j.union = union;
 
 })(jfp);
 

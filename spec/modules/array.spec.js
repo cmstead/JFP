@@ -517,4 +517,32 @@
 
     });
 
+    describe('union', function(){
+    
+        it('should return an array with all unique values', function(){
+            expect(JSON.stringify(j.union([1, 2, 3]))).toBe('[1,2,3]');
+        });
+
+        it('should combine two non-overlapping arrays', function(){
+            expect(JSON.stringify(j.union([1, 2, 3], [4, 5, 6]))).toBe('[1,2,3,4,5,6]');
+        });
+
+        it('should exclude all duplicate values', function(){
+            expect(JSON.stringify(j.union([1, 2, 3, 4], [2, 3, 4, 5, 6]))).toBe('[1,2,3,4,5,6]');
+        });
+
+    });
+
+    describe('intersect', function(){
+        
+        it('should return empty array if only one array is passed', function(){
+            expect(JSON.stringify(j.intersect([1, 2, 3]))).toBe('[]');
+        });
+
+        it('should return the intersection of two overlapping arrays', function(){
+            expect(JSON.stringify(j.intersect([1, 2, 3], [2, 3, 4]))).toBe('[2,3]');
+        });
+
+    });
+
 })();
