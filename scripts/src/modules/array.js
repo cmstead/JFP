@@ -6,7 +6,7 @@
     }
 
     function makeValueArray(value){
-        return j.isTruthy(value) || value === 0 ? [value] : [];
+        return j.not(j.isUndefined(value)) ? [value] : [];
     }
 
     function conj(value, dest){
