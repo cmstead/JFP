@@ -206,7 +206,7 @@ jfp = (function(){
     }
 
     function makeValueArray(value){
-        return j.isTruthy(value) || value === 0 ? [value] : [];
+        return j.not(j.isUndefined(value)) ? [value] : [];
     }
 
     function conj(value, dest){
@@ -369,6 +369,31 @@ jfp = (function(){
         return j.compose(j.unique, j.concat)(set1, set2);
     }
 
+    function buildValueHash(valueSet){
+        var finalHash = {};
+
+        j.each(function(value){
+            finalHash[value] = true;
+        }, valueSet);
+
+        return finalHash;
+    }
+
+    function intersect(set1, set2){
+        var finalSet = [],
+            seta = j.unique(j.either([], set1)),
+            setbHash = buildValueHash(j.either([], set2)),
+            i = 0;
+        
+        for(; i < seta.length; i++){
+            if(setbHash[seta[i]]){
+                finalSet.push(seta[i]);
+            }
+        }
+
+        return finalSet;
+    }
+
     j.conj = conj;
     j.cons = cons;
     j.contains = contains;
@@ -382,6 +407,7 @@ jfp = (function(){
     j.find = find;
     j.first = first;
     j.init = j.dropLast;
+    j.intersect = intersect;
     j.last = last;
     j.lastIndex = lastIndex;
     j.map = map;
