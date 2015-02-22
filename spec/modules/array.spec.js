@@ -545,4 +545,28 @@
 
     });
 
+    describe('difference', function(){
+    
+        it('should return passed array if only one array is passed', function(){
+            expect(JSON.stringify(j.difference([1, 2, 3]))).toBe('[1,2,3]');
+        });
+
+        it('should return the difference mapping set 1 to set 2', function(){
+            expect(JSON.stringify(j.difference([1, 2, 3], [2, 3, 4]))).toBe('[1]');
+        });
+
+    });
+
+    describe('symmetricDifference', function(){
+        
+        it('should return passed array if only one array is passed', function(){
+            expect(JSON.stringify(j.symmetricDifference([1, 2, 3]))).toBe('[1,2,3]');
+        });
+
+        it('should return the symmetric difference of two arrays', function(){
+            expect(JSON.stringify(j.symmetricDifference([1, 2, 3], [2, 3, 4]))).toBe('[1,4]');
+        });
+
+    });
+
 })();

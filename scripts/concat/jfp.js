@@ -394,10 +394,33 @@ jfp = (function(){
         return finalSet;
     }
 
+    function difference(set1, set2){
+        var finalSet = [],
+            seta = j.unique(j.either([], set1)),
+            setbHash = buildValueHash(j.either([], set2)),
+            i = 0;
+
+        for(; i < seta.length; i++){
+            if(!setbHash[seta[i]]){
+                finalSet.push(seta[i]);
+            }
+        }
+
+        return finalSet;
+    }
+
+    function symmetricDifference(set1, set2){
+        var setUnion = union(set1, set2),
+            setIntersection = intersect(set1, set2);
+
+        return difference(setUnion, setIntersection);
+    }
+
     j.conj = conj;
     j.cons = cons;
     j.contains = contains;
     j.copyArray = copyArray;
+    j.difference = difference;
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
@@ -415,6 +438,7 @@ jfp = (function(){
     j.numberOf = numberOf;
     j.rest = rest;
     j.sort = sort;
+    j.symmetricDifference = symmetricDifference;
     j.take = take;
     j.union = union;
 
