@@ -25,5 +25,5 @@ to bend their environment to their own will, not the other way around. This is w
 - [x] Sort ([comparator,] array) -- Sorts values with natural comparison or comparator if available
 - [x] Union (array, array) -- takes the union of two arrays
 - [x] Intersect (array, array) -- takes the intersection of two arrays
-- [ ] Difference (array, array) -- Takes the difference of two arrays
-- [ ] SymmetricDifference (array, array) -- Takes the symmetric difference of two arrays
+- [x] Difference (array, array) -- Takes the difference of two arrays
+- [x] SymmetricDifference (array, array) -- Takes the symmetric difference of two arrays

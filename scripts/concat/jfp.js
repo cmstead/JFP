@@ -216,7 +216,7 @@ jfp = (function(){
     function cons(value, source){
         return j.concat(makeValueArray(value), source);
     }
-    
+
     function each(userFn, userArray){
         var sanitizedArray = j.either([], userArray),
             sanitizedFn = j.either(j.identity, userFn),
@@ -227,7 +227,7 @@ jfp = (function(){
                 break;
             }
         }
-            
+
         return sanitizedArray;
     }
 
@@ -290,19 +290,19 @@ jfp = (function(){
     function dropLast(valueSet){
         return drop(lastIndex(valueSet), valueSet);
     }
-    
+
     function map(userFn, userArray){
         var finalArray = [];
-            
+
         function mapFn(value){
             finalArray = conj(userFn(value), finalArray);
         }
-            
+
         each(mapFn, userArray);
-            
+
         return finalArray;
     }
-    
+
     function nth(index, valueSet){
         return j.either(null, j.either([], valueSet)[index]);
     }
@@ -315,23 +315,132 @@ jfp = (function(){
         return j.isArray(values) ? j.slice(0, values, count) : null;
     }
 
+    function contains(predicate, valueSet){
+        var satisfied = false;
+
+        function containsFn(value){
+            satisfied = predicate(value);
+            return !satisfied;
+        }
+
+        each(containsFn, valueSet);
+
+        return satisfied;
+    }
+
+    function every(predicate, valueSet){
+        var satisfied = false;
+
+        function everyFn(value){
+            satisfied = predicate(value);
+            return satisfied;
+        }
+
+        each(everyFn, valueSet);
+
+        return satisfied;
+    }
+
+    function numberOf(predicate, valueSet){
+        var accumulator = 0;
+
+        function accumulate(value){
+            accumulator += predicate(value) ? 1 : 0;
+        }
+
+        each(accumulate, valueSet);
+
+        return accumulator;
+    }
+
+    function naturalComparator(a, b){
+        var comparison = a < b ? -1 : 1;
+        return a === b ? 0 : comparison;
+    }
+
+    function sort(optionValue, valueSet){
+        var comparator = j.isFunction(optionValue) ? optionValue : naturalComparator,
+            finalSet = j.isArray(optionValue) ? j.slice(0, optionValue) : j.slice(0, valueSet);
+
+        return finalSet.sort(comparator);
+    }
+
+    function union(set1, set2){
+        return j.compose(j.unique, j.concat)(set1, set2);
+    }
+
+    function buildValueHash(valueSet){
+        var finalHash = {};
+
+        j.each(function(value){
+            finalHash[value] = true;
+        }, valueSet);
+
+        return finalHash;
+    }
+
+    function intersect(set1, set2){
+        var finalSet = [],
+            seta = j.unique(j.either([], set1)),
+            setbHash = buildValueHash(j.either([], set2)),
+            i = 0;
+        
+        for(; i < seta.length; i++){
+            if(setbHash[seta[i]]){
+                finalSet.push(seta[i]);
+            }
+        }
+
+        return finalSet;
+    }
+
+    function difference(set1, set2){
+        var finalSet = [],
+            seta = j.unique(j.either([], set1)),
+            setbHash = buildValueHash(j.either([], set2)),
+            i = 0;
+
+        for(; i < seta.length; i++){
+            if(!setbHash[seta[i]]){
+                finalSet.push(seta[i]);
+            }
+        }
+
+        return finalSet;
+    }
+
+    function symmetricDifference(set1, set2){
+        var setUnion = union(set1, set2),
+            setIntersection = intersect(set1, set2);
+
+        return difference(setUnion, setIntersection);
+    }
+
     j.conj = conj;
     j.cons = cons;
+    j.contains = contains;
     j.copyArray = copyArray;
+    j.difference = difference;
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
     j.each = each;
+    j.every = every;
     j.filter = filter;
     j.find = find;
     j.first = first;
     j.init = j.dropLast;
+    j.intersect = intersect;
     j.last = last;
     j.lastIndex = lastIndex;
     j.map = map;
     j.nth = nth;
+    j.numberOf = numberOf;
     j.rest = rest;
+    j.sort = sort;
+    j.symmetricDifference = symmetricDifference;
     j.take = take;
+    j.union = union;
 
 })(jfp);
 
@@ -362,11 +471,28 @@ jfp = (function(){
         return pluckKeys([key], valueMap);
     }
 
+    function merge(defaultObj, mergeData){
+        var finalObj = {},
+            key;
+
+        for(key in j.either({}, defaultObj)){
+            finalObj[key] = defaultObj[key];
+        }
+
+        for(key in j.either({}, mergeData)){
+            finalObj[key] = mergeData[key];
+        }
+
+        return j.eitherIf(null, finalObj, j.isTruthy(defaultObj));
+    }
+
+    j.merge = merge;
     j.pick = pick;
     j.pluck = pluck;
     j.pluckKeys = pluckKeys;
 
 })(jfp);
+
 
 (function(j){
     'use strict';

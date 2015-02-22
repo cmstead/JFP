@@ -89,4 +89,40 @@
 
     });
 
+    describe('merge', function(){
+       
+        it('should return null when no arguments are provided', function(){
+            expect(j.merge()).toBe(null);
+        });
+
+        it('should return a copy of the default when defined', function(){
+            var defaultData = {
+                test1: 'test value 1',
+                test2: 'test value 2'
+            };
+
+            expect(JSON.stringify(j.merge(defaultData))).toBe(JSON.stringify(defaultData));
+        });
+
+        it('should not return pointer to default data', function(){
+            var defaultData = { test: 'test' };
+
+            expect(j.merge(defaultData)).not.toBe(defaultData);
+        });
+
+        it('should merge data into default data.', function(){
+            var defaultData = {
+                    test1: 'test value 1',
+                    test2: 'test value 2',
+                    test3: 'test value 3'
+                },
+                mergeData = {
+                    test1: 'merge value 1'
+                };
+
+            expect(j.merge(defaultData, mergeData).test1).toBe('merge value 1');
+        });
+
+    });
+
 })();
