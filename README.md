@@ -16,14 +16,24 @@ be limited to functions in the library.
 Programmers should be able to extend their libraries easily. Programmers should be able
 to bend their environment to their own will, not the other way around. This is what JFP gives you.
 
-##To Dos (All completed are in v1.2.0 branch)
+Note: OMG! What madness is this?? Version 1.2.x! I know there are just a few people using this library right now, but thanks for all issues created and helpful feedback. I use this library a lot and outside input is so helpful to keep making things better.
 
-- [x] Contains (predicate, array) -- verifies there exists at least one element matching predicate function
-- [x] Every (predicate, array) -- verifies all elements match predicate function
-- [x] NumberOf (predicate, array) -- Returns count of elements matching predicate
-- [x] Merge (defaultObject, object) -- Merges values left to right, Right object properties win
-- [x] Sort ([comparator,] array) -- Sorts values with natural comparison or comparator if available
-- [x] Union (array, array) -- takes the union of two arrays
-- [x] Intersect (array, array) -- takes the intersection of two arrays
-- [x] Difference (array, array) -- Takes the difference of two arrays
-- [x] SymmetricDifference (array, array) -- Takes the symmetric difference of two arrays
+##Update log
+
+###v1.2.0
+
+Added new functionality:
+
+- contains (predicate, array) O(n) (pathological case)
+- every (predicate, array) O(n)
+- numberOf (predicate, array) O(n)
+- merge (defaultObject, object) O(n)
+- sort ([comparator,] array) O(n log n)
+- union (array, array) O(n log n)
+- intersect (array, array) O(n log n)
+- difference (array, array) O(n log n)
+- symmetricDifference (array, array) O(n log n) to O(slow) (pathological case)
+
+###v1.1.4
+
+Fixed bad case where concat would ignore valid falsey values. If this behavior is desired, j.compact will remove falsey values in O(n) time.
