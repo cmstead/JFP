@@ -315,24 +315,28 @@ jfp = (function(){
         return j.isArray(values) ? j.slice(0, values, count) : null;
     }
 
-    function contains(predicate, valueSet){
+    function some(predicate, valueSet){
         var satisfied = false;
 
-        function containsFn(value){
-            satisfied = predicate(value);
+        function someFn(value, index){
+            satisfied = predicate(value, index);
             return !satisfied;
         }
 
-        each(containsFn, valueSet);
+        each(someFn, valueSet);
 
         return satisfied;
+    }
+
+    function contains(value, valueSet){
+        return some(j.partial(j.equal, value), valueSet);
     }
 
     function every(predicate, valueSet){
         var satisfied = false;
 
-        function everyFn(value){
-            satisfied = predicate(value);
+        function everyFn(value, index){
+            satisfied = predicate(value, index);
             return satisfied;
         }
 
@@ -384,7 +388,7 @@ jfp = (function(){
             seta = j.unique(j.either([], set1)),
             setbHash = buildValueHash(j.either([], set2)),
             i = 0;
-        
+
         for(; i < seta.length; i++){
             if(setbHash[seta[i]]){
                 finalSet.push(seta[i]);
@@ -438,6 +442,7 @@ jfp = (function(){
     j.numberOf = numberOf;
     j.rest = rest;
     j.sort = sort;
+    j.some = some;
     j.symmetricDifference = symmetricDifference;
     j.take = take;
     j.union = union;

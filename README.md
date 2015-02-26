@@ -20,6 +20,13 @@ Note: OMG! What madness is this?? Version 1.2.x! I know there are just a few peo
 
 ##Update log
 
+###v1.2.1
+
+Updated functionality:
+
+- original contains function is now some (predicate, array)
+- added new contains (value, array)
+
 ###v1.2.0
 
 Added new functionality:

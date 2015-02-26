@@ -325,22 +325,6 @@
 
     });
 
-    describe('contains', function(){
-
-        it('should return true if array contains an element which satisfies provided predicate', function(){
-            var testArray = [1, 3, 5, 6, 7];
-
-            expect(j.contains(j.isEven, testArray)).toBe(true);
-        });
-
-        it('should return false if array does not contain an element which satisfies provided predicate', function(){
-            var testArray = [1, 3, 5, 7];
-
-            expect(j.contains(j.isEven, testArray)).toBe(false);
-        });
-
-    });
-
     describe('every', function(){
 
         it('should return true if every element of array satisfies predicate', function(){
@@ -422,17 +406,31 @@
     });
 
     describe('contains', function(){
-    
+
+        it('should return true if array contains element', function(){
+            var valueset = [1, 2, 3, 4, 5];
+            expect(j.contains(3, valueset)).toBe(true);
+        });
+
+        it('should return false if array does not contain element', function(){
+            var valueset = [1, 2, 3, 4, 5];
+            expect(j.contains(6, valueset)).toBe(false);
+        });
+
+    });
+
+    describe('some', function(){
+
         it('should return true if array contains an element which satisfies provided predicate', function(){
             var testArray = [1, 3, 5, 6, 7];
 
-            expect(j.contains(j.isEven, testArray)).toBe(true);
+            expect(j.some(j.isEven, testArray)).toBe(true);
         });
 
         it('should return false if array does not contain an element which satisfies provided predicate', function(){
             var testArray = [1, 3, 5, 7];
 
-            expect(j.contains(j.isEven, testArray)).toBe(false);
+            expect(j.some(j.isEven, testArray)).toBe(false);
         });
 
     });
@@ -518,7 +516,7 @@
     });
 
     describe('union', function(){
-    
+
         it('should return an array with all unique values', function(){
             expect(JSON.stringify(j.union([1, 2, 3]))).toBe('[1,2,3]');
         });
@@ -534,7 +532,7 @@
     });
 
     describe('intersect', function(){
-        
+
         it('should return empty array if only one array is passed', function(){
             expect(JSON.stringify(j.intersect([1, 2, 3]))).toBe('[]');
         });
@@ -546,7 +544,7 @@
     });
 
     describe('difference', function(){
-    
+
         it('should return passed array if only one array is passed', function(){
             expect(JSON.stringify(j.difference([1, 2, 3]))).toBe('[1,2,3]');
         });
@@ -558,7 +556,7 @@
     });
 
     describe('symmetricDifference', function(){
-        
+
         it('should return passed array if only one array is passed', function(){
             expect(JSON.stringify(j.symmetricDifference([1, 2, 3]))).toBe('[1,2,3]');
         });
