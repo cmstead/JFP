@@ -20,6 +20,12 @@ Note: OMG! What madness is this?? Version 1.2.x! I know there are just a few peo
 
 ##Update log
 
+###v1.2.2
+
+Added function:
+
+- execute -- executes function and returns result
+
 ###v1.2.1
 
 Updated functionality:
