@@ -316,5 +316,25 @@
         });
 
     });
+    
+    describe('execute', function(){
+        
+        it('should call passed function', function(){
+            var spy = jasmine.createSpy('callback');
+            
+            j.execute(spy);
+            
+            expect(spy).toHaveBeenCalled();
+        });
+        
+        it('should return function output value', function(){
+            function callback(){
+                return 'foo';
+            }
+            
+            expect(j.execute(callback)).toBe('foo');
+        });
+        
+    });
 
 })();

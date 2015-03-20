@@ -155,6 +155,10 @@ jfp = (function(){
 
         return params.length;
     }
+    
+    function execute(userFn){
+        return userFn();
+    }
 
     j.apply = apply;
     j.concat = concat;
@@ -162,6 +166,7 @@ jfp = (function(){
     j.either = either;
     j.eitherIf = eitherIf;
     j.eitherWhen = eitherWhen;
+    j.execute = execute;
     j.identity = identity;
     j.maybe = maybe;
     j.partial = basePartial('left', basePartial, 'left');
