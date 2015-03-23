@@ -335,6 +335,12 @@
             expect(j.execute(callback)).toBe('foo');
         });
         
+        it('should call function with provided arguments', function(){
+            var spy = jasmine.createSpy('spy');
+            j.execute(spy, 1, 2, 3);
+            expect(spy).toHaveBeenCalledWith(1, 2, 3);
+        });
+        
     });
 
 })();

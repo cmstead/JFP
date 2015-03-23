@@ -157,7 +157,7 @@ jfp = (function(){
     }
     
     function execute(userFn){
-        return userFn();
+        return j.apply(userFn, j.slice(1, arguments));
     }
 
     j.apply = apply;

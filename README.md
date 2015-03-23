@@ -20,6 +20,12 @@ Note: OMG! What madness is this?? Version 1.2.x! I know there are just a few peo
 
 ##Update log
 
+###v1.2.3 (In progress)
+
+Updates:
+
+- execute -- handle passed arguments instead of simply calling provided function
+
 ###v1.2.2
 
 Added function:
