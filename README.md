@@ -18,6 +18,27 @@ to bend their environment to their own will, not the other way around. This is w
 
 Note: OMG! What madness is this?? Version 1.2.x! I know there are just a few people using this library right now, but thanks for all issues created and helpful feedback. I use this library a lot and outside input is so helpful to keep making things better.
 
+##Roadmap
+
+###v2.0.0
+
+Below is the list of planned breaking changes coming in v2.0
+
+*Breaking changes*
+
+- Maybe will be rewritten  a -> a | null to adhere to a Haskell analog of maybe
+- Pipeline will take values(array) as an initial argument and then pipeline the values through the provided functions in order
+
+*New functions*
+
+- ShortCircuit will be added (and possibly retrofit into v1.x). ShortCircuit will replace the current definition of maybe.
+- MapOr This will map a set of predicates on to a set of values and map the output to or
+- MapAnd This is the and analog for mapOr
+- ComposeAsync A composition function for handling asynchronous functions
+
+A migration path will be outlined (and short)
+
+
 ##Update log
 
 ###v1.2.3 (In progress)
@@ -26,7 +47,7 @@ Updates:
 
 - execute -- handle passed arguments instead of simply calling provided function
 
-###v1.2.2
+###v1.2.2 (Technically this should have been 1.3 but I couldn't justify it for one function)
 
 Added function:
 
