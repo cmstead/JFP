@@ -36,6 +36,10 @@ Below is the list of planned breaking changes coming in v2.0
 - MapAnd This is the and analog for mapOr
 - ComposeAsync A composition function for handling asynchronous functions
 
+*Extended functionality*
+
+- Either will be extended to allow for a datatype to be specified for greater flexibility
+
 A migration path will be outlined (and short)
 
 
