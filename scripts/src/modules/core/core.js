@@ -11,14 +11,20 @@
                     Array.prototype.slice.call(valueSet, begin, end);
     }
 
-    function maybe(defaultValue, userFn, testValue){
+    function shortCircuit(defaultValue, userFn, testValue){
         return (j.isTruthy(testValue) || testValue === 0) ?
             userFn(testValue) :
             defaultValue;
     }
 
-    function either(defaultValue, testValue){
-        return maybe(defaultValue, identity, testValue);
+    function maybe(value, type){
+        var typeOkay = typeof value === type;
+
+        return typeOkay || (!type && !!value) ? value : null;
+    }
+
+    function either(defaultValue, testValue, type){
+        return maybe(testValue, type) === null ? defaultValue : testValue;
     }
 
     function apply(userFn, args){
@@ -75,13 +81,13 @@
     }
 
     function countArguments(userFn){
-        var params = maybe([], captureArguments, userFn);
+        var params = shortCircuit([], captureArguments, userFn);
 
         params = (params.length === 1 && params[0] === '') ? [] : params;
 
         return params.length;
     }
-    
+
     function execute(userFn){
         return j.apply(userFn, j.slice(1, arguments));
     }
@@ -97,6 +103,7 @@
     j.maybe = maybe;
     j.partial = basePartial('left', basePartial, 'left');
     j.rpartial = basePartial('left', basePartial, 'right');
+    j.shortCircuit = shortCircuit;
     j.slice = slice;
     j.when = when;
 

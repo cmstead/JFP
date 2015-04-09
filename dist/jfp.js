@@ -85,14 +85,20 @@ jfp = (function(){
                     Array.prototype.slice.call(valueSet, begin, end);
     }
 
-    function maybe(defaultValue, userFn, testValue){
+    function shortCircuit(defaultValue, userFn, testValue){
         return (j.isTruthy(testValue) || testValue === 0) ?
             userFn(testValue) :
             defaultValue;
     }
 
-    function either(defaultValue, testValue){
-        return maybe(defaultValue, identity, testValue);
+    function maybe(value, type){
+        var typeOkay = typeof value === type;
+
+        return typeOkay || (!type && !!value) ? value : null;
+    }
+
+    function either(defaultValue, testValue, type){
+        return maybe(testValue, type) === null ? defaultValue : testValue;
     }
 
     function apply(userFn, args){
@@ -149,13 +155,13 @@ jfp = (function(){
     }
 
     function countArguments(userFn){
-        var params = maybe([], captureArguments, userFn);
+        var params = shortCircuit([], captureArguments, userFn);
 
         params = (params.length === 1 && params[0] === '') ? [] : params;
 
         return params.length;
     }
-    
+
     function execute(userFn){
         return j.apply(userFn, j.slice(1, arguments));
     }
@@ -171,10 +177,12 @@ jfp = (function(){
     j.maybe = maybe;
     j.partial = basePartial('left', basePartial, 'left');
     j.rpartial = basePartial('left', basePartial, 'right');
+    j.shortCircuit = shortCircuit;
     j.slice = slice;
     j.when = when;
 
 })(jfp);
+
 
 (function(j){
     'use strict';
@@ -510,7 +518,7 @@ jfp = (function(){
     //This is complicated and I don't expect people to grok it on first read.
     function curry(userFn){
         var args = j.slice(1, arguments),
-            argumentCount = j.maybe(0, j.countArguments, userFn),
+            argumentCount = j.shortCircuit(0, j.countArguments, userFn),
             appliedFn = (args.length < argumentCount) ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
             result = (!!userFn && args.length >= argumentCount) ? j.apply(userFn, args) : null;
 
@@ -586,12 +594,12 @@ jfp = (function(){
             return f(j.apply(g, j.slice(0, arguments)));
         };
     }
-    
+
     function compose(){
         var args = j.slice(0, arguments);
         return (args.length >= 1) ? reduce(compositor, args) : j.identity;
     }
-    
+
     function pipeline(){
         return j.apply(compose, j.slice(0, arguments).reverse());
     }

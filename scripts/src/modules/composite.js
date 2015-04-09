@@ -4,7 +4,7 @@
     //This is complicated and I don't expect people to grok it on first read.
     function curry(userFn){
         var args = j.slice(1, arguments),
-            argumentCount = j.maybe(0, j.countArguments, userFn),
+            argumentCount = j.shortCircuit(0, j.countArguments, userFn),
             appliedFn = (args.length < argumentCount) ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
             result = (!!userFn && args.length >= argumentCount) ? j.apply(userFn, args) : null;
 
@@ -80,12 +80,12 @@
             return f(j.apply(g, j.slice(0, arguments)));
         };
     }
-    
+
     function compose(){
         var args = j.slice(0, arguments);
         return (args.length >= 1) ? reduce(compositor, args) : j.identity;
     }
-    
+
     function pipeline(){
         return j.apply(compose, j.slice(0, arguments).reverse());
     }

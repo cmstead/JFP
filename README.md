@@ -26,19 +26,19 @@ Below is the list of planned breaking changes coming in v2.0
 
 *Breaking changes*
 
-- Maybe will be rewritten  a -> a | null to adhere to a Haskell analog of maybe
-- Pipeline will take values(array) as an initial argument and then pipeline the values through the provided functions in order
+- [x] Maybe will be rewritten  a -> a | null to adhere to a Haskell analog of maybe
+- [ ] Pipeline will take values(array) as an initial argument and then pipeline the values through the provided functions in order
 
 *New functions*
 
-- ShortCircuit will be added (and possibly retrofit into v1.x). ShortCircuit will replace the current definition of maybe.
-- MapOr This will map a set of predicates on to a set of values and map the output to or
-- MapAnd This is the and analog for mapOr
-- ComposeAsync A composition function for handling asynchronous functions
+- [x] ShortCircuit will be added (and possibly retrofit into v1.x). ShortCircuit will replace the current definition of maybe.
+- [ ] MapOr This will map a set of predicates on to a set of values and map the output to or
+- [ ] MapAnd This is the and analog for mapOr
+- [ ] ComposeAsync A composition function for handling asynchronous functions
 
 *Extended functionality*
 
-- Either will be extended to allow for a datatype to be specified for greater flexibility
+- [x] Either will be extended to allow for a datatype to be specified for greater flexibility
 
 A migration path will be outlined (and short)
 

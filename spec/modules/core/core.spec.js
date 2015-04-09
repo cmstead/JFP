@@ -57,31 +57,51 @@
 
     });
 
-    describe('maybe', function(){
+    describe('shortCircuit', function(){
 
         it('should return the default value if passed value is falsey', function(){
             var defaultValue = { test: 'test' };
-            expect(j.maybe(defaultValue, j.identity, null)).toBe(defaultValue);
+            expect(j.shortCircuit(defaultValue, j.identity, null)).toBe(defaultValue);
         });
 
         it('should return passed value if it is truey and function is identity', function(){
             var testObj = { test: 'test' };
-            expect(j.maybe('default', j.identity, testObj)).toBe(testObj);
+            expect(j.shortCircuit('default', j.identity, testObj)).toBe(testObj);
         });
 
         it('should call passed function with passed object', function(){
             var testObj = { test: 'test' },
                 spy = jasmine.createSpy('userFn');
-            j.maybe('test', spy, testObj);
+            j.shortCircuit('test', spy, testObj);
             expect(spy).toHaveBeenCalledWith(testObj);
         });
-        
+
         it('should execute the passed function if 0 is passed', function(){
             var spy = jasmine.createSpy('userFn');
-            j.maybe(0, spy, 0);
+            j.shortCircuit(0, spy, 0);
             expect(spy).toHaveBeenCalledWith(0);
         });
-        
+
+    });
+
+    describe('maybe', function(){
+
+        it('should return passed value when truthy', function(){
+            expect(j.maybe('test')).toBe('test');
+        });
+
+        it('should return false when passed value is falsey', function(){
+            expect(j.maybe(false)).toBe(null);
+        });
+
+        it('should return passed value when type matches provided type', function(){
+            expect(j.maybe(0, 'number')).toBe(0);
+        });
+
+        it('should return null if passed value is a type mismatch', function(){
+            expect(j.maybe('test', 'boolean')).toBe(null);
+        });
+
     });
 
     describe('either', function(){
@@ -91,79 +111,87 @@
             expect(j.either(defaultValue, null)).toBe(defaultValue);
         });
 
-        it('should return passed value if it is truey', function(){
+        it('should return passed value if it is truthy', function(){
             var testValue = { test: 'test' };
             expect(j.either('test', testValue)).toBe(testValue);
         });
 
+        it('should return default value if passed value is a type mismatch', function(){
+            expect(j.either('test', 1234, 'string')).toBe('test');
+        });
+
+        it('should return passed value if passed value is a type match', function(){
+            expect(j.either('test', 'foo', 'string')).toBe('foo');
+        });
+
     });
-    
+
     describe('partial', function(){
-        
+
         it('should return a function', function(){
             expect(typeof j.partial()).toBe('function');
         });
-        
+
         it('should call spy when returned function is called', function(){
             var spy = jasmine.createSpy('userFn');
             j.partial(spy)();
             expect(spy).toHaveBeenCalled();
         });
-        
+
         it('should call spy with applied values', function(){
             var spy = jasmine.createSpy('userFn');
             j.partial(spy, 1, 2)();
             expect(spy).toHaveBeenCalledWith(1, 2);
         });
-        
+
         it('should call spy with applied and new arguments', function(){
             var spy = jasmine.createSpy('userFn');
             j.partial(spy, 1, 2)(3, 4);
             expect(spy).toHaveBeenCalledWith(1, 2, 3, 4);
         });
-        
+
         it('should return returned functionValue', function(){
             function add(a, b){
                 return a + b;
             }
-            
+
             expect(j.partial(add, 3)(2)).toBe(5);
         });
-        
+
     });
 
     describe('rpartial', function(){
-        
+
         it('should return a function', function(){
             expect(typeof j.rpartial()).toBe('function');
         });
-        
+
         it('should call spy when returned function is called', function(){
             var spy = jasmine.createSpy('userFn');
             j.rpartial(spy)();
             expect(spy).toHaveBeenCalled();
         });
-        
+
         it('should call spy with applied values', function(){
             var spy = jasmine.createSpy('userFn');
             j.rpartial(spy, 1, 2)();
             expect(spy).toHaveBeenCalledWith(1, 2);
         });
-        
+
         it('should call spy with applied and new arguments', function(){
             var spy = jasmine.createSpy('userFn');
             j.rpartial(spy, 1, 2)(3, 4);
             expect(spy).toHaveBeenCalledWith(3, 4, 1, 2);
         });
-        
+
         it('should return returned functionValue', function(){
             function divide(a, b){
                 return a / b;
             }
-            
+
             expect(j.rpartial(divide, 2)(6)).toBe(3);
         });
-        
+
     });
 
     describe('curry', function(){
@@ -277,7 +305,7 @@
     });
 
     describe('when', function(){
-    
+
         it('should execute passed function when value evaluates to true', function(){
             var spy = jasmine.createSpy('spy');
             j.when(true, spy);
@@ -292,7 +320,7 @@
 
         it('should return result of executed function if value evaluates to true', function(){
             var returnedValue;
-            
+
             function return5(){
                 return 5;
             }
@@ -306,7 +334,7 @@
             var returnedValue = j.when(false, j.identity);
             expect(returnedValue).toBe(null);
         });
-        
+
         it('should call passed function with provided arguments if value is true', function(){
             var spy = jasmine.createSpy('spy');
 
@@ -316,31 +344,31 @@
         });
 
     });
-    
+
     describe('execute', function(){
-        
+
         it('should call passed function', function(){
             var spy = jasmine.createSpy('callback');
-            
+
             j.execute(spy);
-            
+
             expect(spy).toHaveBeenCalled();
         });
-        
+
         it('should return function output value', function(){
             function callback(){
                 return 'foo';
             }
-            
+
             expect(j.execute(callback)).toBe('foo');
         });
-        
+
         it('should call function with provided arguments', function(){
             var spy = jasmine.createSpy('spy');
             j.execute(spy, 1, 2, 3);
             expect(spy).toHaveBeenCalledWith(1, 2, 3);
         });
-        
+
     });
 
 })();
