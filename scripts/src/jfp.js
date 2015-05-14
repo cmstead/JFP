@@ -1,5 +1,7 @@
-jfp = (function(){
+function jfp(a, b, c){
     'use strict';
-
-    return {};
-})();
+    
+    var args = Array.prototype.slice.call(arguments);
+    
+    return jfp.apply(jfp.curry, args);
+}
