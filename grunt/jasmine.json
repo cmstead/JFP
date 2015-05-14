@@ -1,0 +1,23 @@
+{
+  "options": {
+    "specNameSuffix": "spec.js",
+    "useHelpers": false,
+    "stopOnFailure": false,
+
+    "reporters": {
+      "console": {
+        "colors": true,
+        "cleanStack": 1,
+        "verbosity": 3,
+        "listStyle": "indent",
+        "activity": false
+      }
+    }
+  },
+
+  "dist": {
+    "specs": [
+      "spec/modules/**/*.spec.js"
+    ]
+  }
+}

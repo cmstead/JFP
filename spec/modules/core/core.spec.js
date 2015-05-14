@@ -1,3 +1,6 @@
+var jfp = require('../../../dist/jfp.js'),
+    j = jfp;
+
 (function(){
     'use strict';
 
@@ -75,13 +78,13 @@
             j.maybe('test', spy, testObj);
             expect(spy).toHaveBeenCalledWith(testObj);
         });
-        
+
         it('should execute the passed function if 0 is passed', function(){
             var spy = jasmine.createSpy('userFn');
             j.maybe(0, spy, 0);
             expect(spy).toHaveBeenCalledWith(0);
         });
-        
+
     });
 
     describe('either', function(){
@@ -97,73 +100,73 @@
         });
 
     });
-    
+
     describe('partial', function(){
-        
+
         it('should return a function', function(){
             expect(typeof j.partial()).toBe('function');
         });
-        
+
         it('should call spy when returned function is called', function(){
             var spy = jasmine.createSpy('userFn');
             j.partial(spy)();
             expect(spy).toHaveBeenCalled();
         });
-        
+
         it('should call spy with applied values', function(){
             var spy = jasmine.createSpy('userFn');
             j.partial(spy, 1, 2)();
             expect(spy).toHaveBeenCalledWith(1, 2);
         });
-        
+
         it('should call spy with applied and new arguments', function(){
             var spy = jasmine.createSpy('userFn');
             j.partial(spy, 1, 2)(3, 4);
             expect(spy).toHaveBeenCalledWith(1, 2, 3, 4);
         });
-        
+
         it('should return returned functionValue', function(){
             function add(a, b){
                 return a + b;
             }
-            
+
             expect(j.partial(add, 3)(2)).toBe(5);
         });
-        
+
     });
 
     describe('rpartial', function(){
-        
+
         it('should return a function', function(){
             expect(typeof j.rpartial()).toBe('function');
         });
-        
+
         it('should call spy when returned function is called', function(){
             var spy = jasmine.createSpy('userFn');
             j.rpartial(spy)();
             expect(spy).toHaveBeenCalled();
         });
-        
+
         it('should call spy with applied values', function(){
             var spy = jasmine.createSpy('userFn');
             j.rpartial(spy, 1, 2)();
             expect(spy).toHaveBeenCalledWith(1, 2);
         });
-        
+
         it('should call spy with applied and new arguments', function(){
             var spy = jasmine.createSpy('userFn');
             j.rpartial(spy, 1, 2)(3, 4);
             expect(spy).toHaveBeenCalledWith(3, 4, 1, 2);
         });
-        
+
         it('should return returned functionValue', function(){
             function divide(a, b){
                 return a / b;
             }
-            
+
             expect(j.rpartial(divide, 2)(6)).toBe(3);
         });
-        
+
     });
 
     describe('curry', function(){
@@ -277,7 +280,7 @@
     });
 
     describe('when', function(){
-    
+
         it('should execute passed function when value evaluates to true', function(){
             var spy = jasmine.createSpy('spy');
             j.when(true, spy);
@@ -292,7 +295,7 @@
 
         it('should return result of executed function if value evaluates to true', function(){
             var returnedValue;
-            
+
             function return5(){
                 return 5;
             }
@@ -306,7 +309,7 @@
             var returnedValue = j.when(false, j.identity);
             expect(returnedValue).toBe(null);
         });
-        
+
         it('should call passed function with provided arguments if value is true', function(){
             var spy = jasmine.createSpy('spy');
 
@@ -316,31 +319,31 @@
         });
 
     });
-    
+
     describe('execute', function(){
-        
+
         it('should call passed function', function(){
             var spy = jasmine.createSpy('callback');
-            
+
             j.execute(spy);
-            
+
             expect(spy).toHaveBeenCalled();
         });
-        
+
         it('should return function output value', function(){
             function callback(){
                 return 'foo';
             }
-            
+
             expect(j.execute(callback)).toBe('foo');
         });
-        
+
         it('should call function with provided arguments', function(){
             var spy = jasmine.createSpy('spy');
             j.execute(spy, 1, 2, 3);
             expect(spy).toHaveBeenCalledWith(1, 2, 3);
         });
-        
+
     });
 
 })();

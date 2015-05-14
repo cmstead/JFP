@@ -1,8 +1,8 @@
 var cleanConfig = require('./grunt/clean.json'),
     concatConfig = require('./grunt/concat.json'),
     copyConfig = require('./grunt/copy.json'),
+    jasmine = require('./grunt/jasmine.json'),
     jshintConfig = require('./grunt/jshint.json'),
-    karmaConfig = require('./grunt/karma.json'),
     uglifyConfig = require('./grunt/uglify.json');
 
 module.exports = function(grunt){
@@ -12,8 +12,8 @@ module.exports = function(grunt){
         clean: cleanConfig,
         concat: concatConfig,
         copy: copyConfig,
+        jasmine_nodejs: jasmine,
         jshint: jshintConfig,
-        karma: karmaConfig,
         uglify: uglifyConfig
     });
 
@@ -24,17 +24,12 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-jasmine-nodejs');
 
     /* Register composite grunt tasks */
 
-    grunt.registerTask('test', ['jshint', 'karma:dev']);
-    grunt.registerTask('test-concat', ['karma:concat']);
-    grunt.registerTask('test-min', ['karma:min']);
-    grunt.registerTask('test-build', ['karma:concat', 'karma:min']);
+    grunt.registerTask('test', ['clean', 'concat', 'jshint', 'jasmine_nodejs']);
+    grunt.registerTask('build', ['clean', 'concat', 'jshint', 'jasmine_nodejs', 'uglify']);
 
-    grunt.registerTask('buildjs', ['concat', 'uglify']);
-    grunt.registerTask('build', ['clean', 'test', 'buildjs', 'copy', 'test-build']);
-
-    grunt.registerTask('default', ['test']);
+    grunt.registerTask('default', ['build']);
 };

@@ -1,3 +1,6 @@
+var jfp = require('../../dist/jfp.js'),
+    j = jfp;
+
 (function(){
 
     describe('copyArray', function(){

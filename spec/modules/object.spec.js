@@ -1,3 +1,6 @@
+var jfp = require('../../dist/jfp.js'),
+    j = jfp;
+
 (function(){
     'use strict';
 
@@ -18,7 +21,7 @@
         it('should return null if object.key is undefined.', function(){
             expect(j.pick('test', {})).toBe(null);
         });
-        
+
         //These are to ensure falsey values are preserved, except undefined
         it('should return false if object.key is false', function(){
             expect(j.pick('test', { test: false })).toBe(false);
@@ -90,7 +93,7 @@
     });
 
     describe('merge', function(){
-       
+
         it('should return null when no arguments are provided', function(){
             expect(j.merge()).toBe(null);
         });
