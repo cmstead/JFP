@@ -82,9 +82,11 @@ function jfp(a, b, c){
     }
 
     function slice(begin, valueSet, end){
+        var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
+
         return j.not(j.isTruthy(end)) ?
-                    Array.prototype.slice.call(valueSet, begin) :
-                    Array.prototype.slice.call(valueSet, begin, end);
+                    Array.prototype.slice.call(values, begin) :
+                    Array.prototype.slice.call(values, begin, end);
     }
 
     function maybe(defaultValue, userFn, testValue){
@@ -157,7 +159,7 @@ function jfp(a, b, c){
 
         return params.length;
     }
-    
+
     function execute(userFn){
         return j.apply(userFn, j.slice(1, arguments));
     }
@@ -177,6 +179,7 @@ function jfp(a, b, c){
     j.when = when;
 
 })(jfp);
+
 
 (function(j){
     'use strict';
