@@ -37,7 +37,12 @@ Below is the list of planned breaking changes coming in v2.0
 
 - [x] Either will be extended to allow for a datatype to be specified for greater flexibility
 
-A migration path will be outlined (and short)
+*Migration Path*
+
+Migrating from 1.2.x to 2.0.0 is pretty straightforward. Following are the changes that need to be made:
+
+- Maybe can be renamed to shortCircuit.
+- Pipeline will need all arguments moved inside the function call and ordered with value first. All functions are listed in execution order.
 
 
 ##Update log
