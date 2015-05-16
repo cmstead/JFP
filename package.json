@@ -15,7 +15,6 @@
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-uglify": "^0.6.0",
     "grunt-jasmine-nodejs": "^1.4.0",
-    "jshint": "^2.5.6",
     "uglify-js": "^2.4.15"
   }
 }
