@@ -6,7 +6,7 @@
     },
     "dist": {
         "files": {
-            "dist/jfp.min.js": ["./scripts/concat/jfp.js"]
+            "dist/jfp.min.js": ["./dist/jfp.js"]
         }
     }
 }

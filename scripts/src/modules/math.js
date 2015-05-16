@@ -8,7 +8,7 @@
                 recur(current + j.first(valueSet), j.rest(valueSet));
     }
     
-    function add(){
+    function add(a, b){
         return j.recur(adder, 0, j.slice(0, arguments));
     }
     

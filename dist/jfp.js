@@ -1,7 +1,18 @@
-jfp = (function(){
+var jfp = (function(){
     'use strict';
-
-    return {};
+    
+    function resolveFunction(functionValue){
+        return typeof functionValue === 'string' ? jfp[functionValue] : functionValue;
+    }
+    
+    return function(){
+        var args = jfp.slice(0, arguments);
+        
+        args[0] = resolveFunction(args[0]);
+        
+        return jfp.apply(jfp.curry, args);
+    };
+    
 })();
 
 (function(j){
@@ -80,9 +91,11 @@ jfp = (function(){
     }
 
     function slice(begin, valueSet, end){
+        var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
+
         return j.not(j.isTruthy(end)) ?
-                    Array.prototype.slice.call(valueSet, begin) :
-                    Array.prototype.slice.call(valueSet, begin, end);
+                    Array.prototype.slice.call(values, begin) :
+                    Array.prototype.slice.call(values, begin, end);
     }
 
     function shortCircuit(defaultValue, userFn, testValue){
@@ -645,7 +658,7 @@ jfp = (function(){
                 recur(current + j.first(valueSet), j.rest(valueSet));
     }
     
-    function add(){
+    function add(a, b){
         return j.recur(adder, 0, j.slice(0, arguments));
     }
     
@@ -836,23 +849,6 @@ jfp = (function(){
     j.less = less;
 
 })(jfp);
-
-//(function(j){
-
-    //function shimMode(){
-    //    for(var key in j){
-    //        window[key] = j[key];
-    //    }
-    //}
-
-    //This provides the option to run this library without the j object declared.
-    //This WILL dirty up the window object and potentially collide with reused names.
-    //This might change the way you code forever.
-    //if(!!window){
-    //    j.shimMode = shimMode;
-    //}
-
-//})(jfp);
 
 var j = jfp;
 

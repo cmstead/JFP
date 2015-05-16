@@ -1,3 +1,6 @@
+var jfp = require('../../dist/jfp.js'),
+    j = jfp;
+
 (function(){
 
     describe('copyArray', function(){
@@ -74,13 +77,13 @@
         it('should exit if function returns false', function(){
             var spy = jasmine.createSpy('userFn');
             j.each(function(){ spy(); return false; }, [1, 2, 3, 4]);
-            expect(spy.callCount).toBe(1);
+            expect(spy.calls.count()).toBe(1);
         });
 
         it('should call passed function for each value in array', function(){
             var spy = jasmine.createSpy('userFn');
             j.each(spy, [1, 2, 3, 4]);
-            expect(spy.callCount).toBe(4);
+            expect(spy.calls.count()).toBe(4);
         });
 
     });
@@ -94,7 +97,7 @@
         it('should call function for each element in array argument', function(){
             var spy = jasmine.createSpy('userFn');
             j.map(spy, [1, 2, 3, 4]);
-            expect(spy.callCount).toBe(4);
+            expect(spy.calls.count()).toBe(4);
         });
 
         it('should return a function with mapped values', function(){
@@ -262,7 +265,7 @@
         it('should call filter function for each element', function(){
             var spy = jasmine.createSpy('filterPredicate');
             j.filter(spy, [1, 2, 3]);
-            expect(spy.callCount).toBe(3);
+            expect(spy.calls.count()).toBe(3);
         });
 
         it('should filter array based on filter predicate', function(){

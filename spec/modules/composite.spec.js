@@ -1,6 +1,9 @@
+var jfp = require('../../dist/jfp.js'),
+    j = jfp;
+
 (function(){
     'use strict'
-    
+
     describe('compose', function(){
 
         it('should return identity function if no function is passed', function(){
@@ -34,25 +37,25 @@
         });
 
     });
-    
+
     describe('pipline', function(){
-        
+
         it('should return a function', function(){
             expect(typeof j.pipeline()).toBe('function');
         });
-        
+
         it('should execute composed functions in left-right order', function(){
             var add5 = j.partial(j.add, 5),
                 multiply2 = j.partial(j.multiply, 2),
                 add2 = j.partial(j.add, 2);
-                
+
             expect(j.pipeline(add5, multiply2, add2)(0)).toBe(12)
         });
-        
+
     });
 
     describe('compact', function(){
-        
+
         it('should remove falsey values from an array', function(){
             var testArray = [1, 2, 0, false, undefined, null, true];
 

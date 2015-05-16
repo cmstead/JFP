@@ -45,10 +45,11 @@ A migration path will be outlined (and short)
 
 ##Update log
 
-###v1.2.3 (In progress)
+###v1.2.3
 
 Updates:
 
+- jfp is a shorthand function for currying
 - execute -- handle passed arguments instead of simply calling provided function
 
 ###v1.2.2 (Technically this should have been 1.3 but I couldn't justify it for one function)

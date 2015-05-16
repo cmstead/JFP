@@ -6,9 +6,11 @@
     }
 
     function slice(begin, valueSet, end){
+        var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
+
         return j.not(j.isTruthy(end)) ?
-                    Array.prototype.slice.call(valueSet, begin) :
-                    Array.prototype.slice.call(valueSet, begin, end);
+                    Array.prototype.slice.call(values, begin) :
+                    Array.prototype.slice.call(values, begin, end);
     }
 
     function shortCircuit(defaultValue, userFn, testValue){

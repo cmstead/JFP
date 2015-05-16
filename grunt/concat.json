@@ -15,6 +15,6 @@
             "scripts/src/modules/math-predicate.js",
             "scripts/src/jfp.expose.js"
         ],
-        "dest": "scripts/concat/jfp.js"
+        "dest": "dist/jfp.js"
     }
 }

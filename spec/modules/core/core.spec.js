@@ -1,3 +1,6 @@
+var jfp = require('../../../dist/jfp.js'),
+    j = jfp;
+
 (function(){
     'use strict';
 
@@ -279,7 +282,7 @@
             }
 
             j.recur(recursiveFn);
-            expect(spy.callCount).toBe(2);
+            expect(spy.calls.count()).toBe(2);
         });
 
         it('should call passed function with initial values', function(){
