@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "files": ["scripts/src/**/*.js", "spec/**/*.spec.js"],
+    "tasks": ["build"],
+    "options": {
+      "spawn": false
+    }
+  }
+}

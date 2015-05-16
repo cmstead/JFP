@@ -3,7 +3,8 @@ var cleanConfig = require('./grunt/clean.json'),
     copyConfig = require('./grunt/copy.json'),
     jasmine = require('./grunt/jasmine.json'),
     jshintConfig = require('./grunt/jshint.json'),
-    uglifyConfig = require('./grunt/uglify.json');
+    uglifyConfig = require('./grunt/uglify.json'),
+    watch = require('./grunt/watch.json');
 
 module.exports = function(grunt){
     grunt.initConfig({
@@ -14,7 +15,8 @@ module.exports = function(grunt){
         copy: copyConfig,
         jasmine_nodejs: jasmine,
         jshint: jshintConfig,
-        uglify: uglifyConfig
+        uglify: uglifyConfig,
+        watch: watch
     });
 
     /* Load grunt task adapters */
@@ -24,12 +26,14 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-jasmine-nodejs');
 
     /* Register composite grunt tasks */
 
     grunt.registerTask('test', ['clean', 'concat', 'jshint', 'jasmine_nodejs']);
     grunt.registerTask('build', ['clean', 'concat', 'jshint', 'jasmine_nodejs', 'uglify']);
+    grunt.registerTask('build-watch', ['build', 'watch']);
 
     grunt.registerTask('default', ['build']);
 };

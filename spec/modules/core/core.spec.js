@@ -89,20 +89,20 @@ var jfp = require('../../../dist/jfp.js'),
 
     describe('maybe', function(){
 
-        it('should return passed value when truthy', function(){
-            expect(j.maybe('test')).toBe('test');
-        });
-
-        it('should return false when passed value is falsey', function(){
+        it('should return null if value is falsey', function(){
             expect(j.maybe(false)).toBe(null);
         });
 
-        it('should return passed value when type matches provided type', function(){
-            expect(j.maybe(0, 'number')).toBe(0);
+        it('should return value if value is truthy', function(){
+            expect(j.maybe(true)).toBe(true);
         });
 
-        it('should return null if passed value is a type mismatch', function(){
-            expect(j.maybe('test', 'boolean')).toBe(null);
+        it('should return null if value does not match type', function(){
+            expect(j.maybe('foo', 'boolean')).toBe(null);
+        });
+
+        it('should return value if it matches type', function(){
+            expect(j.maybe('foo', 'string')).toBe('foo');
         });
 
     });

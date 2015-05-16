@@ -38,10 +38,10 @@ var jfp = require('../../dist/jfp.js'),
 
     });
 
-    describe('pipline', function(){
+    describe('pipeline', function(){
 
-        it('should return a function', function(){
-            expect(typeof j.pipeline()).toBe('function');
+        it('should return passed value when no functions are passed', function(){
+            expect(j.pipeline('foo')).toBe('foo');
         });
 
         it('should execute composed functions in left-right order', function(){
@@ -49,7 +49,7 @@ var jfp = require('../../dist/jfp.js'),
                 multiply2 = j.partial(j.multiply, 2),
                 add2 = j.partial(j.add, 2);
 
-            expect(j.pipeline(add5, multiply2, add2)(0)).toBe(12)
+            expect(j.pipeline(0, add5, multiply2, add2)).toBe(12)
         });
 
     });

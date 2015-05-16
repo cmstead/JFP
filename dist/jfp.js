@@ -613,8 +613,8 @@ var jfp = (function(){
         return (args.length >= 1) ? reduce(compositor, args) : j.identity;
     }
 
-    function pipeline(){
-        return j.apply(compose, j.slice(0, arguments).reverse());
+    function pipeline(value){
+        return j.apply(compose, j.slice(1, arguments).reverse())(value);
     }
 
     function unique(valueSet){
