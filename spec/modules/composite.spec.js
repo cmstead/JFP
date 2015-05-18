@@ -111,4 +111,20 @@ var jfp = require('../../dist/jfp.js'),
 
     });
 
+    describe('partialReverse', function(){
+        
+        it('should return a partially applied function', function(){
+            var spy = jasmine.createSpy('spy');
+            j.partialReverse(spy, 'a', 'b')();
+            expect(spy).toHaveBeenCalledWith('a', 'b');
+        });
+        
+        it('should reverse any secondary arguments', function(){
+            var spy = jasmine.createSpy('spy');
+            j.partialReverse(spy, 'a', 'b')('c', 'd', 'e');
+            expect(spy).toHaveBeenCalledWith('a', 'b', 'e', 'd', 'c');
+        });
+        
+    });
+
 })();

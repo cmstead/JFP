@@ -75,6 +75,13 @@
         };
     }
 
+    function reverseArgs(userFn){
+        return function(){
+            var args = j.slice(0, arguments).reverse();
+            j.apply(userFn, args);
+        };
+    }
+
     function captureArguments(userFn){
         return userFn.toString()
             .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
@@ -104,6 +111,7 @@
     j.identity = identity;
     j.maybe = maybe;
     j.partial = basePartial('left', basePartial, 'left');
+    j.reverseArgs = reverseArgs;
     j.rpartial = basePartial('left', basePartial, 'right');
     j.shortCircuit = shortCircuit;
     j.slice = slice;

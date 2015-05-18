@@ -160,6 +160,13 @@ var jfp = (function(){
         };
     }
 
+    function reverseArgs(userFn){
+        return function(){
+            var args = j.slice(0, arguments).reverse();
+            j.apply(userFn, args);
+        };
+    }
+
     function captureArguments(userFn){
         return userFn.toString()
             .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
@@ -189,6 +196,7 @@ var jfp = (function(){
     j.identity = identity;
     j.maybe = maybe;
     j.partial = basePartial('left', basePartial, 'left');
+    j.reverseArgs = reverseArgs;
     j.rpartial = basePartial('left', basePartial, 'right');
     j.shortCircuit = shortCircuit;
     j.slice = slice;
@@ -634,11 +642,20 @@ var jfp = (function(){
         return finalValues;
     }
 
+    function partialReverse(){
+        var args = j.slice(0, arguments),
+            partialAndReverse = j.compose(j.reverseArgs, j.partial);
+            
+        return j.apply(partialAndReverse, args);
+    }
+
+
     j.and = and;
     j.compact = j.partial(j.filter, j.isTruthy);
     j.compose = compose;
     j.curry = curry;
     j.or = or;
+    j.partialReverse = partialReverse;
     j.pipeline = pipeline;
     j.recur = recur;
     j.reduce = reduce;

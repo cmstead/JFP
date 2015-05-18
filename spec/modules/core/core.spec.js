@@ -374,4 +374,45 @@ var jfp = require('../../../dist/jfp.js'),
 
     });
 
+    describe('reverseArgs', function(){
+        
+        it('should return a function', function(){
+            var spy = jasmine.createSpy('spy');
+            expect(typeof j.reverseArgs(spy)).toBe('function');
+        });
+        
+        it('should return a callable wrapper around passed function', function(){
+            var spy = jasmine.createSpy('spy');
+            
+            j.reverseArgs(spy)();
+            
+            expect(spy).toHaveBeenCalled();
+        });
+        
+        it('should return a callable wrapper which passes arguments through to original function', function(){
+            var spy = jasmine.createSpy('spy');
+            
+            j.reverseArgs(spy)('a');
+            
+            expect(spy).toHaveBeenCalledWith('a');
+        });
+        
+        it('should return a callable wrapper which reverses two arguments through to original function', function(){
+            var spy = jasmine.createSpy('spy');
+            
+            j.reverseArgs(spy)('a', 'b');
+            
+            expect(spy).toHaveBeenCalledWith('b', 'a');
+        });
+        
+        it('should return a callable wrapper which reverses all arguments through to original function', function(){
+            var spy = jasmine.createSpy('spy');
+            
+            j.reverseArgs(spy)('a', 'b', 'c', 'd');
+            
+            expect(spy).toHaveBeenCalledWith('d', 'c', 'b', 'a');
+        });
+        
+    });
+    
 })();
