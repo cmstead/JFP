@@ -19,13 +19,15 @@
             defaultValue;
     }
 
-    function maybe(value, type){
-        var typeOkay = typeof value === type;
+    function maybe(value){
+        var type = arguments[1],
+            typeOkay = typeof value === type;
 
         return typeOkay || (!type && !!value) ? value : null;
     }
 
-    function either(defaultValue, testValue, type){
+    function either(defaultValue, testValue){
+        var type = arguments[2];
         return maybe(testValue, type) === null ? defaultValue : testValue;
     }
 
