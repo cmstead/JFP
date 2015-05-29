@@ -1,10 +1,12 @@
 {
-    "options": {
-        "banner": "/*! <%= pkg.name %> <%= grunt.template.today('dd-mm-yyyy') %> */\n",
-        "compress": false,
-        "mangle": false
-    },
     "dist": {
+        "options": {
+            "banner": "/*! <%= pkg.name %> <%= grunt.template.today('dd-mm-yyyy') %> */\n",
+            "compress": false,
+            "mangle": false,
+            "sourceMap": true,
+            "sourceMapIncludeSources": true
+        },
         "files": {
             "dist/jfp.min.js": ["./dist/jfp.js"]
         }

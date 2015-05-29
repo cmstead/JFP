@@ -107,11 +107,20 @@
         return finalValues;
     }
 
+    function partialReverse(){
+        var args = j.slice(0, arguments),
+            partialAndReverse = j.compose(j.reverseArgs, j.partial);
+            
+        return j.apply(partialAndReverse, args);
+    }
+
+
     j.and = and;
     j.compact = j.partial(j.filter, j.isTruthy);
     j.compose = compose;
     j.curry = curry;
     j.or = or;
+    j.partialReverse = partialReverse;
     j.pipeline = pipeline;
     j.recur = recur;
     j.reduce = reduce;
