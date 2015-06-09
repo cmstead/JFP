@@ -38,14 +38,17 @@
         return recurValue;
     }
 
-    function reduce(userFn, values){
+    function reduce(userFn, values, initialState){
+        var initialValue = j.either(j.first(values), initialState),
+            remainder = initialValue === initialState ? values : j.rest(values);
+            
         function reducer(recur, reduction, collection){
             return (collection.length) ?
                 recur(userFn(reduction, j.first(collection)), j.rest(collection)) :
                 reduction;
         }
 
-        return (!!values && values.length > 0) ? recur(reducer, j.first(values), j.rest(values)) : null;
+        return (!!values && values.length > 0) ? recur(reducer, initialValue, remainder) : null;
     }
 
     //Performs 'and' operation on valueSet

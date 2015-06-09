@@ -238,6 +238,14 @@ var jfp = require('../../dist/jfp.js'),
             expect(j.reduce(multiply, [1, 2, 3, 4])).toBe(24);
         });
 
+        it('should accept an initial condition', function(){
+            function add(a, b){
+                return a + b;
+            }
+            
+            expect(j.reduce(add, [1, 2, 3, 4], 5)).toBe(15);
+        });
+
     });
 
     describe('take', function(){
