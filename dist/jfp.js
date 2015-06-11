@@ -654,11 +654,23 @@ var jfp = (function(){
         return j.apply(partialAndReverse, args);
     }
 
+    function keyDeref(baseObj, key){
+        return j.isNull(baseObj) || j.isUndefined(baseObj[key]) ? null : baseObj[key];
+    }
+
+    function deref(baseData, key, defaultValue){
+        var keyTokens = j.either('', key).split('.'),
+            safeData = j.isUndefined(baseData) ? null : baseData,
+            outputData = j.isTruthy(key) ? j.reduce(keyDeref, keyTokens, safeData) : safeData;
+        
+        return outputData === null && !j.isUndefined(defaultValue) ? defaultValue : outputData;
+    }
 
     j.and = and;
     j.compact = j.partial(j.filter, j.isTruthy);
     j.compose = compose;
     j.curry = curry;
+    j.deref = deref;
     j.or = or;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;

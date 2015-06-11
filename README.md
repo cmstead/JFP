@@ -31,6 +31,7 @@ Below is the list of planned breaking changes coming in v2.0
 
 *New functions*
 
+- [x] Deref will take an object, a dot-separated key and a default and return either the dereferenced value, null or default if provided.
 - [x] ShortCircuit will be added (and possibly retrofit into v1.x). ShortCircuit will replace the current definition of maybe.
 - [x] ReverseArgs returns a wrapper function around an original function which reverses all arguments passed in
 - [x] PartialReverse returns a reverseArgs wrapped partial application of original function

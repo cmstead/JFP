@@ -126,5 +126,49 @@ var jfp = require('../../dist/jfp.js'),
         });
         
     });
+    
+    describe('deref', function(){
+        
+        var testData;
+        
+        beforeEach(function(){
+            testData = {
+                test1: {
+                    test2: [
+                        { test3: 'foo' },
+                        { test3: 'bar' },
+                        { test3: 'baz' },
+                        { test3: 'quux' }
+                    ]
+                }
+            };
+        });
+        
+        it('should return provided value', function(){
+            var originalData = {}
+            expect(j.deref(originalData)).toBe(originalData);
+        });
+        
+        it('should return null if data is falsey', function(){
+            expect(j.deref()).toBe(null);
+        });
+        
+        it('should dereference a single key in ', function(){
+            expect(j.deref(testData, 'test1')).toBe(testData.test1);
+        });
+        
+        it('should dereference a delimited key', function(){
+            expect(j.deref(testData, 'test1.test2')).toBe(testData.test1.test2);
+        });
+        
+        it('should dereference numeric keys', function(){
+            expect(j.deref(testData, 'test1.test2.1')).toBe(testData.test1.test2[1]);
+        });
+        
+        it('should return default value if return value would be null', function(){
+            expect(j.deref(null, null, 'foo')).toBe('foo');
+        });
+        
+    });
 
 })();
