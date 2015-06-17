@@ -170,6 +170,7 @@ declare module j {
 		
 	}
 	
+	//Conditional functions
 	interface JfpStatic {
 		
 		/**
@@ -177,7 +178,7 @@ declare module j {
 		 * @param defaultValue Default value
 		 * @param preferredValue Preferred value
 		 */
-		 either(defaultValue: any, preferredValue: any): any;
+		either(defaultValue: any, preferredValue: any): any;
 		
 		/**
 		 * Returns provided value if truthy or matches datatype, otherwise returns default value
@@ -185,7 +186,7 @@ declare module j {
 		 * @param preferredValue Preferred value
 		 * @param datatype Type preferred value should be
 		 */
-		 either(defaultValue: any, preferredValue: any, datatype: string): any;
+		either(defaultValue: any, preferredValue: any, datatype: string): any;
 		
 		/**
 		 * Returns preferred value if truthy, otherwise returns default value
@@ -193,7 +194,7 @@ declare module j {
 		 * @param preferredValue Preferred value
 		 * @param predicateValue Boolean switch to return default or preferred value
 		 */
-		 eitherIf(defaultValue: any, preferredValue: any, predicateValue: boolean): any;
+		eitherIf(defaultValue: any, preferredValue: any, predicateValue: boolean): any;
 		
 		/**
 		 * Returns provided value if truthy, otherwise returns default value
@@ -201,36 +202,124 @@ declare module j {
 		 * @param preferredValue Preferred value
 		 * @param predicate Predicate function preferred value is tested against
 		 */
-		 eitherWhen(defaultValue: any, preferredValue: any, predicate: (value: any) => boolean): any;
+		eitherWhen(defaultValue: any, preferredValue: any, predicate: (value: any) => boolean): any;
 		 
-		 /**
-		  * Returns preferred value if truthy, otherwise null
-		  * @param preferredValue Preferred value to check
-		  */
-		  maybe(preferredValue: any): any;
+		/**
+		 * Returns preferred value if truthy, otherwise null
+		 * @param preferredValue Preferred value to check
+		 */
+		maybe(preferredValue: any): any;
 		
-		 /**
-		  * Returns preferred value if truthy or matches datatype, otherwise null
-		  * @param preferredValue Preferred value to check
-		  * @param datatype Datatype to match
-		  */
-		  maybe(preferredValue: any, datatype: string): any;
+		/**
+		 * Returns preferred value if truthy or matches datatype, otherwise null
+		 * @param preferredValue Preferred value to check
+		 * @param datatype Datatype to match
+		 */
+		maybe(preferredValue: any, datatype: string): any;
 		  
-		  /**
-		   * Executes function when condition is true
-		   * @param predicateValue Value to set behavior execution
-		   * @param userFunction Behavior to execute
-		   */
-		   when(predicateValue: boolean, userFunction: Function): any;
+		/**
+		 * Executes function when condition is true
+		 * @param predicateValue Value to set behavior execution
+		 * @param userFunction Behavior to execute
+		 */
+		when(predicateValue: boolean, userFunction: Function): any;
 		
-		  /**
-		   * Executes function when condition is true
-		   * @param predicateValue Value to set behavior execution
-		   * @param userFunction Behavior to execute
-		   * @param ...arguments arguments for userFunction
-		   */
-		   when(predicateValue: boolean, userFunction: Function, ...arguments: any[]): any;
+		/**
+		 * Executes function when condition is true
+		 * @param predicateValue Value to set behavior execution
+		 * @param userFunction Behavior to execute
+		 * @param ...arguments arguments for userFunction
+		 */
+		when(predicateValue: boolean, userFunction: Function, ...arguments: any[]): any;
 		
+	}
+	
+	interface JfpStatic{
+		
+		/**
+		 * Converts value to decimal equivalent returns null if non-convertable
+		 * @param value String or number value to convert
+		 */
+		toDec(value: string): number;
+		toDec(value: number): number;
+		
+		/**
+		 * Converts an object literal into an array of values
+		 * @param value Object literal
+		 */
+		toValues(value: Object): Array<any>;
+
+	}
+	
+	interface JfpStatic{
+		
+		/**
+		 * Applies an array of values to a function
+		 * @param userFn Function to perform application against
+		 * @param values Array of arguments for function
+		 */
+		apply(userFn: Function, values: Array<any>): void;
+		
+		/**
+		 * Composes a set of functions into a new single function
+		 * @param ...arguments Arguments for compose
+		 */
+		compose(...arguments: Array<Function>): Function
+	
+		/**
+		 * Counts the number of arguments in a function declaration
+		 * @param userFn Function to count arguments of
+		 */
+		countArguments(userFn: Function): number;
+		
+		/**
+		 * Curries function until all arguments are satisfied
+		 * @param userFn Function to curry
+		 * @param ...argments Initial arguments for currying application
+		 */
+		curry(userFn: Function): Function;
+		curry(userFn: Function): any;
+		curry(userFn: Function, ...arguments: Array<any>): Function;
+		curry(userFn: Function, ...arguments: Array<any>): any;
+		
+		/**
+		 * Returns value passed to the function
+		 * @param value Value to return
+		 */
+		identity(value: any): any;
+		
+		/**
+		 * Applies values to a function and returns partially applied function
+		 * @param userFn Function to apply values to
+		 * @param ...arguments Values to apply
+		 */
+		partial(userFn: Function): Function;
+		partial(userFn: Function, ...arguments: Array<any>): Function;
+		
+		/**
+		 * Pipelines or chains functions producing a single final output
+		 * @param value Initial condition for function pipelining
+		 * @param ...arguments Functions to chain/pipeline
+		 */
+		pipeline(value: any, ...arguments: Array<Function>): any;
+		pipeline(value: Array<any>, ...arguments: Array<Function>): any;
+		pipeline(value: Object, ...arguments: Array<Function>): any;
+		
+		/**
+		 * Recursion function to allow for tail-optimized recursion
+		 * @param userFn Function to recur on
+		 * @param ...arguments Initial condition arguments
+		 */
+		recur(userFn: Function): any;
+		recur(userFn: Function, ...arguments: Array<any>): any;
+		
+		/**
+		 * Performs a right partial application on a function
+		 * @param userFn Function to apply arguments
+		 * @param ...arguments Inital arguments
+		 */
+		rpartial(userFn: Function): any;
+		rpartial(userFn: Function, ...arguments: Array<any>): any;
 	}
 	
 }
