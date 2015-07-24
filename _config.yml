@@ -1,0 +1,13 @@
+# Site settings
+title: JFP - Javascript Function Processor
+email: cmstead@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  JFP, the Javascript Function Processor is a language as a library functional
+  programming utility for Javascript
+baseurl: "/JFP" # the subpath of your site, e.g. /blog/
+url: "http://cmstead.github.io" # the base hostname & protocol for your site
+twitter_username: cm_stead
+github_username:  cmstead
+
+# Build settings
+markdown: kramdown

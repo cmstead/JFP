@@ -1,7 +1,0 @@
-{
-    "dist": {
-        "options": {
-            "config": "config.rb"
-        }
-    }
-}
