@@ -4,10 +4,10 @@
     <title>JFP - Javascript Function Processor</title>
     <description>JFP, the Javascript Function Processor is a language as a library functional programming utility for Javascript
 </description>
-    <link>http://cmstead.github.io/</link>
-    <atom:link href="http://cmstead.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 24 Jul 2015 01:37:28 +0000</pubDate>
-    <lastBuildDate>Fri, 24 Jul 2015 01:37:28 +0000</lastBuildDate>
+    <link>http://cmstead.github.io/JFP/</link>
+    <atom:link href="http://cmstead.github.io/JFP/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 23 Jul 2015 21:26:08 -0700</pubDate>
+    <lastBuildDate>Thu, 23 Jul 2015 21:26:08 -0700</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
   </channel>
