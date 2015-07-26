@@ -2,4 +2,4 @@
 layout: default
 ---
 
-{% include index.md %}
+{% include content/index.md %}

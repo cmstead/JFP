@@ -55,6 +55,7 @@
     font-size: 124px;
     font-weight: bold;
     position: absolute;
+    margin-top: -30px;
     z-index: -1;
 
     @include scale(1.25, 1);
@@ -76,6 +77,10 @@
   border-bottom: 3px solid $menu-border;
   display: block;
   padding: 15px;
+
+  .menu{
+    margin: 0;
+  }
 
   li{
     display: inline-block;

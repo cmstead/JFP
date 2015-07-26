@@ -47,17 +47,17 @@
     </div>
     <div class="head-wrapper">
         <div class="lambda">&lambda;</div>
-        <h1><a href="#/">JFP: Javascript Function Processor</a></h1>
+        <h1><a href="/">JFP: Javascript Function Processor</a></h1>
     </div>
     <div class="menu-wrapper">
         <ul class="menu">
-            <li><a href="#/documents/array">Array</a></li>
-            <li><a href="#/documents/conditional">Conditional</a></li>
-            <li><a href="#/documents/conversion">Conversion</a></li>
-            <li><a href="#/documents/core">Core</a></li>
-            <li><a href="#/documents/math">Math</a></li>
-            <li><a href="#/documents/object">Object</a></li>
-            <li><a href="#/documents/predicate">Predicate</a></li>
+            <li><a href="array/">Array</a></li>
+            <li><a href="/conditional/">Conditional</a></li>
+            <li><a href="/conversion/">Conversion</a></li>
+            <li><a href="/core/">Core</a></li>
+            <li><a href="/math/">Math</a></li>
+            <li><a href="/object/">Object</a></li>
+            <li><a href="/predicate/">Predicate</a></li>
         </ul>
     </div>
 </header>
@@ -65,7 +65,41 @@
 
 
     <div class="body-container">
-        <h1 id="foo">FOO</h1>
+        <h2 id="a-different-kind-of-functional-library">A different kind of functional library…</h2>
+
+<p>The Javascript Function Processor (JFP) is a different kind of functional library.  Like Lodash and Underscore,
+JFP provides common functions like map, filter, partial, compose and so on.  Unlike Lodash and Underscore,
+JFP is designed around the idea that functions are going to be used more like one would program in
+Lisp, Haskell or other functional languages.</p>
+
+<p>The driving principles of JFP are as follows:</p>
+
+<ol>
+  <li>Be JFP all the way down</li>
+  <li>Design the interface to answer common needs first</li>
+  <li>Be the least surprising to the user</li>
+</ol>
+
+<p>To be JFP all the way down, the library should either solve a problem in the best way possible and
+only solve the problem once. Each subsequent time the solution is needed, JFP should look inward
+to use the abstraction already created to expose the same efficiencies.  Beyond this, by
+using JFP to solve the problems needed to extend the library, it introduces a guarantee
+that the internals of JFP are used early so problems and needs are resolved as soon as possible.</p>
+
+<p><strong>JFP dogfoods JFP.</strong></p>
+
+<p>JFP is designed with common uses and needs addressed first.  This means even if the interface may seem
+ordered in an unexpected way, the goal is to make it easier to accomplish tasks and create useful abstractions
+with less effort.  Ideally, using JFP should simplify programs and clarify your workflow.</p>
+
+<p><strong>JFP is designed for ease of use.</strong></p>
+
+<p>When JFP is used, function interactions should not surprise you. Given a particular input, every JFP
+function should produce what the user expects. If something doesn’t resolve as expected, it is less likely
+the function is doing something intentionally surprising and more likely the result of a bug.</p>
+
+<p><strong>JFP is as transparent as possible.</strong></p>
+
 
     </div>
 
