@@ -47,17 +47,17 @@
     </div>
     <div class="head-wrapper">
         <div class="lambda">&lambda;</div>
-        <h1><a href="/">JFP: Javascript Function Processor</a></h1>
+        <h1><a href="/JFP/">JFP: Javascript Function Processor</a></h1>
     </div>
     <div class="menu-wrapper">
         <ul class="menu">
-            <li><a href="array/">Array</a></li>
-            <li><a href="/conditional/">Conditional</a></li>
-            <li><a href="/conversion/">Conversion</a></li>
-            <li><a href="/core/">Core</a></li>
-            <li><a href="/math/">Math</a></li>
-            <li><a href="/object/">Object</a></li>
-            <li><a href="/predicate/">Predicate</a></li>
+            <li><a href="/JFP/array/">Array</a></li>
+            <li><a href="/JFP/conditional/">Conditional</a></li>
+            <li><a href="/JFP/conversion/">Conversion</a></li>
+            <li><a href="/JFP/core/">Core</a></li>
+            <li><a href="/JFP/math/">Math</a></li>
+            <li><a href="/JFP/object/">Object</a></li>
+            <li><a href="/JFP/predicate/">Predicate</a></li>
         </ul>
     </div>
 </header>
@@ -65,7 +65,478 @@
 
 
     <div class="body-container">
-        
+        <h2 id="predicate-functions">Predicate Functions</h2>
+
+<p><strong>and</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] {boolean} arguments</li>
+  <li>Description: Checks that all provided values are truthy</li>
+</ul>
+
+<h4 id="example">Example</h4>
+
+<pre><code>j.and();
+
+//true
+
+j.and(true, 1);
+
+//true
+
+j.and(true, false);
+
+//false
+</code></pre>
+
+<p><strong>isArray</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is an array, otherwise false</li>
+</ul>
+
+<h4 id="example-1">Example</h4>
+
+<pre><code>j.isArray([]);
+
+//true
+
+j.isArray({});
+
+//false
+</code></pre>
+
+<p><strong>isBoolean</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is a boolean value, otherwise false</li>
+</ul>
+
+<h4 id="example-2">Example</h4>
+
+<pre><code>j.isBoolean(false);
+
+//true
+
+j.isBoolean('true');
+
+//false
+</code></pre>
+
+<p><strong>isEven</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is even, otherwise false</li>
+</ul>
+
+<h4 id="example-3">Example</h4>
+
+<pre><code>j.isEven(2);
+
+//true
+
+j.isEven(3);
+
+//false
+</code></pre>
+
+<p><strong>isInt</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is an integer, otherwise false</li>
+</ul>
+
+<h4 id="example-4">Example</h4>
+
+<pre><code>j.isInt(2);
+
+//true
+
+j.isInt(3.14159);
+
+//false
+</code></pre>
+
+<p><strong>isNegative</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is less than 0, otherwise false</li>
+</ul>
+
+<h4 id="example-5">Example</h4>
+
+<pre><code>j.isNegative(-2);
+
+//true
+
+j.isNegative(5);
+
+//false
+</code></pre>
+
+<p><strong>isNonNegative</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is 0 or greater, otherwise false</li>
+</ul>
+
+<h4 id="example-6">Example</h4>
+
+<pre><code>j.isNonNegative(0);
+
+//true
+
+j.isNonNegative(3);
+
+//true
+
+j.isNonNegative(-5);
+
+//false
+</code></pre>
+
+<p><strong>isNonPositive</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is 0 or less, otherwise false</li>
+</ul>
+
+<h4 id="example-7">Example</h4>
+
+<pre><code>j.isNonPositive(0);
+
+//true
+
+j.isNonPositive(-2);
+
+//true
+
+j.isNonPositive(7);
+
+//false
+</code></pre>
+
+<p><strong>isNonZero</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is not 0, otherwise false</li>
+</ul>
+
+<h4 id="example-8">Example</h4>
+
+<pre><code>j.isNonZero(6);
+
+//true
+
+j.isNonZero(-2.85);
+
+//true
+
+j.isNonZero(0);
+
+//false
+</code></pre>
+
+<p><strong>isNull</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is null, otherwise false</li>
+</ul>
+
+<h4 id="example-9">Example</h4>
+
+<pre><code>j.isNull(null);
+
+//true
+
+j.isNull(undefined);
+
+//false
+</code></pre>
+
+<p><strong>isNumber</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is a number, otherwise false</li>
+</ul>
+
+<h4 id="example-10">Example</h4>
+
+<pre><code>j.isNumber(1234);
+
+//true
+
+j.isNumber(0x1A);
+
+//true
+
+j.isNumber('1234);
+
+//false
+</code></pre>
+
+<p><strong>isNumeric</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is a number or a string matching a numeric pattern, otherwise false</li>
+</ul>
+
+<h4 id="example-11">Example</h4>
+
+<pre><code>j.isNumeric(1234.33);
+
+//true
+
+j.isNumeric('0x1A');
+
+//true
+
+j.isNumeric('1234');
+
+//false
+</code></pre>
+
+<p><strong>isObject</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is an object, otherwise false</li>
+</ul>
+
+<h4 id="example-12">Example</h4>
+
+<pre><code>j.isObject({});
+
+//true
+
+j.isObject([]);
+
+//true
+
+j.isObject(undefined);
+
+//false
+</code></pre>
+
+<p><strong>isOdd</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is odd, otherwise false</li>
+</ul>
+
+<h4 id="example-13">Example</h4>
+
+<pre><code>j.isOdd(3);
+
+//true
+
+j.isOdd(10);
+
+//false
+</code></pre>
+
+<p><strong>isPositive</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number greater than 0, otherwise false</li>
+</ul>
+
+<h4 id="example-14">Example</h4>
+
+<pre><code>j.isPositive(3);
+
+//true
+
+j.isPositive(-2.414);
+
+//false
+</code></pre>
+
+<p><strong>isString</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is a string, otherwise false</li>
+</ul>
+
+<h4 id="example-15">Example</h4>
+
+<pre><code>j.isString('A string');
+
+//true
+
+j.isString([]);
+
+//false
+</code></pre>
+
+<p><strong>isTruthy</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value resolves to truthy, otherwise false</li>
+</ul>
+
+<h4 id="example-16">Example</h4>
+
+<pre><code>j.isTruthy(true);
+
+//true
+
+j.isTruthy(1);
+
+//true
+
+j.isTruthy('I am a string.');
+
+//true
+
+j.isTruthy(null);
+
+//false
+</code></pre>
+
+<p><strong>isUndefined</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is undefined, otherwise false</li>
+</ul>
+
+<h4 id="example-17">Example</h4>
+
+<pre><code>j.isUndefined(undefined);
+
+//true
+
+j.isUndefined(null);
+
+//false
+</code></pre>
+
+<p><strong>isZero</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is 0, otherwise false</li>
+</ul>
+
+<h4 id="example-18">Example</h4>
+
+<pre><code>j.isZero(0);
+
+//true
+
+j.isZero(1);
+
+//false
+</code></pre>
+
+<p><strong>not</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is falsey, otherwise false</li>
+</ul>
+
+<h4 id="example-19">Example</h4>
+
+<pre><code>j.not(true);
+
+//false
+
+j.not(0);
+
+//true
+</code></pre>
+
+<p><strong>or</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] {boolean} arguments</li>
+  <li>Description: Checks that any of the provided values are truthy</li>
+</ul>
+
+<h4 id="example-20">Example</h4>
+
+<pre><code>j.or();
+
+//false
+
+j.or(true);
+
+//true
+
+j.or(true, false, 'true');
+
+//true
+
+j.or(0, false, null);
+
+//false
+</code></pre>
+
+<p><strong>xor</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {boolean} a, {boolean} b</li>
+  <li>Description: performs an exclusive or check on passed boolean values</li>
+</ul>
+
+<h4 id="example-21">Example</h4>
+
+<pre><code>j.xor(true, false);
+
+//true
+
+j.xor(false, true);
+
+//true
+
+j.xor(true, true);
+
+//false
+
+j.xor(false, false);
+
+//false
+</code></pre>
+
 
     </div>
 

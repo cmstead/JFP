@@ -47,17 +47,17 @@
     </div>
     <div class="head-wrapper">
         <div class="lambda">&lambda;</div>
-        <h1><a href="/">JFP: Javascript Function Processor</a></h1>
+        <h1><a href="/JFP/">JFP: Javascript Function Processor</a></h1>
     </div>
     <div class="menu-wrapper">
         <ul class="menu">
-            <li><a href="array/">Array</a></li>
-            <li><a href="/conditional/">Conditional</a></li>
-            <li><a href="/conversion/">Conversion</a></li>
-            <li><a href="/core/">Core</a></li>
-            <li><a href="/math/">Math</a></li>
-            <li><a href="/object/">Object</a></li>
-            <li><a href="/predicate/">Predicate</a></li>
+            <li><a href="/JFP/array/">Array</a></li>
+            <li><a href="/JFP/conditional/">Conditional</a></li>
+            <li><a href="/JFP/conversion/">Conversion</a></li>
+            <li><a href="/JFP/core/">Core</a></li>
+            <li><a href="/JFP/math/">Math</a></li>
+            <li><a href="/JFP/object/">Object</a></li>
+            <li><a href="/JFP/predicate/">Predicate</a></li>
         </ul>
     </div>
 </header>
@@ -65,7 +65,69 @@
 
 
     <div class="body-container">
-        
+        <h2 id="object-functions">Object Functions</h2>
+
+<p><strong>pick</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {string, number} key, {map} valueMap</li>
+  <li>Description: Returns value at key in valueMap</li>
+</ul>
+
+<h4 id="example">Example</h4>
+
+<pre><code>j.pick('test1', {
+    'test1': 'test value 1',
+    'test2': 'test value 2',
+    'test3': 'test value 3',
+});
+
+//test value 1
+
+j.pick('test1', { 'test2': 'not returned' });
+
+//null
+</code></pre>
+
+<p><strong>pluck</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {string, number} key, {map} valueMap</li>
+  <li>Description: Returns object containing key and value from valueMap at key</li>
+</ul>
+
+<h4 id="example-1">Example</h4>
+
+<pre><code>j.pluck('test1', {
+    'test1': 'test value 1',
+    'test2': 'test value 2',
+    'test3': 'test value 3',
+});
+
+//{ 'test1': 'test value 1' }
+</code></pre>
+
+<p><strong>pluckKeys</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {array of strings or numbers} keys, {map} valueMap</li>
+  <li>Description: Returns object containing keys and values from valueMap at keys</li>
+</ul>
+
+<h4 id="example-2">Example</h4>
+
+<pre><code>j.pluckKeys(['test1', 'test3'], {
+    'test1': 'test value 1',
+    'test2': 'test value 2',
+    'test3': 'test value 3',
+});
+
+//{ 'test1': 'test value 1', 'test3': 'test value 3' }
+</code></pre>
+
 
     </div>
 

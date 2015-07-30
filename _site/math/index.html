@@ -47,17 +47,17 @@
     </div>
     <div class="head-wrapper">
         <div class="lambda">&lambda;</div>
-        <h1><a href="/">JFP: Javascript Function Processor</a></h1>
+        <h1><a href="/JFP/">JFP: Javascript Function Processor</a></h1>
     </div>
     <div class="menu-wrapper">
         <ul class="menu">
-            <li><a href="array/">Array</a></li>
-            <li><a href="/conditional/">Conditional</a></li>
-            <li><a href="/conversion/">Conversion</a></li>
-            <li><a href="/core/">Core</a></li>
-            <li><a href="/math/">Math</a></li>
-            <li><a href="/object/">Object</a></li>
-            <li><a href="/predicate/">Predicate</a></li>
+            <li><a href="/JFP/array/">Array</a></li>
+            <li><a href="/JFP/conditional/">Conditional</a></li>
+            <li><a href="/JFP/conversion/">Conversion</a></li>
+            <li><a href="/JFP/core/">Core</a></li>
+            <li><a href="/JFP/math/">Math</a></li>
+            <li><a href="/JFP/object/">Object</a></li>
+            <li><a href="/JFP/predicate/">Predicate</a></li>
         </ul>
     </div>
 </header>
@@ -65,7 +65,353 @@
 
 
     <div class="body-container">
-        
+        <h2 id="math-functions">Math Functions</h2>
+
+<p><strong>add</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] arguments</li>
+  <li>Description: Returns the sum of all numbers passed to add</li>
+</ul>
+
+<h4 id="example">Example</h4>
+
+<pre><code>j.add();
+
+//0
+
+j.add(1);
+
+//1
+
+j.add(1, 2);
+
+//3
+
+j.add(1, 2, 3, 4, 5);
+
+//15
+</code></pre>
+
+<p><strong>divide</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] arguments</li>
+  <li>Description: divides first value by each other value passed to divide</li>
+</ul>
+
+<h4 id="example-1">Example</h4>
+
+<pre><code>j.divide();
+
+//1
+
+j.divide(12);
+
+//1
+
+j.divide(12, 2);
+
+//6
+
+j.divide(12, 2, 3);
+
+//2
+</code></pre>
+
+<p><strong>equal</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} a, {any} b</li>
+  <li>Description: returns true if a and b are strictly equal, false otherwise</li>
+</ul>
+
+<h4 id="example-2">Example</h4>
+
+<pre><code>j.equal(1, 1);
+
+//true
+
+j.equal(1, 2);
+
+//false
+</code></pre>
+
+<p><strong>fac</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns factorial of value</li>
+</ul>
+
+<h4 id="example-3">Example</h4>
+
+<pre><code>j.fac(0);
+
+//1
+
+j.fac(5);
+
+//120
+</code></pre>
+
+<p><strong>inc</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns value + 1</li>
+</ul>
+
+<h4 id="example-4">Example</h4>
+
+<pre><code>j.inc(5);
+
+//6
+</code></pre>
+
+<p><strong>geq</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: Returns true if a is greater or equal to b, false otherwise</li>
+</ul>
+
+<h4 id="example-5">Example</h4>
+
+<pre><code>j.geq(1, 1);
+
+//true
+
+j.geq(2, 1);
+
+//true
+
+j.geq(1, 2);
+
+//false
+</code></pre>
+
+<p><strong>greater</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: Returns true if a is greater than b, false otherwise</li>
+</ul>
+
+<h4 id="example-6">Example</h4>
+
+<pre><code>j.greater(2, 1);
+
+//true
+
+j.greater(1, 1);
+
+//false
+
+j.greater(1, 2);
+
+//false
+</code></pre>
+
+<p><strong>leq</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: Returns true if a is less or equal to b, false otherwise</li>
+</ul>
+
+<h4 id="example-7">Example</h4>
+
+<pre><code>j.leq(1, 2);
+
+//true
+
+j.leq(1, 1);
+
+//true
+
+j.leq(2, 1);
+
+//false
+</code></pre>
+
+<p><strong>less</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: Returns true if a is less than b, false otherwise</li>
+</ul>
+
+<h4 id="example-8">Example</h4>
+
+<pre><code>j.leq(1, 2);
+
+//true
+
+j.leq(1, 1);
+
+//true
+
+j.leq(2, 1);
+
+//false
+</code></pre>
+
+<p><strong>max</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: returns the max of either a or b. If no values are passed, max returns -Number.MAX_VALUE</li>
+</ul>
+
+<h4 id="example-9">Example</h4>
+
+<pre><code>j.max();
+
+//-1.7976931348623157e+308
+
+j.max(5);
+
+//5
+
+j.max(5, 6);
+
+//6
+</code></pre>
+
+<p><strong>min</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: returns the minimum of either a or b. If no values are passed, min returns Number.MAX_VALUE</li>
+</ul>
+
+<h4 id="example-10">Example</h4>
+
+<pre><code>j.min();
+
+//1.7976931348623157e+308
+
+j.min(5);
+
+//5
+
+j.min(5, 6);
+
+//5
+</code></pre>
+
+<p><strong>mod</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: Returns the modulus of a and b</li>
+</ul>
+
+<h4 id="example-11">Example</h4>
+
+<pre><code>j.mod(4, 2);
+
+//0
+
+j.mod(11, 4);
+
+//3
+</code></pre>
+
+<p><strong>multiply</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] arguments</li>
+  <li>Description: Returns the product of all values passed to multiply</li>
+</ul>
+
+<h4 id="example-12">Example</h4>
+
+<pre><code>j.multiply();
+
+//1
+
+j.multiply(2);
+
+//2
+
+j.multiply(2, 3);
+
+//6
+
+j.multiply(2, 3, 4, 5);
+
+//120
+</code></pre>
+
+<p><strong>range</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {int} a, {int} b, {int} inc</li>
+  <li>Description: returns range from a to b, excluding b, incremented by inc</li>
+</ul>
+
+<h4 id="example-13">Example</h4>
+
+<pre><code>j.range(4);
+
+//[0, 1, 2, 3]
+
+j.range(2, 10);
+
+//[2, 3, 4, 5, 6, 7, 8, 9]
+
+j.range(0, 20, 4);
+
+//[0, 4, 8, 12, 16]
+
+j.range(100, 0, -10);
+
+//[100, 90, 80, 70, 60, 50, 40, 30, 20, 10]
+</code></pre>
+
+<p><strong>subtract</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] arguments</li>
+  <li>Description: Returns sum of the first value and the negative of all other provided values</li>
+</ul>
+
+<h4 id="example-14">Example</h4>
+
+<pre><code>j.subtract();
+
+//0
+
+j.subtract(1);
+
+//1
+
+j.subtract(3, 2);
+
+//1
+
+j.subtract(8, 5, 3, 2, 1);
+
+//-3
+</code></pre>
+
 
     </div>
 

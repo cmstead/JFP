@@ -47,17 +47,17 @@
     </div>
     <div class="head-wrapper">
         <div class="lambda">&lambda;</div>
-        <h1><a href="/">JFP: Javascript Function Processor</a></h1>
+        <h1><a href="/JFP/">JFP: Javascript Function Processor</a></h1>
     </div>
     <div class="menu-wrapper">
         <ul class="menu">
-            <li><a href="array/">Array</a></li>
-            <li><a href="/conditional/">Conditional</a></li>
-            <li><a href="/conversion/">Conversion</a></li>
-            <li><a href="/core/">Core</a></li>
-            <li><a href="/math/">Math</a></li>
-            <li><a href="/object/">Object</a></li>
-            <li><a href="/predicate/">Predicate</a></li>
+            <li><a href="/JFP/array/">Array</a></li>
+            <li><a href="/JFP/conditional/">Conditional</a></li>
+            <li><a href="/JFP/conversion/">Conversion</a></li>
+            <li><a href="/JFP/core/">Core</a></li>
+            <li><a href="/JFP/math/">Math</a></li>
+            <li><a href="/JFP/object/">Object</a></li>
+            <li><a href="/JFP/predicate/">Predicate</a></li>
         </ul>
     </div>
 </header>
@@ -65,7 +65,192 @@
 
 
     <div class="body-container">
-        
+        <h2 id="core-functions">Core Functions</h2>
+
+<p><strong>apply</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {function} userFn, {array} values</li>
+  <li>Description: Calls provided function with values in passed array</li>
+</ul>
+
+<h4 id="example">Example</h4>
+
+<pre><code>function add(a, b){
+    return a + b;
+}
+
+j.apply(add, [1, 2]);
+
+//3
+</code></pre>
+
+<p><strong>compose</strong></p>
+
+<ul>
+  <li>Performance: O(n) on setup where n is the function count, O(1) at execution time</li>
+  <li>Arguments: {function} [arguments]</li>
+  <li>Description: Performs function composition on functions provided</li>
+</ul>
+
+<h4 id="example-1">Example</h4>
+
+<pre><code>function isUndefined(value){
+    return typeof value === 'undefined';
+}
+
+function not(value){
+    return !value;
+}
+
+var notUndefined = j.compose(not, isUndefined);
+
+notUndefined(null);
+
+//true
+
+notUndefined(undefined);
+
+//false
+</code></pre>
+
+<p><strong>countArguments</strong></p>
+
+<ul>
+  <li>Performance: unmeasured</li>
+  <li>Arguments: {function} userFn</li>
+  <li>Description: Counts the number of arguments required for a function</li>
+</ul>
+
+<h4 id="example-2">Example</h4>
+
+<pre><code>j.countArguments(function(arg1, arg2, arg3){});
+
+//3
+</code></pre>
+
+<p><strong>curry</strong></p>
+
+<ul>
+  <li>Performance: unmeasured - requires on countArguments</li>
+  <li>Arguments: {function} userFn, [optional] arguments</li>
+  <li>Description: Curries function based on argument count – partial application special case</li>
+</ul>
+
+<h4 id="example-3">Example</h4>
+
+<pre><code>function add(a, b);
+
+j.curry(add)(1)(2);
+
+//3
+
+j.curry(add, 1)(2);
+
+//3
+
+j.curry(add, 1, 2);
+
+//3
+</code></pre>
+
+<p><strong>identity</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns value passed in, via direct return</li>
+</ul>
+
+<h4 id="example-4">Example</h4>
+
+<pre><code>j.identity('my value');
+
+//my value
+</code></pre>
+
+<p><strong>partial</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {function} userFn, [optional] arguments</li>
+  <li>Description: Generalized partial application function.</li>
+</ul>
+
+<h4 id="example-5">Example</h4>
+
+<pre><code>function divide(a, b){
+    return a / b;
+}
+
+j.partial(divide, 6)(2);
+
+//3
+</code></pre>
+
+<p><strong>pipeline</strong></p>
+
+<ul>
+  <li>Performance: O(n) on setup where n is the argument count, O(1) on execution</li>
+  <li>Arguments: {function} [arguments]</li>
+  <li>Description: Executes functions in left-to-right order pipelining the output from current to the next</li>
+</ul>
+
+<h4 id="example-6">Example</h4>
+
+<pre><code>function add(a, b){
+    return a + b;
+}
+
+function divideBy2(value){
+    return value / 2;
+}
+
+j.pipeline(add, divideBy2)(4, 6);
+
+//5
+</code></pre>
+
+<p><strong>recur</strong></p>
+
+<ul>
+  <li>Performance: O(n) - best case, depends on outside operations</li>
+  <li>Arguments: {function} userFn, [optional] arguments</li>
+  <li>Description: Tail-optimized recursion function</li>
+</ul>
+
+<h4 id="example-7">Example</h4>
+
+<pre><code>function factorial(recur, base, result){
+    var sanitizedResult = j.either(1, result);
+    return (base &gt;= 0) ? recur(base - 1, sanitizedResult * base) : sanitizedResult;
+}
+
+j.recur(factorial, 5);
+
+//120
+</code></pre>
+
+<p><strong>rpartial</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {function} userFn, [optional] arguments</li>
+  <li>Description: partial application, applies initial arguments to the right-most position of userFn</li>
+</ul>
+
+<h4 id="example-8">Example</h4>
+
+<pre><code>function divide(a, b){
+return a / b;
+}
+
+j.rpartial(divide, 4)(2);
+
+//0.5
+</code></pre>
+
 
     </div>
 

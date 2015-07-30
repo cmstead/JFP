@@ -47,17 +47,17 @@
     </div>
     <div class="head-wrapper">
         <div class="lambda">&lambda;</div>
-        <h1><a href="/">JFP: Javascript Function Processor</a></h1>
+        <h1><a href="/JFP/">JFP: Javascript Function Processor</a></h1>
     </div>
     <div class="menu-wrapper">
         <ul class="menu">
-            <li><a href="array/">Array</a></li>
-            <li><a href="/conditional/">Conditional</a></li>
-            <li><a href="/conversion/">Conversion</a></li>
-            <li><a href="/core/">Core</a></li>
-            <li><a href="/math/">Math</a></li>
-            <li><a href="/object/">Object</a></li>
-            <li><a href="/predicate/">Predicate</a></li>
+            <li><a href="/JFP/array/">Array</a></li>
+            <li><a href="/JFP/conditional/">Conditional</a></li>
+            <li><a href="/JFP/conversion/">Conversion</a></li>
+            <li><a href="/JFP/core/">Core</a></li>
+            <li><a href="/JFP/math/">Math</a></li>
+            <li><a href="/JFP/object/">Object</a></li>
+            <li><a href="/JFP/predicate/">Predicate</a></li>
         </ul>
     </div>
 </header>
@@ -65,7 +65,115 @@
 
 
     <div class="body-container">
-        
+        <h2 id="conditional-functions">Conditional Functions</h2>
+
+<p><strong>either</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} defaultValue, {any, nullable} optionValue</li>
+  <li>Description: Returns defaultValue on falsey optionValue or optionValue if it is truthy</li>
+</ul>
+
+<h4 id="example">Example</h4>
+
+<pre><code>j.either('default', null);
+
+//default
+
+j.either('default', 'my string');
+
+//my string
+</code></pre>
+
+<p><strong>eitherIf</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} defaultValue, {any, nullable} testValue, {boolean} predicate</li>
+  <li>Description: Returns defaultValue on falsey optionValue or false predicate or optionValue if it is truthy and predicate is true</li>
+</ul>
+
+<h4 id="example-1">Example</h4>
+
+<pre><code>j.eitherWhen('default', 'yay!', true);
+
+//yay!
+
+j.eitherWhen('default', null, true);
+
+//default
+
+j.eitherWhen('default', 'yay!', false);
+
+//default
+</code></pre>
+
+<p><strong>eitherWhen</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} defaultValue, {boolean} predicateValue, {function} userFn</li>
+  <li>Description: returns userFn output on true predicateValue and truthy otherwise default value</li>
+</ul>
+
+<h4 id="example-2">Example</h4>
+
+<pre><code>j.eitherWhen('default', false, j.identity);
+
+//default
+
+j.eitherWhen('default', true, j.partial(j.identity, false));
+
+//default
+
+j.eitherWhen('default', true, j.partial(j.identity, 'yay!'));
+
+//yay!
+</code></pre>
+
+<p><strong>maybe</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} defaultValue, {function} userFn, {any, nullable} optionValue</li>
+  <li>Description: Returns default value on falsey optionValue or userFn(optionValue) if optionValue is truthy</li>
+</ul>
+
+<h4 id="example-3">Example</h4>
+
+<pre><code>function multiplyBy2(value){
+return value * 2;
+}
+
+j.maybe(1, multiplyBy2, null);
+
+//1
+
+j.maybe(1, multiplyBy2, 0);
+
+//0
+
+j.maybe(1, multiplyBy2, 2);
+
+//4
+</code></pre>
+
+<p><strong>when</strong></p>
+
+<ul>
+  <li>Performance: O(1) function execution varies on implementation</li>
+  <li>Arguments: {boolean} checkValue, {function} userFn, [optional] arguments</li>
+  <li>Description: executes function with passed arguments on a truthy checkValue</li>
+</ul>
+
+<h4 id="example-4">Example</h4>
+
+<pre><code>when(true, function(myValue){ console.log(myValue); }, "Hello, world!");
+
+//Hello, world!
+</code></pre>
+
 
     </div>
 
