@@ -67,6 +67,35 @@
     <div class="body-container">
         <h2 id="object-functions">Object Functions</h2>
 
+<p><strong>merge</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {object} defaultObject, {object} mergeData</li>
+  <li>Description: Merges data from mergeData into new object, filling missing data with default object</li>
+</ul>
+
+<h4 id="example">Example</h4>
+
+<pre><code>var defaultData = {
+        1: 'foo',
+        2: 'bar',
+        3: 'baz'
+    },
+    mergeData = {
+        1: 'baz',
+        3: 'quux'
+    };
+
+j.merge(defaultData, mergeData);
+
+// {
+//     1: 'baz',
+//     2: 'bar',
+//     3: 'quux'
+// }
+</code></pre>
+
 <p><strong>pick</strong></p>
 
 <ul>
@@ -75,7 +104,7 @@
   <li>Description: Returns value at key in valueMap</li>
 </ul>
 
-<h4 id="example">Example</h4>
+<h4 id="example-1">Example</h4>
 
 <pre><code>j.pick('test1', {
     'test1': 'test value 1',
@@ -98,7 +127,7 @@ j.pick('test1', { 'test2': 'not returned' });
   <li>Description: Returns object containing key and value from valueMap at key</li>
 </ul>
 
-<h4 id="example-1">Example</h4>
+<h4 id="example-2">Example</h4>
 
 <pre><code>j.pluck('test1', {
     'test1': 'test value 1',
@@ -117,7 +146,7 @@ j.pick('test1', { 'test2': 'not returned' });
   <li>Description: Returns object containing keys and values from valueMap at keys</li>
 </ul>
 
-<h4 id="example-2">Example</h4>
+<h4 id="example-3">Example</h4>
 
 <pre><code>j.pluckKeys(['test1', 'test3'], {
     'test1': 'test value 1',

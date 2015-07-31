@@ -1,3 +1,4 @@
+
 ##Array Functions
 
 **compact**
@@ -47,6 +48,30 @@
     j.cons(4, [1, 2, 3]);
     
     // [ 4, 1, 2, 3 ]
+
+**contains**
+
+- Performance: O(n) (Pathological)
+- Arguments: {any} value, {array} list
+- Description: Returns true if array contains value only supports primitives and pointers
+
+####Example
+
+    j.contains(5, [1, 2, 3, 4, 5, 6]);
+    
+    // true
+
+**difference**
+
+- Performance: O(n log n)
+- Arguments: {array} listA, {array} listB
+- Description: takes the difference of listA against listB
+
+####Example
+
+    j.difference([1, 2, 3, 4, 5], [2, 4, 5]);
+    
+    // [1, 3]
 
 **drop**
 
@@ -108,6 +133,18 @@
     // 4
     // 5
 
+**every**
+
+- Performance: O(n)
+- Arguments: {function} predicate, {array} list
+- Description: returns true if all values of array satisfy predicate
+
+####Example
+
+    j.every(j.odd, [1, 3, 5, 6, 7]);
+    
+    // false
+
 **filter**
 
 - Performance: O(n)
@@ -143,6 +180,18 @@
     j.first([1, 2, 3, 4, 5, 6]);
     
     // 1
+
+**intersect**
+
+- Performance: O(n log n)
+- Arguments: {array} listA, {array} listB
+- Description: Takes the intersection of two arrays
+
+####Example
+
+    j.intersect([1, 2, 3], [2, 3, 4]);
+    
+    // [2, 3]
 
 **last**
 
@@ -200,6 +249,18 @@
     
     // 4
 
+**numberOf**
+
+- Performance: O(n)
+- Arguments: {function} predicate, {array} list
+- Description: Returns count of elements satisfying predicate
+
+####Example
+
+    j.numberOf(j.even, [1, 2, 3, 4, 5, 6]);
+    
+    // 3
+
 **reduce**
 
 - Performance: O(n)
@@ -244,6 +305,50 @@
     
     // [ 4 ]
 
+**some**
+
+- Performance: O(n)
+- Arguments: {function} predicate, {array} list
+- Description: Returns true if any value in the list passes predicate function otherwise false
+
+####Example
+
+    j.some(j.even, [1, 2, 3, 4, 5]);
+    
+    // true
+
+**sort**
+
+- Performance: O(n log n)
+- Arguments [{function} comparator,] {array} list
+- Description: Sorts array with quick sort naturally or with comparator
+
+####Example
+
+    j.sort([1, 3, 2, 5, 4]);
+    
+    // [1, 2, 3, 4, 5]
+    
+    function comparator(a, b){
+        var b - a; 
+    }
+    
+    j.sort(comparator, [1, 3, 2, 5, 4]);
+    
+    // [5, 4, 3, 2, 1]
+
+**symmetricDifference**
+
+- Performance: O(n log n) to O(slow) (pathological)
+- Arguments: {array} listA, {array} listB
+- Description: Takes the symmetric difference of two arrays
+
+####Example
+
+    j.symmetricDifference([1, 2, 3, 4], [2, 3, 4, 5]);
+    
+    // [1, 5]
+
 **take**
 
 - Performance: O(1)
@@ -255,6 +360,19 @@
     j.take(3, [1, 2, 3, 4, 5]);
     
     // [ 1, 2, 3 ]
+
+**union**
+
+- Performance: O(n log n)
+- Arguments: {array} listA, {array} listB
+- Description: takes the union of two arrays
+
+####Example
+
+    j.union([1, 2, 3], [2, 3, 4]);
+    
+    // [1, 2, 3, 4]
+
 
 **unique**
 

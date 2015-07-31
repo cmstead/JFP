@@ -1,5 +1,31 @@
 ##Object Functions
 
+**merge**
+
+- Performance: O(n)
+- Arguments: {object} defaultObject, {object} mergeData
+- Description: Merges data from mergeData into new object, filling missing data with default object
+
+####Example
+
+    var defaultData = {
+            1: 'foo',
+            2: 'bar',
+            3: 'baz'
+        },
+        mergeData = {
+            1: 'baz',
+            3: 'quux'
+        };
+    
+    j.merge(defaultData, mergeData);
+    
+    // {
+    //     1: 'baz',
+    //     2: 'bar',
+    //     3: 'quux'
+    // }
+
 
 **pick**
 
