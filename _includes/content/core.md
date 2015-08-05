@@ -109,6 +109,27 @@
 
     //3
 
+**deref**
+
+- Performance: O(n)
+- Arguments: {object|array} source, {string} deepReference
+- Description: Deref resolves a dot-delimited deep object reference
+
+####Example
+
+    var myObj = {
+        data: {
+            aList: [
+                'foo',
+                'bar',
+                'baz'
+            ]
+        }
+    };
+    
+    j.deref(myObj, 'data.aList.1'); // bar
+    j.deref(myObj, 'data.aList.baz'); // null
+
 **execute**
 
 - Performance: O(1)
@@ -220,4 +241,13 @@
 
     //0.5
 
+**shortCircuit**
 
+- Performance: O(1)
+- Arguments: {any} defaultValue, {function} userFn, {any} testValue
+- Description: Tests testValue for truthy value, if true, userFn is executed with testValue, otherwise returns default value
+
+####Example
+
+    j.shortCircuit(0, j('apply', j.add), [1, 2]); // 3
+    j.shortCircuit(0, j('apply', j.add), null); // 0
