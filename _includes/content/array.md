@@ -264,14 +264,13 @@
 **reduce**
 
 - Performance: O(n)
-- Arguments: {function} userFn, {array} values
+- Arguments: {function} userFn, {array} values[, {any} initialState]
 - Description: Reduces array to single element of any type through application of userFn
 
 ####Example
 
-    j.reduce(function(a, b){ return a + b; }, [1, 2, 3, 4, 5]);
-    
-    //15
+    j.reduce(function(a, b){ return a + b; }, [1, 2, 3, 4, 5]); // 15
+    j.reduce([1, 2, 3, 4], j.add, 10); // 20
 
 **rest**
 
