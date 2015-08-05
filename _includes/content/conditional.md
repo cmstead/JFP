@@ -4,7 +4,7 @@
 **either**
 
 - Performance: O(1)
-- Arguments: {any} defaultValue, {any, nullable} optionValue
+- Arguments: {any} defaultValue, {any, nullable} optionValue, {string} optionValueType
 - Description: Returns defaultValue on falsey optionValue or optionValue if it is truthy
 
 
@@ -12,13 +12,9 @@
 
 
 
-    j.either('default', null);
-
-    //default
-
-    j.either('default', 'my string');
-
-    //my string
+    j.either('default', null); // default
+    j.either('default', 'my string'); // my string
+    j.either(10, 0, 'number'); // 0
 
 
 

@@ -182,7 +182,19 @@
 
     //3
 
+**partialReverse**
 
+- Performance: O(n) where n is the number of arguments
+- Arguments: {function} userFn[, {any} arguments]
+- Description: Performs partial application and returns a function with remaining arguments reversed
+
+####Example
+
+    function concatThree(astr, bstr, cstr){
+        return astr + bstr + cstr;
+    }
+    
+    j.partialReverse(concatThree, 'foo')('bar', 'baz'); // foobazbar
 
 
 **pipeline**
@@ -219,7 +231,19 @@
 
     //120
 
+**reverseArgs**
 
+- Performance: O(1) on return, O(n) on function execution, where n is the number of arguments
+- Arguments: {function} userFn
+- Description: Returns a function which takes arguments in reverse order
+
+####Example
+
+    function strConcat(astr, bstr){
+        return astr + bstr;
+    }
+    
+    j.reverseArgs(strConcat)('foo', 'bar'); // barfoo
 
 
 **rpartial**

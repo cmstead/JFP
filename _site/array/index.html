@@ -392,15 +392,14 @@ j.nth(3, [1, 2, 3, 4, 5, 6]);
 
 <ul>
   <li>Performance: O(n)</li>
-  <li>Arguments: {function} userFn, {array} values</li>
+  <li>Arguments: {function} userFn, {array} values[, {any} initialState]</li>
   <li>Description: Reduces array to single element of any type through application of userFn</li>
 </ul>
 
 <h4 id="example-20">Example</h4>
 
-<pre><code>j.reduce(function(a, b){ return a + b; }, [1, 2, 3, 4, 5]);
-
-//15
+<pre><code>j.reduce(function(a, b){ return a + b; }, [1, 2, 3, 4, 5]); // 15
+j.reduce([1, 2, 3, 4], j.add, 10); // 20
 </code></pre>
 
 <p><strong>rest</strong></p>
