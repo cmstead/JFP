@@ -78,32 +78,17 @@
 **maybe**
 
 - Performance: O(1)
-- Arguments: {any} defaultValue, {function} userFn, {any, nullable} optionValue
-- Description: Returns default value on falsey optionValue or userFn(optionValue) if optionValue is truthy
+- Arguments: {any} value[, {string} valueType]
+- Description: Returns value if truthy, nulll if falsey. Optionall, returns value if it matches valueType, null if not.
 
 
 ####Example
 
-
-
-    function multiplyBy2(value){
-    return value * 2;
-    }
-
-    j.maybe(1, multiplyBy2, null);
-
-    //1
-
-    j.maybe(1, multiplyBy2, 0);
-
-    //0
-
-    j.maybe(1, multiplyBy2, 2);
-
-    //4
-
-
-
+    j.maybe(undefined); // null
+    j.maybe('foo'); // foo
+    j.maybe(5, 'string'); // null
+    j.maybe(0, 'number'); // 0
+    
 
 **when**
 

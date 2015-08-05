@@ -1,5 +1,16 @@
 ##Core Functions
 
+**j**
+
+- Performance: Identical to j.curry
+- Arguments: {string} jfpFunctionName[, {any} arguments]
+- Description: Shorthand for j.curry, only accepts string arguments for jfp functions
+
+####Example
+
+    j('conj')(1)([2, 3, 4]); // [1, 2, 3, 4]
+    j('pick', 'key')({ key: 'foo' }); // 'foo'
+
 
 **apply**
 
@@ -75,7 +86,7 @@
 
 **curry**
 
-- Performance: unmeasured - requires on countArguments
+- Performance: unmeasured - relies on countArguments
 - Arguments: {function} userFn, [optional] arguments
 - Description: Curries function based on argument count -- partial application special case
 
@@ -98,8 +109,20 @@
 
     //3
 
+**execute**
+
+- Performance: O(1)
+- Arguments: {function} userFn, [optional] arguments
+- Description: Executes function with provided arguments
 
 
+####Example
+
+    j.execute(j.add); // 0
+    j.execute(j.add, 5); // 5
+    j.execute(j.add, 5, 7); // 12
+
+    
 
 **identity**
 
@@ -143,29 +166,17 @@
 
 **pipeline**
 
-- Performance: O(n) on setup where n is the argument count, O(1) on execution
-- Arguments: {function} [arguments]
-- Description: Executes functions in left-to-right order pipelining the output from current to the next
+- Performance: O(n) where n is the number of functions
+- Arguments: {any} value {function} pipelinedFunctions
+- Description: Executes functions in order, passing value to first and output from previous to input of next
 
 
 ####Example
 
-
-
-    function add(a, b){
-        return a + b;
-    }
-
-    function divideBy2(value){
-        return value / 2;
-    }
-
-    j.pipeline(add, divideBy2)(4, 6);
-
-    //5
-
-
-
+    j.pipeline([1, 2, 3, 4],
+               j('reduce', j.add, 0),
+               j('multiply', 3));
+    // 30
 
 **recur**
 
