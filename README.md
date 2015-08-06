@@ -16,9 +16,14 @@ be limited to functions in the library.
 Programmers should be able to extend their libraries easily. Programmers should be able
 to bend their environment to their own will, not the other way around. This is what JFP gives you.
 
-Note: OMG! What madness is this?? Version 1.2.x! I know there are just a few people using this library right now, but thanks for all issues created and helpful feedback. I use this library a lot and outside input is so helpful to keep making things better.
+###v2.1.0
 
-##Roadmap
+Because sometimes I forget how to semver...
+
+Anyway, updates go a little like this:
+
+- Fixed reverseArgs. Function now returns value output from execution of original function.
+- Fixed deref. Function no longer returns key value if object value is null or undefined.
 
 ###v2.0.0
 
@@ -49,6 +54,8 @@ Migrating from 1.2.x to 2.0.0 is pretty straightforward. Following are the chang
 
 
 ##Update log
+
+Note: OMG! What madness is this?? Version 1.2.x! I know there are just a few people using this library right now, but thanks for all issues created and helpful feedback. I use this library a lot and outside input is so helpful to keep making things better.
 
 ###v1.2.3
 
