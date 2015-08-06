@@ -152,6 +152,10 @@ var jfp = require('../../dist/jfp.js'),
         it('should return null if data is falsey', function(){
             expect(j.deref()).toBe(null);
         });
+
+        it('should return null if key is provided but object is null', function(){
+            expect(j.deref(null, 'test')).toBe(null);
+        });
         
         it('should dereference a single key in ', function(){
             expect(j.deref(testData, 'test1')).toBe(testData.test1);

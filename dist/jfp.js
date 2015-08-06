@@ -165,7 +165,7 @@ var jfp = (function(){
     function reverseArgs(userFn){
         return function(){
             var args = j.slice(0, arguments).reverse();
-            j.apply(userFn, args);
+            return j.apply(userFn, args);
         };
     }
 
@@ -654,16 +654,15 @@ var jfp = (function(){
         return j.apply(partialAndReverse, args);
     }
 
-    function keyDeref(baseObj, key){
-        return j.isNull(baseObj) || j.isUndefined(baseObj[key]) ? null : baseObj[key];
-    }
-
     function deref(baseData, key, defaultValue){
-        var keyTokens = j.either('', key).split('.'),
-            safeData = j.isUndefined(baseData) ? null : baseData,
-            outputData = j.isTruthy(key) ? j.reduce(keyDeref, keyTokens, safeData) : safeData;
+        var sanitizedDefault = j.either(null, defaultValue),
+            keyTokens = j.either('', key).split('.'),
+            derefValue = j.reduce(j.reverseArgs(j.pick), keyTokens, baseData),
+            returnValue = Boolean(key) ? derefValue : baseData;
         
-        return outputData === null && !j.isUndefined(defaultValue) ? defaultValue : outputData;
+        returnValue = !Boolean(baseData) ? null : returnValue;
+        
+        return returnValue === null ? sanitizedDefault : returnValue;
     }
 
     j.and = and;

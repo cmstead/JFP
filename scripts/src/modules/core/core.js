@@ -80,7 +80,7 @@
     function reverseArgs(userFn){
         return function(){
             var args = j.slice(0, arguments).reverse();
-            j.apply(userFn, args);
+            return j.apply(userFn, args);
         };
     }
 
