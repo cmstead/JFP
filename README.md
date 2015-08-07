@@ -16,6 +16,13 @@ be limited to functions in the library.
 Programmers should be able to extend their libraries easily. Programmers should be able
 to bend their environment to their own will, not the other way around. This is what JFP gives you.
 
+###v2.2.0
+
+Added functionality to j-aliasing - pick aliasing
+
+calling j(':propertyname') returns a partially applied j.pick
+calling j(':propertyname', object) will return the picked property from an object
+
 ###v2.1.0
 
 Because sometimes I forget how to semver...
