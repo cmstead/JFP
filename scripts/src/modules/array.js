@@ -31,20 +31,6 @@
         return sanitizedArray;
     }
 
-    function filter(predicate, userArray){
-        var result = [];
-
-        function filterFn(value){
-            j.when(predicate(value), function(){
-                result = conj(value, result);
-            });
-        }
-
-        each(filterFn, userArray);
-
-        return result;
-    }
-
     function find(predicate, valueSet){
         var finalValue = null;
 
@@ -89,18 +75,6 @@
 
     function dropLast(valueSet){
         return drop(lastIndex(valueSet), valueSet);
-    }
-
-    function map(userFn, userArray){
-        var finalArray = [];
-
-        function mapFn(value){
-            finalArray = conj(userFn(value), finalArray);
-        }
-
-        each(mapFn, userArray);
-
-        return finalArray;
     }
 
     function nth(index, valueSet){
@@ -230,14 +204,12 @@
     j.dropLast = dropLast;
     j.each = each;
     j.every = every;
-    j.filter = filter;
     j.find = find;
     j.first = first;
     j.init = j.dropLast;
     j.intersect = intersect;
     j.last = last;
     j.lastIndex = lastIndex;
-    j.map = map;
     j.nth = nth;
     j.numberOf = numberOf;
     j.rest = rest;

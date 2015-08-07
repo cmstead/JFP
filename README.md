@@ -16,6 +16,12 @@ be limited to functions in the library.
 Programmers should be able to extend their libraries easily. Programmers should be able
 to bend their environment to their own will, not the other way around. This is what JFP gives you.
 
+###v2.2.1
+
+- Removed unnecessary code for function argument length and fell back to standard JS behavior, Function.length
+- Refactored reduce to eliminate nested functions
+- Refactored map and filter to be functions of reduce
+
 ###v2.2.0
 
 Added functionality to j-aliasing - pick aliasing

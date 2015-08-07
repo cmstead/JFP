@@ -84,19 +84,8 @@
         };
     }
 
-    function captureArguments(userFn){
-        return userFn.toString()
-            .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
-            .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-            .split(/,/);
-    }
-
     function countArguments(userFn){
-        var params = shortCircuit([], captureArguments, userFn);
-
-        params = (params.length === 1 && params[0] === '') ? [] : params;
-
-        return params.length;
+        return either(function(){}, userFn).length;
     }
 
     function execute(userFn){
