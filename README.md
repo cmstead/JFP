@@ -16,11 +16,22 @@ be limited to functions in the library.
 Programmers should be able to extend their libraries easily. Programmers should be able
 to bend their environment to their own will, not the other way around. This is what JFP gives you.
 
+###V2.3.0
+
+Upcoming functionality
+
+- [ ] Pattern matching (defmatch)
+- [ ] Conditional cleanup with pattern matching functionality
+
 ###v2.2.1
 
+Upcoming changes
+
+- Refactorization of functions for readability and maintenance
 - Removed unnecessary code for function argument length and fell back to standard JS behavior, Function.length
-- Refactored reduce to eliminate nested functions
-- Refactored map and filter to be functions of reduce
+- Reworking dependencies to simplify code
+- Enhacning performance as applicable
+- Adding license information (Never quite did that. WHOOPS!)
 
 ###v2.2.0
 
