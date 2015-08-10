@@ -600,23 +600,6 @@ var jfp = (function(){
         return j.apply(compose, j.slice(1, arguments).reverse())(value);
     }
 
-    // function unique(valueSet){
-    //     var values = j.slice(0, valueSet).sort(),
-    //         finalValues = [];
-
-    //     function operator(value){
-    //         finalValues = j.eitherIf(finalValues,
-    //                                  j.conj(value, finalValues),
-    //                                  j.compose(j.not,
-    //                                            j.partial(j.equal, value),
-    //                                            j.last)(finalValues));
-    //     }
-
-    //     j.each(operator, values);
-
-    //     return finalValues;
-    // }
-
     function captureUnique(finalList, value){
         if(j.last(finalList) !== value){
             finalList.push(value);
