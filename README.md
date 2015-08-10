@@ -16,6 +16,22 @@ be limited to functions in the library.
 Programmers should be able to extend their libraries easily. Programmers should be able
 to bend their environment to their own will, not the other way around. This is what JFP gives you.
 
+###V2.3.0
+
+Upcoming functionality
+
+- [ ] Pattern matching (defmatch)
+- [ ] Conditional cleanup with pattern matching functionality
+
+###v2.2.1
+
+Upcoming changes
+
+- Refactorization of functions for readability and maintenance
+- Reworking dependencies to simplify code
+- Enhacning performance as applicable
+- Adding license information (Never quite did that. WHOOPS!)
+
 ###v2.2.0
 
 Added functionality to j-aliasing - pick aliasing
