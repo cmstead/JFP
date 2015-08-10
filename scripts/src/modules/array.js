@@ -143,62 +143,10 @@
         return finalSet.sort(comparator);
     }
 
-    function union(set1, set2){
-        return j.compose(j.unique, j.concat)(set1, set2);
-    }
-
-    function buildValueHash(valueSet){
-        var finalHash = {};
-
-        j.each(function(value){
-            finalHash[value] = true;
-        }, valueSet);
-
-        return finalHash;
-    }
-
-    function intersect(set1, set2){
-        var finalSet = [],
-            seta = j.unique(j.either([], set1)),
-            setbHash = buildValueHash(j.either([], set2)),
-            i = 0;
-
-        for(; i < seta.length; i++){
-            if(setbHash[seta[i]]){
-                finalSet.push(seta[i]);
-            }
-        }
-
-        return finalSet;
-    }
-
-    function difference(set1, set2){
-        var finalSet = [],
-            seta = j.unique(j.either([], set1)),
-            setbHash = buildValueHash(j.either([], set2)),
-            i = 0;
-
-        for(; i < seta.length; i++){
-            if(!setbHash[seta[i]]){
-                finalSet.push(seta[i]);
-            }
-        }
-
-        return finalSet;
-    }
-
-    function symmetricDifference(set1, set2){
-        var setUnion = union(set1, set2),
-            setIntersection = intersect(set1, set2);
-
-        return difference(setUnion, setIntersection);
-    }
-
     j.conj = conj;
     j.cons = cons;
     j.contains = contains;
     j.copyArray = copyArray;
-    j.difference = difference;
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
@@ -207,7 +155,6 @@
     j.find = find;
     j.first = first;
     j.init = j.dropLast;
-    j.intersect = intersect;
     j.last = last;
     j.lastIndex = lastIndex;
     j.nth = nth;
@@ -215,8 +162,6 @@
     j.rest = rest;
     j.sort = sort;
     j.some = some;
-    j.symmetricDifference = symmetricDifference;
     j.take = take;
-    j.union = union;
 
 })(jfp);

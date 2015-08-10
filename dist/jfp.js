@@ -387,62 +387,10 @@ var jfp = (function(){
         return finalSet.sort(comparator);
     }
 
-    function union(set1, set2){
-        return j.compose(j.unique, j.concat)(set1, set2);
-    }
-
-    function buildValueHash(valueSet){
-        var finalHash = {};
-
-        j.each(function(value){
-            finalHash[value] = true;
-        }, valueSet);
-
-        return finalHash;
-    }
-
-    function intersect(set1, set2){
-        var finalSet = [],
-            seta = j.unique(j.either([], set1)),
-            setbHash = buildValueHash(j.either([], set2)),
-            i = 0;
-
-        for(; i < seta.length; i++){
-            if(setbHash[seta[i]]){
-                finalSet.push(seta[i]);
-            }
-        }
-
-        return finalSet;
-    }
-
-    function difference(set1, set2){
-        var finalSet = [],
-            seta = j.unique(j.either([], set1)),
-            setbHash = buildValueHash(j.either([], set2)),
-            i = 0;
-
-        for(; i < seta.length; i++){
-            if(!setbHash[seta[i]]){
-                finalSet.push(seta[i]);
-            }
-        }
-
-        return finalSet;
-    }
-
-    function symmetricDifference(set1, set2){
-        var setUnion = union(set1, set2),
-            setIntersection = intersect(set1, set2);
-
-        return difference(setUnion, setIntersection);
-    }
-
     j.conj = conj;
     j.cons = cons;
     j.contains = contains;
     j.copyArray = copyArray;
-    j.difference = difference;
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
@@ -451,7 +399,6 @@ var jfp = (function(){
     j.find = find;
     j.first = first;
     j.init = j.dropLast;
-    j.intersect = intersect;
     j.last = last;
     j.lastIndex = lastIndex;
     j.nth = nth;
@@ -459,9 +406,7 @@ var jfp = (function(){
     j.rest = rest;
     j.sort = sort;
     j.some = some;
-    j.symmetricDifference = symmetricDifference;
     j.take = take;
-    j.union = union;
 
 })(jfp);
 
@@ -572,8 +517,8 @@ var jfp = (function(){
 
     function reduce(userFn, values, initialState){
         var appliedReducer = j.partial(reducer, userFn),
-            initialValue = j.either(j.first(values), initialState),
-            remainder = j.eitherIf(j.rest(values), values, j.isTruthy(initialState));
+            initialValue = j.eitherIf(j.first(values), initialState, !j.isUndefined(initialState)),
+            remainder = j.eitherIf(j.rest(values), values, !j.isUndefined(initialState));
             
         return (!!values && values.length > 0) ? recur(appliedReducer, initialValue, remainder) : null;
     }
@@ -655,21 +600,34 @@ var jfp = (function(){
         return j.apply(compose, j.slice(1, arguments).reverse())(value);
     }
 
-    function unique(valueSet){
-        var values = j.slice(0, valueSet).sort(),
-            finalValues = [];
+    // function unique(valueSet){
+    //     var values = j.slice(0, valueSet).sort(),
+    //         finalValues = [];
 
-        function operator(value){
-            finalValues = j.eitherIf(finalValues,
-                                     j.conj(value, finalValues),
-                                     j.compose(j.not,
-                                               j.partial(j.equal, value),
-                                               j.last)(finalValues));
+    //     function operator(value){
+    //         finalValues = j.eitherIf(finalValues,
+    //                                  j.conj(value, finalValues),
+    //                                  j.compose(j.not,
+    //                                            j.partial(j.equal, value),
+    //                                            j.last)(finalValues));
+    //     }
+
+    //     j.each(operator, values);
+
+    //     return finalValues;
+    // }
+
+    function captureUnique(finalList, value){
+        if(j.last(finalList) !== value){
+            finalList.push(value);
         }
-
-        j.each(operator, values);
-
-        return finalValues;
+        
+        return finalList;
+    }
+    
+    function unique(valueSet){
+        var values = j.sort(j.slice(0, valueSet));
+        return reduce(captureUnique, values, []);
     }
 
     function partialReverse(){
@@ -690,18 +648,68 @@ var jfp = (function(){
         return returnValue === null ? sanitizedDefault : returnValue;
     }
 
+    function union(set1, set2){
+        return j.compose(j.unique, j.concat)(set1, set2);
+    }
+
+    function addToHash(finalObject, value){
+        finalObject[value] = true;
+        return finalObject;
+    }
+
+    function buildValueHash(valueList){
+        return j.either({}, reduce(addToHash, valueList, {}));
+    }
+
+    function captureIntersection(valueHash, finalList, value){
+        if(valueHash[value]){
+            finalList.push(value);
+        }
+
+        return finalList;
+    }
+    
+    function intersect(set1, set2){
+        var setHash = buildValueHash(j.either([], set2));
+        return reduce(j.partial(captureIntersection, setHash), set1, []); 
+    }
+
+    function captureDifference(valueHash, finalList, value){
+        if(!valueHash[value]){
+            finalList.push(value);
+        }
+        
+        return finalList;
+    }
+    
+    function difference(set1, set2){
+        var setHash = buildValueHash(j.either([], set2));
+        return reduce(j.partial(captureDifference, setHash), set1, []);
+    }
+
+    function symmetricDifference(set1, set2){
+        var setUnion = union(set1, set2),
+            setIntersection = intersect(set1, set2);
+
+        return difference(setUnion, setIntersection);
+    }
+
     j.and = and;
     j.compact = j.partial(filter, j.isTruthy);
     j.compose = compose;
     j.curry = curry;
     j.deref = deref;
+    j.difference = difference;
     j.filter = filter;
+    j.intersect = intersect;
     j.map = map;
     j.or = or;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;
     j.recur = recur;
     j.reduce = reduce;
+    j.symmetricDifference = symmetricDifference;
+    j.union = union;
     j.unique = unique;
     j.xor = xor;
 
