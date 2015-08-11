@@ -119,18 +119,6 @@
         return satisfied;
     }
 
-    function numberOf(predicate, valueSet){
-        var accumulator = 0;
-
-        function accumulate(value){
-            accumulator += predicate(value) ? 1 : 0;
-        }
-
-        each(accumulate, valueSet);
-
-        return accumulator;
-    }
-
     function naturalComparator(a, b){
         var comparison = a < b ? -1 : 1;
         return a === b ? 0 : comparison;
@@ -158,7 +146,6 @@
     j.last = last;
     j.lastIndex = lastIndex;
     j.nth = nth;
-    j.numberOf = numberOf;
     j.rest = rest;
     j.sort = sort;
     j.some = some;

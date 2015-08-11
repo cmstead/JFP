@@ -55,10 +55,10 @@
 
     function reduce(userFn, values, initialState){
         var appliedReducer = j.partial(reducer, userFn),
-            initialValue = j.eitherIf(j.first(values), initialState, !j.isUndefined(initialState)),
-            remainder = j.eitherIf(j.rest(values), values, !j.isUndefined(initialState));
+            initialValue = j.isUndefined(initialState) ? j.first(values) : initialState,
+            remainder = j.isUndefined(initialState) ? j.rest(values) : values;
             
-        return (!!values && values.length > 0) ? recur(appliedReducer, initialValue, remainder) : null;
+        return (!!values && values.length > 0) ? recur(appliedReducer, initialValue, remainder) : initialValue;
     }
 
 
@@ -87,39 +87,47 @@
      * Filterer handles a single update step for the final output array
      */
     function filterer(userPredicate, finalArray, value){
-        if(userPredicate(value)){
-            finalArray.push(value);
-        }
-        
-        return finalArray;
+        return userPredicate(value) ? j.conj(value, finalArray) : finalArray;
     }
 
     filter = j.partial(arrayReduceAdapter, filterer);
 
+    function predicateAccumulator(predicate, total, value){
+        var sanitizedTotal = j.either(0, total, 'number');
+        console.log(total, value, predicate(value));
+        return predicate(value) ? sanitizedTotal + 1 : sanitizedTotal;
+    }
+
+    function numberOf(predicate, valueSet){
+        var accumulator = j.partial(predicateAccumulator, predicate);
+        return reduce(accumulator, j.either([], valueSet), 0);
+    }
+
     //Performs 'and' operation on valueSet
-    function ander(recur, current, valueSet){
-        return (valueSet.length === 0) ?
-            current :
-            recur(current && Boolean(j.first(valueSet)), j.rest(valueSet));
+    function ander(a, b){
+        return a && b;
     }
 
-    function and(){
-        return recur(ander, true, j.slice(0, arguments));
+    function orer(a, b){
+        return a || b;
     }
 
-    //Performs 'or' operation on valueSet
-    function orer(recur, current, valueSet){
-        return (valueSet.length === 0) ?
-            current :
-            recur(current || Boolean(j.first(valueSet)), j.rest(valueSet));
+    function reduceConditions(conditionArgs, operator, initialCondition){
+        var args = j.map(Boolean, j.slice(0, conditionArgs));
+        return Boolean(reduce(operator, args, initialCondition));
     }
 
-    function or(){
-        return recur(orer, false, j.slice(0, arguments));
+    function and(a, b){
+        return reduceConditions(arguments, ander, true);
+    }
+
+    function or(a, b){
+        return reduceConditions(arguments, orer, false);
     }
 
     function xor(a, b){
-        return Boolean(or(a, b) && j.not(j.isTruthy(a) === j.isTruthy(b)));
+        var equivalent = Boolean(a) === Boolean(b);
+        return or(a, b) && j.not(equivalent);
     }
 
     //Produces a function that returns f(g(x))
@@ -130,8 +138,7 @@
     }
 
     function compose(){
-        var args = j.slice(0, arguments);
-        return (args.length >= 1) ? reduce(compositor, args) : j.identity;
+        return reduce(compositor, j.slice(0, arguments), j.identity);
     }
 
     function pipeline(value){
@@ -139,34 +146,29 @@
     }
 
     function captureUnique(finalList, value){
-        if(j.last(finalList) !== value){
-            finalList.push(value);
-        }
-        
-        return finalList;
+        return j.last(finalList) === value ? finalList : j.conj(value, finalList);
     }
     
     function unique(valueSet){
-        var values = j.sort(j.slice(0, valueSet));
-        return reduce(captureUnique, values, []);
+        return reduce(captureUnique, j.sort(j.slice(0, valueSet)), []);
     }
 
     function partialReverse(){
-        var args = j.slice(0, arguments),
-            partialAndReverse = j.compose(j.reverseArgs, j.partial);
-            
-        return j.apply(partialAndReverse, args);
+        return j.apply(j.compose(j.reverseArgs, j.partial),
+                       j.slice(0, arguments));
+    }
+
+    function dereferencer(dataObject, token){
+        var key = j.either('', token).trim();
+        return key === '' ? dataObject : j.pick(token, dataObject);
     }
 
     function deref(baseData, key, defaultValue){
-        var sanitizedDefault = j.either(null, defaultValue),
-            keyTokens = j.either('', key).split('.'),
-            derefValue = j.reduce(j.reverseArgs(j.pick), keyTokens, baseData),
-            returnValue = Boolean(key) ? derefValue : baseData;
+        var sanitizedDefault = defaultValue === undefined ? null : defaultValue,
+            keyTokens = j.either('', key, 'string').split('.'),
+            result = reduce(dereferencer, keyTokens, j.either(null, baseData, 'object'));
         
-        returnValue = !Boolean(baseData) ? null : returnValue;
-        
-        return returnValue === null ? sanitizedDefault : returnValue;
+        return j.either(sanitizedDefault, result);
     }
 
     function union(set1, set2){
@@ -183,11 +185,7 @@
     }
 
     function captureIntersection(valueHash, finalList, value){
-        if(valueHash[value]){
-            finalList.push(value);
-        }
-
-        return finalList;
+        return valueHash[value] ? j.conj(value, finalList) : finalList;
     }
     
     function intersect(set1, set2){
@@ -196,11 +194,7 @@
     }
 
     function captureDifference(valueHash, finalList, value){
-        if(!valueHash[value]){
-            finalList.push(value);
-        }
-        
-        return finalList;
+        return !valueHash[value] ? j.conj(value, finalList) : finalList;
     }
     
     function difference(set1, set2){
@@ -224,6 +218,7 @@
     j.filter = filter;
     j.intersect = intersect;
     j.map = map;
+    j.numberOf = numberOf;
     j.or = or;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;

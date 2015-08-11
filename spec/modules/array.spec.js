@@ -462,28 +462,6 @@ var jfp = require('../../dist/jfp.js'),
 
     });
 
-    describe('numberOf', function(){
-
-        it('should return correct count of 1', function(){
-            var testArray = [2];
-
-            expect(j.numberOf(j.isEven, testArray)).toBe(1);
-        });
-
-        it('should return correct count of 0', function(){
-            var testArray = [1, 3, 5, 7];
-
-            expect(j.numberOf(j.isEven, testArray)).toBe(0);
-        });
-
-        it('should return correct count of 4', function(){
-            var testArray = [2, 4, 6, 7, 8];
-
-            expect(j.numberOf(j.isEven, testArray)).toBe(4);
-        });
-
-    });
-
     describe('sort', function(){
 
         it('should perform a natural sort by default', function(){
