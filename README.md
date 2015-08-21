@@ -16,6 +16,11 @@ be limited to functions in the library.
 Programmers should be able to extend their libraries easily. Programmers should be able
 to bend their environment to their own will, not the other way around. This is what JFP gives you.
 
+Licensed under the Mozilla Public License (MPL). For the full text of the license please see the included text file.
+If the text file has been removed, please visit:
+
+https://www.mozilla.org/MPL/
+
 ###V2.3.0
 
 Upcoming functionality
