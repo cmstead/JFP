@@ -25,8 +25,9 @@ https://www.mozilla.org/MPL/
 
 Upcoming functionality
 
-- [ ] Pattern matching (defmatch)
-- [ ] Conditional cleanup with pattern matching functionality
+- [ ] Partition - partitions list based on predicate function
+- [ ] MultiPartition - Partitions list based on 2-arity predicate function with a list of comparison values
+- [ ] Update deref to accept key, object by default and fall back to compatible mode to support 2.0.x implementation
 
 ###v2.2.1
 
