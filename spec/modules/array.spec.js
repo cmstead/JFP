@@ -555,5 +555,20 @@ var jfp = require('../../dist/jfp.js'),
         });
 
     });
+    
+    describe('partition', function(){
+        
+        it('should return an array containing two arrays', function(){
+            var result = j.partition();
+            
+            expect(JSON.stringify(result)).toBe('[[],[]]');
+        });
+        
+        it('should partition a one-item array', function(){
+            var result = j.partition(j.isEven, [2])
+            expect(JSON.stringify(result)).toBe('[[2],[]]');
+        });
+        
+    });
 
 })();

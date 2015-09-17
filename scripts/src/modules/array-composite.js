@@ -127,6 +127,15 @@
         return some(j.partial(j.equal, value), valueList);
     }
 
+    function partition(predicate, list){
+        var sanitizedList = j.either([], list),
+            partitions = [[], []];
+        
+        partitions = sanitizedList.length === 1 ? [[2], []] : partitions;
+        
+        return partitions;
+    }
+
     j.contains = contains;
     j.compact = compact;
     j.difference = difference;
@@ -136,6 +145,7 @@
     j.intersect = intersect;
 	j.map = map;
 	j.numberOf = numberOf;
+    j.partition = partition;
     j.some = some;
     j.symmetricDifference = symmetricDifference;
     j.union = union;
