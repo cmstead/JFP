@@ -25,7 +25,7 @@ https://www.mozilla.org/MPL/
 
 Upcoming functionality
 
-- [ ] Partition - partitions list based on predicate function
+- [x] Partition - partitions list based on predicate function
 - [ ] MultiPartition - Partitions list based on 2-arity predicate function with a list of comparison values
 - [ ] Update deref to accept key, object by default and fall back to compatible mode to support 2.0.x implementation
 
