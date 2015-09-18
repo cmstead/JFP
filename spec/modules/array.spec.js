@@ -569,6 +569,11 @@ var jfp = require('../../dist/jfp.js'),
             expect(JSON.stringify(result)).toBe('[[2],[]]');
         });
         
+        it('should partition a multi-item array', function(){
+            var result = j.partition(j.isEven, [1, 2, 3, 4, 5]);
+            expect(JSON.stringify(result)).toBe('[[2,4],[1,3,5]]');
+        });
+        
     });
 
 })();

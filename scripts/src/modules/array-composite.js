@@ -127,13 +127,20 @@
         return some(j.partial(j.equal, value), valueList);
     }
 
-    function partition(predicate, list){
-        var sanitizedList = j.either([], list),
-            partitions = [[], []];
-        
-        partitions = sanitizedList.length === 1 ? [[2], []] : partitions;
-        
+    function partitioner(predicate, partitions, value){
+        var index = predicate(value) ? 0 : 1;
+
+        partitions[index].push(value);
+
         return partitions;
+    }
+
+    function partition(predicate, list){
+        var sanitizedPredicate = j.either(j.identity, predicate, 'function');
+        
+        return j.reduce(j.partial(partitioner, sanitizedPredicate),
+                        j.either([], list),
+                        [[], []]);
     }
 
     j.contains = contains;
