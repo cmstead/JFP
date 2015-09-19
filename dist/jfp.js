@@ -613,6 +613,25 @@ var jfp = (function(){
                         [[], []]);
     }
 
+    function multiPartitioner(predicate, partitions, value){
+        var partitionPredicate = j.rpartial(predicate, value),
+            computedPartitions = j.dropLast(partitions);
+        
+        return j.concat(computedPartitions, partition(partitionPredicate, j.last(partitions)));
+    }
+    
+    function multiPartition(predicate, predicateArgs, list){
+        var sanitizedArgs = j.either([], predicateArgs),
+            sanitizedPredicate = j.either(j.identity, predicate),
+            sanitizedList = j.either([], list);
+            
+        return !Boolean(list) ?
+                [[], []] :
+                j.reduce(j.partial(multiPartitioner, sanitizedPredicate),
+                         sanitizedArgs,
+                         [sanitizedList]);
+    }
+
     j.contains = contains;
     j.compact = compact;
     j.difference = difference;
@@ -621,6 +640,7 @@ var jfp = (function(){
     j.find = find;
     j.intersect = intersect;
 	j.map = map;
+	j.multiPartition = multiPartition;
 	j.numberOf = numberOf;
     j.partition = partition;
     j.some = some;

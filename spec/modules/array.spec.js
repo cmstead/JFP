@@ -564,6 +564,12 @@ var jfp = require('../../dist/jfp.js'),
             expect(JSON.stringify(result)).toBe('[[],[]]');
         });
         
+        it('should return an array containing two arrays', function(){
+            var result = j.partition(j.isEven, []);
+            
+            expect(JSON.stringify(result)).toBe('[[],[]]');
+        });
+        
         it('should partition a one-item array', function(){
             var result = j.partition(j.isEven, [2])
             expect(JSON.stringify(result)).toBe('[[2],[]]');
@@ -572,6 +578,36 @@ var jfp = require('../../dist/jfp.js'),
         it('should partition a multi-item array', function(){
             var result = j.partition(j.isEven, [1, 2, 3, 4, 5]);
             expect(JSON.stringify(result)).toBe('[[2,4],[1,3,5]]');
+        });
+        
+    });
+    
+    describe('multiPartition', function(){
+        
+        var predicate;
+        
+        beforeEach(function(){
+            predicate = j.compose(j('equal', 0), j.mod);
+        });
+        
+        it('should return an empty partition with no arguments', function(){
+            var result = j.multiPartition();
+            expect(JSON.stringify(result)).toBe('[[],[]]');
+        });
+        
+        it('should partition one-element array on one requirement', function(){
+            var result = j.multiPartition(predicate, [2], [2]);
+            expect(JSON.stringify(result)).toBe('[[2],[]]');
+        });
+        
+        it('should partition multi-element array on one requirement', function(){
+            var result = j.multiPartition(predicate, [2], [1, 2, 3, 4, 5]);
+            expect(JSON.stringify(result)).toBe('[[2,4],[1,3,5]]');
+        });
+        
+        it('should partition multi-element array on multiple requirements', function(){
+            var result = j.multiPartition(predicate, [2, 3, 5], [2, 3, 4, 5, 9, 11, 25]);
+            expect(JSON.stringify(result)).toBe('[[2,4],[3,9],[5,25],[11]]');
         });
         
     });
