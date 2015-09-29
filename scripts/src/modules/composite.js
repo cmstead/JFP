@@ -29,7 +29,7 @@
     //Tail optimization with managed recursion is really complicated.
     //Please don't muck with this unless you TRULY understand what is happening.
     function recur(userFn){
-        var recursingFn = j.either(j.identity, userFn),
+        var recursingFn = j.either(j.identity, userFn, 'function'),
             localRecursor = j.partial(recursor, recursingFn),
             recurValue = j.apply(localRecursor, j.slice(1, arguments));
 
@@ -67,9 +67,11 @@
 
     function reduce(userFn, values, initialState){
         var appliedReducer = j.partial(reducer, userFn),
-            initialValue = j.isUndefined(initialState) ? j.first(values) : initialState,
-            remainder = j.isUndefined(initialState) ? j.rest(values) : values;
+            hasInitialState = typeof initialState !== 'undefined',
             
+            initialValue = !hasInitialState ? j.first(values) : initialState,
+            remainder = !hasInitialState ? j.rest(values) : values;
+        
         return (!!values && values.length > 0) ? j.recur(appliedReducer, initialValue, remainder) : initialValue;
     }
 

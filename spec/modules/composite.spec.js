@@ -173,6 +173,10 @@ var jfp = require('../../dist/jfp.js'),
             expect(j.deref(null, null, 'foo')).toBe('foo');
         });
         
+        it('should support key first, object second calling', function(){
+            expect(j.deref('test1.test2.1', testData)).toBe(testData.test1.test2[1]);
+        });
+        
     });
 
 })();

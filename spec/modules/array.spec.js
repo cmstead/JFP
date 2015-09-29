@@ -245,6 +245,13 @@ var jfp = require('../../dist/jfp.js'),
             
             expect(j.reduce(add, [1, 2, 3, 4], 5)).toBe(15);
         });
+        
+        xit('should accept 0 as an initial argument', function(){
+            var objectList = [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }],
+                pickAndAdd = j.compose(j.add, j.partial(j.pick, 'value'));
+            
+            expect(j.reduce(pickAndAdd, objectList, 0)).toBe(10);
+        });
 
     });
 

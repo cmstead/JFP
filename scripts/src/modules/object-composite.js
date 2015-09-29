@@ -6,12 +6,24 @@
         return key === '' ? dataObject : j.pick(token, dataObject);
     }
 
-    function deref(baseData, key, defaultValue){
+    function internalDeref(key, baseData, defaultValue){
         var sanitizedDefault = defaultValue === undefined ? null : defaultValue,
-            keyTokens = j.either('', key, 'string').split('.'),
-            result = j.reduce(dereferencer, keyTokens, j.either(null, baseData, 'object'));
+            keyTokens = key.split('.'),
+            result = j.reduce(dereferencer, keyTokens, baseData);
         
         return j.either(sanitizedDefault, result);
+    }
+    
+    function deref(key, baseData, defaultValue){
+        // Satisifes backwards-compatibility case where key an data are reversed
+        var sanitizedKey = typeof key === 'string' ? key : baseData,
+            sanitizedData = typeof baseData === 'object' ? baseData : key;
+        
+        // Fully sanitize data before executing the dereference function
+        sanitizedKey = j.either('', sanitizedKey, 'string');
+        sanitizedData = j.either(null, sanitizedData, 'object');
+        
+        return internalDeref(j.either('', sanitizedKey), sanitizedData, defaultValue);
     }
     
     function plucker (baseObj, finalObj, key){

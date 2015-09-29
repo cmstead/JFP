@@ -393,7 +393,7 @@ var jfp = (function(){
     //Tail optimization with managed recursion is really complicated.
     //Please don't muck with this unless you TRULY understand what is happening.
     function recur(userFn){
-        var recursingFn = j.either(j.identity, userFn),
+        var recursingFn = j.either(j.identity, userFn, 'function'),
             localRecursor = j.partial(recursor, recursingFn),
             recurValue = j.apply(localRecursor, j.slice(1, arguments));
 
@@ -431,9 +431,13 @@ var jfp = (function(){
 
     function reduce(userFn, values, initialState){
         var appliedReducer = j.partial(reducer, userFn),
-            initialValue = j.isUndefined(initialState) ? j.first(values) : initialState,
-            remainder = j.isUndefined(initialState) ? j.rest(values) : values;
+            hasInitialState = typeof initialState !== 'undefined',
             
+            initialValue = !hasInitialState ? j.first(values) : initialState,
+            remainder = !hasInitialState ? j.rest(values) : values;
+        
+        console.log(initialValue, remainder);
+        
         return (!!values && values.length > 0) ? j.recur(appliedReducer, initialValue, remainder) : initialValue;
     }
 
@@ -694,12 +698,24 @@ var jfp = (function(){
         return key === '' ? dataObject : j.pick(token, dataObject);
     }
 
-    function deref(baseData, key, defaultValue){
+    function internalDeref(key, baseData, defaultValue){
         var sanitizedDefault = defaultValue === undefined ? null : defaultValue,
-            keyTokens = j.either('', key, 'string').split('.'),
-            result = j.reduce(dereferencer, keyTokens, j.either(null, baseData, 'object'));
+            keyTokens = key.split('.'),
+            result = j.reduce(dereferencer, keyTokens, baseData);
         
         return j.either(sanitizedDefault, result);
+    }
+    
+    function deref(key, baseData, defaultValue){
+        // Satisifes backwards-compatibility case where key an data are reversed
+        var sanitizedKey = typeof key === 'string' ? key : baseData,
+            sanitizedData = typeof baseData === 'object' ? baseData : key;
+        
+        // Fully sanitize data before executing the dereference function
+        sanitizedKey = j.either('', sanitizedKey, 'string');
+        sanitizedData = j.either(null, sanitizedData, 'object');
+        
+        return internalDeref(j.either('', sanitizedKey), sanitizedData, defaultValue);
     }
     
     function plucker (baseObj, finalObj, key){
