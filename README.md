@@ -28,7 +28,6 @@ Upcoming functionality
 - [x] Partition - partitions list based on predicate function
 - [x] MultiPartition - Partitions list based on 2-arity predicate function with a list of comparison values
 - [x] Update deref to accept key, object by default and fall back to compatible mode to support 2.0.x implementation
-- [ ] Fix bug in reduce that doesn't recognize defined, falsey values for initial arguments.
 
 ###v2.2.1
 

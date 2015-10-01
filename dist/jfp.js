@@ -423,10 +423,10 @@ var jfp = (function(){
      * Reduce manages the setup and recursion execution.
      */
     function reducer(userFn, recur, reduction, collection){
-        var finished = collection.length === 0,
-            newReduction = finished ? reduction : userFn(reduction, j.first(collection));
-            
-        return finished ? reduction : recur(newReduction, j.rest(collection));
+        return collection.length === 0 ?
+                    reduction :
+                    recur(userFn(reduction, j.first(collection)),
+                          j.rest(collection));
     }
 
     function reduce(userFn, values, initialState){
@@ -435,9 +435,7 @@ var jfp = (function(){
             
             initialValue = !hasInitialState ? j.first(values) : initialState,
             remainder = !hasInitialState ? j.rest(values) : values;
-        
-        console.log(initialValue, remainder);
-        
+
         return (!!values && values.length > 0) ? j.recur(appliedReducer, initialValue, remainder) : initialValue;
     }
 
