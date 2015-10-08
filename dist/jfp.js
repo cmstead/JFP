@@ -78,8 +78,26 @@ var jfp = (function(){
         return !!value;
     }
     
+    function isType (typeString, value) {
+        return typeof value === typeString;
+    }
+    
     function isUndefined(value){
         return value === undefined;
+    }
+    
+    function typeCheckReduction (value, result, typeString){
+        return result || isType(typeString, value);
+    }
+    
+    function isPrimitive (value) {
+        var nullValue = isNull(value),
+            primitiveNames = ['number',
+                              'string',
+                              'boolean',
+                              'undefined'];
+
+        return primitiveNames.reduce(typeCheckReduction.bind(null, value), nullValue);
     }
 
     function not(value){
@@ -94,7 +112,9 @@ var jfp = (function(){
     j.isNumber = isNumber;
     j.isNumeric = isNumeric;
     j.isObject = isObject;
+    j.isPrimitive = isPrimitive;
     j.isString = isString;
+    j.isType = isType;
     j.isTruthy = isTruthy;
     j.isUndefined = isUndefined;
     j.not = not;
@@ -459,6 +479,16 @@ var jfp = (function(){
                        j.slice(0, arguments));
     }
 
+    function copy (value) {
+        var container = j.isArray(value) ? [] : {};
+        return container;
+    }
+
+    function clone (value) {
+        return j.isType('object', value) ? copy(value) : value;
+    }
+
+    j.clone = clone;
     j.compose = compose;
     j.curry = curry;
     j.partialReverse = partialReverse;

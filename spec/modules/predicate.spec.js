@@ -237,6 +237,46 @@ var jfp = require('../../dist/jfp.js'),
             });
 
         });
+        
+        describe('isType', function () {
+            
+            it('should return false if type does not match', function(){
+                expect(j.isType('string', 5)).toBe(false);
+            });
+            
+            it('should return true if type does match', function(){
+                expect(j.isType('string', 'foo')).toBe(true);
+            });
+            
+        });
+        
+        describe('isPrimitive', function(){
+            
+            it('should return false if value is not a primitive', function () {
+                expect(j.isPrimitive({})).toBe(false);
+            });
+
+            it('should return true if value is a number', function(){
+                expect(j.isPrimitive(5)).toBe(true);
+            });
+            
+            it('should return true if value is a string', function () {
+                expect(j.isPrimitive('foo')).toBe(true);
+            });
+            
+            it('should return true if value is a boolean', function () {
+                expect(j.isPrimitive(true)).toBe(true);
+            });
+            
+            it('should return true if value is undefined', function () {
+                expect(j.isPrimitive(undefined)).toBe(true);
+            });
+            
+            it('should return true if value is null', function () {
+                expect(j.isPrimitive(null)).toBe(true);
+            });
+            
+        });
 
     });
 

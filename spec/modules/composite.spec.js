@@ -178,5 +178,29 @@ var jfp = require('../../dist/jfp.js'),
         });
         
     });
-
+    
+    describe('clone', function(){
+        
+        it('should return original value if it is a primitive data type', function(){
+            expect(j.clone(5)).toBe(5);
+        });
+        
+        it('should return a copy of an array', function(){
+            var testArray = [],
+                result = j.clone(testArray);
+                
+            expect(result).not.toBe(testArray);
+            expect(j.isArray(result)).toBe(true);
+        });
+       
+       it('should return a copy of an object', function () {
+            var testObject = {},
+                result = j.clone(testObject);
+                
+            expect(result).not.toBe(testObject);
+            expect(j.isArray(result)).toBe(false);
+       });
+        
+    });
+    
 })();

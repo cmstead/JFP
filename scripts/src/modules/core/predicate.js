@@ -42,8 +42,26 @@
         return !!value;
     }
     
+    function isType (typeString, value) {
+        return typeof value === typeString;
+    }
+    
     function isUndefined(value){
         return value === undefined;
+    }
+    
+    function typeCheckReduction (value, result, typeString){
+        return result || isType(typeString, value);
+    }
+    
+    function isPrimitive (value) {
+        var nullValue = isNull(value),
+            primitiveNames = ['number',
+                              'string',
+                              'boolean',
+                              'undefined'];
+
+        return primitiveNames.reduce(typeCheckReduction.bind(null, value), nullValue);
     }
 
     function not(value){
@@ -58,7 +76,9 @@
     j.isNumber = isNumber;
     j.isNumeric = isNumeric;
     j.isObject = isObject;
+    j.isPrimitive = isPrimitive;
     j.isString = isString;
+    j.isType = isType;
     j.isTruthy = isTruthy;
     j.isUndefined = isUndefined;
     j.not = not;

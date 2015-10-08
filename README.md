@@ -21,6 +21,15 @@ If the text file has been removed, please visit:
 
 https://www.mozilla.org/MPL/
 
+###V2.4.0
+
+Upcoming functionality
+
+- [ ] getType - returns type of value -- <any> value -> <string>
+- [x] isType - checks type of value -- <string> typeString, <any> value -> <boolean>
+- [x] isPrimitive - checks if value type is a primitive -- <any> value -> <boolean>
+- [ ] clone - clones objects and arrays
+
 ###V2.3.0
 
 Upcoming functionality

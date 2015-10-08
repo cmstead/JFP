@@ -95,6 +95,16 @@
                        j.slice(0, arguments));
     }
 
+    function copy (value) {
+        var container = j.isArray(value) ? [] : {};
+        return container;
+    }
+
+    function clone (value) {
+        return j.isType('object', value) ? copy(value) : value;
+    }
+
+    j.clone = clone;
     j.compose = compose;
     j.curry = curry;
     j.partialReverse = partialReverse;
