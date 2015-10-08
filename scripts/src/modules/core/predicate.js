@@ -1,53 +1,33 @@
 (function(j){
     'use strict';
     
-    function isBoolean(value){
-        return typeof value === 'boolean';
-    }
-
-    function isFunction(testFn){
-        return typeof testFn === 'function';
-    }
-    
-    function isObject(value){
-        return (typeof value == 'object');
+    function isType (typeString, value) {
+        return typeof value === typeString;
     }
     
     function isArray(value){
-        return (isObject(value) && Object.prototype.toString.call(value) === '[object Array]');
+        return isType('object', value) && Object.prototype.toString.call(value) === '[object Array]';
     }
     
-    function isString(value){
-        return typeof value === 'string';
-    }
-
     function isEmptyString(value){
-        return isString(value) && value === '';
+        return value === '';
     }
     
     function isNull(value){
         return value === null;
     }
     
-    function isNumber(value){
-        return typeof value === 'number';
+    function isUndefined(value){
+        return value === undefined;
     }
     
     function isNumeric(value){
         var pattern = /^(0x)?[0-9]+((\.[0-9]+)|(e\-?[0-9]+))?$/;
-        return isNumber(value) || (isString(value) && !!value.match(pattern));
+        return isType('number', value) || (isType('string', value) && !!value.match(pattern));
     }
     
     function isTruthy(value){
-        return !!value;
-    }
-    
-    function isType (typeString, value) {
-        return typeof value === typeString;
-    }
-    
-    function isUndefined(value){
-        return value === undefined;
+        return Boolean(value);
     }
     
     function typeCheckReduction (value, result, typeString){
@@ -69,18 +49,18 @@
     }
 
     j.isArray = isArray;
-    j.isBoolean = isBoolean;
+    j.isBoolean = isType.bind(null, 'boolean');
     j.isEmptyString = isEmptyString;
-    j.isFunction = isFunction;
+    j.isFunction = isType.bind(null, 'function');
     j.isNull = isNull;
-    j.isNumber = isNumber;
+    j.isNumber = isType.bind(null, 'number');
     j.isNumeric = isNumeric;
-    j.isObject = isObject;
+    j.isObject = isType.bind(null, 'object');
     j.isPrimitive = isPrimitive;
-    j.isString = isString;
+    j.isString = isType.bind(null, 'string');
     j.isType = isType;
     j.isTruthy = isTruthy;
-    j.isUndefined = isUndefined;
+    j.isUndefined = isType.bind(null, 'undefined');
     j.not = not;
 
 })(jfp);
