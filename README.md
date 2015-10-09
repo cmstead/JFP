@@ -28,7 +28,7 @@ Upcoming functionality
 - [x] getType - returns type of value -- <any> value -> <string>
 - [x] isType - checks type of value -- <string> typeString, <any> value -> <boolean>
 - [x] isPrimitive - checks if value type is a primitive -- <any> value -> <boolean>
-- [x] clone - clones objects and arrays
+- [x] clone - clones objects and arrays -- <T> -> <T>
 - [x] Refactoring of predicate functionality
 
 ###V2.3.0
