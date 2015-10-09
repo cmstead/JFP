@@ -6,11 +6,6 @@
         });
     }
 
-    function equal(a, b){
-        var isNotUndefined = j.compose(j.not, j.isUndefined);
-        return (isNotUndefined(a) && isNotUndefined(b)) ? a === b : false;
-    }
-
     function greater(a, b){
         throwWhenNotComparable(a, b);
         return a > b;
@@ -21,25 +16,14 @@
         return a < b;
     }
 
-    function isEven(value){
-        return equal(0, j.mod(value, 2));
-    }
-
-    function isPositive(value){
-        return greater(value, 0);
-    }
-
-    function isZero(value){
-        return value === 0;
-    }
-
-    function isNegative(value){
-        return j.compose(j.not, j.or)(isPositive(value), isZero(value));
-    }
-
     function isInt(value){
-        return equal(j.truncate(value), value);
+        return j.equal(j.truncate(value), value);
     }
+
+    var isNegative = j.partial(greater, 0),
+        isPositive = j.partial(less, 0),
+        isZero = j.partial(j.equal, 0),
+        isEven = j.compose(isZero, j.rpartial(j.mod, 2));
 
     j.isEven = isEven;
     j.isInt = isInt;
@@ -53,7 +37,6 @@
 
     //Special case predicate naming is intended for these functions
     //There is a general expectation that these not be named with 'is'
-    j.equal = equal;
     j.geq = j.compose(j.not, less);
     j.greater = greater;
     j.leq = j.compose(j.not, greater);

@@ -91,6 +91,10 @@
     function execute(userFn){
         return j.apply(userFn, j.slice(1, arguments));
     }
+    
+    function getType (value) {
+        return typeof value;
+    }
 
     j.apply = apply;
     j.concat = concat;
@@ -99,6 +103,7 @@
     j.eitherIf = eitherIf;
     j.eitherWhen = eitherWhen;
     j.execute = execute;
+    j.getType = getType;
     j.identity = identity;
     j.maybe = maybe;
     j.partial = basePartial('left', basePartial, 'left');

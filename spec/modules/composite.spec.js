@@ -245,6 +245,25 @@ var jfp = require('../../dist/jfp.js'),
             expect(result.layer1).not.toBe(testObject.layer1);
             expect(result.layer1.layer2).toBe(testObject.layer1.layer2);
         });
+        
+        it('should throw RangeError if object contains a circular reference', function () {
+            var testObject = {
+                layer1: {}
+            },
+            err;
+            
+            testObject.layer1 = {
+                layer2: testObject
+            };
+            
+            try {
+                j.clone(testObject);
+            } catch (cloneErr) {
+                err = cloneErr;
+            }
+            
+            expect(err instanceof RangeError).toBe(true);
+        });
 
     });
     

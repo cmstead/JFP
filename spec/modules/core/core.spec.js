@@ -415,4 +415,15 @@ var jfp = require('../../../dist/jfp.js'),
         
     });
     
+    describe('getType', function () {
+        
+        it('should return type of value', function () {
+            // This is merely a wrapper around the typeof operator, so 
+            // adding expectations to ensure this doesn't get hosed.
+            expect(j.getType(5)).toBe('number');
+            expect(j.getType('foo')).toBe('string');
+        });
+        
+    });
+    
 })();

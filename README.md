@@ -25,10 +25,11 @@ https://www.mozilla.org/MPL/
 
 Upcoming functionality
 
-- [ ] getType - returns type of value -- <any> value -> <string>
+- [x] getType - returns type of value -- <any> value -> <string>
 - [x] isType - checks type of value -- <string> typeString, <any> value -> <boolean>
 - [x] isPrimitive - checks if value type is a primitive -- <any> value -> <boolean>
-- [ ] clone - clones objects and arrays
+- [x] clone - clones objects and arrays
+- [x] Refactoring of predicate functionality
 
 ###V2.3.0
 

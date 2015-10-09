@@ -36,30 +36,34 @@ var jfp = (function(){
 
 (function(j){
     'use strict';
+
+    function isUndefined(value){
+        return value === undefined;
+    }
     
+    function not(value){
+        return !Boolean(value);
+    }
+    
+    function equal (a, b) {
+        var missingValues = isUndefined(a) || isUndefined(b);
+        return not(missingValues) && a === b;
+    }
+
     function isType (typeString, value) {
-        return typeof value === typeString;
+        return j.equal(j.getType(value), typeString);
     }
     
     function isArray(value){
         return isType('object', value) && Object.prototype.toString.call(value) === '[object Array]';
     }
     
-    function isEmptyString(value){
-        return value === '';
-    }
-    
-    function isNull(value){
-        return value === null;
-    }
-    
-    function isUndefined(value){
-        return value === undefined;
-    }
-    
     function isNumeric(value){
-        var pattern = /^(0x)?[0-9]+((\.[0-9]+)|(e\-?[0-9]+))?$/;
-        return isType('number', value) || (isType('string', value) && !!value.match(pattern));
+        var pattern = /^(0x)?[0-9]+((\.[0-9]+)|(e\-?[0-9]+))?$/,
+            number = isType('number', value),
+            numericString = isType('string', value) && Boolean(value.match(pattern));
+            
+        return number || numericString;
     }
     
     function isTruthy(value){
@@ -71,24 +75,20 @@ var jfp = (function(){
     }
     
     function isPrimitive (value) {
-        var nullValue = isNull(value),
-            primitiveNames = ['number',
+        var primitiveNames = ['number',
                               'string',
                               'boolean',
                               'undefined'];
 
-        return primitiveNames.reduce(typeCheckReduction.bind(null, value), nullValue);
+        return primitiveNames.reduce(typeCheckReduction.bind(null, value), equal(null, value));
     }
 
-    function not(value){
-        return !value;
-    }
-
+    j.equal = equal;
     j.isArray = isArray;
     j.isBoolean = isType.bind(null, 'boolean');
-    j.isEmptyString = isEmptyString;
+    j.isEmptyString = equal.bind(null, '');
     j.isFunction = isType.bind(null, 'function');
-    j.isNull = isNull;
+    j.isNull = equal.bind(null, null);
     j.isNumber = isType.bind(null, 'number');
     j.isNumeric = isNumeric;
     j.isObject = isType.bind(null, 'object');
@@ -195,6 +195,10 @@ var jfp = (function(){
     function execute(userFn){
         return j.apply(userFn, j.slice(1, arguments));
     }
+    
+    function getType (value) {
+        return typeof value;
+    }
 
     j.apply = apply;
     j.concat = concat;
@@ -203,6 +207,7 @@ var jfp = (function(){
     j.eitherIf = eitherIf;
     j.eitherWhen = eitherWhen;
     j.execute = execute;
+    j.getType = getType;
     j.identity = identity;
     j.maybe = maybe;
     j.partial = basePartial('left', basePartial, 'left');
@@ -469,7 +474,13 @@ var jfp = (function(){
             
             j.each(function (key) {
                 var newDepth = j.isNumber(depth) ? depth - 1 : undefined;
-                container[key] = clone(originalValue[key], newDepth);
+                
+                try {
+                    container[key] = clone(originalValue[key], newDepth);
+                } catch (err) {
+                    throw new RangeError('Object contains circular reference or is too deep to clone.');
+                }
+                
             }, keys);
             
             return container;
@@ -903,11 +914,6 @@ var jfp = (function(){
         });
     }
 
-    function equal(a, b){
-        var isNotUndefined = j.compose(j.not, j.isUndefined);
-        return (isNotUndefined(a) && isNotUndefined(b)) ? a === b : false;
-    }
-
     function greater(a, b){
         throwWhenNotComparable(a, b);
         return a > b;
@@ -918,25 +924,14 @@ var jfp = (function(){
         return a < b;
     }
 
-    function isEven(value){
-        return equal(0, j.mod(value, 2));
-    }
-
-    function isPositive(value){
-        return greater(value, 0);
-    }
-
-    function isZero(value){
-        return value === 0;
-    }
-
-    function isNegative(value){
-        return j.compose(j.not, j.or)(isPositive(value), isZero(value));
-    }
-
     function isInt(value){
-        return equal(j.truncate(value), value);
+        return j.equal(j.truncate(value), value);
     }
+
+    var isNegative = j.partial(greater, 0),
+        isPositive = j.partial(less, 0),
+        isZero = j.partial(j.equal, 0),
+        isEven = j.compose(isZero, j.rpartial(j.mod, 2));
 
     j.isEven = isEven;
     j.isInt = isInt;
@@ -950,7 +945,6 @@ var jfp = (function(){
 
     //Special case predicate naming is intended for these functions
     //There is a general expectation that these not be named with 'is'
-    j.equal = equal;
     j.geq = j.compose(j.not, less);
     j.greater = greater;
     j.leq = j.compose(j.not, greater);

@@ -1,29 +1,33 @@
 (function(j){
     'use strict';
+
+    function isUndefined(value){
+        return value === undefined;
+    }
     
+    function not(value){
+        return !Boolean(value);
+    }
+    
+    function equal (a, b) {
+        var missingValues = isUndefined(a) || isUndefined(b);
+        return not(missingValues) && a === b;
+    }
+
     function isType (typeString, value) {
-        return typeof value === typeString;
+        return j.equal(j.getType(value), typeString);
     }
     
     function isArray(value){
         return isType('object', value) && Object.prototype.toString.call(value) === '[object Array]';
     }
     
-    function isEmptyString(value){
-        return value === '';
-    }
-    
-    function isNull(value){
-        return value === null;
-    }
-    
-    function isUndefined(value){
-        return value === undefined;
-    }
-    
     function isNumeric(value){
-        var pattern = /^(0x)?[0-9]+((\.[0-9]+)|(e\-?[0-9]+))?$/;
-        return isType('number', value) || (isType('string', value) && !!value.match(pattern));
+        var pattern = /^(0x)?[0-9]+((\.[0-9]+)|(e\-?[0-9]+))?$/,
+            number = isType('number', value),
+            numericString = isType('string', value) && Boolean(value.match(pattern));
+            
+        return number || numericString;
     }
     
     function isTruthy(value){
@@ -35,24 +39,20 @@
     }
     
     function isPrimitive (value) {
-        var nullValue = isNull(value),
-            primitiveNames = ['number',
+        var primitiveNames = ['number',
                               'string',
                               'boolean',
                               'undefined'];
 
-        return primitiveNames.reduce(typeCheckReduction.bind(null, value), nullValue);
+        return primitiveNames.reduce(typeCheckReduction.bind(null, value), equal(null, value));
     }
 
-    function not(value){
-        return !value;
-    }
-
+    j.equal = equal;
     j.isArray = isArray;
     j.isBoolean = isType.bind(null, 'boolean');
-    j.isEmptyString = isEmptyString;
+    j.isEmptyString = equal.bind(null, '');
     j.isFunction = isType.bind(null, 'function');
-    j.isNull = isNull;
+    j.isNull = equal.bind(null, null);
     j.isNumber = isType.bind(null, 'number');
     j.isNumeric = isNumeric;
     j.isObject = isType.bind(null, 'object');

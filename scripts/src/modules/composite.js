@@ -95,7 +95,6 @@
                        j.slice(0, arguments));
     }
 
-    // TODO Break up the recursion through tail-call optimization or looping
     function clone (originalValue, depth) {
         var depthOkay = j.isUndefined(depth) || j.geq(depth, 0),
             copyOkay = j.isType('object', originalValue);
@@ -106,7 +105,13 @@
             
             j.each(function (key) {
                 var newDepth = j.isNumber(depth) ? depth - 1 : undefined;
-                container[key] = clone(originalValue[key], newDepth);
+                
+                try {
+                    container[key] = clone(originalValue[key], newDepth);
+                } catch (err) {
+                    throw new RangeError('Object contains circular reference or is too deep to clone.');
+                }
+                
             }, keys);
             
             return container;
