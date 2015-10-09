@@ -11,7 +11,7 @@
         return j.either(appliedFn, result);
     }
 
-    //zOMG! TAIL RECURSION
+    //zOMG! TAIL OPTIMIZED RECURSION
     function recursor(recurFn){
         var args = j.slice(1, arguments);
 
@@ -95,13 +95,24 @@
                        j.slice(0, arguments));
     }
 
-    function copy (value) {
-        var container = j.isArray(value) ? [] : {};
-        return container;
-    }
-
-    function clone (value) {
-        return j.isType('object', value) ? copy(value) : value;
+    // TODO Break up the recursion through tail-call optimization or looping
+    function clone (originalValue, depth) {
+        var depthOkay = j.isUndefined(depth) || j.geq(depth, 0),
+            copyOkay = j.isType('object', originalValue);
+        
+        function copy () {
+            var keys = Object.keys(originalValue),
+                container = j.isArray(originalValue) ? [] : {};
+            
+            j.each(function (key) {
+                var newDepth = j.isNumber(depth) ? depth - 1 : undefined;
+                container[key] = clone(originalValue[key], newDepth);
+            }, keys);
+            
+            return container;
+        }
+        
+        return copyOkay && depthOkay ? copy() : originalValue;
     }
 
     j.clone = clone;

@@ -185,7 +185,7 @@ var jfp = require('../../dist/jfp.js'),
             expect(j.clone(5)).toBe(5);
         });
         
-        it('should return a copy of an array', function(){
+        it('should return a copy of an empty array', function(){
             var testArray = [],
                 result = j.clone(testArray);
                 
@@ -193,14 +193,59 @@ var jfp = require('../../dist/jfp.js'),
             expect(j.isArray(result)).toBe(true);
         });
        
-       it('should return a copy of an object', function () {
+        it('should return a copy of an empty object', function () {
             var testObject = {},
                 result = j.clone(testObject);
                 
             expect(result).not.toBe(testObject);
             expect(j.isArray(result)).toBe(false);
-       });
+        });
+
+        it('should copy a one-dimensional array', function () {
+            var testArray = [ 'a', 'b', 'c', 'd', 'e' ],
+                result = j.clone(testArray);
+            
+            expect(JSON.stringify(result)).toBe(JSON.stringify(testArray));
+        });
         
+        it('should copy a single-depth object', function () {
+            var testObject = {
+                    a: 1,
+                    b: 2,
+                    c: 3,
+                    d: 4
+                },
+                result = j.clone(testObject);
+            
+            expect(JSON.stringify(result)).toBe(JSON.stringify(testObject));
+        });
+        
+        it('should copy objects more than 1 layer deep', function () {
+            var testObject = {
+                foo: {
+                    bar: 'baz'
+                }
+            },
+            result = j.clone(testObject);
+            
+            expect(result.foo).not.toBe(testObject.foo);
+            expect(JSON.stringify(result.foo)).toBe(JSON.stringify(testObject.foo));
+        });
+        
+        it('should only clone to specified depth', function () {
+            var testObject = {
+                    layer1: {
+                        layer2: {
+                            foo: 'bar'
+                        }
+                    }
+                },
+                result = j.clone(testObject, 1);
+            
+            expect(result.layer1).not.toBe(testObject.layer1);
+            expect(result.layer1.layer2).toBe(testObject.layer1.layer2);
+        });
+
     });
     
 })();
