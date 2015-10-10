@@ -446,9 +446,11 @@ var jfp = (function(){
 
     //Produces a function that returns f(g(x))
     function compositor(f, g){
-        return function(){
+        var compositeFn = function(){
             return f(j.apply(g, j.slice(0, arguments)));
         };
+        
+        return typeof g !== 'function' ? f : compositeFn;
     }
 
     function compose(){
