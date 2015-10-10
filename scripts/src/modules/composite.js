@@ -77,11 +77,14 @@
 
     //Produces a function that returns f(g(x))
     function compositor(f, g){
+        var $f = typeof f !== 'function' ? j.identity : f,
+            $g = typeof g !== 'function' ? j.identity : g;
+            
         function compositeFn () {
-            return f(j.apply(g, j.slice(0, arguments)));
+            return $f(j.apply($g, j.slice(0, arguments)));
         }
         
-        return typeof g !== 'function' ? f : compositeFn;
+        return compositeFn;
     }
 
     function compose(){
