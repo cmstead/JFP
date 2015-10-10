@@ -31,6 +31,10 @@ Upcoming functionality
 - [ ] clone - clones objects and arrays -- <T> -> <T>
 - [ ] Refactoring of predicate functionality
 
+###V2.3.1
+
+Fixed issue with compose, filter and map which were misbehaving after last update.
+
 ###V2.3.0
 
 Upcoming functionality
