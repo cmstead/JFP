@@ -25,23 +25,15 @@ https://www.mozilla.org/MPL/
 
 Upcoming functionality
 
-<<<<<<< HEAD
 - [x] getType - returns type of value -- <any> value -> <string>
 - [x] isType - checks type of value -- <string> typeString, <any> value -> <boolean>
 - [x] isPrimitive - checks if value type is a primitive -- <any> value -> <boolean>
 - [x] clone - clones objects and arrays -- <T> -> <T>
 - [x] Refactoring of predicate functionality
-=======
-- [ ] getType - returns type of value -- <any> value -> <string>
-- [ ] isType - checks type of value -- <string> typeString, <any> value -> <boolean>
-- [ ] isPrimitive - checks if value type is a primitive -- <any> value -> <boolean>
-- [ ] clone - clones objects and arrays -- <T> -> <T>
-- [ ] Refactoring of predicate functionality
 
 ###V2.3.1
 
 Fixed issue with compose, filter and map which were misbehaving after last update.
->>>>>>> master
 
 ###V2.3.0
 
