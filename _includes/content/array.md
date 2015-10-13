@@ -225,9 +225,39 @@
 
 ####Example
 
-    j.map(function(value){ return value - 3; }, [1, 2, 3, 4, 5, 6]);
+    j.map(function(value){ return value * 3; }, [1, 2, 3, 4, 5, 6]);
     
     // [ 3, 6, 9, 12, 15, 18 ]
+
+**multiPartition**
+
+- Performance: O(nlogn)
+- Arguments: {function} predicate, {array} predicateArgs, {array} values
+- Description: Returns an array of arrays partitioned on values in predicateArgs
+
+###Example
+    
+    var recordset = [
+        { id: 1, foreignId: 1 },
+        { id: 2, foreignId: 2 },
+        { id: 3, foreignId: 1 },
+        { id: 4, foreignId: 3 },
+        { id: 5, foreignId: 4 }
+    ];
+    
+    function foreignIdMatch (id, record) {
+        return record.foreignId === id;
+    }
+    
+    j.multipartition(foreignIdMatch, [1, 2], recordset);
+    
+    /*
+    [
+        [ { id: 1, foreignId: 1 }, { id: 3, foreignId: 1 } ],
+        [ { id: 2, foreignId: 2 } ],
+        [ { id: 4, foreignId: 3 }, { id: 5, foreignId: 4 } ]
+    ];
+    */
 
 **nth**
 
@@ -260,6 +290,18 @@
     j.numberOf(j.even, [1, 2, 3, 4, 5, 6]);
     
     // 3
+
+**partition**
+
+- Performance: O(n)
+- Arguments: {function} predicate, {array} values
+- Description: Partitions array into array of two arrays, using predicate as identifier
+
+###Example
+
+    j.partition(j.even, [1, 2, 3, 4, 5]);
+    
+    // [ [2, 4], [1, 3, 5] ]
 
 **reduce**
 

@@ -112,7 +112,8 @@
 **deref**
 
 - Performance: O(n)
-- Arguments: {object|array} source, {string} deepReference
+- Arguments: {string} deepReference, {object|array} source
+- Optional argument arrangement: {object|array} source, {string} deepReference
 - Description: Deref resolves a dot-delimited deep object reference
 
 ####Example
@@ -127,8 +128,8 @@
         }
     };
     
-    j.deref(myObj, 'data.aList.1'); // bar
-    j.deref(myObj, 'data.aList.baz'); // null
+    j.deref('data.aList.1', myObj); // bar
+    j.deref('data.aList.baz', myObj); // null
 
 **execute**
 
