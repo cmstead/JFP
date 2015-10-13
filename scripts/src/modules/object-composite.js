@@ -1,6 +1,20 @@
 (function (j) {
 	'use strict';
 	
+    /*
+     * toValues converts an object to an array of values
+     * This is necessary for reduce to convert objects into
+     * processible arrays in an upcoming version.
+     */
+	function keyReduction (baseObj, finalList, key) {
+		return j.conj(baseObj[key], finalList);
+	}
+	
+	function toValues (baseObj) {
+		var reducer = j.partial(keyReduction, baseObj);
+		return j.isNull(j.maybe(baseObj, 'object')) ? null : j.reduce(reducer, Object.keys(baseObj), []);
+	}
+
 	function dereferencer(dataObject, token){
         var key = j.either('', token).trim();
         return key === '' ? dataObject : j.pick(token, dataObject);
@@ -43,5 +57,6 @@
 	j.deref = deref;
     j.pluck = pluck;
     j.pluckKeys = pluckKeys;
+    j.toValues = toValues;
 
 })(jfp);

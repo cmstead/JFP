@@ -31,6 +31,14 @@ Upcoming functionality
 - [x] clone - clones objects and arrays -- <T> -> <T>
 - [x] Refactoring of predicate functionality
 
+###V2.3.2
+
+Fixed issue with toValues which occasionally caused an infinite loop.
+
+###V2.3.1
+
+Fixed issue with compose, filter and map which were misbehaving after last update.
+
 ###V2.3.0
 
 Upcoming functionality

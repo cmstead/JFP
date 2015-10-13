@@ -407,21 +407,6 @@ var jfp = (function(){
         return recurValue;
     }
 
-    /*
-     * toValues converts an object to an array of values
-     * This is necessary for reduce to convert objects into
-     * processible arrays in an upcoming version.
-     */
-    function valueReducer (recur, baseObj, finalList, keyList) {
-        finalList.push(baseObj[j.first(keyList)]);
-        return keyList.length === 1 ? finalList : recur(baseObj, finalList, j.rest(keyList));
-    }
-    
-    function toValues (baseObj) {
-        var baseIsValid = typeof baseObj === 'object';
-        return !baseIsValid ? null : j.recur(valueReducer, baseObj, [], Object.keys(baseObj));
-    }
-    
 	/*
      * Reduce uses tail-optimized (while-trampolined, fully returning) recursion to resolve reductions.
      * Reducer is a pure function for handling a single reduction step.
@@ -446,11 +431,14 @@ var jfp = (function(){
 
     //Produces a function that returns f(g(x))
     function compositor(f, g){
-        var compositeFn = function(){
-            return f(j.apply(g, j.slice(0, arguments)));
-        };
+        var $f = typeof f !== 'function' ? j.identity : f,
+            $g = typeof g !== 'function' ? j.identity : g;
+            
+        function compositeFn () {
+            return $f(j.apply($g, j.slice(0, arguments)));
+        }
         
-        return typeof g !== 'function' ? f : compositeFn;
+        return compositeFn;
     }
 
     function compose(){
@@ -498,24 +486,12 @@ var jfp = (function(){
     j.pipeline = pipeline;
     j.recur = recur;
     j.reduce = reduce;
-    j.toValues = toValues;
 
 })(jfp);
 
 
 (function(j){
 	
-    var map, filter;
-    
-    // Adapter function for reduce to allow for simplification of
-    // array construction behaviors like map and filter
-    function arrayReduceAdapter(reducerFn, userFn, valueList){
-        var appliedReducer = j.partial(reducerFn, userFn),
-            result = j.reduce(appliedReducer, valueList, []);
-        
-        return j.either([], result);
-    }
-
     /*
      * Map uses reduce to produce a new, completely reference-decoupled list of values
      * Mapper handles a single update step for the final output array
@@ -525,8 +501,11 @@ var jfp = (function(){
         return finalArray;
     }
 
-    map = j.partial(arrayReduceAdapter, mapper);
-
+    function map (userFn, values) {
+        var mapperFn = j.partial(mapper, userFn);
+        return j.reduce(mapperFn, values, []);
+    }
+    
     /*
      * Filter uses reduce to produce a new, completely reference-decoupled list of values
      * Filterer handles a single update step for the final output array
@@ -535,7 +514,10 @@ var jfp = (function(){
         return userPredicate(value) ? j.conj(value, finalArray) : finalArray;
     }
 
-    filter = j.partial(arrayReduceAdapter, filterer);
+    function filter (predicate, values) {
+        var filterFn = j.partial(filterer, predicate);
+        return j.reduce(filterFn, values, []);
+    }
     
     function compact(valueList){
         return filter(j.isTruthy, valueList);
@@ -724,6 +706,20 @@ var jfp = (function(){
 (function (j) {
 	'use strict';
 	
+    /*
+     * toValues converts an object to an array of values
+     * This is necessary for reduce to convert objects into
+     * processible arrays in an upcoming version.
+     */
+	function keyReduction (baseObj, finalList, key) {
+		return j.conj(baseObj[key], finalList);
+	}
+	
+	function toValues (baseObj) {
+		var reducer = j.partial(keyReduction, baseObj);
+		return j.isNull(j.maybe(baseObj, 'object')) ? null : j.reduce(reducer, Object.keys(baseObj), []);
+	}
+
 	function dereferencer(dataObject, token){
         var key = j.either('', token).trim();
         return key === '' ? dataObject : j.pick(token, dataObject);
@@ -766,6 +762,7 @@ var jfp = (function(){
 	j.deref = deref;
     j.pluck = pluck;
     j.pluckKeys = pluckKeys;
+    j.toValues = toValues;
 
 })(jfp);
 

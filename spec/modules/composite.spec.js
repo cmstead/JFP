@@ -36,6 +36,27 @@ var jfp = require('../../dist/jfp.js'),
             expect(j.compose(add3, add3, add3)(5)).toBe(14);
         });
 
+        it('should support complex compositions', function () {
+            function compositeFn (data) {
+                return j.compose(j.partial(j.reduce, j.add),
+                                 j('map', j('pick', 'value')),
+                                 j('filter', j.compose(j.isEven, j('pick', 'value'))),
+                                 j('sort', function (a, b) { return a.value - b.value; }))(data);
+            }
+
+            var testData = [
+                { value: 3 },
+                { value: 4 },
+                { value: 2 },
+                { value: 1 },
+                { value: 5 },
+                { value: 6 }
+            ],
+            result = compositeFn(testData);
+                        
+            expect(result).toBe(12);
+        });
+
     });
 
     describe('pipeline', function(){
