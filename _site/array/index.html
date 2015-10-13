@@ -26,15 +26,15 @@
         <div class="library-links">
             <div class="release">
                 <a href="https://github.com/cmstead/JFP/releases">RELEASES</a>
-                <span>Current Version: v2.2.1</span>
+                <span>Current Version: v2.3.2</span>
             </div>
             <div>
-                <a href="https://github.com/cmstead/JFP/archive/v2.2.1.tar.gz">
+                <a href="https://github.com/cmstead/JFP/archive/v2.3.2.tar.gz">
                     <i class="fa fa-arrow-circle-down"></i>TAR.GZ
                 </a>
             </div>
             <div>
-                <a href="https://github.com/cmstead/JFP/archive/v2.2.1.zip">
+                <a href="https://github.com/cmstead/JFP/archive/v2.3.2.zip">
                     <i class="fa fa-arrow-circle-down"></i>ZIP
                 </a>
             </div>
@@ -345,9 +345,42 @@ j.drop(2, [1, 2, 3, 4, 5]);
 
 <h4 id="example-17">Example</h4>
 
-<pre><code>j.map(function(value){ return value - 3; }, [1, 2, 3, 4, 5, 6]);
+<pre><code>j.map(function(value){ return value * 3; }, [1, 2, 3, 4, 5, 6]);
 
 // [ 3, 6, 9, 12, 15, 18 ]
+</code></pre>
+
+<p><strong>multiPartition</strong></p>
+
+<ul>
+  <li>Performance: O(nlogn)</li>
+  <li>Arguments: {function} predicate, {array} predicateArgs, {array} values</li>
+  <li>Description: Returns an array of arrays partitioned on values in predicateArgs</li>
+</ul>
+
+<h3 id="example-18">Example</h3>
+
+<pre><code>var recordset = [
+    { id: 1, foreignId: 1 },
+    { id: 2, foreignId: 2 },
+    { id: 3, foreignId: 1 },
+    { id: 4, foreignId: 3 },
+    { id: 5, foreignId: 4 }
+];
+
+function foreignIdMatch (id, record) {
+    return record.foreignId === id;
+}
+
+j.multipartition(foreignIdMatch, [1, 2], recordset);
+
+/*
+[
+    [ { id: 1, foreignId: 1 }, { id: 3, foreignId: 1 } ],
+    [ { id: 2, foreignId: 2 } ],
+    [ { id: 4, foreignId: 3 }, { id: 5, foreignId: 4 } ]
+];
+*/
 </code></pre>
 
 <p><strong>nth</strong></p>
@@ -358,7 +391,7 @@ j.drop(2, [1, 2, 3, 4, 5]);
   <li>Description: Returns value at nth position of valueSet</li>
 </ul>
 
-<h4 id="example-18">Example</h4>
+<h4 id="example-19">Example</h4>
 
 <pre><code>j.nth(0, [1, 2, 3, 4, 5, 6]);
 
@@ -381,11 +414,26 @@ j.nth(3, [1, 2, 3, 4, 5, 6]);
   <li>Description: Returns count of elements satisfying predicate</li>
 </ul>
 
-<h4 id="example-19">Example</h4>
+<h4 id="example-20">Example</h4>
 
 <pre><code>j.numberOf(j.even, [1, 2, 3, 4, 5, 6]);
 
 // 3
+</code></pre>
+
+<p><strong>partition</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {function} predicate, {array} values</li>
+  <li>Description: Partitions array into array of two arrays, using predicate as identifier</li>
+</ul>
+
+<h3 id="example-21">Example</h3>
+
+<pre><code>j.partition(j.even, [1, 2, 3, 4, 5]);
+
+// [ [2, 4], [1, 3, 5] ]
 </code></pre>
 
 <p><strong>reduce</strong></p>
@@ -396,7 +444,7 @@ j.nth(3, [1, 2, 3, 4, 5, 6]);
   <li>Description: Reduces array to single element of any type through application of userFn</li>
 </ul>
 
-<h4 id="example-20">Example</h4>
+<h4 id="example-22">Example</h4>
 
 <pre><code>j.reduce(function(a, b){ return a + b; }, [1, 2, 3, 4, 5]); // 15
 j.reduce([1, 2, 3, 4], j.add, 10); // 20
@@ -410,7 +458,7 @@ j.reduce([1, 2, 3, 4], j.add, 10); // 20
   <li>Description: Returns new array without first element</li>
 </ul>
 
-<h4 id="example-21">Example</h4>
+<h4 id="example-23">Example</h4>
 
 <pre><code>j.rest([1, 2, 3, 4, 5]);
 
@@ -425,7 +473,7 @@ j.reduce([1, 2, 3, 4], j.add, 10); // 20
   <li>Description: Returns slice of provided array</li>
 </ul>
 
-<h4 id="example-22">Example</h4>
+<h4 id="example-24">Example</h4>
 
 <pre><code>j.slice(0, [1, 2, 3, 4, 5]);
 
@@ -448,7 +496,7 @@ j.slice(2, [1, 2, 3, 4, 5], 3);
   <li>Description: Returns true if any value in the list passes predicate function otherwise false</li>
 </ul>
 
-<h4 id="example-23">Example</h4>
+<h4 id="example-25">Example</h4>
 
 <pre><code>j.some(j.even, [1, 2, 3, 4, 5]);
 
@@ -463,7 +511,7 @@ j.slice(2, [1, 2, 3, 4, 5], 3);
   <li>Description: Sorts array with quick sort naturally or with comparator</li>
 </ul>
 
-<h4 id="example-24">Example</h4>
+<h4 id="example-26">Example</h4>
 
 <pre><code>j.sort([1, 3, 2, 5, 4]);
 
@@ -486,7 +534,7 @@ j.sort(comparator, [1, 3, 2, 5, 4]);
   <li>Description: Takes the symmetric difference of two arrays</li>
 </ul>
 
-<h4 id="example-25">Example</h4>
+<h4 id="example-27">Example</h4>
 
 <pre><code>j.symmetricDifference([1, 2, 3, 4], [2, 3, 4, 5]);
 
@@ -501,7 +549,7 @@ j.sort(comparator, [1, 3, 2, 5, 4]);
   <li>Description: returns first n values of array where n is provided count</li>
 </ul>
 
-<h4 id="example-26">Example</h4>
+<h4 id="example-28">Example</h4>
 
 <pre><code>j.take(3, [1, 2, 3, 4, 5]);
 
@@ -516,7 +564,7 @@ j.sort(comparator, [1, 3, 2, 5, 4]);
   <li>Description: takes the union of two arrays</li>
 </ul>
 
-<h4 id="example-27">Example</h4>
+<h4 id="example-29">Example</h4>
 
 <pre><code>j.union([1, 2, 3], [2, 3, 4]);
 
@@ -531,7 +579,7 @@ j.sort(comparator, [1, 3, 2, 5, 4]);
   <li>Description: returns a sorted array of unique values</li>
 </ul>
 
-<h4 id="example-28">Example</h4>
+<h4 id="example-30">Example</h4>
 
 <pre><code>j.unique([2, 5, 2, 3, 2, 4, 3, 1]);
 
