@@ -38,21 +38,6 @@
         return recurValue;
     }
 
-    /*
-     * toValues converts an object to an array of values
-     * This is necessary for reduce to convert objects into
-     * processible arrays in an upcoming version.
-     */
-    function valueReducer (recur, baseObj, finalList, keyList) {
-        finalList.push(baseObj[j.first(keyList)]);
-        return keyList.length === 1 ? finalList : recur(baseObj, finalList, j.rest(keyList));
-    }
-    
-    function toValues (baseObj) {
-        var baseIsValid = typeof baseObj === 'object';
-        return !baseIsValid ? null : j.recur(valueReducer, baseObj, [], Object.keys(baseObj));
-    }
-    
 	/*
      * Reduce uses tail-optimized (while-trampolined, fully returning) recursion to resolve reductions.
      * Reducer is a pure function for handling a single reduction step.
@@ -106,6 +91,5 @@
     j.pipeline = pipeline;
     j.recur = recur;
     j.reduce = reduce;
-    j.toValues = toValues;
 
 })(jfp);

@@ -402,21 +402,6 @@ var jfp = (function(){
         return recurValue;
     }
 
-    /*
-     * toValues converts an object to an array of values
-     * This is necessary for reduce to convert objects into
-     * processible arrays in an upcoming version.
-     */
-    function valueReducer (recur, baseObj, finalList, keyList) {
-        finalList.push(baseObj[j.first(keyList)]);
-        return keyList.length === 1 ? finalList : recur(baseObj, finalList, j.rest(keyList));
-    }
-    
-    function toValues (baseObj) {
-        var baseIsValid = typeof baseObj === 'object';
-        return !baseIsValid ? null : j.recur(valueReducer, baseObj, [], Object.keys(baseObj));
-    }
-    
 	/*
      * Reduce uses tail-optimized (while-trampolined, fully returning) recursion to resolve reductions.
      * Reducer is a pure function for handling a single reduction step.
@@ -470,7 +455,6 @@ var jfp = (function(){
     j.pipeline = pipeline;
     j.recur = recur;
     j.reduce = reduce;
-    j.toValues = toValues;
 
 })(jfp);
 
@@ -691,6 +675,20 @@ var jfp = (function(){
 (function (j) {
 	'use strict';
 	
+    /*
+     * toValues converts an object to an array of values
+     * This is necessary for reduce to convert objects into
+     * processible arrays in an upcoming version.
+     */
+	function keyReduction (baseObj, finalList, key) {
+		return j.conj(baseObj[key], finalList);
+	}
+	
+	function toValues (baseObj) {
+		var reducer = j.partial(keyReduction, baseObj);
+		return j.isNull(j.maybe(baseObj, 'object')) ? null : j.reduce(reducer, Object.keys(baseObj), []);
+	}
+
 	function dereferencer(dataObject, token){
         var key = j.either('', token).trim();
         return key === '' ? dataObject : j.pick(token, dataObject);
@@ -733,6 +731,7 @@ var jfp = (function(){
 	j.deref = deref;
     j.pluck = pluck;
     j.pluckKeys = pluckKeys;
+    j.toValues = toValues;
 
 })(jfp);
 
