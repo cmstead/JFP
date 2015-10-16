@@ -5,6 +5,13 @@
         return value;
     }
 
+    function getType (value) {
+        var valueType = typeof value,
+            isArray = valueType === 'object' && Object.prototype.toString.call(value) === '[object Array]';
+            
+        return isArray ? 'array' : valueType;
+    }
+
     function slice(begin, valueSet, end){
         var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
 
@@ -21,7 +28,7 @@
 
     function maybe(value){
         var type = arguments[1],
-            typeOkay = typeof value === type;
+            typeOkay = getType(value) === type;
 
         return typeOkay || (!type && !!value) ? value : null;
     }
@@ -92,10 +99,6 @@
         return j.apply(userFn, j.slice(1, arguments));
     }
     
-    function getType (value) {
-        return typeof value;
-    }
-
     j.apply = apply;
     j.concat = concat;
     j.countArguments = countArguments;

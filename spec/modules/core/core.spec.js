@@ -104,6 +104,11 @@ var jfp = require('../../../dist/jfp.js'),
         it('should return value if it matches type', function(){
             expect(j.maybe('foo', 'string')).toBe('foo');
         });
+        
+        it('should gracefully handle arrays', function () {
+            var testValue = [];
+            expect(j.maybe(testValue, 'array')).toBe(testValue);
+        });
 
     });
 
@@ -422,6 +427,10 @@ var jfp = require('../../../dist/jfp.js'),
             // adding expectations to ensure this doesn't get hosed.
             expect(j.getType(5)).toBe('number');
             expect(j.getType('foo')).toBe('string');
+        });
+        
+        it('should return "array" if value is an array', function () {
+            expect(j.getType([])).toBe('array');
         });
         
     });

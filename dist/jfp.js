@@ -55,7 +55,7 @@ var jfp = (function(){
     }
     
     function isArray(value){
-        return isType('object', value) && Object.prototype.toString.call(value) === '[object Array]';
+        return isType('array', value);
     }
     
     function isNumeric(value){
@@ -109,6 +109,13 @@ var jfp = (function(){
         return value;
     }
 
+    function getType (value) {
+        var valueType = typeof value,
+            isArray = valueType === 'object' && Object.prototype.toString.call(value) === '[object Array]';
+            
+        return isArray ? 'array' : valueType;
+    }
+
     function slice(begin, valueSet, end){
         var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
 
@@ -125,7 +132,7 @@ var jfp = (function(){
 
     function maybe(value){
         var type = arguments[1],
-            typeOkay = typeof value === type;
+            typeOkay = getType(value) === type;
 
         return typeOkay || (!type && !!value) ? value : null;
     }
@@ -196,10 +203,6 @@ var jfp = (function(){
         return j.apply(userFn, j.slice(1, arguments));
     }
     
-    function getType (value) {
-        return typeof value;
-    }
-
     j.apply = apply;
     j.concat = concat;
     j.countArguments = countArguments;
@@ -375,7 +378,7 @@ var jfp = (function(){
         var args = j.slice(1, arguments),
             argumentCount = j.countArguments(userFn),
             appliedFn = (args.length < argumentCount) ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
-            result = (!!userFn && args.length >= argumentCount) ? j.apply(userFn, args) : null;
+            result = (Boolean(userFn) && args.length >= argumentCount) ? j.apply(userFn, args) : null;
 
         return j.either(appliedFn, result);
     }
@@ -426,7 +429,7 @@ var jfp = (function(){
             initialValue = !hasInitialState ? j.first(values) : initialState,
             remainder = !hasInitialState ? j.rest(values) : values;
 
-        return (!!values && values.length > 0) ? j.recur(appliedReducer, initialValue, remainder) : initialValue;
+        return (Boolean(values) && values.length > 0) ? j.recur(appliedReducer, initialValue, remainder) : initialValue;
     }
 
     //Produces a function that returns f(g(x))
@@ -456,7 +459,7 @@ var jfp = (function(){
 
     function clone (originalValue, depth) {
         var depthOkay = j.isUndefined(depth) || j.geq(depth, 0),
-            copyOkay = j.isType('object', originalValue);
+            copyOkay = j.isType('object', originalValue) || j.isType('array', originalValue);
         
         function copy () {
             var keys = Object.keys(originalValue),
@@ -953,7 +956,7 @@ var jfp = (function(){
 
 var j = jfp;
 
-if(typeof module !== 'undefined' && !!module.exports){
+if(typeof module !== 'undefined' && Boolean(module.exports)){
     module.exports = j;
 }
 

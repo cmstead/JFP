@@ -6,7 +6,7 @@
         var args = j.slice(1, arguments),
             argumentCount = j.countArguments(userFn),
             appliedFn = (args.length < argumentCount) ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
-            result = (!!userFn && args.length >= argumentCount) ? j.apply(userFn, args) : null;
+            result = (Boolean(userFn) && args.length >= argumentCount) ? j.apply(userFn, args) : null;
 
         return j.either(appliedFn, result);
     }
@@ -57,7 +57,7 @@
             initialValue = !hasInitialState ? j.first(values) : initialState,
             remainder = !hasInitialState ? j.rest(values) : values;
 
-        return (!!values && values.length > 0) ? j.recur(appliedReducer, initialValue, remainder) : initialValue;
+        return (Boolean(values) && values.length > 0) ? j.recur(appliedReducer, initialValue, remainder) : initialValue;
     }
 
     //Produces a function that returns f(g(x))
@@ -87,7 +87,7 @@
 
     function clone (originalValue, depth) {
         var depthOkay = j.isUndefined(depth) || j.geq(depth, 0),
-            copyOkay = j.isType('object', originalValue);
+            copyOkay = j.isType('object', originalValue) || j.isType('array', originalValue);
         
         function copy () {
             var keys = Object.keys(originalValue),

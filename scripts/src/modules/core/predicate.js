@@ -19,7 +19,7 @@
     }
     
     function isArray(value){
-        return isType('object', value) && Object.prototype.toString.call(value) === '[object Array]';
+        return isType('array', value);
     }
     
     function isNumeric(value){
