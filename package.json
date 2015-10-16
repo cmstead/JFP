@@ -2,7 +2,7 @@
   "name": "jfp",
   "description": "Javascript Function Processor",
   "main": "dist/jfp.js",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/cmstead/JFP.git"
