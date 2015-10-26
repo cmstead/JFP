@@ -25,11 +25,18 @@ https://www.mozilla.org/MPL/
 
 Upcoming functionality
 
-- [x] getType - returns type of value -- <any> value -> <string>
+- [x] getType - returns type of value -- <any> value -> <string> handles array special case as 'array'
 - [x] isType - checks type of value -- <string> typeString, <any> value -> <boolean>
 - [x] isPrimitive - checks if value type is a primitive -- <any> value -> <boolean>
 - [x] clone - clones objects and arrays -- <T> -> <T>
-- [x] Refactoring of predicate functionality
+- [x] Code refactoring
+    - Boolean typecast instead of using !!
+	- Updates to predicate functionality, reducing footprint
+- [x] Updated functionality to explicitly handle array as a type
+	- getType returns array
+	- isType('array', []) returns true
+	- maybe([], 'array') returns []
+	- either([], [1, 2, 3, 4], 'array') returns [1, 2, 3, 4]
 
 ###V2.3.2
 
