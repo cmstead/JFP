@@ -126,6 +126,11 @@ var jfp = require('../../../dist/jfp.js'),
         it('should return passed value if passed value is a type match', function(){
             expect(j.either('test', 'foo', 'string')).toBe('foo');
         });
+        
+        it('should return default value if passed value is null for any type, including object', function () {
+            var defaultValue = { test: 'test' };
+            expect(j.either(defaultValue, null, 'object')).toBe(defaultValue);
+        });
 
     });
 

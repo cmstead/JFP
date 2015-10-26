@@ -157,12 +157,17 @@
                          [sanitizedList]);
     }
 
+    function firstExists (list) {
+        return j.not(j.isNull(j.first(list)));
+    }
+
     j.contains = contains;
     j.compact = compact;
     j.difference = difference;
     j.every = every;
 	j.filter = filter;
     j.find = find;
+    j.firstExists = firstExists;
     j.intersect = intersect;
 	j.map = map;
 	j.multiPartition = multiPartition;

@@ -30,7 +30,7 @@
         var type = arguments[2];
         return maybe(testValue, type) === null ? defaultValue : testValue;
     }
-
+    
     function apply(userFn, args){
         return userFn.apply(null, args);
     }

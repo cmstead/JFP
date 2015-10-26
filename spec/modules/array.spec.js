@@ -619,5 +619,17 @@ var jfp = require('../../dist/jfp.js'),
         });
         
     });
+    
+    describe('firstExists', function () {
+        
+        it('should return true if array contains a first value', function () {
+            expect(j.firstExists(['foo'])).toBe(true);
+        });
+        
+        it('should return false if array does not contain a first value', function () {
+            expect(j.firstExists([])).toBe(false);
+        });
+        
+    });
 
 })();
