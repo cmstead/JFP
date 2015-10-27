@@ -422,8 +422,9 @@ var jfp = (function(){
                           j.rest(collection));
     }
 
-    function reduce(userFn, values, initialState){
+    function reduce(userFn, values){
         var appliedReducer = j.partial(reducer, userFn),
+            initialState = arguments[2],
             hasInitialState = typeof initialState !== 'undefined',
             
             initialValue = !hasInitialState ? j.first(values) : initialState,
@@ -482,9 +483,23 @@ var jfp = (function(){
         return copyOkay && depthOkay ? copy() : originalValue;
     }
 
+    function maybeType (typeString) {
+        return j.curry(function (value) {
+            return j.maybe(value, typeString);
+        }).apply(j, j.slice(1, arguments));
+    }
+    
+    function eitherType (typeString) {
+        return j.curry(function (defaultValue, optionValue) {
+            return j.either(defaultValue, optionValue, typeString);
+        }).apply(j, j.slice(1, arguments));
+    }
+    
     j.clone = clone;
     j.compose = compose;
     j.curry = curry;
+    j.eitherType = eitherType;
+    j.maybeType = maybeType;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;
     j.recur = recur;

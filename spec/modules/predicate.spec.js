@@ -195,6 +195,10 @@ var jfp = require('../../dist/jfp.js'),
             it('should resolve a set of truey/falsey values', function(){
                 expect(j.and(true, 1, 'foo', 0, false)).toBe(false);
             });
+            
+            it('should report an arity of 2', function () {
+                expect(j.and.length).toBe(2);
+            });
 
         });
 
@@ -210,6 +214,10 @@ var jfp = require('../../dist/jfp.js'),
 
             it('should resolve a set of truey/falsey values', function(){
                 expect(j.or(0, false, null, 1, true)).toBe(true);
+            });
+
+            it('should report an arity of 2', function () {
+                expect(j.or.length).toBe(2);
             });
 
         });

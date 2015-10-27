@@ -254,6 +254,10 @@ var jfp = require('../../dist/jfp.js'),
             expect(j.reduce(add, [1, 2, 3, 4], 0)).toBe(10);
         });
         
+        it('should report an arity of 2', function () {
+            expect(j.reduce.length).toBe(2);
+        });
+        
     });
 
     describe('take', function(){

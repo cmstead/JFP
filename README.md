@@ -29,6 +29,8 @@ Upcoming functionality
 - [x] isType - checks type of value -- <string> typeString, <any> value -> <boolean>
 - [x] isPrimitive - checks if value type is a primitive -- <any> value -> <boolean>
 - [x] clone - clones objects and arrays -- <T> -> <T>
+- [x] maybeType - Applies type string to maybe function and returns new maybe function accepting a value
+- [x] eitherType - Applies type string to either function and returns a new, curried either function accepting a default value and an option value
 - [x] Code refactoring
     - Boolean typecast instead of using !!
 	- Updates to predicate functionality, reducing footprint
@@ -37,6 +39,8 @@ Upcoming functionality
 	- isType('array', []) returns true
 	- maybe([], 'array') returns []
 	- either([], [1, 2, 3, 4], 'array') returns [1, 2, 3, 4]
+- [x] Update arity reporting to improve default currying behavior
+    - Reduce - default arity of 2, multi-arity max 3
 
 ###V2.3.2
 

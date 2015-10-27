@@ -288,4 +288,52 @@ var jfp = require('../../dist/jfp.js'),
 
     });
     
+    describe('maybeType', function () {
+        
+        it('should return a function', function () {
+            expect(typeof j.maybeType('string')).toBe('function');
+        });
+        
+        it('should perform a successful maybe check with the returned value', function () {
+            expect(j.maybeType('string')('foo')).toBe('foo');
+        });
+
+        it('should perform a successful maybe check with the returned value', function () {
+            expect(j.maybeType('string')([])).toBe(null);
+        });
+        
+        it('should accept all arguments up front', function () {
+            expect(j.maybeType('string', 'foo')).toBe('foo');
+        });
+
+    });
+    
+    describe('eitherType', function () {
+        
+        it('should return a function', function (){
+            expect(typeof j.eitherType('string')).toBe('function');
+        });
+
+        it('should return a curried function', function () {
+            function testFn () {
+                j.eitherType('string')('bar')('foo');
+            }
+            
+            expect(testFn).not.toThrow();
+        });
+
+        it('should perform a successful either check with returned function', function () {
+            expect(j.eitherType('string')('bar', 'foo')).toBe('foo');
+        });        
+
+        it('should perform a failing either check with returned function', function () {
+            expect(j.eitherType('string')('bar', [])).toBe('bar');
+        });
+
+        it('should accept all arguments up front', function () {
+            expect(j.eitherType('string', 'bar', 'foo')).toBe('foo');
+        });
+
+    });
+    
 })();
