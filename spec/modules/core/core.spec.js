@@ -207,6 +207,42 @@ var jfp = require('../../../dist/jfp.js'),
 
     });
 
+    describe('splitPartial', function () {
+        
+        var tripleOperation;
+        
+        beforeEach(function () {
+            tripleOperation = function (a, b, c) {
+                return (a - b) * c;
+            };
+        });
+        
+        it('should return a function', function () {
+            expect(typeof j.splitPartial(tripleOperation)).toBe('function');
+        });
+        
+        it('should return a left-partially applied function', function () {
+            expect(j.splitPartial(tripleOperation, [3, 2], [])(5)).toBe(5);
+        });
+        
+        it('should return a right-partially applied function', function () {
+            expect(j.splitPartial(tripleOperation, [], [2, 4])(3)).toBe(4);
+        });
+        
+        it('should return a split-partially applied function', function () {
+            expect(j.splitPartial(tripleOperation, [3], [3])(2)).toBe(3);
+        });
+        
+        it('should sanitize missing right array', function () {
+            expect(j.splitPartial(tripleOperation, [3, 2])(9)).toBe(9);
+        });
+        
+        it('should return base function with no other arguments', function () {
+            expect(j.splitPartial(tripleOperation)(3, 2, 11)).toBe(11);
+        });
+        
+    });
+
     describe('curry', function(){
 
         it('should return null if no function is passed', function(){

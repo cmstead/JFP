@@ -30,7 +30,7 @@
         var type = arguments[1],
             typeOkay = getType(value) === type;
 
-        return typeOkay || (!type && !!value) ? value : null;
+        return typeOkay || (!type && Boolean(value)) ? value : null;
     }
 
     function either(defaultValue, testValue){
@@ -84,6 +84,11 @@
         };
     }
 
+    function splitPartial (baseFn, left, right) {
+        var leftApplied = apply(basePartial, concat(['left', baseFn], left));
+        return apply(basePartial, concat(['right', leftApplied], right));
+    }
+
     function reverseArgs(userFn){
         return function(){
             var args = j.slice(0, arguments).reverse();
@@ -114,6 +119,7 @@
     j.rpartial = basePartial('left', basePartial, 'right');
     j.shortCircuit = shortCircuit;
     j.slice = slice;
+    j.splitPartial = splitPartial;
     j.when = when;
 
 })(jfp);

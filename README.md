@@ -31,6 +31,7 @@ Upcoming functionality
 - [x] clone - clones objects and arrays -- &lt;T&gt; -&gt; &lt;T&gt;
 - [x] maybeType - Applies type string to maybe function and returns new maybe function accepting a value -- &lt;string&gt; -&gt; &lt;function&gt;&lt;T&gt; -&gt; &lt;T | null&gt;
 - [x] eitherType - Applies type string to either function and returns a new, curried either function accepting a default value and an option value -- &lt;string&gt; -&gt; &lt;function&gt;&lt;T&gt; -&gt; &lt;function&gt;&lt;T&gt; -&gt; &lt;T | null&gt;
+- [x] splitPartial - Performs a split left/right partial, applying final args in the middle of the set - &lt;function&gt;, &lt;array&gt;&lt;Any&gt;, &lt;array&gt;&lt;Any&gt; -&gt; &lt;function&gt;&lt;Any&gt;[&lt;Any&gt;...]
 - [x] Code refactoring
     - Boolean typecast instead of using !!
 	- Updates to predicate functionality, reducing footprint
@@ -90,7 +91,7 @@ Below is the list of planned breaking changes coming in v2.0
 
 *Breaking changes*
 
-- [x] Maybe will be rewritten  a -> a | null to adhere to a Haskell analog of maybe
+- [x] Maybe will be rewritten  a -&gt; a | null to adhere to a Haskell analog of maybe
 - [x] Pipeline will take a value of any type as an initial argument and then pipeline the value through the provided functions in order
 
 *New functions*
