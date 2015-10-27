@@ -25,12 +25,12 @@ https://www.mozilla.org/MPL/
 
 Upcoming functionality
 
-- [x] getType - returns type of value -- <any> value -> <string> handles array special case as 'array'
-- [x] isType - checks type of value -- <string> typeString, <any> value -> <boolean>
-- [x] isPrimitive - checks if value type is a primitive -- <any> value -> <boolean>
-- [x] clone - clones objects and arrays -- <T> -> <T>
-- [x] maybeType - Applies type string to maybe function and returns new maybe function accepting a value -- <string> -> <function><T> -> <T | null>
-- [x] eitherType - Applies type string to either function and returns a new, curried either function accepting a default value and an option value -- <string> -> <function><T> -> <function><T> -> <T | null>
+- [x] getType - returns type of value -- &lt;any&gt; value -&gt; &lt;string&gt; handles array special case as 'array'
+- [x] isType - checks type of value -- &lt;string&gt; typeString, &lt;any&gt; value -&gt; &lt;boolean&gt;
+- [x] isPrimitive - checks if value type is a primitive -- &lt;any&gt; value -&gt; &lt;boolean&gt;
+- [x] clone - clones objects and arrays -- &lt;T&gt; -&gt; &lt;T&gt;
+- [x] maybeType - Applies type string to maybe function and returns new maybe function accepting a value -- &lt;string&gt; -&gt; &lt;function&gt;&lt;T&gt; -&gt; &lt;T | null&gt;
+- [x] eitherType - Applies type string to either function and returns a new, curried either function accepting a default value and an option value -- &lt;string&gt; -&gt; &lt;function&gt;&lt;T&gt; -&gt; &lt;function&gt;&lt;T&gt; -&gt; &lt;T | null&gt;
 - [x] Code refactoring
     - Boolean typecast instead of using !!
 	- Updates to predicate functionality, reducing footprint
