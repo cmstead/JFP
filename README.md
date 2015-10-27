@@ -29,8 +29,8 @@ Upcoming functionality
 - [x] isType - checks type of value -- <string> typeString, <any> value -> <boolean>
 - [x] isPrimitive - checks if value type is a primitive -- <any> value -> <boolean>
 - [x] clone - clones objects and arrays -- <T> -> <T>
-- [x] maybeType - Applies type string to maybe function and returns new maybe function accepting a value
-- [x] eitherType - Applies type string to either function and returns a new, curried either function accepting a default value and an option value
+- [x] maybeType - Applies type string to maybe function and returns new maybe function accepting a value -- <string> -> <function><T> -> <T | null>
+- [x] eitherType - Applies type string to either function and returns a new, curried either function accepting a default value and an option value -- <string> -> <function><T> -> <function><T> -> <T | null>
 - [x] Code refactoring
     - Boolean typecast instead of using !!
 	- Updates to predicate functionality, reducing footprint
