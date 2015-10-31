@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>JFP</id>
+    <version>{{version}}</version>
+    <authors>Chris Stead</authors>
+    <licenseUrl>https://www.mozilla.org/MPL/</licenseUrl>
+    <projectUrl>https://github.com/cmstead/JFP</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A language as a library borrowing concepts from Lisp and Haskell. JFP contains functions which allow for gentle adoption of functional programming ideas for developers who are new to the functional paradigm. JFP embraces the dynamic nature of Javascript while supporting safe data typing.</description>
+    <releaseNotes><![CDATA[
+      
+    ]]></releaseNotes>
+    <copyright>Copyright {{year}}</copyright>
+    <tags>Functional Javascript Scheme Lisp Clojure </tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>

@@ -8,5 +8,16 @@
                 "dest": "dist/"
             }
         ]
+    },
+    
+    "nuget": {
+        "files": [
+            {
+                "expand": true,
+                "flatten": true,
+                "src": ["dist/*.js", "readme.md", "mpl.txt"],
+                "dest": "nuget-package/content/Scripts/JFP/"
+            }
+        ]
     }
 }

@@ -11,3 +11,4 @@ scripts/min/
 min/
 doc/
 spec/coverage/
+nuget-package/
