@@ -110,6 +110,11 @@ var jfp = require('../../../dist/jfp.js'),
             expect(j.maybe(testValue, 'array')).toBe(testValue);
         });
 
+        it('should gracefully handle arrays as objects', function () {
+            var testValue = [];
+            expect(j.maybe(testValue, 'object')).toBe(testValue);
+        });
+
     });
 
     describe('either', function(){

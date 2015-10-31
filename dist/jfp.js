@@ -132,8 +132,9 @@ var jfp = (function(){
 
     function maybe(value){
         var type = arguments[1],
-            typeOkay = getType(value) === type;
-
+            valueType = getType(value),
+            typeOkay = valueType === type || valueType === 'array' && type === 'object';
+        
         return typeOkay || (!type && Boolean(value)) ? value : null;
     }
 

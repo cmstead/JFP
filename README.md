@@ -32,16 +32,17 @@ Upcoming functionality
 - [x] maybeType - Applies type string to maybe function and returns new maybe function accepting a value -- &lt;string&gt; -&gt; &lt;function&gt;&lt;T&gt; -&gt; &lt;T | null&gt;
 - [x] eitherType - Applies type string to either function and returns a new, curried either function accepting a default value and an option value -- &lt;string&gt; -&gt; &lt;function&gt;&lt;T&gt; -&gt; &lt;function&gt;&lt;T&gt; -&gt; &lt;T | null&gt;
 - [x] splitPartial - Performs a split left/right partial, applying final args in the middle of the set - &lt;function&gt;, &lt;array&gt;&lt;Any&gt;, &lt;array&gt;&lt;Any&gt; -&gt; &lt;function&gt;&lt;Any&gt;[&lt;Any&gt;...]
-- [x] Code refactoring
-    - Boolean typecast instead of using !!
-	- Updates to predicate functionality, reducing footprint
 - [x] Updated functionality to explicitly handle array as a type
 	- getType returns array
 	- isType('array', []) returns true
-	- maybe([], 'array') returns []
+	- maybe([], 'array') returns [], array respected as object for backwards-compatibility and Javascript standard
 	- either([], [1, 2, 3, 4], 'array') returns [1, 2, 3, 4]
 - [x] Update arity reporting to improve default currying behavior
     - Reduce - default arity of 2, multi-arity max 3
+- [x] Code refactoring
+    - Boolean typecast instead of using !!
+	- Updates to predicate functionality, reducing footprint
+- [x] Added nuget build automation
 
 ###V2.3.2
 
