@@ -356,8 +356,16 @@
 
     //false
 
+**isPrimitive**
 
+- Performance: O(1);
+- Arguments: {any} value
+- Description: returns true if value has a primitive type, otherwise false
 
+####Example
+
+    j.isPrimitive(55); // true
+    j.isPrimitive({}); // false
 
 **isString**
 
@@ -387,10 +395,7 @@
 - Arguments: {any} value
 - Description: Returns true if value resolves to truthy, otherwise false
 
-
 ####Example
-
-
 
     j.isTruthy(true);
 
@@ -408,8 +413,17 @@
 
     //false
 
+**isType**
 
+- Performance: O(1)
+- Arguments: {string} typeString, {any} value
+- Description: returns true if value type and typeString match
 
+####Example
+
+    j.isType('string', 'foo'); // true
+    j.isType('string', null); // false
+    j.isType('array', []); // true
 
 **isUndefined**
 

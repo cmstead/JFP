@@ -380,6 +380,20 @@ j.isPositive(-2.414);
 //false
 </code></pre>
 
+<p><strong>isPrimitive</strong></p>
+
+<ul>
+  <li>Performance: O(1);</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: returns true if value has a primitive type, otherwise false</li>
+</ul>
+
+<h4 id="example-15">Example</h4>
+
+<pre><code>j.isPrimitive(55); // true
+j.isPrimitive({}); // false
+</code></pre>
+
 <p><strong>isString</strong></p>
 
 <ul>
@@ -388,7 +402,7 @@ j.isPositive(-2.414);
   <li>Description: Returns true if value is a string, otherwise false</li>
 </ul>
 
-<h4 id="example-15">Example</h4>
+<h4 id="example-16">Example</h4>
 
 <pre><code>j.isString('A string');
 
@@ -407,7 +421,7 @@ j.isString([]);
   <li>Description: Returns true if value resolves to truthy, otherwise false</li>
 </ul>
 
-<h4 id="example-16">Example</h4>
+<h4 id="example-17">Example</h4>
 
 <pre><code>j.isTruthy(true);
 
@@ -426,6 +440,21 @@ j.isTruthy(null);
 //false
 </code></pre>
 
+<p><strong>isType</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {string} typeString, {any} value</li>
+  <li>Description: returns true if value type and typeString match</li>
+</ul>
+
+<h4 id="example-18">Example</h4>
+
+<pre><code>j.isType('string', 'foo'); // true
+j.isType('string', null); // false
+j.isType('array', []); // true
+</code></pre>
+
 <p><strong>isUndefined</strong></p>
 
 <ul>
@@ -434,7 +463,7 @@ j.isTruthy(null);
   <li>Description: Returns true if value is undefined, otherwise false</li>
 </ul>
 
-<h4 id="example-17">Example</h4>
+<h4 id="example-19">Example</h4>
 
 <pre><code>j.isUndefined(undefined);
 
@@ -453,7 +482,7 @@ j.isUndefined(null);
   <li>Description: returns true if number is 0, otherwise false</li>
 </ul>
 
-<h4 id="example-18">Example</h4>
+<h4 id="example-20">Example</h4>
 
 <pre><code>j.isZero(0);
 
@@ -472,7 +501,7 @@ j.isZero(1);
   <li>Description: Returns true if value is falsey, otherwise false</li>
 </ul>
 
-<h4 id="example-19">Example</h4>
+<h4 id="example-21">Example</h4>
 
 <pre><code>j.not(true);
 
@@ -491,7 +520,7 @@ j.not(0);
   <li>Description: Checks that any of the provided values are truthy</li>
 </ul>
 
-<h4 id="example-20">Example</h4>
+<h4 id="example-22">Example</h4>
 
 <pre><code>j.or();
 
@@ -518,7 +547,7 @@ j.or(0, false, null);
   <li>Description: performs an exclusive or check on passed boolean values</li>
 </ul>
 
-<h4 id="example-21">Example</h4>
+<h4 id="example-23">Example</h4>
 
 <pre><code>j.xor(true, false);
 

@@ -105,6 +105,23 @@ j.eitherWhen('default', 'yay!', false);
 //default
 </code></pre>
 
+<p><strong>eitherType</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {string} type[, {any} defaultValue[, {any} value]]</li>
+  <li>Description: applies type argument to either function and curries remaining function</li>
+</ul>
+
+<h3 id="example-2">Example</h3>
+
+<pre><code>// All of the following execution patterns are equivalent
+j.eitherType('string', 'default', null); // default
+j.eitherType('string', 'default')(null);
+j.eitherType('string')('default', null);
+j.eitherType('string')('default')(null);
+</code></pre>
+
 <p><strong>eitherWhen</strong></p>
 
 <ul>
@@ -113,7 +130,7 @@ j.eitherWhen('default', 'yay!', false);
   <li>Description: returns userFn output on true predicateValue and truthy otherwise default value</li>
 </ul>
 
-<h4 id="example-2">Example</h4>
+<h4 id="example-3">Example</h4>
 
 <pre><code>j.eitherWhen('default', false, j.identity);
 
@@ -136,7 +153,25 @@ j.eitherWhen('default', true, j.partial(j.identity, 'yay!'));
   <li>Description: Returns value if truthy, nulll if falsey. Optionall, returns value if it matches valueType, null if not.</li>
 </ul>
 
-<h4 id="example-3">Example</h4>
+<p><strong>maybeType</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {string} type[, {any} value]</li>
+  <li>Description: Applies type to maybe and returns function to apply values to</li>
+</ul>
+
+<h3 id="example-4">Example</h3>
+
+<pre><code>var maybeString = j.maybeType('string');
+
+maybeString('foo'); // foo
+maybeString({}); // null
+j.maybeType('string')([]); // null
+j.maybeType('string', []); // null
+</code></pre>
+
+<h4 id="example-5">Example</h4>
 
 <pre><code>j.maybe(undefined); // null
 j.maybe('foo'); // foo
@@ -152,7 +187,7 @@ j.maybe(0, 'number'); // 0
   <li>Description: executes function with passed arguments on a truthy checkValue</li>
 </ul>
 
-<h4 id="example-4">Example</h4>
+<h4 id="example-6">Example</h4>
 
 <pre><code>when(true, function(myValue){ console.log(myValue); }, "Hello, world!");
 

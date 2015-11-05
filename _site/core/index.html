@@ -227,6 +227,21 @@ j.execute(j.add, 5); // 5
 j.execute(j.add, 5, 7); // 12
 </code></pre>
 
+<p><strong>getType</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any}</li>
+  <li>Description: returns type of value; handles array case</li>
+</ul>
+
+<h4 id="example-7">Example</h4>
+
+<pre><code>j.getType('foo'); // string
+j.getType({}); // object
+j.getType([]); // array
+</code></pre>
+
 <p><strong>identity</strong></p>
 
 <ul>
@@ -235,7 +250,7 @@ j.execute(j.add, 5, 7); // 12
   <li>Description: Returns value passed in, via direct return</li>
 </ul>
 
-<h4 id="example-7">Example</h4>
+<h4 id="example-8">Example</h4>
 
 <pre><code>j.identity('my value');
 
@@ -250,7 +265,7 @@ j.execute(j.add, 5, 7); // 12
   <li>Description: Generalized partial application function.</li>
 </ul>
 
-<h4 id="example-8">Example</h4>
+<h4 id="example-9">Example</h4>
 
 <pre><code>function divide(a, b){
     return a / b;
@@ -269,7 +284,7 @@ j.partial(divide, 6)(2);
   <li>Description: Performs partial application and returns a function with remaining arguments reversed</li>
 </ul>
 
-<h4 id="example-9">Example</h4>
+<h4 id="example-10">Example</h4>
 
 <pre><code>function concatThree(astr, bstr, cstr){
     return astr + bstr + cstr;
@@ -286,7 +301,7 @@ j.partialReverse(concatThree, 'foo')('bar', 'baz'); // foobazbar
   <li>Description: Executes functions in order, passing value to first and output from previous to input of next</li>
 </ul>
 
-<h4 id="example-10">Example</h4>
+<h4 id="example-11">Example</h4>
 
 <pre><code>j.pipeline([1, 2, 3, 4],
            j('reduce', j.add, 0),
@@ -302,7 +317,7 @@ j.partialReverse(concatThree, 'foo')('bar', 'baz'); // foobazbar
   <li>Description: Tail-optimized recursion function</li>
 </ul>
 
-<h4 id="example-11">Example</h4>
+<h4 id="example-12">Example</h4>
 
 <pre><code>function factorial(recur, base, result){
     var sanitizedResult = j.either(1, result);
@@ -322,7 +337,7 @@ j.recur(factorial, 5);
   <li>Description: Returns a function which takes arguments in reverse order</li>
 </ul>
 
-<h4 id="example-12">Example</h4>
+<h4 id="example-13">Example</h4>
 
 <pre><code>function strConcat(astr, bstr){
     return astr + bstr;
@@ -339,7 +354,7 @@ j.reverseArgs(strConcat)('foo', 'bar'); // barfoo
   <li>Description: partial application, applies initial arguments to the right-most position of userFn</li>
 </ul>
 
-<h4 id="example-13">Example</h4>
+<h4 id="example-14">Example</h4>
 
 <pre><code>function divide(a, b){
 return a / b;
@@ -350,6 +365,26 @@ j.rpartial(divide, 4)(2);
 //0.5
 </code></pre>
 
+<p><strong>splitPartial</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {function} userFn[, {array} leftArguments[, {array} rightArguments]]</li>
+  <li>Description: partially applies left and right arguments to a function, resolving remaining arguments in the middle</li>
+</ul>
+
+<h4 id="example-15">Example</h4>
+
+<pre><code>function addToFakeSet (obj, value) {
+    obj[key] = true;
+    return obj;
+}
+
+var reduceToSet = j.splitPartial(j.reduce, [addToFakeSet], [{}]);
+
+reduceToSet([1, 2, 3, 4, 2, 5, 1, 1, 3]); // { 1: true, 2: true, 3: true, 4: true, 5: true }
+</code></pre>
+
 <p><strong>shortCircuit</strong></p>
 
 <ul>
@@ -358,7 +393,7 @@ j.rpartial(divide, 4)(2);
   <li>Description: Tests testValue for truthy value, if true, userFn is executed with testValue, otherwise returns default value</li>
 </ul>
 
-<h4 id="example-14">Example</h4>
+<h4 id="example-16">Example</h4>
 
 <pre><code>j.shortCircuit(0, j('apply', j.add), [1, 2]); // 3
 j.shortCircuit(0, j('apply', j.add), null); // 0

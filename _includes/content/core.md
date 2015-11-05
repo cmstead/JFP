@@ -144,7 +144,17 @@
     j.execute(j.add, 5); // 5
     j.execute(j.add, 5, 7); // 12
 
-    
+**getType**
+
+- Performance: O(1)
+- Arguments: {any}
+- Description: returns type of value; handles array case
+
+####Example
+
+    j.getType('foo'); // string
+    j.getType({}); // object
+    j.getType([]); // array
 
 **identity**
 
@@ -152,17 +162,11 @@
 - Arguments: {any} value
 - Description: Returns value passed in, via direct return
 
-
 ####Example
-
-
 
     j.identity('my value');
 
     //my value
-
-
-
 
 **partial**
 
@@ -256,8 +260,6 @@
 
 ####Example
 
-
-
     function divide(a, b){
     return a / b;
     }
@@ -265,6 +267,23 @@
     j.rpartial(divide, 4)(2);
 
     //0.5
+
+**splitPartial**
+
+- Performance: O(1)
+- Arguments: {function} userFn[, {array} leftArguments[, {array} rightArguments]]
+- Description: partially applies left and right arguments to a function, resolving remaining arguments in the middle
+
+####Example
+
+    function addToFakeSet (obj, value) {
+        obj[key] = true;
+        return obj;
+    }
+    
+    var reduceToSet = j.splitPartial(j.reduce, [addToFakeSet], [{}]);
+    
+    reduceToSet([1, 2, 3, 4, 2, 5, 1, 1, 3]); // { 1: true, 2: true, 3: true, 4: true, 5: true }
 
 **shortCircuit**
 

@@ -1,5 +1,20 @@
 ##Object Functions
 
+**clone**
+
+- Performance: O(n) where n is the count of elements in your object tree
+- Arguments: {any} object[, {int} depth]
+- Description: Deep clones an object or clones to a particular depth
+
+####Example
+
+    var original = { foo: 'bar', baz: ['quux'] },
+        clone = j.clone(original);
+    
+    JSON.stringify(original) === JSON.stringify(clone); // true
+    original === clone; // false
+    original.baz === clone.baz; // false
+
 **merge**
 
 - Performance: O(n)
