@@ -9,11 +9,15 @@
 ####Example
 
     var original = { foo: 'bar', baz: ['quux'] },
-        clone = j.clone(original);
+        clone = j.clone(original),
+        shallowCopy = j.clone(original, 0);
     
     JSON.stringify(original) === JSON.stringify(clone); // true
     original === clone; // false
     original.baz === clone.baz; // false
+
+    original === shallowCopy; // false
+    original.baz === shallowCopy.baz; // true
 
 **merge**
 

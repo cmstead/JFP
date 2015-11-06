@@ -26,15 +26,15 @@
         <div class="library-links">
             <div class="release">
                 <a href="https://github.com/cmstead/JFP/releases">RELEASES</a>
-                <span>Current Version: v2.3.2</span>
+                <span>Current Version: v2.4.0</span>
             </div>
             <div>
-                <a href="https://github.com/cmstead/JFP/archive/v2.3.2.tar.gz">
+                <a href="https://github.com/cmstead/JFP/archive/v2.4.0.tar.gz">
                     <i class="fa fa-arrow-circle-down"></i>TAR.GZ
                 </a>
             </div>
             <div>
-                <a href="https://github.com/cmstead/JFP/archive/v2.3.2.zip">
+                <a href="https://github.com/cmstead/JFP/archive/v2.4.0.zip">
                     <i class="fa fa-arrow-circle-down"></i>ZIP
                 </a>
             </div>
@@ -78,11 +78,15 @@
 <h4 id="example">Example</h4>
 
 <pre><code>var original = { foo: 'bar', baz: ['quux'] },
-    clone = j.clone(original);
+    clone = j.clone(original),
+    shallowCopy = j.clone(original, 0);
 
 JSON.stringify(original) === JSON.stringify(clone); // true
 original === clone; // false
 original.baz === clone.baz; // false
+
+original === shallowCopy; // false
+original.baz === shallowCopy.baz; // true
 </code></pre>
 
 <p><strong>merge</strong></p>
