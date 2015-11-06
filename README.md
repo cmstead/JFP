@@ -21,6 +21,12 @@ If the text file has been removed, please visit:
 
 https://www.mozilla.org/MPL/
 
+###V2.5.0
+
+- [ ] transform - transforms an object into a new object through a key-value pair definition
+- [ ] getKeys - returns array of object keys returns empty array if value is not an object or if object has no keys
+- [ ] hasFirst - checks if array contains a first element, always returns false on non-array values
+
 ###V2.4.0
 
 Upcoming functionality
