@@ -285,6 +285,62 @@ var jfp = require('../../dist/jfp.js'),
             });
             
         });
+        
+        describe('isTuple', function () {
+            
+            it('should return false if array is not of length 1', function () {
+                expect(j.isTuple(1, [1, 2, 3])).toBe(false);
+            });
+            
+            it('should return true if array is of length 1', function () {
+                expect(j.isTuple(1, [1])).toBe(true);
+            });
+
+            it('should return false if value is not an array', function () {
+                expect(j.isTuple(1, null)).toBe(false);
+            });
+            
+            it('should return true if list matches length other than 1', function () {
+                expect(j.isTuple(3, [1, 2, 3])).toBe(true);
+            });
+            
+        });
+        
+        describe('isPair', function () {
+            
+            it('should return false if list is not of length 2', function () {
+                expect(j.isPair([1, 2, 3])).toBe(false);
+            });
+            
+            it('should return true if list is of length 2', function () {
+                expect(j.isPair([1, 2])).toBe(true);
+            });
+            
+        });
+
+        describe('isSingle', function () {
+            
+            it('should return false if list is not of length 1', function () {
+                expect(j.isSingle([1, 2, 3])).toBe(false);
+            });
+            
+            it('should return true if list is of length 1', function () {
+                expect(j.isSingle([1])).toBe(true);
+            });
+            
+        });
+
+        describe('isTriple', function () {
+            
+            it('should return false if list is not of length 3', function () {
+                expect(j.isTriple([1, 2, 3, 4])).toBe(false);
+            });
+            
+            it('should return true if list is of length 3', function () {
+                expect(j.isTriple([1, 2, 3])).toBe(true);
+            });
+            
+        });
 
     });
 

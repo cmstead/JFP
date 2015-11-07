@@ -85,6 +85,14 @@ var jfp = require('../../../dist/jfp.js'),
             expect(spy).toHaveBeenCalledWith(0);
         });
 
+        it('should execute function with falsey typed parameter with a type string', function () {
+            function appendFoo (value) {
+                return value + 'foo';
+            }
+            
+            expect(j.shortCircuit('bar', appendFoo, '', 'string')).toBe('foo');
+        });
+
     });
 
     describe('maybe', function(){

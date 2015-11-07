@@ -54,10 +54,6 @@ var jfp = (function(){
         return j.equal(j.getType(value), typeString);
     }
     
-    function isArray(value){
-        return isType('array', value);
-    }
-    
     function isNumeric(value){
         var pattern = /^(0x)?[0-9]+((\.[0-9]+)|(e\-?[0-9]+))?$/,
             number = isType('number', value),
@@ -83,20 +79,35 @@ var jfp = (function(){
         return primitiveNames.reduce(typeCheckReduction.bind(null, value), equal(null, value));
     }
 
+    function isTuple (size, list) {
+        return isType('array', list) && list.length === size;
+    }
+
+    // Equality
     j.equal = equal;
-    j.isArray = isArray;
-    j.isBoolean = isType.bind(null, 'boolean');
     j.isEmptyString = equal.bind(null, '');
-    j.isFunction = isType.bind(null, 'function');
     j.isNull = equal.bind(null, null);
-    j.isNumber = isType.bind(null, 'number');
-    j.isNumeric = isNumeric;
-    j.isObject = isType.bind(null, 'object');
-    j.isPrimitive = isPrimitive;
-    j.isString = isType.bind(null, 'string');
+
+    // Types
     j.isType = isType;
-    j.isTruthy = isTruthy;
+    j.isArray = isType.bind(null, 'array');
+    j.isBoolean = isType.bind(null, 'boolean');
+    j.isFunction = isType.bind(null, 'function');
+    j.isNumber = isType.bind(null, 'number');
+    j.isObject = isType.bind(null, 'object');
+    j.isString = isType.bind(null, 'string');
     j.isUndefined = isType.bind(null, 'undefined');
+
+    // Tuples
+    j.isTuple = isTuple;
+    j.isPair = isTuple.bind(null, 2);
+    j.isSingle = isTuple.bind(null, 1);
+    j.isTriple = isTuple.bind(null, 3);
+
+    //Other predicates
+    j.isNumeric = isNumeric;
+    j.isPrimitive = isPrimitive;
+    j.isTruthy = isTruthy;
     j.not = not;
 
 })(jfp);
@@ -124,12 +135,6 @@ var jfp = (function(){
                     Array.prototype.slice.call(values, begin, end);
     }
 
-    function shortCircuit(defaultValue, userFn, testValue){
-        return (j.isTruthy(testValue) || testValue === 0) ?
-            userFn(testValue) :
-            defaultValue;
-    }
-
     function maybe(value){
         var type = arguments[1],
             valueType = getType(value),
@@ -143,6 +148,11 @@ var jfp = (function(){
         return maybe(testValue, type) === null ? defaultValue : testValue;
     }
     
+    function shortCircuit(defaultValue, fn, optionValue){
+        var type = optionValue === 0 ? 'number' : arguments[3];
+        return maybe(optionValue, type) !== null ? fn(optionValue) : defaultValue;
+    }
+
     function apply(userFn, args){
         return userFn.apply(null, args);
     }

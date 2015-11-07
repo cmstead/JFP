@@ -20,12 +20,6 @@
                     Array.prototype.slice.call(values, begin, end);
     }
 
-    function shortCircuit(defaultValue, userFn, testValue){
-        return (j.isTruthy(testValue) || testValue === 0) ?
-            userFn(testValue) :
-            defaultValue;
-    }
-
     function maybe(value){
         var type = arguments[1],
             valueType = getType(value),
@@ -39,6 +33,11 @@
         return maybe(testValue, type) === null ? defaultValue : testValue;
     }
     
+    function shortCircuit(defaultValue, fn, optionValue){
+        var type = optionValue === 0 ? 'number' : arguments[3];
+        return maybe(optionValue, type) !== null ? fn(optionValue) : defaultValue;
+    }
+
     function apply(userFn, args){
         return userFn.apply(null, args);
     }
