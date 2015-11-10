@@ -12,6 +12,22 @@
         return isArray ? 'array' : valueType;
     }
 
+    function empty (typeString) {
+        return {
+                array: [],
+                boolean: false,
+                'null': null,
+                number: 0,
+                object: {},
+                string: ''
+            }[typeString];
+    }
+
+    function none (typeString) {
+        var result = empty(typeString);
+        return getType(result) !== 'undefined' ? result : null;
+    }
+
     function slice(begin, valueSet, end){
         var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
 
@@ -110,10 +126,12 @@
     j.either = either;
     j.eitherIf = eitherIf;
     j.eitherWhen = eitherWhen;
+    j.empty = empty;
     j.execute = execute;
     j.getType = getType;
     j.identity = identity;
     j.maybe = maybe;
+    j.none = none;
     j.partial = basePartial('left', basePartial, 'left');
     j.reverseArgs = reverseArgs;
     j.rpartial = basePartial('left', basePartial, 'right');

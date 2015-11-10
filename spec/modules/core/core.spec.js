@@ -489,4 +489,56 @@ var jfp = require('../../../dist/jfp.js'),
         
     });
     
+    describe('empty', function () {
+        
+        it('should return undefined as a default value', function () {
+            expect(j.empty()).toBe(undefined);
+        });
+        
+        it('should return null for null', function () {
+            expect(j.empty('null')).toBe(null);
+        });
+        
+        it('should return "" for string', function () {
+            expect(j.empty('string')).toBe('');
+        });
+        
+        it('should return 0 for number', function () {
+            expect(j.empty('number')).toBe(0);
+        });
+        
+        it('should return false for boolean', function () {
+            expect(j.empty('boolean')).toBe(false);
+        });
+        
+        it('should return [] for array', function () {
+            expect(JSON.stringify(j.empty('array'))).toBe('[]');
+        });
+        
+        it('should return {} for object', function () {
+            expect(JSON.stringify(j.empty('object'))).toBe('{}');
+        });
+        
+    });
+    
+    describe('none', function () {
+        
+        it('should return empty("null") by default', function () {
+            expect(j.none()).toBe(null);
+        });
+        
+        it('should return empty("string") for string', function () {
+            expect(j.none('string')).toBe('');
+        });
+        
+        it('should return null for "undefined" string', function () {
+            expect(j.none('undefined')).toBe(null);
+        });
+        
+        it('should return null for unknown string', function () {
+            expect(j.none('foo')).toBe(null);
+        });
+        
+    });
+    
 })();
