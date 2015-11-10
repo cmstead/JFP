@@ -308,6 +308,26 @@ var jfp = require('../../dist/jfp.js'),
 
     });
     
+    describe('optionType', function () {
+        
+        it('should return a function', function () {
+            expect(typeof j.optionType('string')).toBe('function');
+        });
+        
+        it('should perform a successful option check with the returned value', function () {
+            expect(j.optionType('string')('foo')).toBe('foo');
+        });
+
+        it('should perform a successful option check with the returned value', function () {
+            expect(j.optionType('string')([])).toBe('');
+        });
+        
+        it('should accept all arguments up front', function () {
+            expect(j.optionType('string', 'foo')).toBe('foo');
+        });
+
+    });
+    
     describe('eitherType', function () {
         
         it('should return a function', function (){

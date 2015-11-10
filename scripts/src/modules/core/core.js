@@ -28,6 +28,10 @@
         return getType(result) !== 'undefined' ? result : null;
     }
 
+    function just(value) {
+        return getType(value) !== 'undefined' ? identity(value) : none();
+    }
+
     function slice(begin, valueSet, end){
         var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
 
@@ -47,6 +51,10 @@
     function either(defaultValue, testValue){
         var type = arguments[2];
         return maybe(testValue, type) === null ? defaultValue : testValue;
+    }
+    
+    function option (value, typeString) {
+        return either(none(typeString), maybe(value, typeString));
     }
     
     function shortCircuit(defaultValue, fn, optionValue){
@@ -130,8 +138,10 @@
     j.execute = execute;
     j.getType = getType;
     j.identity = identity;
+    j.just = just;
     j.maybe = maybe;
     j.none = none;
+    j.option = option;
     j.partial = basePartial('left', basePartial, 'left');
     j.reverseArgs = reverseArgs;
     j.rpartial = basePartial('left', basePartial, 'right');

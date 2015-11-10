@@ -117,6 +117,10 @@
         }).apply(j, j.slice(1, arguments));
     }
     
+    function optionType (typeString, value) {
+        return !j.isUndefined(value) ? j.option(value, typeString) : j.rpartial(j.option, typeString);
+    }
+    
     function eitherType (typeString) {
         return j.curry(function (defaultValue, optionValue) {
             return j.either(defaultValue, optionValue, typeString);
@@ -128,6 +132,7 @@
     j.curry = curry;
     j.eitherType = eitherType;
     j.maybeType = maybeType;
+    j.optionType = optionType;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;
     j.recur = recur;

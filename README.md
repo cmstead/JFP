@@ -31,11 +31,11 @@ https://www.mozilla.org/MPL/
 - [x] getKeys - returns array of object keys returns empty array if value is not an object or if object has no keys
 - [x] hasFirst - checks if array contains a first element, always returns false on non-array values
 - [x] empty - accepts type string, returns initialized, empty value of type specified by type string, with no string, empty returns null
-- [ ] none - accepts type string typeString, returns empty(typeString)
-- [ ] just - accepts value, returns identity of value unless undefined, then returns none(undefined)
-- [ ] option - accepts value and type string typeString, returns either(none(typeString), maybe(value, typeString))
-- [ ] optionType - returns eitherType(typeString, none(typeString))
-- [x] Updated shortCircuit to act on an option type
+- [x] none - accepts type string typeString, returns empty(typeString)
+- [x] just - accepts value, returns identity of value unless undefined, then returns none(undefined)
+- [x] option - accepts value and type string called typeString, returns either(none(typeString), maybe(value, typeString))
+- [x] optionType - returns eitherType(typeString, none(typeString))
+- [x] Updated shortCircuit to act on an typeString
 - [x] Updated merge function to reduce verbosity and improve stability
 
 ###V2.4.0

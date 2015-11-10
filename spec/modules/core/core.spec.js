@@ -541,4 +541,32 @@ var jfp = require('../../../dist/jfp.js'),
         
     });
     
+    describe('just', function () {
+        
+        it('should return none() for undefined', function () {
+            expect(j.just()).toBe(j.none());
+        });
+        
+        it('should return identity(value) for non-undefined value', function () {
+            expect(j.just('foo')).toBe('foo');
+        });
+        
+    });
+    
+    describe('option', function () {
+        
+        it('should return empty("null") by default', function () {
+            expect(j.option()).toBe(j.empty('null'));
+        });
+        
+        it('should return maybe value for non-falsey value without typing', function () {
+            expect(j.option('foo')).toBe(j.maybe('foo'));
+        });
+        
+        it('should return none(typeString) when maybe(value, typeString) is null', function () {
+            expect(JSON.stringify(j.option('foo', 'object'))).toBe('{}');
+        });
+        
+    });
+    
 })();

@@ -148,6 +148,10 @@ var jfp = (function(){
         return getType(result) !== 'undefined' ? result : null;
     }
 
+    function just(value) {
+        return getType(value) !== 'undefined' ? identity(value) : none();
+    }
+
     function slice(begin, valueSet, end){
         var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
 
@@ -167,6 +171,10 @@ var jfp = (function(){
     function either(defaultValue, testValue){
         var type = arguments[2];
         return maybe(testValue, type) === null ? defaultValue : testValue;
+    }
+    
+    function option (value, typeString) {
+        return either(none(typeString), maybe(value, typeString));
     }
     
     function shortCircuit(defaultValue, fn, optionValue){
@@ -250,8 +258,10 @@ var jfp = (function(){
     j.execute = execute;
     j.getType = getType;
     j.identity = identity;
+    j.just = just;
     j.maybe = maybe;
     j.none = none;
+    j.option = option;
     j.partial = basePartial('left', basePartial, 'left');
     j.reverseArgs = reverseArgs;
     j.rpartial = basePartial('left', basePartial, 'right');
@@ -535,6 +545,10 @@ var jfp = (function(){
         }).apply(j, j.slice(1, arguments));
     }
     
+    function optionType (typeString, value) {
+        return !j.isUndefined(value) ? j.option(value, typeString) : j.rpartial(j.option, typeString);
+    }
+    
     function eitherType (typeString) {
         return j.curry(function (defaultValue, optionValue) {
             return j.either(defaultValue, optionValue, typeString);
@@ -546,6 +560,7 @@ var jfp = (function(){
     j.curry = curry;
     j.eitherType = eitherType;
     j.maybeType = maybeType;
+    j.optionType = optionType;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;
     j.recur = recur;
