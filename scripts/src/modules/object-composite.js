@@ -54,9 +54,21 @@
         return pluckKeys([key], baseObj);
     }
 
+    function transformer (obj, result, transformation) {
+        result[transformation[1]] = deref(transformation[0], obj);
+        return result;
+    }
+
+    function transform (transformation, obj) {
+        return j.pipeline(transformation,
+                          j.partial(j.filter, j.isPair),
+                          j.splitPartial(j.reduce, [j.partial(transformer, obj)], [{}]));
+    }
+
 	j.deref = deref;
     j.pluck = pluck;
     j.pluckKeys = pluckKeys;
     j.toValues = toValues;
+    j.transform = transform;
 
 })(jfp);

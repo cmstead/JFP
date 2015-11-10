@@ -336,4 +336,52 @@ var jfp = require('../../dist/jfp.js'),
 
     });
     
+    describe('transform', function () {
+        
+        var testObj;
+        
+        beforeEach(function () {
+            testObj = {
+                'foo': {
+                    'bar': [1, 2, 3, 4]
+                },
+                'baz': 'quux'
+            };
+        });
+        
+        it('should return an object', function () {
+            expect(JSON.stringify(j.transform([], testObj))).toBe('{}');
+        });
+        
+        it('should transform an object using a single string pair', function () {
+            var result = j.transform([['baz', 'foo']], testObj);
+            expect(JSON.stringify(result)).toBe('{"foo":"quux"}');
+        });
+        
+        it('should transform an object with a deep reference', function () {
+            var result = j.transform([['foo.bar.1', 'test']], testObj);
+            expect(JSON.stringify(result)).toBe('{"test":2}');
+        });
+        
+        it('should transform on multiple pairs', function () {
+            var result = j.transform([['foo.bar.0', 'a'], ['foo.bar.1', 'b'], ['baz', 'c']], testObj);
+            expect(JSON.stringify(result)).toBe('{"a":1,"b":2,"c":"quux"}');
+        });
+        
+        it('should transform only on definition pairs (2-tuples)', function () {
+            var result = j.transform([['foo.bar.0'], ['foo.bar.1', 'b'], ['baz', 'c', 0]], testObj);
+            expect(JSON.stringify(result)).toBe('{"b":2}');
+        });
+        
+        it('should fill values with null when no object provided', function () {
+            var result = j.transform([['baz', 'foo']]);
+            expect(JSON.stringify(result)).toBe('{"foo":null}');
+        });
+        
+        it('should return empty object when no values are provided', function () {
+            var result = j.transform();
+            expect(JSON.stringify(result)).toBe('{}');
+        });
+    });
+    
 })();

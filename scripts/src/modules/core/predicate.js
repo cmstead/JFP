@@ -46,6 +46,10 @@
     function isTuple (size, list) {
         return isType('array', list) && list.length === size;
     }
+    
+    function hasFirst (list) {
+        return not(isUndefined(j.either([], list, 'array')[0]));
+    }
 
     // Equality
     j.equal = equal;
@@ -69,6 +73,7 @@
     j.isTriple = isTuple.bind(null, 3);
 
     //Other predicates
+    j.hasFirst = hasFirst;
     j.isNumeric = isNumeric;
     j.isPrimitive = isPrimitive;
     j.isTruthy = isTruthy;

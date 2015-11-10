@@ -82,6 +82,10 @@ var jfp = (function(){
     function isTuple (size, list) {
         return isType('array', list) && list.length === size;
     }
+    
+    function hasFirst (list) {
+        return not(isUndefined(j.either([], list, 'array')[0]));
+    }
 
     // Equality
     j.equal = equal;
@@ -105,6 +109,7 @@ var jfp = (function(){
     j.isTriple = isTuple.bind(null, 3);
 
     //Other predicates
+    j.hasFirst = hasFirst;
     j.isNumeric = isNumeric;
     j.isPrimitive = isPrimitive;
     j.isTruthy = isTruthy;
@@ -366,21 +371,27 @@ var jfp = (function(){
         return j.isUndefined(pickResult) ? null : pickResult;
     }
 
-    function merge(defaultObj, mergeData){
-        var finalObj = {},
-            key;
-
-        for(key in j.either({}, defaultObj)){
-            finalObj[key] = defaultObj[key];
-        }
-
-        for(key in j.either({}, mergeData)){
-            finalObj[key] = mergeData[key];
-        }
-
-        return j.eitherIf(null, finalObj, j.isTruthy(defaultObj));
+    function getKeys (obj) {
+        return Object.keys(j.either({}, obj, 'object'));
     }
 
+    function mergeValue (dataObj, mergedObj, key) {
+        mergedObj[key] = dataObj[key];
+        return mergedObj;
+    }
+
+    function merge(baseObj, mergeData){
+        var finalObj = null;
+        
+        if (j.maybe(baseObj) !== null) {
+            finalObj = getKeys(baseObj).reduce(j.partial(mergeValue, baseObj), {});
+            finalObj = getKeys(mergeData).reduce(j.partial(mergeValue, mergeData), finalObj);
+        }
+
+        return finalObj;
+    }
+
+    j.getKeys = getKeys;
     j.merge = merge;
     j.pick = pick;
 
@@ -799,10 +810,22 @@ var jfp = (function(){
         return pluckKeys([key], baseObj);
     }
 
+    function transformer (obj, result, transformation) {
+        result[transformation[1]] = deref(transformation[0], obj);
+        return result;
+    }
+
+    function transform (transformation, obj) {
+        return j.pipeline(transformation,
+                          j.partial(j.filter, j.isPair),
+                          j.splitPartial(j.reduce, [j.partial(transformer, obj)], [{}]));
+    }
+
 	j.deref = deref;
     j.pluck = pluck;
     j.pluckKeys = pluckKeys;
     j.toValues = toValues;
+    j.transform = transform;
 
 })(jfp);
 

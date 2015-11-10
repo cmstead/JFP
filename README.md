@@ -27,10 +27,11 @@ https://www.mozilla.org/MPL/
 - [x] isPair - special case isTuple representable by j('isTuple', 2) -- intentionally does NOT conform to scheme's pair? predicate
 - [x] isSingle - special case isTuple representable by j('isTuple', 1)
 - [x] isTriple - special case isTuple representable by j('isTuple', 3)
-- [ ] transform - transforms an object into a new object through an array of pairs-based transform definitions -- This ignores all non-pair values
-- [ ] getKeys - returns array of object keys returns empty array if value is not an object or if object has no keys
-- [ ] hasFirst - checks if array contains a first element, always returns false on non-array values
+- [x] transform - transforms an object into a new object through an array of pairs-based transform definitions -- This ignores all non-pair values
+- [x] getKeys - returns array of object keys returns empty array if value is not an object or if object has no keys
+- [x] hasFirst - checks if array contains a first element, always returns false on non-array values
 - [x] Updated shortCircuit to act on an option type
+- [x] Updated merge function to reduce verbosity and improve stability
 
 ###V2.4.0
 

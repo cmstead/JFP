@@ -341,6 +341,22 @@ var jfp = require('../../dist/jfp.js'),
             });
             
         });
+        
+        describe('hasFirst', function () {
+            
+            it('should return false if array has no first element', function () {
+                expect(j.hasFirst([])).toBe(false);
+            });
+            
+            it('should return true if array has a first element', function () {
+                expect(j.hasFirst([1])).toBe(true);
+            });
+            
+            it('should return false if value is not a list', function () {
+                expect(j.hasFirst('foo')).toBe(false);
+            });
+            
+        });
 
     });
 

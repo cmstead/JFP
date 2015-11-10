@@ -128,4 +128,20 @@ var jfp = require('../../dist/jfp.js'),
 
     });
 
+    describe('getKeys', function () {
+        
+        it('should return an empty array if object is empty', function () {
+            expect(JSON.stringify(j.getKeys({}))).toBe('[]');
+        });
+        
+        it('should return array of keys if object is not empty', function () {
+            expect(JSON.stringify(j.getKeys({'foo': 'bar', 'baz': 'quux'}))).toBe('["foo","baz"]');
+        });
+        
+        it('should return an empty arrray if value is not an object', function () {
+            expect(JSON.stringify(j.getKeys('I am a string'))).toBe('[]');
+        });
+        
+    });
+
 })();
