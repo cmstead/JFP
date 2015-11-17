@@ -33,9 +33,10 @@ https://www.mozilla.org/MPL/
 - [x] always - returns a function which always returns the same value -- similar to j.partial(j.identity, value)
 - [x] empty - accepts type string, returns initialized, empty value of type specified by type string, with no string, empty returns null
 - [x] isMultipleOf - verifies value is multiple of a number
-- [x] Function updates and enhancements
+- [x] Assorted updates and enhancements
     - Updated shortCircuit to act on an typeString
     - Updated merge function to reduce verbosity and improve stability
+    - Added AMD/RequireJS module support
 
 ###V2.4.0
 
