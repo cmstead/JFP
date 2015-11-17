@@ -521,50 +521,18 @@ var jfp = require('../../../dist/jfp.js'),
         
     });
     
-    describe('none', function () {
+    describe('always', function () {
         
-        it('should return empty("null") by default', function () {
-            expect(j.none()).toBe(null);
+        it('should return a function', function () {
+            expect(typeof j.always()).toBe('function');
         });
         
-        it('should return empty("string") for string', function () {
-            expect(j.none('string')).toBe('');
+        it('should always function should return null if no parameter is provided', function () {
+            expect(j.always()()).toBe(null);
         });
         
-        it('should return null for "undefined" string', function () {
-            expect(j.none('undefined')).toBe(null);
-        });
-        
-        it('should return null for unknown string', function () {
-            expect(j.none('foo')).toBe(null);
-        });
-        
-    });
-    
-    describe('just', function () {
-        
-        it('should return none() for undefined', function () {
-            expect(j.just()).toBe(j.none());
-        });
-        
-        it('should return identity(value) for non-undefined value', function () {
-            expect(j.just('foo')).toBe('foo');
-        });
-        
-    });
-    
-    describe('option', function () {
-        
-        it('should return empty("null") by default', function () {
-            expect(j.option()).toBe(j.empty('null'));
-        });
-        
-        it('should return maybe value for non-falsey value without typing', function () {
-            expect(j.option('foo')).toBe(j.maybe('foo'));
-        });
-        
-        it('should return none(typeString) when maybe(value, typeString) is null', function () {
-            expect(JSON.stringify(j.option('foo', 'object'))).toBe('{}');
+        it('should return first argument when provided', function () {
+            expect(j.always('foo')()).toBe('foo');
         });
         
     });

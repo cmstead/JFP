@@ -30,13 +30,12 @@ https://www.mozilla.org/MPL/
 - [x] transform - transforms an object into a new object through an array of pairs-based transform definitions -- This ignores all non-pair values
 - [x] getKeys - returns array of object keys returns empty array if value is not an object or if object has no keys
 - [x] hasFirst - checks if array contains a first element, always returns false on non-array values
+- [x] always - returns a function which always returns the same value -- similar to j.partial(j.identity, value)
 - [x] empty - accepts type string, returns initialized, empty value of type specified by type string, with no string, empty returns null
-- [x] none - accepts type string typeString, returns empty(typeString)
-- [x] just - accepts value, returns identity of value unless undefined, then returns none(undefined)
-- [x] option - accepts value and type string called typeString, returns either(none(typeString), maybe(value, typeString))
-- [x] optionType - returns eitherType(typeString, none(typeString))
-- [x] Updated shortCircuit to act on an typeString
-- [x] Updated merge function to reduce verbosity and improve stability
+- [x] isMultipleOf - verifies value is multiple of a number
+- [x] Function updates and enhancements
+    - Updated shortCircuit to act on an typeString
+    - Updated merge function to reduce verbosity and improve stability
 
 ###V2.4.0
 

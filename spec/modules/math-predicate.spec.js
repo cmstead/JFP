@@ -222,4 +222,16 @@ describe('math predicate', function(){
 
     });
 
+    describe('isMultipleOf', function () {
+        
+        it('should return true if test value is a multiple of base value', function () {
+            expect(j.isMultipleOf(3, 6)).toBe(true);
+        });
+        
+        it('should return false if test value is not a multiple of base value', function () {
+            expect(j.isMultipleOf(5, 13)).toBe(false);
+        });
+        
+    });
+
 });

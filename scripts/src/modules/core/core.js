@@ -23,15 +23,6 @@
             }[typeString];
     }
 
-    function none (typeString) {
-        var result = empty(typeString);
-        return getType(result) !== 'undefined' ? result : null;
-    }
-
-    function just(value) {
-        return getType(value) !== 'undefined' ? identity(value) : none();
-    }
-
     function slice(begin, valueSet, end){
         var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
 
@@ -53,10 +44,11 @@
         return maybe(testValue, type) === null ? defaultValue : testValue;
     }
     
-    function option (value, typeString) {
-        return either(none(typeString), maybe(value, typeString));
+    function always (value) {
+        var output = getType(value) === 'undefined' ? null : value;
+        return identity.bind(null, output);
     }
-    
+
     function shortCircuit(defaultValue, fn, optionValue){
         var type = optionValue === 0 ? 'number' : arguments[3];
         return maybe(optionValue, type) !== null ? fn(optionValue) : defaultValue;
@@ -128,6 +120,7 @@
         return j.apply(userFn, j.slice(1, arguments));
     }
     
+    j.always = always;
     j.apply = apply;
     j.concat = concat;
     j.countArguments = countArguments;
@@ -138,10 +131,7 @@
     j.execute = execute;
     j.getType = getType;
     j.identity = identity;
-    j.just = just;
     j.maybe = maybe;
-    j.none = none;
-    j.option = option;
     j.partial = basePartial('left', basePartial, 'left');
     j.reverseArgs = reverseArgs;
     j.rpartial = basePartial('left', basePartial, 'right');

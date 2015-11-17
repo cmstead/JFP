@@ -20,6 +20,10 @@
         return j.equal(j.truncate(value), value);
     }
 
+    function isMultipleOf (base, test) {
+        return j.equal(0, j.mod(test, base));
+    }
+
     var isNegative = j.partial(greater, 0),
         isPositive = j.partial(less, 0),
         isZero = j.partial(j.equal, 0),
@@ -27,6 +31,7 @@
 
     j.isEven = isEven;
     j.isInt = isInt;
+    j.isMultipleOf = isMultipleOf;
     j.isNegative = isNegative;
     j.isNonNegative = j.compose(j.not, isNegative);
     j.isNonPositive = j.compose(j.not, isPositive);

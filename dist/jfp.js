@@ -143,15 +143,6 @@ var jfp = (function(){
             }[typeString];
     }
 
-    function none (typeString) {
-        var result = empty(typeString);
-        return getType(result) !== 'undefined' ? result : null;
-    }
-
-    function just(value) {
-        return getType(value) !== 'undefined' ? identity(value) : none();
-    }
-
     function slice(begin, valueSet, end){
         var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
 
@@ -173,10 +164,11 @@ var jfp = (function(){
         return maybe(testValue, type) === null ? defaultValue : testValue;
     }
     
-    function option (value, typeString) {
-        return either(none(typeString), maybe(value, typeString));
+    function always (value) {
+        var output = getType(value) === 'undefined' ? null : value;
+        return identity.bind(null, output);
     }
-    
+
     function shortCircuit(defaultValue, fn, optionValue){
         var type = optionValue === 0 ? 'number' : arguments[3];
         return maybe(optionValue, type) !== null ? fn(optionValue) : defaultValue;
@@ -248,6 +240,7 @@ var jfp = (function(){
         return j.apply(userFn, j.slice(1, arguments));
     }
     
+    j.always = always;
     j.apply = apply;
     j.concat = concat;
     j.countArguments = countArguments;
@@ -258,10 +251,7 @@ var jfp = (function(){
     j.execute = execute;
     j.getType = getType;
     j.identity = identity;
-    j.just = just;
     j.maybe = maybe;
-    j.none = none;
-    j.option = option;
     j.partial = basePartial('left', basePartial, 'left');
     j.reverseArgs = reverseArgs;
     j.rpartial = basePartial('left', basePartial, 'right');
@@ -545,10 +535,6 @@ var jfp = (function(){
         }).apply(j, j.slice(1, arguments));
     }
     
-    function optionType (typeString, value) {
-        return !j.isUndefined(value) ? j.option(value, typeString) : j.rpartial(j.option, typeString);
-    }
-    
     function eitherType (typeString) {
         return j.curry(function (defaultValue, optionValue) {
             return j.either(defaultValue, optionValue, typeString);
@@ -560,7 +546,6 @@ var jfp = (function(){
     j.curry = curry;
     j.eitherType = eitherType;
     j.maybeType = maybeType;
-    j.optionType = optionType;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;
     j.recur = recur;
@@ -1023,6 +1008,10 @@ var jfp = (function(){
         return j.equal(j.truncate(value), value);
     }
 
+    function isMultipleOf (base, test) {
+        return j.equal(0, j.mod(test, base));
+    }
+
     var isNegative = j.partial(greater, 0),
         isPositive = j.partial(less, 0),
         isZero = j.partial(j.equal, 0),
@@ -1030,6 +1019,7 @@ var jfp = (function(){
 
     j.isEven = isEven;
     j.isInt = isInt;
+    j.isMultipleOf = isMultipleOf;
     j.isNegative = isNegative;
     j.isNonNegative = j.compose(j.not, isNegative);
     j.isNonPositive = j.compose(j.not, isPositive);
