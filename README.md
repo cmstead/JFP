@@ -21,6 +21,10 @@ If the text file has been removed, please visit:
 
 https://www.mozilla.org/MPL/
 
+###V2.5.1
+
+- [ ] Fix arity of deref so base arity is 2 (fix to make currying work more predictably)
+
 ###V2.5.0
 
 - [x] isTuple - predicate testing on if array is a tuple of n length &lt;int&gt;, &lt;array&gt; -&gt; &lt;boolean&gt;

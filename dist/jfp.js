@@ -814,16 +814,17 @@ var jfp = (function(){
     }
 
     function internalDeref(key, baseData, defaultValue){
-        var sanitizedDefault = defaultValue === undefined ? null : defaultValue,
+        var sanitizedDefault = j.isUndefined(defaultValue) ? null : defaultValue,
             keyTokens = key.split('.'),
             result = j.reduce(dereferencer, keyTokens, baseData);
         
         return j.either(sanitizedDefault, result);
     }
     
-    function deref(key, baseData, defaultValue){
+    function deref(key, baseData){
         // Satisifes backwards-compatibility case where key an data are reversed
-        var sanitizedKey = typeof key === 'string' ? key : baseData,
+        var defaultValue = arguments[2],
+            sanitizedKey = typeof key === 'string' ? key : baseData,
             sanitizedData = typeof baseData === 'object' ? baseData : key;
         
         // Fully sanitize data before executing the dereference function
