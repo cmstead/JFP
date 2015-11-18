@@ -23,7 +23,7 @@ https://www.mozilla.org/MPL/
 
 ###V2.5.1
 
-- [ ] Fix arity of deref so base arity is 2 (fix to make currying work more predictably)
+- [x] Fix arity of deref so base arity is 2 (fix to make currying work more predictably)
 
 ###V2.5.0
 
