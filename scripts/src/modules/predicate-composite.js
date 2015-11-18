@@ -28,8 +28,13 @@
         return or(a, b) && j.not(equivalent);
     }
     
-    function composePredicate (predicateList) {
-        var combinator = arguments[1] === or ? or : and;
+    function composePredicate (predicateFn) {
+        var predicateList = j.slice(0, arguments),
+            combinator = j.last(predicateList),
+            lastIsCombinator = combinator === or || combinator === and;
+        
+        predicateList = lastIsCombinator ? j.dropLast(predicateList) : predicateList;
+        combinator = combinator === or ? or : and;
         
         return function (value) {
             var executor = j.rpartial(j.execute, value);
