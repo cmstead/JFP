@@ -89,6 +89,23 @@ original === shallowCopy; // false
 original.baz === shallowCopy.baz; // true
 </code></pre>
 
+<p><strong>getKeys</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {object} value</li>
+  <li>Description: returns an array of keys. If obj is empty or value is not an object, getKeys will return an empty array</li>
+</ul>
+
+<h4 id="example-1">Example</h4>
+
+<pre><code>var myObj = { foo: 'foo', bar: 'bar' };
+
+j.getKeys(myObj); // ['foo', 'bar']
+j.getKeys('Bloop!'); // []
+j.getKeys(null); // []
+</code></pre>
+
 <p><strong>merge</strong></p>
 
 <ul>
@@ -97,7 +114,7 @@ original.baz === shallowCopy.baz; // true
   <li>Description: Merges data from mergeData into new object, filling missing data with default object</li>
 </ul>
 
-<h4 id="example-1">Example</h4>
+<h4 id="example-2">Example</h4>
 
 <pre><code>var defaultData = {
         1: 'foo',
@@ -126,7 +143,7 @@ j.merge(defaultData, mergeData);
   <li>Description: Returns value at key in valueMap</li>
 </ul>
 
-<h4 id="example-2">Example</h4>
+<h4 id="example-3">Example</h4>
 
 <pre><code>j.pick('test1', {
     'test1': 'test value 1',
@@ -149,7 +166,7 @@ j.pick('test1', { 'test2': 'not returned' });
   <li>Description: Returns object containing key and value from valueMap at key</li>
 </ul>
 
-<h4 id="example-3">Example</h4>
+<h4 id="example-4">Example</h4>
 
 <pre><code>j.pluck('test1', {
     'test1': 'test value 1',
@@ -168,7 +185,7 @@ j.pick('test1', { 'test2': 'not returned' });
   <li>Description: Returns object containing keys and values from valueMap at keys</li>
 </ul>
 
-<h4 id="example-4">Example</h4>
+<h4 id="example-5">Example</h4>
 
 <pre><code>j.pluckKeys(['test1', 'test3'], {
     'test1': 'test value 1',
@@ -177,6 +194,30 @@ j.pick('test1', { 'test2': 'not returned' });
 });
 
 //{ 'test1': 'test value 1', 'test3': 'test value 3' }
+</code></pre>
+
+<p><strong>transform</strong></p>
+
+<ul>
+  <li>Performance: O(n) to O(n^2) – O(n^2) is pathological case</li>
+  <li>Arguments: {array} transformPairs, {object} obj</li>
+  <li>Description: transforms array from any one structure to a flattened new structure – each pair represents a from key and a to key. The from key will be dereferenced and a new property will be assigned to the to-key. Any non-pair values in the array will be ignored.</li>
+</ul>
+
+<h4 id="example-6">Example</h4>
+
+<pre><code>var myObj = {
+    test: 'bar',
+    bar: {
+        value: 'bar',
+        baz: {
+            value: 'quux'
+        }
+    }
+},
+newObj = j.transform([['test', 'foo'], ['bar.baz', 'baz']], myObj);
+
+JSON.stringify(newObj); // {"foo":"bar","baz":"quux"}
 </code></pre>
 
 

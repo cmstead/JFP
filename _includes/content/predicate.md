@@ -24,8 +24,9 @@
 **composePredicate**
 
 - Performance: O(n)
-- Arguments: {array} predicates, {any} value
+- Arguments: {function} predicate[, ... {function} predicate[, {function} combinator]]
 - Description: composes predicates using either the "and" or the "or" combinator to produce a new composite predcate function
+- Note: Combinator must be j.or or j.and all other functions will be treated as predicates
 
 ####Example
 

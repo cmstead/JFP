@@ -90,6 +90,24 @@ j.and(true, false);
 //false
 </code></pre>
 
+<p><strong>composePredicate</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {function} predicate[, … {function} predicate[, {function} combinator]]</li>
+  <li>Description: composes predicates using either the “and” or the “or” combinator to produce a new composite predcate function</li>
+  <li>Note: Combinator must be j.or or j.and all other functions will be treated as predicates</li>
+</ul>
+
+<h4 id="example-1">Example</h4>
+
+<pre><code>var between3And5 = j.composePredicate(j('less', 3), j('greater', 5)),
+    multipleOf3Or5 = j.composePredicate(j('isMultipleOf', 3), j('isMultipleOf', 5), j.or);
+
+j.filter(between3And5, [1, 2, 3, 4, 5]); // [4]
+j.filter(multipleOf3Or5, [1, 2, 3, 4, 5, 6]); // [3, 5, 6]
+</code></pre>
+
 <p><strong>isArray</strong></p>
 
 <ul>
@@ -98,7 +116,7 @@ j.and(true, false);
   <li>Description: Returns true if value is an array, otherwise false</li>
 </ul>
 
-<h4 id="example-1">Example</h4>
+<h4 id="example-2">Example</h4>
 
 <pre><code>j.isArray([]);
 
@@ -117,7 +135,7 @@ j.isArray({});
   <li>Description: Returns true if value is a boolean value, otherwise false</li>
 </ul>
 
-<h4 id="example-2">Example</h4>
+<h4 id="example-3">Example</h4>
 
 <pre><code>j.isBoolean(false);
 
@@ -136,7 +154,7 @@ j.isBoolean('true');
   <li>Description: returns true if number is even, otherwise false</li>
 </ul>
 
-<h4 id="example-3">Example</h4>
+<h4 id="example-4">Example</h4>
 
 <pre><code>j.isEven(2);
 
@@ -155,7 +173,7 @@ j.isEven(3);
   <li>Description: returns true if number is an integer, otherwise false</li>
 </ul>
 
-<h4 id="example-4">Example</h4>
+<h4 id="example-5">Example</h4>
 
 <pre><code>j.isInt(2);
 
@@ -166,6 +184,20 @@ j.isInt(3.14159);
 //false
 </code></pre>
 
+<p><strong>isMultiple</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {int} baseValue, {int} testValue</li>
+  <li>Description: returns true if testValue is a multiple of baseValue else false</li>
+</ul>
+
+<h4 id="example-6">Example</h4>
+
+<pre><code>j.isMultiple(3, 6); // true
+j.isMultiple(2, 15); // false
+</code></pre>
+
 <p><strong>isNegative</strong></p>
 
 <ul>
@@ -174,7 +206,7 @@ j.isInt(3.14159);
   <li>Description: returns true if number is less than 0, otherwise false</li>
 </ul>
 
-<h4 id="example-5">Example</h4>
+<h4 id="example-7">Example</h4>
 
 <pre><code>j.isNegative(-2);
 
@@ -193,7 +225,7 @@ j.isNegative(5);
   <li>Description: returns true if number is 0 or greater, otherwise false</li>
 </ul>
 
-<h4 id="example-6">Example</h4>
+<h4 id="example-8">Example</h4>
 
 <pre><code>j.isNonNegative(0);
 
@@ -216,7 +248,7 @@ j.isNonNegative(-5);
   <li>Description: returns true if number is 0 or less, otherwise false</li>
 </ul>
 
-<h4 id="example-7">Example</h4>
+<h4 id="example-9">Example</h4>
 
 <pre><code>j.isNonPositive(0);
 
@@ -239,7 +271,7 @@ j.isNonPositive(7);
   <li>Description: returns true if number is not 0, otherwise false</li>
 </ul>
 
-<h4 id="example-8">Example</h4>
+<h4 id="example-10">Example</h4>
 
 <pre><code>j.isNonZero(6);
 
@@ -262,7 +294,7 @@ j.isNonZero(0);
   <li>Description: Returns true if value is null, otherwise false</li>
 </ul>
 
-<h4 id="example-9">Example</h4>
+<h4 id="example-11">Example</h4>
 
 <pre><code>j.isNull(null);
 
@@ -281,7 +313,7 @@ j.isNull(undefined);
   <li>Description: Returns true if value is a number, otherwise false</li>
 </ul>
 
-<h4 id="example-10">Example</h4>
+<h4 id="example-12">Example</h4>
 
 <pre><code>j.isNumber(1234);
 
@@ -304,7 +336,7 @@ j.isNumber('1234);
   <li>Description: Returns true if value is a number or a string matching a numeric pattern, otherwise false</li>
 </ul>
 
-<h4 id="example-11">Example</h4>
+<h4 id="example-13">Example</h4>
 
 <pre><code>j.isNumeric(1234.33);
 
@@ -327,7 +359,7 @@ j.isNumeric('1234');
   <li>Description: Returns true if value is an object, otherwise false</li>
 </ul>
 
-<h4 id="example-12">Example</h4>
+<h4 id="example-14">Example</h4>
 
 <pre><code>j.isObject({});
 
@@ -350,7 +382,7 @@ j.isObject(undefined);
   <li>Description: returns true if number is odd, otherwise false</li>
 </ul>
 
-<h4 id="example-13">Example</h4>
+<h4 id="example-15">Example</h4>
 
 <pre><code>j.isOdd(3);
 
@@ -361,6 +393,21 @@ j.isOdd(10);
 //false
 </code></pre>
 
+<p><strong>isPair</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {array} value</li>
+  <li>Description: Verifies provided value is an array of length 2. Shorthand for j(‘isTuple’, 2)</li>
+</ul>
+
+<h4 id="example-16">Example</h4>
+
+<pre><code>j.isPair(null); // false
+j.isPair([1, 2]); // true
+j.isPair([1, 2, 3, 4]); // false
+</code></pre>
+
 <p><strong>isPositive</strong></p>
 
 <ul>
@@ -369,7 +416,7 @@ j.isOdd(10);
   <li>Description: returns true if number greater than 0, otherwise false</li>
 </ul>
 
-<h4 id="example-14">Example</h4>
+<h4 id="example-17">Example</h4>
 
 <pre><code>j.isPositive(3);
 
@@ -388,10 +435,25 @@ j.isPositive(-2.414);
   <li>Description: returns true if value has a primitive type, otherwise false</li>
 </ul>
 
-<h4 id="example-15">Example</h4>
+<h4 id="example-18">Example</h4>
 
 <pre><code>j.isPrimitive(55); // true
 j.isPrimitive({}); // false
+</code></pre>
+
+<p><strong>isSingle</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {array} value</li>
+  <li>Description: Verifies provided value is an array of length 1. Shorthand for j(‘isTuple’, 1)</li>
+</ul>
+
+<h4 id="example-19">Example</h4>
+
+<pre><code>j.isSingle(null); // false
+j.isSingle([1]); // true
+j.isSingle([1, 2, 3, 4]); // false
 </code></pre>
 
 <p><strong>isString</strong></p>
@@ -402,7 +464,7 @@ j.isPrimitive({}); // false
   <li>Description: Returns true if value is a string, otherwise false</li>
 </ul>
 
-<h4 id="example-16">Example</h4>
+<h4 id="example-20">Example</h4>
 
 <pre><code>j.isString('A string');
 
@@ -413,6 +475,21 @@ j.isString([]);
 //false
 </code></pre>
 
+<p><strong>isTriple</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {array} value</li>
+  <li>Description: Verifies provided value is an array of length 3. Shorthand for j(‘isTuple’, 3)</li>
+</ul>
+
+<h4 id="example-21">Example</h4>
+
+<pre><code>j.isTriple(null); // false
+j.isTriple([1, 2, 3]); // true
+j.isTriple([1, 2, 3, 4]); // false
+</code></pre>
+
 <p><strong>isTruthy</strong></p>
 
 <ul>
@@ -421,7 +498,7 @@ j.isString([]);
   <li>Description: Returns true if value resolves to truthy, otherwise false</li>
 </ul>
 
-<h4 id="example-17">Example</h4>
+<h4 id="example-22">Example</h4>
 
 <pre><code>j.isTruthy(true);
 
@@ -440,6 +517,21 @@ j.isTruthy(null);
 //false
 </code></pre>
 
+<p><strong>isTuple</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {int} size, {array} value</li>
+  <li>Description: Verifies provided value is an array and that the array is of length “size”</li>
+</ul>
+
+<h4 id="example-23">Example</h4>
+
+<pre><code>j.isTuple(3, null); // false
+j.isTuple(2, [1, 2]); // true
+j.isTuple(1, [1, 2, 3, 4]); // false
+</code></pre>
+
 <p><strong>isType</strong></p>
 
 <ul>
@@ -448,7 +540,7 @@ j.isTruthy(null);
   <li>Description: returns true if value type and typeString match</li>
 </ul>
 
-<h4 id="example-18">Example</h4>
+<h4 id="example-24">Example</h4>
 
 <pre><code>j.isType('string', 'foo'); // true
 j.isType('string', null); // false
@@ -463,7 +555,7 @@ j.isType('array', []); // true
   <li>Description: Returns true if value is undefined, otherwise false</li>
 </ul>
 
-<h4 id="example-19">Example</h4>
+<h4 id="example-25">Example</h4>
 
 <pre><code>j.isUndefined(undefined);
 
@@ -482,7 +574,7 @@ j.isUndefined(null);
   <li>Description: returns true if number is 0, otherwise false</li>
 </ul>
 
-<h4 id="example-20">Example</h4>
+<h4 id="example-26">Example</h4>
 
 <pre><code>j.isZero(0);
 
@@ -501,7 +593,7 @@ j.isZero(1);
   <li>Description: Returns true if value is falsey, otherwise false</li>
 </ul>
 
-<h4 id="example-21">Example</h4>
+<h4 id="example-27">Example</h4>
 
 <pre><code>j.not(true);
 
@@ -520,7 +612,7 @@ j.not(0);
   <li>Description: Checks that any of the provided values are truthy</li>
 </ul>
 
-<h4 id="example-22">Example</h4>
+<h4 id="example-28">Example</h4>
 
 <pre><code>j.or();
 
@@ -547,7 +639,7 @@ j.or(0, false, null);
   <li>Description: performs an exclusive or check on passed boolean values</li>
 </ul>
 
-<h4 id="example-23">Example</h4>
+<h4 id="example-29">Example</h4>
 
 <pre><code>j.xor(true, false);
 
