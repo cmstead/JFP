@@ -11,6 +11,21 @@
     j('conj')(1)([2, 3, 4]); // [1, 2, 3, 4]
     j('pick', 'key')({ key: 'foo' }); // 'foo'
 
+**always**
+
+- Performance: O(1)
+- Arguments: {any} value
+- Description: Returns a function which always returns provided value. Returns null if original argument is undefined
+
+####Example
+
+    var alwaysTrue = j.always(true),
+        alwaysFoo = j.always('foo');
+    
+    alwaysTrue(); // true
+    alwaysFoo('bar'); // 'foo'
+    
+    j.filter(alwaysTrue, [1, 2, 3, 4]); // [1, 2, 3, 4] -- identity filter
 
 **apply**
 
@@ -31,19 +46,13 @@
 
     //3
 
-
-
-
 **compose**
 
 - Performance: O(n) on setup where n is the function count, O(1) at execution time
 - Arguments: {function} [arguments]
 - Description: Performs function composition on functions provided
 
-
 ####Example
-
-
 
     function isUndefined(value){
         return typeof value === 'undefined';
@@ -63,26 +72,17 @@
 
     //false
 
-
-
-
 **countArguments**
 
 - Performance: unmeasured
 - Arguments: {function} userFn
 - Description: Counts the number of arguments required for a function
 
-
 ####Example
-
-
 
     j.countArguments(function(arg1, arg2, arg3){});
 
     //3
-
-
-
 
 **curry**
 
@@ -90,10 +90,7 @@
 - Arguments: {function} userFn, [optional] arguments
 - Description: Curries function based on argument count -- partial application special case
 
-
 ####Example
-
-
 
     function add(a, b);
 
@@ -131,12 +128,23 @@
     j.deref('data.aList.1', myObj); // bar
     j.deref('data.aList.baz', myObj); // null
 
+**empty**
+
+- Performance: O(1)
+- Arguments: {string} type
+- Description: returns empty value of type "type"
+
+####Example
+
+    j.empty('object'); // {}
+    j.empty('array'); // []
+    j.empty('boolean'); // false
+
 **execute**
 
 - Performance: O(1)
 - Arguments: {function} userFn, [optional] arguments
 - Description: Executes function with provided arguments
-
 
 ####Example
 
@@ -174,10 +182,7 @@
 - Arguments: {function} userFn, [optional] arguments
 - Description: Generalized partial application function.
 
-
 ####Example
-
-
 
     function divide(a, b){
         return a / b;

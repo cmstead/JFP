@@ -19,6 +19,20 @@
     original === shallowCopy; // false
     original.baz === shallowCopy.baz; // true
 
+**getKeys**
+
+- Performance: O(1)
+- Arguments: {object} value
+- Description: returns an array of keys. If obj is empty or value is not an object, getKeys will return an empty array
+
+####Example
+
+    var myObj = { foo: 'foo', bar: 'bar' };
+    
+    j.getKeys(myObj); // ['foo', 'bar']
+    j.getKeys('Bloop!'); // []
+    j.getKeys(null); // []
+
 **merge**
 
 - Performance: O(n)
@@ -113,4 +127,23 @@
 
     //{ 'test1': 'test value 1', 'test3': 'test value 3' }
 
+**transform**
 
+- Performance: O(n) to O(n^2) -- O(n^2) is pathological case
+- Arguments: {array} transformPairs, {object} obj
+- Description: transforms array from any one structure to a flattened new structure -- each pair represents a from key and a to key. The from key will be dereferenced and a new property will be assigned to the to-key. Any non-pair values in the array will be ignored.
+
+####Example
+
+    var myObj = {
+        test: 'bar',
+        bar: {
+            value: 'bar',
+            baz: {
+                value: 'quux'
+            }
+        }
+    },
+    newObj = j.transform([['test', 'foo'], ['bar.baz', 'baz']], myObj);
+    
+    JSON.stringify(newObj); // {"foo":"bar","baz":"quux"}

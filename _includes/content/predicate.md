@@ -7,10 +7,7 @@
 - Arguments: [optional] {boolean} arguments
 - Description: Checks that all provided values are truthy
 
-
 ####Example
-
-
 
     j.and();
 
@@ -24,8 +21,19 @@
 
     //false
 
+**composePredicate**
 
+- Performance: O(n)
+- Arguments: {array} predicates, {any} value
+- Description: composes predicates using either the "and" or the "or" combinator to produce a new composite predcate function
 
+####Example
+
+    var between3And5 = j.composePredicate(j('less', 3), j('greater', 5)),
+        multipleOf3Or5 = j.composePredicate(j('isMultipleOf', 3), j('isMultipleOf', 5), j.or);
+    
+    j.filter(between3And5, [1, 2, 3, 4, 5]); // [4]
+    j.filter(multipleOf3Or5, [1, 2, 3, 4, 5, 6]); // [3, 5, 6]
 
 **isArray**
 
@@ -33,10 +41,7 @@
 - Arguments: {any} value
 - Description: Returns true if value is an array, otherwise false
 
-
 ####Example
-
-
 
     j.isArray([]);
 
@@ -45,9 +50,6 @@
     j.isArray({});
 
     //false
-
-
-
 
 **isBoolean**
 
@@ -112,8 +114,16 @@
 
     //false
 
+**isMultiple**
 
+- Performance: O(1)
+- Arguments: {int} baseValue, {int} testValue
+- Description: returns true if testValue is a multiple of baseValue else false
 
+####Example
+
+    j.isMultiple(3, 6); // true
+    j.isMultiple(2, 15); // false
 
 **isNegative**
 
@@ -334,8 +344,17 @@
 
     //false
 
+**isPair**
 
+- Performance: O(1)
+- Arguments: {array} value
+- Description: Verifies provided value is an array of length 2. Shorthand for j('isTuple', 2)
 
+####Example
+
+    j.isPair(null); // false
+    j.isPair([1, 2]); // true
+    j.isPair([1, 2, 3, 4]); // false
 
 **isPositive**
 
@@ -367,6 +386,18 @@
     j.isPrimitive(55); // true
     j.isPrimitive({}); // false
 
+**isSingle**
+
+- Performance: O(1)
+- Arguments: {array} value
+- Description: Verifies provided value is an array of length 1. Shorthand for j('isTuple', 1)
+
+####Example
+
+    j.isSingle(null); // false
+    j.isSingle([1]); // true
+    j.isSingle([1, 2, 3, 4]); // false
+
 **isString**
 
 - Performance: O(1)
@@ -386,8 +417,17 @@
 
     //false
 
+**isTriple**
 
+- Performance: O(1)
+- Arguments: {array} value
+- Description: Verifies provided value is an array of length 3. Shorthand for j('isTuple', 3)
 
+####Example
+
+    j.isTriple(null); // false
+    j.isTriple([1, 2, 3]); // true
+    j.isTriple([1, 2, 3, 4]); // false
 
 **isTruthy**
 
@@ -412,6 +452,18 @@
     j.isTruthy(null);
 
     //false
+
+**isTuple**
+
+- Performance: O(1)
+- Arguments: {int} size, {array} value
+- Description: Verifies provided value is an array and that the array is of length "size"
+
+####Example
+
+    j.isTuple(3, null); // false
+    j.isTuple(2, [1, 2]); // true
+    j.isTuple(1, [1, 2, 3, 4]); // false
 
 **isType**
 

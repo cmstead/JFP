@@ -181,6 +181,18 @@
     
     // 1
 
+**hasFirst**
+
+- Performance: O(1)
+- Arguments: {array} list
+- Description: Array predicate -- returns true if argument is an array and has at least one element. Otherwise returns false
+
+####Example
+
+    j.hasFirst([1, 2, 3]); // true
+    j.hasFirst([]); // false
+    j.hasFirst(null); // false
+
 **intersect**
 
 - Performance: O(n log n)
