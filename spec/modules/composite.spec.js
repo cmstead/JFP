@@ -384,4 +384,38 @@ var jfp = require('../../dist/jfp.js'),
         });
     });
     
+    describe('composePredicate', function () {
+        
+        it('should return a predicate function', function () {
+            expect(typeof j.composePredicate([])('foo')).toBe('boolean');
+        });
+        
+        it('should resolve a single predicate', function () {
+            var predicates = [j('greater', 0)];
+            expect(j.composePredicate(predicates)(5)).toBe(false);
+        });
+        
+        it('should resolve two predicates', function () {
+            var predicates = [j('greater', 9), j('less', 0)],
+                between0And9 = j.composePredicate(predicates);
+            
+            expect(between0And9(5)).toBe(true);
+        });
+        
+        it('should resolve three predicates', function () {
+            var predicates = [j.isEven, j('greater', 9), j('less', 0)],
+                evenBetween0And9 = j.composePredicate(predicates);
+            
+            expect(evenBetween0And9(5)).toBe(false);
+        });
+
+        it('should perform or combination when specified', function () {
+            var predicates = [j('greater', 0), j('less', 9)],
+                notIn0To9 = j.composePredicate(predicates, j.or);
+            
+            expect(notIn0To9(-8)).toBe(true);
+        });
+        
+    });
+    
 })();
