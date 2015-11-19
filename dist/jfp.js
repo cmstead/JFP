@@ -143,8 +143,9 @@ var jfp = (function(){
             }[typeString];
     }
 
-    function slice(begin, valueSet, end){
-        var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
+    function slice(begin, valueSet){
+        var end = arguments[2],
+            values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
 
         return j.not(j.isTruthy(end)) ?
                     Array.prototype.slice.call(values, begin) :
@@ -748,9 +749,12 @@ var jfp = (function(){
         return a || b;
     }
 
-    function reduceConditions(conditionArgs, operator, initialCondition){
-        var args = j.map(Boolean, j.slice(0, conditionArgs));
-        return Boolean(j.reduce(operator, args, initialCondition));
+    function reduceConditions(conditionArgs, operator, initialCondition) {
+        return j.pipeline(conditionArgs,
+                          j.partial(j.slice, 0),
+                          j.partial(j.map, Boolean),
+                          j.splitPartial(j.reduce, [operator], [initialCondition]),
+                          Boolean);
     }
 
     function and(a, b){
@@ -763,7 +767,7 @@ var jfp = (function(){
 
     function xor(a, b){
         var equivalent = Boolean(a) === Boolean(b);
-        return or(a, b) && j.not(equivalent);
+        return or(a, b) && !equivalent;
     }
     
     function composePredicate (predicateFn) {
@@ -784,11 +788,25 @@ var jfp = (function(){
         };
     }
 
-    j.composePredicate = composePredicate;
+    function cond (conditionPair) {
+        var isTruthy = j.compose(j.truthy, j.partial(j.nth, 0)),
+            behavior = j.pipeline(arguments,
+                                  j.partial(j.slice, 0),
+                                  j.partial(j.filter, j.isPair),
+                                  j.partial(j.find, isTruthy),
+                                  j.partial(j.nth, 1));
+
+        return j.isType('function', behavior) ? behavior() : null;
+    }
+
+    // Predicate combinators
 	j.and = and;
 	j.or = or;
 	j.xor = xor;
 
+    j.composePredicate = composePredicate;
+    j.cond = cond;
+    
 })(jfp);
 
 (function (j) {
