@@ -23,8 +23,9 @@
             }[typeString];
     }
 
-    function slice(begin, valueSet, end){
-        var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
+    function slice(begin, valueSet){
+        var end = arguments[2],
+            values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
 
         return j.not(j.isTruthy(end)) ?
                     Array.prototype.slice.call(values, begin) :

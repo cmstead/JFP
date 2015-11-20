@@ -799,6 +799,30 @@ var jfp = (function(){
         return j.isType('function', behavior) ? behavior() : null;
     }
 
+    function cleanConditionPairs (value, conditionPairs) {
+        var error = new Error('Match call does not contain expressions for all condition cases.'),
+            errorState = [j.always(true), function () { throw error; }],
+            emptyState = [j.always(true), j.always(value)];
+
+        return cond([j.isUndefined(value), j.always([])],
+                    [j.hasFirst(conditionPairs), j.partial(j.conj, errorState, conditionPairs)],
+                    ['else', j.partial(j.conj, emptyState, conditionPairs)]);
+    }
+
+    function matchToCond (value, conditionPair) {
+        return [conditionPair[0](value), conditionPair[1]];
+    }
+
+    function match (value, conditionPair) {
+        var conditionPairs = j.slice(1, arguments),
+            result = j.isUndefined(value) ? null : value;
+
+        return j.pipeline(conditionPairs,
+                          j.partial(cleanConditionPairs, result),
+                          j.partial(j.map, j.partial(matchToCond, value)),
+                          j.partial(j.apply, cond));
+    }
+
     // Predicate combinators
 	j.and = and;
 	j.or = or;
@@ -806,6 +830,7 @@ var jfp = (function(){
 
     j.composePredicate = composePredicate;
     j.cond = cond;
+    j.match = match;
     
 })(jfp);
 

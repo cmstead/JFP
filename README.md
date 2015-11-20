@@ -23,11 +23,14 @@ https://www.mozilla.org/MPL/
 
 ###V2.6.0
 
-- [ ] cond - Conditional matching function; accepts function pairs as arguments position 0 must be a predicate, position 1 is a behavior
+- [x] cond - Conditional matching function; accepts function pairs as arguments position 0 must be a predicate, position 1 is a behavior
+- [ ] match - Takes an argument and matches on predicate functions then executes functions or returns values accordingly
+- [x] Various updates and fixes
+    - Updated slice base arity to 2
 
 ###V2.5.1
 
-- [ ] Fix arity of deref so base arity is 2 (fix to make currying work more predictably)
+- [x] Fix arity of deref so base arity is 2 (fix to make currying work more predictably)
 
 ###V2.5.0
 
