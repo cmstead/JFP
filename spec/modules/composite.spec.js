@@ -498,7 +498,28 @@ var jfp = require('../../dist/jfp.js'),
                                  [j('equal', 'baz'), j.partial(j.add, 3, 3)]);
             
             expect(matcher).toThrow();
-        });        
+        });
+        
+        it('should ignore any elements which are not pairs', function () {
+            var result = j.match('baz', 
+                                 [j('equal', 'baz'), 'foo', 'blarg'],
+                                 ['foo'],
+                                 [j('equal', 'baz'), j.always('hooray')]);
+            
+            expect(result).toBe('hooray');
+        });
+
+        it('should test equality when no predicate is provided', function () {
+            var result = j.match('foo',
+                                 ['foo', j.always('bar')]);
+            expect(result).toBe('bar');
+        });
+
+        it('should return value when result is not a function', function () {
+            var result = j.match('foo',
+                                 ['foo', 'bar']);
+            expect(result).toBe('bar');
+        });
 
     });
     

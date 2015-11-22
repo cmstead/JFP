@@ -31,24 +31,6 @@
         return or(a, b) && !equivalent;
     }
     
-    function composePredicate (predicateFn) {
-        var predicateList = j.slice(0, arguments),
-            combinator = j.last(predicateList),
-            lastIsCombinator = combinator === or || combinator === and;
-        
-        predicateList = lastIsCombinator ? j.dropLast(predicateList) : predicateList;
-        combinator = combinator === or ? or : and;
-        
-        return function (value) {
-            var executor = j.rpartial(j.execute, value);
-            
-            return j.pipeline(predicateList,
-                              j.partial(j.map, executor),
-                              j.partial(j.reduce, combinator),
-                              Boolean);
-        };
-    }
-
     function cond (conditionPair) {
         var isTruthy = j.compose(j.truthy, j.partial(j.nth, 0)),
             behavior = j.pipeline(arguments,
@@ -62,16 +44,25 @@
 
     function cleanConditionPairs (value, conditionPairs) {
         var error = new Error('Match call does not contain expressions for all condition cases.'),
-            errorState = [j.always(true), function () { throw error; }],
-            emptyState = [j.always(true), j.always(value)];
+            notEmpty = j.hasFirst(conditionPairs);
 
         return cond([j.isUndefined(value), j.always([])],
-                    [j.hasFirst(conditionPairs), j.partial(j.conj, errorState, conditionPairs)],
-                    ['else', j.partial(j.conj, emptyState, conditionPairs)]);
+                    [notEmpty, j.partial(j.conj, 
+                                         [j.always(true), function () { throw error; }],
+                                         conditionPairs)],
+                    ['else', j.partial(j.conj,
+                                       [j.always(true), j.always(value)],
+                                       conditionPairs)]);
     }
 
     function matchToCond (value, conditionPair) {
-        return [conditionPair[0](value), conditionPair[1]];
+        var condition = j.first(conditionPair),
+            result = j.last(conditionPair),
+            newPair = [
+                j.isType('function', condition) ? condition(value) : j.equal(condition, value),
+                j.isType('function', result) ? result : j.always(result)
+            ];
+        return !j.isPair(conditionPair) ? conditionPair : newPair;
     }
 
     function match (value, conditionPair) {
@@ -82,6 +73,28 @@
                           j.partial(cleanConditionPairs, result),
                           j.partial(j.map, j.partial(matchToCond, value)),
                           j.partial(j.apply, cond));
+    }
+
+    function composePredicate (predicateFn) {
+        var args = j.slice(0, arguments),
+        
+            combinator = match(j.last(args),
+                               [j.partial(j.equal, or), j.always(or)],                              
+                               [j.always(true), j.always(and)]),
+                               
+            predicateList = match(j.last(args),
+                                  [j.partial(j.equal, or), j.partial(j.dropLast, args)],
+                                  [j.partial(j.equal, and), j.partial(j.dropLast, args)],
+                                  [j.always(true), j.always(args)]);
+        
+        return function (value) {
+            var executor = j.rpartial(j.execute, value);
+            
+            return j.pipeline(predicateList,
+                              j.partial(j.map, executor),
+                              j.partial(j.reduce, combinator),
+                              Boolean);
+        };
     }
 
     // Predicate combinators

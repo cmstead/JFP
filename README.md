@@ -24,8 +24,9 @@ https://www.mozilla.org/MPL/
 ###V2.6.0
 
 - [x] cond - Conditional matching function; accepts function pairs as arguments position 0 must be a predicate, position 1 is a behavior
-- [ ] match - Takes an argument and matches on predicate functions then executes functions or returns values accordingly
+- [x] match - Takes an argument and matches on predicate functions or comparison values then executes functions or returns values accordingly
 - [x] Various updates and fixes
+    - Compose predicates rewritten to use pattern matching
     - Updated slice base arity to 2
 
 ###V2.5.1
