@@ -143,15 +143,6 @@ var jfp = (function(){
             }[typeString];
     }
 
-    function slice(begin, valueSet){
-        var end = arguments[2],
-            values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
-
-        return j.not(j.isTruthy(end)) ?
-                    Array.prototype.slice.call(values, begin) :
-                    Array.prototype.slice.call(values, begin, end);
-    }
-
     function maybe(value){
         var type = arguments[1],
             valueType = getType(value),
@@ -165,6 +156,11 @@ var jfp = (function(){
         return maybe(testValue, type) === null ? defaultValue : testValue;
     }
     
+    function slice (begin, valueSet) {
+        var boundaries = !arguments[2] ? [begin] : [begin, arguments[2]];
+        return Array.prototype.slice.apply(either([], valueSet), boundaries);
+    }
+
     function always (value) {
         var output = getType(value) === 'undefined' ? null : value;
         return identity.bind(null, output);
@@ -180,8 +176,7 @@ var jfp = (function(){
     }
 
     function when(checkValue, userFn){
-        var args = slice(2, arguments);
-        return j.isTruthy(checkValue) ? apply(userFn, args) : null;
+        return j.isTruthy(checkValue) ? apply(userFn, slice(2, arguments)) : null;
     }
 
     function eitherIf(defaultValue, testValue, predicateValue){
@@ -228,8 +223,7 @@ var jfp = (function(){
 
     function reverseArgs(userFn){
         return function(){
-            var args = j.slice(0, arguments).reverse();
-            return j.apply(userFn, args);
+            return j.apply(userFn, j.slice(0, arguments).reverse());
         };
     }
 
@@ -306,19 +300,12 @@ var jfp = (function(){
         return j.isArray(values) ? values[lastIndex(values)] : null;
     }
 
-    function drop(index, valueSet){
-        var finalIndex = lastIndex(valueSet),
-
-            sanitizedIndex = (index === 0 || index === finalIndex) ?
-                index : j.either(1, index) - 1,
-
-            firstArray = (sanitizedIndex === 0) ?
-                [] : j.slice(0, valueSet, sanitizedIndex),
-
-            secondArray = (sanitizedIndex === finalIndex)?
-                [] : j.slice(sanitizedIndex + 1, valueSet);
-
-        return j.concat(firstArray, secondArray);
+    function drop (index, list) {
+        var result = j.slice(0, j.either([], list, 'array'));
+        
+        result.splice(j.either(0, index, 'number'), 1);
+        
+        return result;
     }
 
     function dropLast(valueSet){
@@ -343,10 +330,8 @@ var jfp = (function(){
     }
 
     function sort(optionValue, valueSet){
-        var comparator = j.isFunction(optionValue) ? optionValue : naturalComparator,
-            finalSet = j.isArray(optionValue) ? j.slice(0, optionValue) : j.slice(0, valueSet);
-
-        return finalSet.sort(comparator);
+        return j.slice(0, j.either(valueSet, optionValue, 'array'))
+                .sort(j.either(naturalComparator, optionValue, 'function'));
     }
 
     function each(userFn, userArray){
@@ -423,9 +408,9 @@ var jfp = (function(){
     //This is complicated and I don't expect people to grok it on first read.
     function curry(userFn){
         var args = j.slice(1, arguments),
-            argumentCount = j.countArguments(userFn),
-            appliedFn = (args.length < argumentCount) ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
-            result = (Boolean(userFn) && args.length >= argumentCount) ? j.apply(userFn, args) : null;
+            done = args.length >= j.countArguments(userFn),
+            appliedFn = !done ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
+            result = Boolean(userFn) && done ? j.apply(userFn, args) : null;
 
         return j.either(appliedFn, result);
     }
@@ -470,26 +455,22 @@ var jfp = (function(){
     }
 
     function reduce(userFn, values){
-        var appliedReducer = j.partial(reducer, userFn),
-            initialState = arguments[2],
-            hasInitialState = typeof initialState !== 'undefined',
-            
-            initialValue = !hasInitialState ? j.first(values) : initialState,
+        var hasInitialState = !j.isUndefined(arguments[2]),
+            initialValue = !hasInitialState ? j.first(values) : arguments[2],
             remainder = !hasInitialState ? j.rest(values) : values;
 
-        return (Boolean(values) && values.length > 0) ? j.recur(appliedReducer, initialValue, remainder) : initialValue;
+        return (Boolean(values) && values.length > 0) ?
+                j.recur(j.partial(reducer, userFn), initialValue, remainder) :
+                initialValue;
     }
 
     //Produces a function that returns f(g(x))
     function compositor(f, g){
-        var $f = typeof f !== 'function' ? j.identity : f,
-            $g = typeof g !== 'function' ? j.identity : g;
+        var clean = j.splitPartial(j.either, [j.identity], ['function']);
             
-        function compositeFn () {
-            return $f(j.apply($g, j.slice(0, arguments)));
-        }
-        
-        return compositeFn;
+        return function () {
+            return clean(f)(j.apply(clean(g), j.slice(0, arguments)));
+        };
     }
 
     function compose(){
@@ -781,50 +762,13 @@ var jfp = (function(){
         return j.isType('function', behavior) ? behavior() : null;
     }
 
-    function cleanConditionPairs (value, conditionPairs) {
-        var error = new Error('Match call does not contain expressions for all condition cases.'),
-            notEmpty = j.hasFirst(conditionPairs);
-
-        return cond([j.isUndefined(value), j.always([])],
-                    [notEmpty, j.partial(j.conj, 
-                                         [j.always(true), function () { throw error; }],
-                                         conditionPairs)],
-                    ['else', j.partial(j.conj,
-                                       [j.always(true), j.always(value)],
-                                       conditionPairs)]);
-    }
-
-    function matchToCond (value, conditionPair) {
-        var condition = j.first(conditionPair),
-            result = j.last(conditionPair),
-            newPair = [
-                j.isType('function', condition) ? condition(value) : j.equal(condition, value),
-                j.isType('function', result) ? result : j.always(result)
-            ];
-        return !j.isPair(conditionPair) ? conditionPair : newPair;
-    }
-
-    function match (value, conditionPair) {
-        var conditionPairs = j.slice(1, arguments),
-            result = j.isUndefined(value) ? null : value;
-
-        return j.pipeline(conditionPairs,
-                          j.partial(cleanConditionPairs, result),
-                          j.partial(j.map, j.partial(matchToCond, value)),
-                          j.partial(j.apply, cond));
-    }
-
     function composePredicate (predicateFn) {
-        var args = j.slice(0, arguments),
+        var predicateList = j.slice(0, arguments),
+            combinator = j.last(predicateList),
+            lastIsCombinator = combinator === or || combinator === and;
         
-            combinator = match(j.last(args),
-                               [j.partial(j.equal, or), j.always(or)],                              
-                               [j.always(true), j.always(and)]),
-                               
-            predicateList = match(j.last(args),
-                                  [j.partial(j.equal, or), j.partial(j.dropLast, args)],
-                                  [j.partial(j.equal, and), j.partial(j.dropLast, args)],
-                                  [j.always(true), j.always(args)]);
+        predicateList = lastIsCombinator ? j.dropLast(predicateList) : predicateList;
+        combinator = combinator === or ? or : and;
         
         return function (value) {
             var executor = j.rpartial(j.execute, value);
@@ -835,7 +779,7 @@ var jfp = (function(){
                               Boolean);
         };
     }
-
+    
     // Predicate combinators
 	j.and = and;
 	j.or = or;
@@ -843,7 +787,6 @@ var jfp = (function(){
 
     j.composePredicate = composePredicate;
     j.cond = cond;
-    j.match = match;
     
 })(jfp);
 

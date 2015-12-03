@@ -23,12 +23,14 @@ https://www.mozilla.org/MPL/
 
 ###V2.6.0
 
-- [x] cond - Conditional matching function; accepts function pairs as arguments position 0 must be a predicate, position 1 is a behavior
-- [x] match - Takes an argument and matches on predicate functions or comparison values then executes functions or returns values accordingly
+- [x]  cond - Conditional matching function; accepts function pairs as arguments position 0 must be a predicate, position 1 is a behavior
 - [x] addModule - takes function and executes, capturing map of keys and functions; returns function which will attempt to add functions to JFP; throws error if any names exist, or any functions cannot be added 
 - [x] Various updates and fixes
     - Compose predicates rewritten to use pattern matching
     - Updated slice base arity to 2
+    - Fixed sneaky bug in slice
+    - Updated slice, drop and sort to reduce code footprint
+    - Removed excess and redundant code in reduce and composite
 
 ###V2.5.1
 

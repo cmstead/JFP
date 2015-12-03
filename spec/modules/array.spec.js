@@ -165,7 +165,7 @@ var jfp = require('../../dist/jfp.js'),
         });
 
         it('should remove a middle element from passed array', function(){
-            expect(JSON.stringify(j.drop(2, [1, 2, 3, 4]))).toBe('[1,3,4]');
+            expect(JSON.stringify(j.drop(1, [1, 2, 3, 4]))).toBe('[1,3,4]');
         });
 
     });

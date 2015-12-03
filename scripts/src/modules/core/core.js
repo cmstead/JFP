@@ -23,15 +23,6 @@
             }[typeString];
     }
 
-    function slice(begin, valueSet){
-        var end = arguments[2],
-            values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
-
-        return j.not(j.isTruthy(end)) ?
-                    Array.prototype.slice.call(values, begin) :
-                    Array.prototype.slice.call(values, begin, end);
-    }
-
     function maybe(value){
         var type = arguments[1],
             valueType = getType(value),
@@ -45,6 +36,11 @@
         return maybe(testValue, type) === null ? defaultValue : testValue;
     }
     
+    function slice (begin, valueSet) {
+        var boundaries = !arguments[2] ? [begin] : [begin, arguments[2]];
+        return Array.prototype.slice.apply(either([], valueSet), boundaries);
+    }
+
     function always (value) {
         var output = getType(value) === 'undefined' ? null : value;
         return identity.bind(null, output);
@@ -60,8 +56,7 @@
     }
 
     function when(checkValue, userFn){
-        var args = slice(2, arguments);
-        return j.isTruthy(checkValue) ? apply(userFn, args) : null;
+        return j.isTruthy(checkValue) ? apply(userFn, slice(2, arguments)) : null;
     }
 
     function eitherIf(defaultValue, testValue, predicateValue){
@@ -108,8 +103,7 @@
 
     function reverseArgs(userFn){
         return function(){
-            var args = j.slice(0, arguments).reverse();
-            return j.apply(userFn, args);
+            return j.apply(userFn, j.slice(0, arguments).reverse());
         };
     }
 
