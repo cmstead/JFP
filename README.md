@@ -24,6 +24,7 @@ https://www.mozilla.org/MPL/
 ###V2.6.0
 
 - [x]  cond - Conditional matching function; accepts function pairs as arguments position 0 must be a predicate, position 1 is a behavior
+- [ ] takeUntil - captures values in order from the beginning of provided list until a value causes the predicate to pass
 - [x] addModule - takes function and executes, capturing map of keys and functions; returns function which will attempt to add functions to JFP; throws error if any names exist, or any functions cannot be added 
 - [x] Various updates and fixes
     - Compose predicates rewritten to use pattern matching
