@@ -623,17 +623,29 @@ var jfp = require('../../dist/jfp.js'),
         });
         
     });
-    
-    describe('firstExists', function () {
+
+    describe('takeUntil', function () {
         
-        it('should return true if array contains a first value', function () {
-            expect(j.firstExists(['foo'])).toBe(true);
+        it('should return an empty array if predicate always returns true', function () {
+            var result = j.takeUntil(j.always(true), [1, 2, 3, 4]);
+            expect(JSON.stringify(result)).toBe('[]');
         });
         
-        it('should return false if array does not contain a first value', function () {
-            expect(j.firstExists([])).toBe(false);
+        it('should return entire array if predicate always returns false', function () {
+            var result = j.takeUntil(j.always(false), [1, 2, 3, 4]);
+            expect(JSON.stringify(result)).toBe('[1,2,3,4]');
+        });
+        
+        it('should only capture elements which do not satisfy the predicate', function () {
+            var result = j.takeUntil(j.isEven, [1, 3, 5, 7, 8]);
+            expect(JSON.stringify(result)).toBe('[1,3,5,7]');
+        });
+        
+        it('should stop accumulating values at the first value to satisfy the predicate', function () {
+            var result = j.takeUntil(j.isEven, [1, 3, 4, 5, 7]);
+            expect(JSON.stringify(result)).toBe('[1,3]');
         });
         
     });
-
+    
 })();

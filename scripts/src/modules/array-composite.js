@@ -157,17 +157,37 @@
                          [sanitizedList]);
     }
 
-    function firstExists (list) {
-        return j.not(j.isNull(j.first(list)));
+    function eachFn(recur, userFn, userArray, index){
+        var continuing = j.hasFirst(userArray) && userFn(j.first(userArray), index) !== false;
+        return continuing ? recur(userFn, j.rest(userArray), j.inc(index)) : false;
+    }
+    
+    function each (userFn, userArray) {
+        var sanitizedFn = j.either(j.identity, userFn),
+            sanitizedArray = j.either([], userArray);
+        
+        j.recur(eachFn, sanitizedFn, sanitizedArray, 0);
+        return sanitizedArray;
     }
 
+    function takeUntil (predicate, list) {
+        var result = [];
+            
+        j.each(function (value, index) {
+            result = !predicate(value) ? j.conj(value, result) : result;
+            return result.length > index;
+        }, list);
+        
+        return result;
+    }
+    
     j.contains = contains;
     j.compact = compact;
     j.difference = difference;
+    j.each = each;
     j.every = every;
 	j.filter = filter;
     j.find = find;
-    j.firstExists = firstExists;
     j.intersect = intersect;
 	j.map = map;
 	j.multiPartition = multiPartition;
@@ -175,6 +195,7 @@
     j.partition = partition;
     j.some = some;
     j.symmetricDifference = symmetricDifference;
+    j.takeUntil = takeUntil;
     j.union = union;
     j.unique = unique;
 

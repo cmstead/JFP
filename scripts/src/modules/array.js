@@ -63,27 +63,13 @@
                 .sort(j.either(naturalComparator, optionValue, 'function'));
     }
 
-    function each(userFn, userArray){
-        var sanitizedArray = j.either([], userArray),
-            sanitizedFn = j.either(j.identity, userFn),
-            i;
-
-        for(i = 0; i < sanitizedArray.length; i++){
-            if(sanitizedFn(sanitizedArray[i], i) === false){
-                break;
-            }
-        }
-
-        return sanitizedArray;
-    }
-
     j.conj = conj;
     j.cons = cons;
     j.copyArray = copyArray;
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
-    j.each = each;
+    //j.each = each;
     j.first = first;
     j.init = j.dropLast;
     j.last = last;

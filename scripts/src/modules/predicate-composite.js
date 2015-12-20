@@ -31,17 +31,6 @@
         return or(a, b) && !equivalent;
     }
     
-    function cond (conditionPair) {
-        var isTruthy = j.compose(j.truthy, j.partial(j.nth, 0)),
-            behavior = j.pipeline(arguments,
-                                  j.partial(j.slice, 0),
-                                  j.partial(j.filter, j.isPair),
-                                  j.partial(j.find, isTruthy),
-                                  j.partial(j.nth, 1));
-
-        return j.isType('function', behavior) ? behavior() : null;
-    }
-
     function composePredicate (predicateFn) {
         var predicateList = j.slice(0, arguments),
             combinator = j.last(predicateList),
@@ -66,6 +55,5 @@
 	j.xor = xor;
 
     j.composePredicate = composePredicate;
-    j.cond = cond;
     
 })(jfp);

@@ -420,44 +420,4 @@ var jfp = require('../../dist/jfp.js'),
         
     });
     
-    describe('cond', function () {
-        
-        it('should return null if argument list is empty', function () {
-            expect(j.cond()).toBe(null);
-        });
-        
-        it('should execute function is condition is true', function () {
-            var spy = jasmine.createSpy('spy');
-            j.cond([true, spy]);
-            expect(spy).toHaveBeenCalled();
-        });
-        
-        it('should not execute function is condition is false', function () {
-            var spy = jasmine.createSpy('spy');
-            j.cond([false, spy]);
-            expect(spy).not.toHaveBeenCalled();
-        });
-        
-        it('should return function result when function is executed', function () {
-            var result = j.cond([true, j.partial(j.nth, 1, [2, 4])]);
-            expect(result).toBe(4);
-        });
-        
-        it('should call else behavior if condition is false', function () {
-            var result = j.cond([false, j.always('foo')], ['else', j.always('bar')]);
-            expect(result).toBe('bar');
-        });
-        
-        it('should call first function with a true condition', function () {
-            var result = j.cond([false, j.always('foo')], [true, j.always('baz')], ['else', j.always('bar')]);
-            expect(result).toBe('baz');
-        });
-        
-        it('should ignore non-pair arrays', function () {
-            var result = j.cond([true], [true, j.always('baz'), 'blah'], ['else', j.always('bar')]);
-            expect(result).toBe('bar');
-        });
-        
-    });
-    
 })();
