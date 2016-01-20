@@ -694,20 +694,27 @@ var jfp = (function(){
         return sanitizedArray;
     }
 
+    function takeEltsUntil (recur, predicate, list, aggregate) {
+        var elt = j.first(list);
+        return predicate(elt) || j.equal(0, list.length) ? aggregate : recur(predicate, j.rest(list), j.conj(elt, aggregate));
+    }
+
     function takeUntil (predicate, list) {
-        var result = [];
-            
-        j.each(function (value, index) {
-            result = !predicate(value) ? j.conj(value, result) : result;
-            return result.length > index;
-        }, list);
-        
-        return result;
+        return j.recur(takeEltsUntil, predicate, list, []);
+    }
+
+    function dropEltsUntil (recur, predicate, list){
+        return predicate(j.first(list)) || j.equal(0, list.length) ? list : recur(predicate, j.rest(list));
+    }
+
+    function dropUntil (predicate, list){
+        return j.recur(dropEltsUntil, predicate, list);
     }
     
     j.contains = contains;
     j.compact = compact;
     j.difference = difference;
+    j.dropUntil = dropUntil;
     j.each = each;
     j.every = every;
 	j.filter = filter;

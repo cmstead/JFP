@@ -648,4 +648,28 @@ var jfp = require('../../dist/jfp.js'),
         
     });
     
+    describe('dropUntil', function () {
+        
+        it('should return an empty array when an empty array is passed', function () {
+            var result = j.dropUntil(j.always(false), []);
+            expect(JSON.stringify(result)).toBe('[]');
+        });
+        
+        it('should return entire array if predicate returns true immediately', function () {
+            var result = j.dropUntil(j.always(true), [1, 2, 3]);
+            expect(JSON.stringify(result)).toBe('[1,2,3]');
+        });
+        
+        it('should return an array with the first element dropped when the second element passes', function () {
+            var result = j.dropUntil(j.isEven, [1, 2, 3]);
+            expect(JSON.stringify(result)).toBe('[2,3]');
+        });
+        
+        it('should return an array with the first elements which do not pass predicate dropped.', function () {
+            var result = j.dropUntil(j.isEven, [1, 3, 5, 6, 7, 8]);
+            expect(JSON.stringify(result)).toBe('[6,7,8]');
+        });
+        
+    });
+    
 })();
