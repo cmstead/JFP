@@ -143,14 +143,6 @@ var jfp = (function(){
             }[typeString];
     }
 
-    function slice(begin, valueSet, end){
-        var values = j.not(j.isTruthy(valueSet)) ? [] : valueSet;
-
-        return j.not(j.isTruthy(end)) ?
-                    Array.prototype.slice.call(values, begin) :
-                    Array.prototype.slice.call(values, begin, end);
-    }
-
     function maybe(value){
         var type = arguments[1],
             valueType = getType(value),
@@ -164,6 +156,11 @@ var jfp = (function(){
         return maybe(testValue, type) === null ? defaultValue : testValue;
     }
     
+    function slice (begin, valueSet) {
+        var boundaries = !arguments[2] ? [begin] : [begin, arguments[2]];
+        return Array.prototype.slice.apply(either([], valueSet), boundaries);
+    }
+
     function always (value) {
         var output = getType(value) === 'undefined' ? null : value;
         return identity.bind(null, output);
@@ -179,8 +176,7 @@ var jfp = (function(){
     }
 
     function when(checkValue, userFn){
-        var args = slice(2, arguments);
-        return j.isTruthy(checkValue) ? apply(userFn, args) : null;
+        return j.isTruthy(checkValue) ? apply(userFn, slice(2, arguments)) : null;
     }
 
     function eitherIf(defaultValue, testValue, predicateValue){
@@ -227,8 +223,7 @@ var jfp = (function(){
 
     function reverseArgs(userFn){
         return function(){
-            var args = j.slice(0, arguments).reverse();
-            return j.apply(userFn, args);
+            return j.apply(userFn, j.slice(0, arguments).reverse());
         };
     }
 
@@ -305,19 +300,12 @@ var jfp = (function(){
         return j.isArray(values) ? values[lastIndex(values)] : null;
     }
 
-    function drop(index, valueSet){
-        var finalIndex = lastIndex(valueSet),
-
-            sanitizedIndex = (index === 0 || index === finalIndex) ?
-                index : j.either(1, index) - 1,
-
-            firstArray = (sanitizedIndex === 0) ?
-                [] : j.slice(0, valueSet, sanitizedIndex),
-
-            secondArray = (sanitizedIndex === finalIndex)?
-                [] : j.slice(sanitizedIndex + 1, valueSet);
-
-        return j.concat(firstArray, secondArray);
+    function drop (index, list) {
+        var result = j.slice(0, j.either([], list, 'array'));
+        
+        result.splice(j.either(0, index, 'number'), 1);
+        
+        return result;
     }
 
     function dropLast(valueSet){
@@ -342,24 +330,8 @@ var jfp = (function(){
     }
 
     function sort(optionValue, valueSet){
-        var comparator = j.isFunction(optionValue) ? optionValue : naturalComparator,
-            finalSet = j.isArray(optionValue) ? j.slice(0, optionValue) : j.slice(0, valueSet);
-
-        return finalSet.sort(comparator);
-    }
-
-    function each(userFn, userArray){
-        var sanitizedArray = j.either([], userArray),
-            sanitizedFn = j.either(j.identity, userFn),
-            i;
-
-        for(i = 0; i < sanitizedArray.length; i++){
-            if(sanitizedFn(sanitizedArray[i], i) === false){
-                break;
-            }
-        }
-
-        return sanitizedArray;
+        return j.slice(0, j.either(valueSet, optionValue, 'array'))
+                .sort(j.either(naturalComparator, optionValue, 'function'));
     }
 
     j.conj = conj;
@@ -368,7 +340,7 @@ var jfp = (function(){
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
-    j.each = each;
+    //j.each = each;
     j.first = first;
     j.init = j.dropLast;
     j.last = last;
@@ -422,9 +394,9 @@ var jfp = (function(){
     //This is complicated and I don't expect people to grok it on first read.
     function curry(userFn){
         var args = j.slice(1, arguments),
-            argumentCount = j.countArguments(userFn),
-            appliedFn = (args.length < argumentCount) ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
-            result = (Boolean(userFn) && args.length >= argumentCount) ? j.apply(userFn, args) : null;
+            done = args.length >= j.countArguments(userFn),
+            appliedFn = !done ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
+            result = Boolean(userFn) && done ? j.apply(userFn, args) : null;
 
         return j.either(appliedFn, result);
     }
@@ -469,26 +441,22 @@ var jfp = (function(){
     }
 
     function reduce(userFn, values){
-        var appliedReducer = j.partial(reducer, userFn),
-            initialState = arguments[2],
-            hasInitialState = typeof initialState !== 'undefined',
-            
-            initialValue = !hasInitialState ? j.first(values) : initialState,
+        var hasInitialState = !j.isUndefined(arguments[2]),
+            initialValue = !hasInitialState ? j.first(values) : arguments[2],
             remainder = !hasInitialState ? j.rest(values) : values;
 
-        return (Boolean(values) && values.length > 0) ? j.recur(appliedReducer, initialValue, remainder) : initialValue;
+        return (Boolean(values) && values.length > 0) ?
+                j.recur(j.partial(reducer, userFn), initialValue, remainder) :
+                initialValue;
     }
 
     //Produces a function that returns f(g(x))
     function compositor(f, g){
-        var $f = typeof f !== 'function' ? j.identity : f,
-            $g = typeof g !== 'function' ? j.identity : g;
+        var clean = j.splitPartial(j.either, [j.identity], ['function']);
             
-        function compositeFn () {
-            return $f(j.apply($g, j.slice(0, arguments)));
-        }
-        
-        return compositeFn;
+        return function () {
+            return clean(f)(j.apply(clean(g), j.slice(0, arguments)));
+        };
     }
 
     function compose(){
@@ -713,17 +681,59 @@ var jfp = (function(){
                          [sanitizedList]);
     }
 
-    function firstExists (list) {
-        return j.not(j.isNull(j.first(list)));
+    function eachFn(recur, userFn, userArray, index){
+        var continuing = j.hasFirst(userArray) && userFn(j.first(userArray), index) !== false;
+        return continuing ? recur(userFn, j.rest(userArray), j.inc(index)) : false;
+    }
+    
+    function each (userFn, userArray) {
+        var sanitizedFn = j.either(j.identity, userFn),
+            sanitizedArray = j.either([], userArray);
+        
+        j.recur(eachFn, sanitizedFn, sanitizedArray, 0);
+        return sanitizedArray;
     }
 
+    function takeEltsUntil (recur, predicate, list, aggregate) {
+        var elt = j.first(list);
+        return predicate(elt) || j.equal(0, list.length) ? aggregate : recur(predicate, j.rest(list), j.conj(elt, aggregate));
+    }
+
+    function takeUntil (predicate, list) {
+        return j.recur(takeEltsUntil, predicate, list, []);
+    }
+
+    function dropEltsUntil (recur, predicate, list){
+        return predicate(j.first(list)) || j.equal(0, list.length) ? list : recur(predicate, j.rest(list));
+    }
+
+    function dropUntil (predicate, list){
+        return j.recur(dropEltsUntil, predicate, list);
+    }
+
+    function zipStep (aggregate, list){
+        return [j.conj(j.first(list), aggregate[0]),
+                j.conj(j.rest(list), aggregate[1])];
+    }
+
+    function zipElts (recur, aggregate, lists){
+        var reduction = j.reduce(zipStep, lists, [[], []]);
+        return j.equal(0, lists[0].length) ? aggregate : recur(j.conj(reduction[0], aggregate), reduction[1]);
+    }
+
+    function zip (lista, listb){
+        var lists = j.slice(0, arguments);
+        return j.equal(0, lists.length) ? [] : j.recur(zipElts, [], lists);
+    }    
+    
     j.contains = contains;
     j.compact = compact;
     j.difference = difference;
+    j.dropUntil = dropUntil;
+    j.each = each;
     j.every = every;
 	j.filter = filter;
     j.find = find;
-    j.firstExists = firstExists;
     j.intersect = intersect;
 	j.map = map;
 	j.multiPartition = multiPartition;
@@ -731,8 +741,10 @@ var jfp = (function(){
     j.partition = partition;
     j.some = some;
     j.symmetricDifference = symmetricDifference;
+    j.takeUntil = takeUntil;
     j.union = union;
     j.unique = unique;
+    j.zip = zip;
 
 })(jfp);
 
@@ -748,9 +760,12 @@ var jfp = (function(){
         return a || b;
     }
 
-    function reduceConditions(conditionArgs, operator, initialCondition){
-        var args = j.map(Boolean, j.slice(0, conditionArgs));
-        return Boolean(j.reduce(operator, args, initialCondition));
+    function reduceConditions(conditionArgs, operator, initialCondition) {
+        return j.pipeline(conditionArgs,
+                          j.partial(j.slice, 0),
+                          j.partial(j.map, Boolean),
+                          j.splitPartial(j.reduce, [operator], [initialCondition]),
+                          Boolean);
     }
 
     function and(a, b){
@@ -763,7 +778,7 @@ var jfp = (function(){
 
     function xor(a, b){
         var equivalent = Boolean(a) === Boolean(b);
-        return or(a, b) && j.not(equivalent);
+        return or(a, b) && !equivalent;
     }
     
     function composePredicate (predicateFn) {
@@ -783,12 +798,14 @@ var jfp = (function(){
                               Boolean);
         };
     }
-
-    j.composePredicate = composePredicate;
+    
+    // Predicate combinators
 	j.and = and;
 	j.or = or;
 	j.xor = xor;
 
+    j.composePredicate = composePredicate;
+    
 })(jfp);
 
 (function (j) {
@@ -1055,6 +1072,29 @@ var jfp = (function(){
     j.leq = j.compose(j.not, greater);
     j.less = less;
 
+})(jfp);
+
+(function (j) {
+	'use strict';
+	
+	function attachFunction (module, j, key) {
+		if(j.isUndefined(j[key]) && j.isType('function', module[key])) {
+			j[key] = module[key];
+		}
+		return j;
+	}
+	
+	function addModule (provider) {
+		var module = j.either(j.always({}), provider, 'function')(),
+			moduleKeys = j.getKeys(module);
+			
+		return function () {
+			return j.reduce(j.partial(attachFunction, module), moduleKeys, j);
+		};
+	}
+	
+	j.addModule = addModule;
+	
 })(jfp);
 
 var j = jfp;

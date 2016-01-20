@@ -157,17 +157,59 @@
                          [sanitizedList]);
     }
 
-    function firstExists (list) {
-        return j.not(j.isNull(j.first(list)));
+    function eachFn(recur, userFn, userArray, index){
+        var continuing = j.hasFirst(userArray) && userFn(j.first(userArray), index) !== false;
+        return continuing ? recur(userFn, j.rest(userArray), j.inc(index)) : false;
+    }
+    
+    function each (userFn, userArray) {
+        var sanitizedFn = j.either(j.identity, userFn),
+            sanitizedArray = j.either([], userArray);
+        
+        j.recur(eachFn, sanitizedFn, sanitizedArray, 0);
+        return sanitizedArray;
     }
 
+    function takeEltsUntil (recur, predicate, list, aggregate) {
+        var elt = j.first(list);
+        return predicate(elt) || j.equal(0, list.length) ? aggregate : recur(predicate, j.rest(list), j.conj(elt, aggregate));
+    }
+
+    function takeUntil (predicate, list) {
+        return j.recur(takeEltsUntil, predicate, list, []);
+    }
+
+    function dropEltsUntil (recur, predicate, list){
+        return predicate(j.first(list)) || j.equal(0, list.length) ? list : recur(predicate, j.rest(list));
+    }
+
+    function dropUntil (predicate, list){
+        return j.recur(dropEltsUntil, predicate, list);
+    }
+
+    function zipStep (aggregate, list){
+        return [j.conj(j.first(list), aggregate[0]),
+                j.conj(j.rest(list), aggregate[1])];
+    }
+
+    function zipElts (recur, aggregate, lists){
+        var reduction = j.reduce(zipStep, lists, [[], []]);
+        return j.equal(0, lists[0].length) ? aggregate : recur(j.conj(reduction[0], aggregate), reduction[1]);
+    }
+
+    function zip (lista, listb){
+        var lists = j.slice(0, arguments);
+        return j.equal(0, lists.length) ? [] : j.recur(zipElts, [], lists);
+    }    
+    
     j.contains = contains;
     j.compact = compact;
     j.difference = difference;
+    j.dropUntil = dropUntil;
+    j.each = each;
     j.every = every;
 	j.filter = filter;
     j.find = find;
-    j.firstExists = firstExists;
     j.intersect = intersect;
 	j.map = map;
 	j.multiPartition = multiPartition;
@@ -175,7 +217,9 @@
     j.partition = partition;
     j.some = some;
     j.symmetricDifference = symmetricDifference;
+    j.takeUntil = takeUntil;
     j.union = union;
     j.unique = unique;
+    j.zip = zip;
 
 })(jfp);

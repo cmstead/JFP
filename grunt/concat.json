@@ -16,6 +16,7 @@
             "scripts/src/modules/object-composite.js",
             "scripts/src/modules/math.js",
             "scripts/src/modules/math-predicate.js",
+            "scripts/src/modules/plugins.js",
             "scripts/src/jfp.expose.js"
         ],
         "dest": "dist/jfp.js"

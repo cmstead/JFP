@@ -21,6 +21,20 @@ If the text file has been removed, please visit:
 
 https://www.mozilla.org/MPL/
 
+###V2.6.0
+
+- [x] takeUntil - captures values in order from the beginning of provided list until a value causes the predicate to pass
+- [x] dropUntil - drops values from array until predicate is satisfied
+- [x] zip - zips n arrays together into an array of n-length arrays
+- [x] addModule - takes function and executes, capturing map of keys and functions; returns function which will attempt to add functions to JFP; throws error if any names exist, or any functions cannot be added 
+- [x] Various updates and fixes
+    - Compose predicates rewritten to use pattern matching
+    - Updated slice base arity to 2
+    - Fixed sneaky bug in slice
+    - Updated slice, drop and sort to reduce code footprint
+    - Removed excess and redundant code in reduce and composite
+    - Refactored each function to use recur function
+
 ###V2.5.1
 
 - [x] Fix arity of deref so base arity is 2 (fix to make currying work more predictably)

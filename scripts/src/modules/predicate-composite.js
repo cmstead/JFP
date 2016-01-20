@@ -10,9 +10,12 @@
         return a || b;
     }
 
-    function reduceConditions(conditionArgs, operator, initialCondition){
-        var args = j.map(Boolean, j.slice(0, conditionArgs));
-        return Boolean(j.reduce(operator, args, initialCondition));
+    function reduceConditions(conditionArgs, operator, initialCondition) {
+        return j.pipeline(conditionArgs,
+                          j.partial(j.slice, 0),
+                          j.partial(j.map, Boolean),
+                          j.splitPartial(j.reduce, [operator], [initialCondition]),
+                          Boolean);
     }
 
     function and(a, b){
@@ -25,7 +28,7 @@
 
     function xor(a, b){
         var equivalent = Boolean(a) === Boolean(b);
-        return or(a, b) && j.not(equivalent);
+        return or(a, b) && !equivalent;
     }
     
     function composePredicate (predicateFn) {
@@ -45,10 +48,12 @@
                               Boolean);
         };
     }
-
-    j.composePredicate = composePredicate;
+    
+    // Predicate combinators
 	j.and = and;
 	j.or = or;
 	j.xor = xor;
 
+    j.composePredicate = composePredicate;
+    
 })(jfp);

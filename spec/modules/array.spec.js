@@ -165,7 +165,7 @@ var jfp = require('../../dist/jfp.js'),
         });
 
         it('should remove a middle element from passed array', function(){
-            expect(JSON.stringify(j.drop(2, [1, 2, 3, 4]))).toBe('[1,3,4]');
+            expect(JSON.stringify(j.drop(1, [1, 2, 3, 4]))).toBe('[1,3,4]');
         });
 
     });
@@ -623,17 +623,76 @@ var jfp = require('../../dist/jfp.js'),
         });
         
     });
-    
-    describe('firstExists', function () {
+
+    describe('takeUntil', function () {
         
-        it('should return true if array contains a first value', function () {
-            expect(j.firstExists(['foo'])).toBe(true);
+        it('should return an empty array if predicate always returns true', function () {
+            var result = j.takeUntil(j.always(true), [1, 2, 3, 4]);
+            expect(JSON.stringify(result)).toBe('[]');
         });
         
-        it('should return false if array does not contain a first value', function () {
-            expect(j.firstExists([])).toBe(false);
+        it('should return entire array if predicate always returns false', function () {
+            var result = j.takeUntil(j.always(false), [1, 2, 3, 4]);
+            expect(JSON.stringify(result)).toBe('[1,2,3,4]');
+        });
+        
+        it('should only capture elements which do not satisfy the predicate', function () {
+            var result = j.takeUntil(j.isEven, [1, 3, 5, 7, 8]);
+            expect(JSON.stringify(result)).toBe('[1,3,5,7]');
+        });
+        
+        it('should stop accumulating values at the first value to satisfy the predicate', function () {
+            var result = j.takeUntil(j.isEven, [1, 3, 4, 5, 7]);
+            expect(JSON.stringify(result)).toBe('[1,3]');
         });
         
     });
+    
+    describe('dropUntil', function () {
+        
+        it('should return an empty array when an empty array is passed', function () {
+            var result = j.dropUntil(j.always(false), []);
+            expect(JSON.stringify(result)).toBe('[]');
+        });
+        
+        it('should return entire array if predicate returns true immediately', function () {
+            var result = j.dropUntil(j.always(true), [1, 2, 3]);
+            expect(JSON.stringify(result)).toBe('[1,2,3]');
+        });
+        
+        it('should return an array with the first element dropped when the second element passes', function () {
+            var result = j.dropUntil(j.isEven, [1, 2, 3]);
+            expect(JSON.stringify(result)).toBe('[2,3]');
+        });
+        
+        it('should return an array with the first elements which do not pass predicate dropped.', function () {
+            var result = j.dropUntil(j.isEven, [1, 3, 5, 6, 7, 8]);
+            expect(JSON.stringify(result)).toBe('[6,7,8]');
+        });
+        
+    });
+    
+    describe('zip', function () {
+        
+        it('should return an empty list when no arguments are provided', function () {
+            var result = j.zip();
+            expect(JSON.stringify(result)).toBe('[]');
+        });
+        
+        it('should zip a single array', function () {
+            var result = j.zip([1, 2, 3]);
+            expect(JSON.stringify(result)).toBe('[[1],[2],[3]]');
+        });
+        
+        it('should zip two arrays together', function () {
+            var result = j.zip([1, 2, 3], [4, 5, 6]);
+            expect(JSON.stringify(result)).toBe('[[1,4],[2,5],[3,6]]');
+        });
 
+        it('should zip multiple arrays together', function () {
+            var result = j.zip([1, 2, 3], [4, 5, 6], [7, 8, 9]);
+            expect(JSON.stringify(result)).toBe('[[1,4,7],[2,5,8],[3,6,9]]');
+        });
+    });
+    
 })();

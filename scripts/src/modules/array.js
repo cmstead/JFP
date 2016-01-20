@@ -29,19 +29,12 @@
         return j.isArray(values) ? values[lastIndex(values)] : null;
     }
 
-    function drop(index, valueSet){
-        var finalIndex = lastIndex(valueSet),
-
-            sanitizedIndex = (index === 0 || index === finalIndex) ?
-                index : j.either(1, index) - 1,
-
-            firstArray = (sanitizedIndex === 0) ?
-                [] : j.slice(0, valueSet, sanitizedIndex),
-
-            secondArray = (sanitizedIndex === finalIndex)?
-                [] : j.slice(sanitizedIndex + 1, valueSet);
-
-        return j.concat(firstArray, secondArray);
+    function drop (index, list) {
+        var result = j.slice(0, j.either([], list, 'array'));
+        
+        result.splice(j.either(0, index, 'number'), 1);
+        
+        return result;
     }
 
     function dropLast(valueSet){
@@ -66,24 +59,8 @@
     }
 
     function sort(optionValue, valueSet){
-        var comparator = j.isFunction(optionValue) ? optionValue : naturalComparator,
-            finalSet = j.isArray(optionValue) ? j.slice(0, optionValue) : j.slice(0, valueSet);
-
-        return finalSet.sort(comparator);
-    }
-
-    function each(userFn, userArray){
-        var sanitizedArray = j.either([], userArray),
-            sanitizedFn = j.either(j.identity, userFn),
-            i;
-
-        for(i = 0; i < sanitizedArray.length; i++){
-            if(sanitizedFn(sanitizedArray[i], i) === false){
-                break;
-            }
-        }
-
-        return sanitizedArray;
+        return j.slice(0, j.either(valueSet, optionValue, 'array'))
+                .sort(j.either(naturalComparator, optionValue, 'function'));
     }
 
     j.conj = conj;
@@ -92,7 +69,7 @@
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
-    j.each = each;
+    //j.each = each;
     j.first = first;
     j.init = j.dropLast;
     j.last = last;

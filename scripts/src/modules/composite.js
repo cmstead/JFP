@@ -4,9 +4,9 @@
     //This is complicated and I don't expect people to grok it on first read.
     function curry(userFn){
         var args = j.slice(1, arguments),
-            argumentCount = j.countArguments(userFn),
-            appliedFn = (args.length < argumentCount) ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
-            result = (Boolean(userFn) && args.length >= argumentCount) ? j.apply(userFn, args) : null;
+            done = args.length >= j.countArguments(userFn),
+            appliedFn = !done ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
+            result = Boolean(userFn) && done ? j.apply(userFn, args) : null;
 
         return j.either(appliedFn, result);
     }
@@ -51,26 +51,22 @@
     }
 
     function reduce(userFn, values){
-        var appliedReducer = j.partial(reducer, userFn),
-            initialState = arguments[2],
-            hasInitialState = typeof initialState !== 'undefined',
-            
-            initialValue = !hasInitialState ? j.first(values) : initialState,
+        var hasInitialState = !j.isUndefined(arguments[2]),
+            initialValue = !hasInitialState ? j.first(values) : arguments[2],
             remainder = !hasInitialState ? j.rest(values) : values;
 
-        return (Boolean(values) && values.length > 0) ? j.recur(appliedReducer, initialValue, remainder) : initialValue;
+        return (Boolean(values) && values.length > 0) ?
+                j.recur(j.partial(reducer, userFn), initialValue, remainder) :
+                initialValue;
     }
 
     //Produces a function that returns f(g(x))
     function compositor(f, g){
-        var $f = typeof f !== 'function' ? j.identity : f,
-            $g = typeof g !== 'function' ? j.identity : g;
+        var clean = j.splitPartial(j.either, [j.identity], ['function']);
             
-        function compositeFn () {
-            return $f(j.apply($g, j.slice(0, arguments)));
-        }
-        
-        return compositeFn;
+        return function () {
+            return clean(f)(j.apply(clean(g), j.slice(0, arguments)));
+        };
     }
 
     function compose(){
