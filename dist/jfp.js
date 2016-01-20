@@ -710,6 +710,21 @@ var jfp = (function(){
     function dropUntil (predicate, list){
         return j.recur(dropEltsUntil, predicate, list);
     }
+
+    function zipStep (aggregate, list){
+        return [j.conj(j.first(list), aggregate[0]),
+                j.conj(j.rest(list), aggregate[1])];
+    }
+
+    function zipElts (recur, aggregate, lists){
+        var reduction = j.reduce(zipStep, lists, [[], []]);
+        return j.equal(0, lists[0].length) ? aggregate : recur(j.conj(reduction[0], aggregate), reduction[1]);
+    }
+
+    function zip (lista, listb){
+        var lists = j.slice(0, arguments);
+        return j.equal(0, lists.length) ? [] : j.recur(zipElts, [], lists);
+    }    
     
     j.contains = contains;
     j.compact = compact;
@@ -729,6 +744,7 @@ var jfp = (function(){
     j.takeUntil = takeUntil;
     j.union = union;
     j.unique = unique;
+    j.zip = zip;
 
 })(jfp);
 

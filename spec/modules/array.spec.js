@@ -672,4 +672,27 @@ var jfp = require('../../dist/jfp.js'),
         
     });
     
+    describe('zip', function () {
+        
+        it('should return an empty list when no arguments are provided', function () {
+            var result = j.zip();
+            expect(JSON.stringify(result)).toBe('[]');
+        });
+        
+        it('should zip a single array', function () {
+            var result = j.zip([1, 2, 3]);
+            expect(JSON.stringify(result)).toBe('[[1],[2],[3]]');
+        });
+        
+        it('should zip two arrays together', function () {
+            var result = j.zip([1, 2, 3], [4, 5, 6]);
+            expect(JSON.stringify(result)).toBe('[[1,4],[2,5],[3,6]]');
+        });
+
+        it('should zip multiple arrays together', function () {
+            var result = j.zip([1, 2, 3], [4, 5, 6], [7, 8, 9]);
+            expect(JSON.stringify(result)).toBe('[[1,4,7],[2,5,8],[3,6,9]]');
+        });
+    });
+    
 })();

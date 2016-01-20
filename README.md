@@ -24,6 +24,8 @@ https://www.mozilla.org/MPL/
 ###V2.6.0
 
 - [x] takeUntil - captures values in order from the beginning of provided list until a value causes the predicate to pass
+- [x] dropUntil - drops values from array until predicate is satisfied
+- [x] zip - zips n arrays together into an array of n-length arrays
 - [x] addModule - takes function and executes, capturing map of keys and functions; returns function which will attempt to add functions to JFP; throws error if any names exist, or any functions cannot be added 
 - [x] Various updates and fixes
     - Compose predicates rewritten to use pattern matching
