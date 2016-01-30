@@ -509,6 +509,15 @@ var jfp = (function(){
         }).apply(j, j.slice(1, arguments));
     }
     
+    function timesRecursor (recur, count, userFn, accumulator){
+        return j.isZero(count) ? accumulator : recur(count - 1, userFn, userFn(accumulator));
+    }
+    
+    function times (count, userFn){
+        var accumulator = arguments[2];
+        return j.recur(timesRecursor, count, userFn, accumulator);
+    }
+    
     j.clone = clone;
     j.compose = compose;
     j.curry = curry;
@@ -518,6 +527,7 @@ var jfp = (function(){
     j.pipeline = pipeline;
     j.recur = recur;
     j.reduce = reduce;
+    j.times = times;
 
 })(jfp);
 
@@ -963,7 +973,6 @@ var jfp = (function(){
     }
 
     function mod(a, b){
-        console.log('mod args: ' + arguments[0] + ', ' + arguments[1] + ', ' + arguments[2]);
         return j.isUndefined(b) ? j.either(0, a) : a%b;
     }
 

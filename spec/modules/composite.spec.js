@@ -420,4 +420,38 @@ var jfp = require('../../dist/jfp.js'),
         
     });
     
+    describe('times', function () {
+        
+        it('should call the passed function once', function () {
+            var spy = jasmine.createSpy('callback');
+            j.times(1, spy);
+            expect(spy.calls.count()).toBe(1);
+        });
+        
+        it('should call the passed function multiple times', function () {
+            var spy = jasmine.createSpy('callback');
+            j.times(5, spy);
+            expect(spy.calls.count()).toBe(5);
+        });
+        
+        it('should pass output from previous call', function () {
+            var spy = jasmine.createSpy('callback');
+            function callback (value){
+                spy(value);
+                return 'foo';
+            }
+            
+            j.times(2, callback);
+            expect(spy.calls.argsFor(1)[0]).toBe('foo');
+        });
+        
+        it('should accept an optional accumulator initial state', function () {
+            function callback (value){
+                return value + 'a';
+            }
+            
+            expect(j.times(5, callback, '')).toBe('aaaaa');
+        });
+    });
+    
 })();
