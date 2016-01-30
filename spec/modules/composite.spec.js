@@ -454,4 +454,16 @@ var jfp = require('../../dist/jfp.js'),
         });
     });
     
+    describe('repeat', function () {
+        
+        it('should return a single instance of the string', function () {
+            expect(j.repeat(1, 'blah')).toBe('blah');
+        });
+        
+        it('should return multiple instances of a string concatenated', function () {
+            expect(j.repeat(5, 'a')).toBe('aaaaa');
+        });
+        
+    });
+    
 })();

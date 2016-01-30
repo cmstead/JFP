@@ -128,6 +128,16 @@
         return j.recur(timesRecursor, count, userFn, accumulator);
     }
     
+    function repeatStepFactory (value){
+        return function (accumulator) {
+            return accumulator + value;
+        };
+    }
+    
+    function repeat (count, value){
+        return times(count, repeatStepFactory(value), '');
+    }
+    
     j.clone = clone;
     j.compose = compose;
     j.curry = curry;
@@ -137,6 +147,7 @@
     j.pipeline = pipeline;
     j.recur = recur;
     j.reduce = reduce;
+    j.repeat = repeat;
     j.times = times;
 
 })(jfp);
