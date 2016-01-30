@@ -28,10 +28,18 @@
         return isZero(j.mod(value, 2));
     }
 
+    function between (bounds, value){
+        var sortedBounds = j.sort(j.take(2, bounds)),
+            lowerBound = j.first(sortedBounds),
+            upperBound = j.last(sortedBounds);
+        return j.less(lowerBound, value) && j.greater(upperBound, value);
+    }
+
     var isNegative = j.partial(greater, 0),
         isPositive = j.partial(less, 0),
         isZero = j.partial(j.equal, 0);
 
+    j.between = between;
     j.isEven = isEven;
     j.isInt = isInt;
     j.isMultipleOf = isMultipleOf;
