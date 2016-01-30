@@ -420,4 +420,62 @@ var jfp = require('../../dist/jfp.js'),
         
     });
     
+    describe('times', function () {
+        
+        it('should call the passed function once', function () {
+            var spy = jasmine.createSpy('callback');
+            j.times(1, spy);
+            expect(spy.calls.count()).toBe(1);
+        });
+        
+        it('should call the passed function multiple times', function () {
+            var spy = jasmine.createSpy('callback');
+            j.times(5, spy);
+            expect(spy.calls.count()).toBe(5);
+        });
+        
+        it('should pass output from previous call', function () {
+            var spy = jasmine.createSpy('callback');
+            function callback (value){
+                spy(value);
+                return 'foo';
+            }
+            
+            j.times(2, callback);
+            expect(spy.calls.argsFor(1)[0]).toBe('foo');
+        });
+        
+        it('should accept an optional accumulator initial state', function () {
+            function callback (value){
+                return value + 'a';
+            }
+            
+            expect(j.times(5, callback, '')).toBe('aaaaa');
+        });
+    });
+    
+    describe('repeat', function () {
+        
+        it('should return a single instance of the string', function () {
+            expect(j.repeat(1, 'blah')).toBe('blah');
+        });
+        
+        it('should return multiple instances of a string concatenated', function () {
+            expect(j.repeat(5, 'a')).toBe('aaaaa');
+        });
+        
+    });
+    
+    describe('rcompose', function () {
+        
+        it('should take and compose a single function', function () {
+            expect(j.rcompose(j.add)(3, 5)).toBe(8);
+        });
+        
+        it('should compose functions left to right', function () {
+            expect(j.rcompose(j.add, j('multiply', 2))(6, 7)).toBe(26);
+        })
+        
+    });
+    
 })();

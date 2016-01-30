@@ -119,6 +119,25 @@
         }).apply(j, j.slice(1, arguments));
     }
     
+    function timesRecursor (recur, count, userFn, accumulator){
+        return j.isZero(count) ? accumulator : recur(count - 1, userFn, userFn(accumulator));
+    }
+    
+    function times (count, userFn){
+        var accumulator = arguments[2];
+        return j.recur(timesRecursor, count, userFn, accumulator);
+    }
+    
+    function repeatStepFactory (value){
+        return function (accumulator) {
+            return accumulator + value;
+        };
+    }
+    
+    function repeat (count, value){
+        return times(count, repeatStepFactory(value), '');
+    }
+    
     j.clone = clone;
     j.compose = compose;
     j.curry = curry;
@@ -126,7 +145,10 @@
     j.maybeType = maybeType;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;
+    j.rcompose = j.reverseArgs(compose);
     j.recur = recur;
     j.reduce = reduce;
+    j.repeat = repeat;
+    j.times = times;
 
 })(jfp);

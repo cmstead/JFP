@@ -509,6 +509,25 @@ var jfp = (function(){
         }).apply(j, j.slice(1, arguments));
     }
     
+    function timesRecursor (recur, count, userFn, accumulator){
+        return j.isZero(count) ? accumulator : recur(count - 1, userFn, userFn(accumulator));
+    }
+    
+    function times (count, userFn){
+        var accumulator = arguments[2];
+        return j.recur(timesRecursor, count, userFn, accumulator);
+    }
+    
+    function repeatStepFactory (value){
+        return function (accumulator) {
+            return accumulator + value;
+        };
+    }
+    
+    function repeat (count, value){
+        return times(count, repeatStepFactory(value), '');
+    }
+    
     j.clone = clone;
     j.compose = compose;
     j.curry = curry;
@@ -516,8 +535,11 @@ var jfp = (function(){
     j.maybeType = maybeType;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;
+    j.rcompose = j.reverseArgs(compose);
     j.recur = recur;
     j.reduce = reduce;
+    j.repeat = repeat;
+    j.times = times;
 
 })(jfp);
 
@@ -905,7 +927,7 @@ var jfp = (function(){
                 recur(current / j.first(valueSet), j.rest(valueSet));
     }
     
-    function divide(){
+    function divide(a, b){
         var args = j.slice(0, arguments),
             first = args.length ? j.first(args) : 1;
         return j.recur(divider, first, j.rest(args));
@@ -918,7 +940,7 @@ var jfp = (function(){
                 recur(current * j.first(valueSet), j.rest(valueSet));
     }
     
-    function multiply(){
+    function multiply(a, b){
         return j.recur(multiplier, 1, j.slice(0, arguments));
     }
     
@@ -929,7 +951,7 @@ var jfp = (function(){
                 recur(current - j.first(valueSet), j.rest(valueSet));
     }
     
-    function subtract(){
+    function subtract(a, b){
         var args = j.slice(0, arguments),
             first = args.length ? j.first(args) : 0;
         return j.recur(subtractor, first, j.rest(args));
@@ -1053,10 +1075,18 @@ var jfp = (function(){
         return isZero(j.mod(value, 2));
     }
 
+    function between (bounds, value){
+        var sortedBounds = j.sort(j.take(2, bounds)),
+            lowerBound = j.first(sortedBounds),
+            upperBound = j.last(sortedBounds);
+        return j.less(lowerBound, value) && j.greater(upperBound, value);
+    }
+
     var isNegative = j.partial(greater, 0),
         isPositive = j.partial(less, 0),
         isZero = j.partial(j.equal, 0);
 
+    j.between = between;
     j.isEven = isEven;
     j.isInt = isInt;
     j.isMultipleOf = isMultipleOf;

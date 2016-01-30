@@ -233,5 +233,37 @@ describe('math predicate', function(){
         });
         
     });
+    
+    describe('between', function () {
+        
+        it('should return true if value is between bounds', function () {
+            expect(j.between([0, 5], 4)).toBe(true);
+        });
+        
+        it('should return false if value is less than lower bound', function () {
+            expect(j.between([0, 5], -1)).toBe(false);
+        });
+        
+        it('should return false if value is greater than lower bound', function () {
+            expect(j.between([0, 5], 6)).toBe(false);
+        });
+        
+        it('should return false if value is equal to lower bound', function () {
+            expect(j.between([0, 5], 0)).toBe(false);
+        });
+        
+        it('should return false if value is equal to upper bound', function () {
+            expect(j.between([0, 5], 5)).toBe(false);
+        });
+        
+        it('should return true if value is between bounds and bounds are reversed', function () {
+            expect(j.between([5, 0], 3)).toBe(true);
+        });
+        
+        it('should only use the first two values if array is greater than 2', function () {
+            expect(j.between([1, 3, 5], 4)).toBe(false);
+        })
+        
+    });
 
 });
