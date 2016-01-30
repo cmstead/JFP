@@ -77,6 +77,7 @@
     }
 
     function mod(a, b){
+        console.log('mod args: ' + arguments[0] + ', ' + arguments[1] + ', ' + arguments[2]);
         return j.isUndefined(b) ? j.either(0, a) : a%b;
     }
 

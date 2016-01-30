@@ -24,10 +24,13 @@
         return j.equal(0, j.mod(test, base));
     }
 
+    function isEven (value) {
+        return isZero(j.mod(value, 2));
+    }
+
     var isNegative = j.partial(greater, 0),
         isPositive = j.partial(less, 0),
-        isZero = j.partial(j.equal, 0),
-        isEven = j.compose(isZero, j.rpartial(j.mod, 2));
+        isZero = j.partial(j.equal, 0);
 
     j.isEven = isEven;
     j.isInt = isInt;

@@ -646,6 +646,11 @@ var jfp = require('../../dist/jfp.js'),
             expect(JSON.stringify(result)).toBe('[1,3]');
         });
         
+        it('should halt on a predicate based on remaining list', function () {
+            var result = j.takeUntil(function (__, aggregate) { return aggregate.length === 3; }, [1, 2, 3, 4, 5, 6]);
+            expect(JSON.stringify(result)).toBe('[1,2,3]');
+        });
+
     });
     
     describe('dropUntil', function () {
@@ -668,6 +673,11 @@ var jfp = require('../../dist/jfp.js'),
         it('should return an array with the first elements which do not pass predicate dropped.', function () {
             var result = j.dropUntil(j.isEven, [1, 3, 5, 6, 7, 8]);
             expect(JSON.stringify(result)).toBe('[6,7,8]');
+        });
+        
+        it('should halt on a predicate based on remaining list', function () {
+            var result = j.dropUntil(function (__, rest) { return rest.length === 3; }, [1, 2, 3, 4, 5, 6]);
+            expect(JSON.stringify(result)).toBe('[4,5,6]');
         });
         
     });

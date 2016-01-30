@@ -172,7 +172,7 @@
 
     function takeEltsUntil (recur, predicate, list, aggregate) {
         var elt = j.first(list);
-        return predicate(elt) || j.equal(0, list.length) ? aggregate : recur(predicate, j.rest(list), j.conj(elt, aggregate));
+        return predicate(elt, aggregate) || j.equal(0, list.length) ? aggregate : recur(predicate, j.rest(list), j.conj(elt, aggregate));
     }
 
     function takeUntil (predicate, list) {
@@ -180,7 +180,7 @@
     }
 
     function dropEltsUntil (recur, predicate, list){
-        return predicate(j.first(list)) || j.equal(0, list.length) ? list : recur(predicate, j.rest(list));
+        return predicate(j.first(list), list) || j.equal(0, list.length) ? list : recur(predicate, j.rest(list));
     }
 
     function dropUntil (predicate, list){

@@ -696,7 +696,7 @@ var jfp = (function(){
 
     function takeEltsUntil (recur, predicate, list, aggregate) {
         var elt = j.first(list);
-        return predicate(elt) || j.equal(0, list.length) ? aggregate : recur(predicate, j.rest(list), j.conj(elt, aggregate));
+        return predicate(elt, aggregate) || j.equal(0, list.length) ? aggregate : recur(predicate, j.rest(list), j.conj(elt, aggregate));
     }
 
     function takeUntil (predicate, list) {
@@ -704,7 +704,7 @@ var jfp = (function(){
     }
 
     function dropEltsUntil (recur, predicate, list){
-        return predicate(j.first(list)) || j.equal(0, list.length) ? list : recur(predicate, j.rest(list));
+        return predicate(j.first(list), list) || j.equal(0, list.length) ? list : recur(predicate, j.rest(list));
     }
 
     function dropUntil (predicate, list){
@@ -963,6 +963,7 @@ var jfp = (function(){
     }
 
     function mod(a, b){
+        console.log('mod args: ' + arguments[0] + ', ' + arguments[1] + ', ' + arguments[2]);
         return j.isUndefined(b) ? j.either(0, a) : a%b;
     }
 
@@ -1049,10 +1050,13 @@ var jfp = (function(){
         return j.equal(0, j.mod(test, base));
     }
 
+    function isEven (value) {
+        return isZero(j.mod(value, 2));
+    }
+
     var isNegative = j.partial(greater, 0),
         isPositive = j.partial(less, 0),
-        isZero = j.partial(j.equal, 0),
-        isEven = j.compose(isZero, j.rpartial(j.mod, 2));
+        isZero = j.partial(j.equal, 0);
 
     j.isEven = isEven;
     j.isInt = isInt;
