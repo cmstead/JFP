@@ -535,6 +535,7 @@ var jfp = (function(){
     j.maybeType = maybeType;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;
+    j.rcompose = j.reverseArgs(compose);
     j.recur = recur;
     j.reduce = reduce;
     j.repeat = repeat;
@@ -926,7 +927,7 @@ var jfp = (function(){
                 recur(current / j.first(valueSet), j.rest(valueSet));
     }
     
-    function divide(){
+    function divide(a, b){
         var args = j.slice(0, arguments),
             first = args.length ? j.first(args) : 1;
         return j.recur(divider, first, j.rest(args));
@@ -939,7 +940,7 @@ var jfp = (function(){
                 recur(current * j.first(valueSet), j.rest(valueSet));
     }
     
-    function multiply(){
+    function multiply(a, b){
         return j.recur(multiplier, 1, j.slice(0, arguments));
     }
     
@@ -950,7 +951,7 @@ var jfp = (function(){
                 recur(current - j.first(valueSet), j.rest(valueSet));
     }
     
-    function subtract(){
+    function subtract(a, b){
         var args = j.slice(0, arguments),
             first = args.length ? j.first(args) : 0;
         return j.recur(subtractor, first, j.rest(args));

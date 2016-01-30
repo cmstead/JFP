@@ -145,6 +145,7 @@
     j.maybeType = maybeType;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;
+    j.rcompose = j.reverseArgs(compose);
     j.recur = recur;
     j.reduce = reduce;
     j.repeat = repeat;

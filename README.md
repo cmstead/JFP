@@ -21,6 +21,13 @@ If the text file has been removed, please visit:
 
 https://www.mozilla.org/MPL/
 
+###V2.7.0
+
+- [x] repeat - Repeats a string n times
+- [x] times - executes a function n times, threading the output through the execution chain
+- [x] between - tests that a value is between two numbers
+- [x] rcompose - performs a right (reverse) composition
+
 ###V2.6.0
 
 - [x] takeUntil - captures values in order from the beginning of provided list until a value causes the predicate to pass

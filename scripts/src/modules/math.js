@@ -19,7 +19,7 @@
                 recur(current / j.first(valueSet), j.rest(valueSet));
     }
     
-    function divide(){
+    function divide(a, b){
         var args = j.slice(0, arguments),
             first = args.length ? j.first(args) : 1;
         return j.recur(divider, first, j.rest(args));
@@ -32,7 +32,7 @@
                 recur(current * j.first(valueSet), j.rest(valueSet));
     }
     
-    function multiply(){
+    function multiply(a, b){
         return j.recur(multiplier, 1, j.slice(0, arguments));
     }
     
@@ -43,7 +43,7 @@
                 recur(current - j.first(valueSet), j.rest(valueSet));
     }
     
-    function subtract(){
+    function subtract(a, b){
         var args = j.slice(0, arguments),
             first = args.length ? j.first(args) : 0;
         return j.recur(subtractor, first, j.rest(args));

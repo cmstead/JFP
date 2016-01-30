@@ -466,4 +466,16 @@ var jfp = require('../../dist/jfp.js'),
         
     });
     
+    describe('rcompose', function () {
+        
+        it('should take and compose a single function', function () {
+            expect(j.rcompose(j.add)(3, 5)).toBe(8);
+        });
+        
+        it('should compose functions left to right', function () {
+            expect(j.rcompose(j.add, j('multiply', 2))(6, 7)).toBe(26);
+        })
+        
+    });
+    
 })();
