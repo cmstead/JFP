@@ -478,4 +478,28 @@ var jfp = require('../../dist/jfp.js'),
         
     });
     
+    describe('enclose', function () {
+        
+        it('should return a function', function () {
+            expect(typeof j.enclose(j.identity, {})).toBe('function');
+        });
+        
+        it('should set a closure for a single value dynamically', function () {
+            function testFn (){
+                return myValue;
+            }
+            
+            expect(j.enclose(testFn, { myValue: 5 })()).toBe(5);
+        });
+        
+        it('should set a closure for multiple values dynamically', function () {
+            function testFn (){
+                return [value1, value2, value3].toString();
+            }
+            
+            expect(j.enclose(testFn, { value1: 1, value2: 2, value3: 3 })()).toBe('1,2,3');
+        });
+        
+    });
+
 })();

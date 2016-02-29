@@ -1,8 +1,20 @@
-(function(j){
+(function (j) {
     'use strict';
 
+    function enclose(userFn, environment) {
+        var encloseTemplate = 'return {function};',
+            enclosingFunction = encloseTemplate.replace('{function}', userFn.toString()),
+            
+            environmentKeys = j.getKeys(environment),
+            environmentValues = j.toValues(environment),
+            
+            enclosingFn = new Function(environmentKeys, enclosingFunction);
+            
+        return j.apply(enclosingFn, environmentValues);
+    }
+
     //This is complicated and I don't expect people to grok it on first read.
-    function curry(userFn){
+    function curry(userFn) {
         var args = j.slice(1, arguments),
             done = args.length >= j.countArguments(userFn),
             appliedFn = !done ? j.apply(j.partial, j.concat([curry, userFn], args)) : null,
@@ -12,28 +24,28 @@
     }
 
     //zOMG! TAIL OPTIMIZED RECURSION
-    function recursor(recurFn){
+    function recursor(recurFn) {
         var args = j.slice(1, arguments);
 
         //This is to make the returned function distinct and identifiable.
-        return function recursorFn(localRecursor){
+        return function recursorFn(localRecursor) {
             return j.apply(recurFn, j.concat([localRecursor], args));
         };
     }
 
-    function verifyRecurValue(recurValue){
+    function verifyRecurValue(recurValue) {
         return typeof recurValue === 'function' &&
             recurValue.toString().match('recursorFn');
     }
 
     //Tail optimization with managed recursion is really complicated.
     //Please don't muck with this unless you TRULY understand what is happening.
-    function recur(userFn){
+    function recur(userFn) {
         var recursingFn = j.either(j.identity, userFn, 'function'),
             localRecursor = j.partial(recursor, recursingFn),
             recurValue = j.apply(localRecursor, j.slice(1, arguments));
 
-        while(verifyRecurValue(recurValue = recurValue(localRecursor)) && recursingFn !== j.identity);
+        while (verifyRecurValue(recurValue = recurValue(localRecursor)) && recursingFn !== j.identity);
 
         return recurValue;
     }
@@ -43,105 +55,107 @@
      * Reducer is a pure function for handling a single reduction step.
      * Reduce manages the setup and recursion execution.
      */
-    function reducer(userFn, recur, reduction, collection){
+    function reducer(userFn, recur, reduction, collection) {
         return collection.length === 0 ?
-                    reduction :
-                    recur(userFn(reduction, j.first(collection)),
-                          j.rest(collection));
+            reduction :
+            recur(userFn(reduction, j.first(collection)),
+                j.rest(collection));
     }
 
-    function reduce(userFn, values){
+    function reduce(userFn, values) {
         var hasInitialState = !j.isUndefined(arguments[2]),
             initialValue = !hasInitialState ? j.first(values) : arguments[2],
             remainder = !hasInitialState ? j.rest(values) : values;
 
         return (Boolean(values) && values.length > 0) ?
-                j.recur(j.partial(reducer, userFn), initialValue, remainder) :
-                initialValue;
+            j.recur(j.partial(reducer, userFn), initialValue, remainder) :
+            initialValue;
     }
 
     //Produces a function that returns f(g(x))
-    function compositor(f, g){
+    function compositor(f, g) {
         var clean = j.splitPartial(j.either, [j.identity], ['function']);
-            
+
         return function () {
             return clean(f)(j.apply(clean(g), j.slice(0, arguments)));
         };
     }
 
-    function compose(){
+    function compose() {
         return reduce(compositor, j.slice(0, arguments), j.identity);
     }
 
-    function pipeline(value){
+    function pipeline(value) {
         return j.apply(compose, j.slice(1, arguments).reverse())(value);
     }
 
-    function partialReverse(){
+    function partialReverse() {
         return j.apply(j.compose(j.reverseArgs, j.partial),
-                       j.slice(0, arguments));
+            j.slice(0, arguments));
     }
 
-    function clone (originalValue, depth) {
+    function clone(originalValue, depth) {
         var depthOkay = j.isUndefined(depth) || j.geq(depth, 0),
             copyOkay = j.isType('object', originalValue) || j.isType('array', originalValue);
-        
-        function copy () {
+
+        function copy() {
             var keys = Object.keys(originalValue),
                 container = j.isArray(originalValue) ? [] : {};
-            
+
             j.each(function (key) {
                 var newDepth = j.isNumber(depth) ? depth - 1 : undefined;
-                
+
                 try {
                     container[key] = clone(originalValue[key], newDepth);
                 } catch (err) {
                     throw new RangeError('Object contains circular reference or is too deep to clone.');
                 }
-                
+
             }, keys);
-            
+
             return container;
         }
-        
+
         return copyOkay && depthOkay ? copy() : originalValue;
     }
 
-    function maybeType (typeString) {
+    function maybeType(typeString) {
         return j.curry(function (value) {
             return j.maybe(value, typeString);
         }).apply(j, j.slice(1, arguments));
     }
-    
-    function eitherType (typeString) {
+
+    function eitherType(typeString) {
         return j.curry(function (defaultValue, optionValue) {
             return j.either(defaultValue, optionValue, typeString);
         }).apply(j, j.slice(1, arguments));
     }
-    
-    function timesRecursor (recur, count, userFn, accumulator){
+
+    function timesRecursor(recur, count, userFn, accumulator) {
         return j.isZero(count) ? accumulator : recur(count - 1, userFn, userFn(accumulator));
     }
-    
-    function times (count, userFn){
+
+    function times(count, userFn) {
         var accumulator = arguments[2];
         return j.recur(timesRecursor, count, userFn, accumulator);
     }
-    
-    function repeatStepFactory (value){
+
+    function repeatStepFactory(value) {
         return function (accumulator) {
             return accumulator + value;
         };
     }
-    
-    function repeat (count, value){
+
+    function repeat(count, value) {
         return times(count, repeatStepFactory(value), '');
     }
-    
+
+
     j.clone = clone;
     j.compose = compose;
     j.curry = curry;
     j.eitherType = eitherType;
+    j.enclose = enclose;
     j.maybeType = maybeType;
     j.partialReverse = partialReverse;
     j.pipeline = pipeline;
