@@ -500,6 +500,35 @@ var jfp = require('../../dist/jfp.js'),
             expect(j.enclose(testFn, { value1: 1, value2: 2, value3: 3 })()).toBe('1,2,3');
         });
         
+        it('should throw error if first argument is not a function', function () {
+            var err = null;
+            
+            try{
+                j.enclose('foo', {});
+            } catch (e) {
+                err = e;
+            }
+            
+            expect(err instanceof TypeError).toBe(true);
+            expect(err.message).toBe('Expected value of type function but got string.');
+        });
+        
+        it('should throw error if toString output is not a function', function () {
+            var err = null;
+            
+            function foo (){}
+            
+            foo.toString = function () { return '(function () { console.log(\'nooooooooo\');})()'; };
+            
+            try{
+                j.enclose(foo, {});
+            } catch (e) {
+                err = e;
+            }
+            
+            expect(err instanceof Error).toBe(true);
+            
+        });
     });
 
 })();

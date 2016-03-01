@@ -391,16 +391,30 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
+    function throwIfNotType(type, value) {
+        if (!j.isType(type, value)) {
+            throw new TypeError('Expected value of type ' + type + ' but got ' + j.getType(value) + '.');
+        }
+    }
+
+    function throwIfBadFunctionStr(functionStr) {
+        var functionPattern = /^function(\s[^(]+)?\s*\([^)]*\)\s*\{(\s*.*)*\}$/m;
+        
+        if (functionStr.match(functionPattern) === null) {
+            throw new Error('Function.toString must return a function string.');
+        }
+    }
+
     function enclose(userFn, environment) {
-        var encloseTemplate = 'return {function};',
-            enclosingFunction = encloseTemplate.replace('{function}', userFn.toString()),
-            
-            environmentKeys = j.getKeys(environment),
-            environmentValues = j.toValues(environment),
-            
-            enclosingFn = new Function(environmentKeys, enclosingFunction);
-            
-        return j.apply(enclosingFn, environmentValues);
+        var functionStr = userFn.toString();
+        
+        throwIfNotType('function', userFn);
+        throwIfBadFunctionStr(functionStr);
+
+        var enclosingFunction = 'return ' + functionStr + ';',
+            enclosingFn = new Function(j.getKeys(environment), enclosingFunction);
+
+        return j.apply(enclosingFn, j.toValues(environment));
     }
 
     //This is complicated and I don't expect people to grok it on first read.
