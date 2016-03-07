@@ -602,7 +602,16 @@ declare module j {
          */
         recur(fn: () => any): any;
         
-        // need to do reduce, repeat and times from composite module
+        /**
+         * Repeats action n times
+         */
+        repeat(count: number, action: () => any): any;
+        
+        /**
+         * Outputs a string composed of n copies of base string
+         */
+        times(count: number, value: string): string;
+        
     }
 
 }
