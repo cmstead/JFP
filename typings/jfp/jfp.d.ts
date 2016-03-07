@@ -12,7 +12,7 @@ declare module j {
 		 * will happen against the jfp object only.
 		 */
         (alias: string, ...arguments: any[]): JfpCurriedOutput<any>;
-        (externalFunction: () => any, ...arguments: any[]): JfpCurriedOutput<any>;
+        (externalFunction: (...arguments: any[]) => any, ...arguments: any[]): JfpCurriedOutput<any>;
     }
 
     interface JfpCurriedOutput<T> { }
@@ -79,7 +79,7 @@ declare module j {
         /**
          * Drops values from array until predicate is satisfied
          */
-        dropUntil(predicate: () => boolean, list: any[]): any[];
+        dropUntil(predicate: (...arguments: any[]) => boolean, list: any[]): any[];
         
 		/**
 		 * Performs iterable function on each value of provided array
@@ -294,14 +294,14 @@ declare module j {
          * @param userFn
          * @param value
          */
-        shortCircuit(defaultValue: any, userFn: () => any, value: any): any;
+        shortCircuit(defaultValue: any, userFn: (...arguments: any[]) => any, value: any): any;
         
 		/**
 		 * Executes function when condition is true
 		 * @param predicateValue Value to set behavior execution
 		 * @param userFunction Behavior to execute
 		 */
-        when(predicateValue: boolean, userFunction: () => any): any;
+        when(predicateValue: boolean, userFunction: (...arguments: any[]) => any): any;
 		
 		/**
 		 * Executes function when condition is true
@@ -309,7 +309,7 @@ declare module j {
 		 * @param userFunction Behavior to execute
 		 * @param ...arguments arguments for userFunction
 		 */
-        when(predicateValue: boolean, userFunction: () => any, ...arguments: any[]): any;
+        when(predicateValue: boolean, userFunction: (...arguments: any[]) => any, ...arguments: any[]): any;
 
     }
 
@@ -337,42 +337,42 @@ declare module j {
          * Signature: (any) -> () -> any
          * @param value Value to return from produced function
          */
-        always(value: any): () => any;
+        always(value: any): (...arguments: any[]) => any;
         
         /**
          * Applies an array of values to a function
          * @param userFn Function to perform application against
          * @param values Array of arguments for function
          */
-        apply(userFn: () => any, values: any[]): void;
+        apply(userFn: (...arguments: any[]) => any, values: any[]): void;
 		
 		/**
 		 * Composes a set of functions into a new single function
 		 * @param ...arguments Arguments for compose
 		 */
-        compose(...arguments: (() => any)[]): () => any
+        compose(...arguments: ((...arguments: any[]) => any)[]): (...arguments: any[]) => any
 	
 		/**
 		 * Counts the number of arguments in a function declaration
 		 * @param userFn Function to count arguments of
 		 */
-        countArguments(userFn: () => any): number;
+        countArguments(userFn: (...arguments: any[]) => any): number;
 		
 		/**
 		 * Curries function until all arguments are satisfied
 		 * @param userFn Function to curry
 		 * @param ...argments Initial arguments for currying application
 		 */
-        curry(userFn: () => any): () => any;
-        curry(userFn: () => any): any;
-        curry(userFn: () => any, ...arguments: any[]): () => any;
-        curry(userFn: () => any, ...arguments: any[]): any;
+        curry(userFn: (...arguments: any[]) => any): (...arguments: any[]) => any;
+        curry(userFn: (...arguments: any[]) => any): any;
+        curry(userFn: (...arguments: any[]) => any, ...arguments: any[]): (...arguments: any[]) => any;
+        curry(userFn: (...arguments: any[]) => any, ...arguments: any[]): any;
 		
         /**
          * Executes passed function
          * @param userFn
          */
-        execute(userFn: () => any): any;
+        execute(userFn: (...arguments: any[]) => any): any;
         
         /**
          * Gets type of passed value
@@ -391,37 +391,37 @@ declare module j {
 		 * @param userFn Function to apply values to
 		 * @param ...arguments Values to apply
 		 */
-        partial(userFn: () => any): () => any;
-        partial(userFn: () => any, ...arguments: any[]): () => any;
+        partial(userFn: (...arguments: any[]) => any): (...arguments: any[]) => any;
+        partial(userFn: (...arguments: any[]) => any, ...arguments: any[]): (...arguments: any[]) => any;
 		
 		/**
 		 * Pipelines or chains functions producing a single final output
 		 * @param value Initial condition for function pipelining
 		 * @param ...arguments Functions to chain/pipeline
 		 */
-        pipeline(value: any, ...arguments: (() => any)[]): any;
+        pipeline(value: any, ...arguments: ((...arguments: any[]) => any)[]): any;
 		
 		/**
 		 * Recursion function to allow for tail-optimized recursion
 		 * @param userFn Function to recur on
 		 * @param ...arguments Initial condition arguments
 		 */
-        recur(userFn: () => any): any;
-        recur(userFn: () => any, ...arguments: any[]): any;
+        recur(userFn: (...arguments: any[]) => any): any;
+        recur(userFn: (...arguments: any[]) => any, ...arguments: any[]): any;
 		
         /**
          * Reverses arguments of provided function
          * @param userFn
          */
-        reverseArgs(userFn: () => any): () => any;
+        reverseArgs(userFn: (...arguments: any[]) => any): (...arguments: any[]) => any;
         
 		/**
 		 * Performs a right partial application on a function
 		 * @param userFn Function to apply arguments
 		 * @param ...arguments Inital arguments
 		 */
-        rpartial(userFn: () => any): any;
-        rpartial(userFn: () => any, ...arguments: any[]): any;
+        rpartial(userFn: (...arguments: any[]) => any): any;
+        rpartial(userFn: (...arguments: any[]) => any, ...arguments: any[]): any;
         
         /**
          * Performs a split partial application
@@ -429,7 +429,7 @@ declare module j {
          * @param leftArgs
          * @param rightArgs
          */
-        splitPartial(userFn: () => any, leftArgs: any[], rightArgs: any[]): () => any;
+        splitPartial(userFn: (...arguments: any[]) => any, leftArgs: any[], rightArgs: any[]): (...arguments: any[]) => any;
     }
     
     // Predicate functions
@@ -565,12 +565,12 @@ declare module j {
         /**
          * Composes functions together in common nested order
          */
-        compose(...arguments: (() => any)[]): () => any;
+        compose(...arguments: ((...arguments: any[]) => any)[]): (...arguments: any[]) => any;
         
         /**
          * Curries passed function and applies optional arguments
          */
-        curry(fn: () => any, ...arguments: any[]): () => any;
+        curry(fn: (...arguments: any[]) => any, ...arguments: any[]): (...arguments: any[]) => any;
         
         /**
          * Returns either typed value based on type parameter
@@ -585,27 +585,27 @@ declare module j {
         /**
          * Returns a partially applied function with remaining arguments reversed
          */
-        partialReverse(fn: () => any, ...arguments: any[]): () => any;
+        partialReverse(fn: (...arguments: any[]) => any, ...arguments: any[]): (...arguments: any[]) => any;
         
         /**
          * Passes chains functions together with an initial arguments
          */
-        pipeline(value: any, ...arguments: (() => any)[]): any;
+        pipeline(value: any, ...arguments: ((...arguments: any[]) => any)[]): any;
         
         /**
          * Composes functions executing from left to right
          */
-        rcompose(...arguments: (() => any)[]): () => any;
+        rcompose(...arguments: ((...arguments: any[]) => any)[]): (...arguments: any[]) => any;
         
         /**
          * Executes a trampolined tail-optimized recursive function
          */
-        recur(fn: () => any): any;
+        recur(fn: (...arguments: any[]) => any): any;
         
         /**
          * Repeats action n times
          */
-        repeat(count: number, action: () => any): any;
+        repeat(count: number, action: (...arguments: any[]) => any): any;
         
         /**
          * Outputs a string composed of n copies of base string
@@ -835,7 +835,7 @@ declare module j {
         /**
          * Creates composite predicate which performs each check on a value and then conjoins the result
          */
-        composePredicate(...arguments: (() => boolean)[]): () => boolean;
+        composePredicate(...arguments: ((...arguments: any[]) => boolean)[]): (...arguments: any[]) => boolean;
         
     
     }
