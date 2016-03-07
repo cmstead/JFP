@@ -613,6 +613,232 @@ declare module j {
         times(count: number, value: string): string;
         
     }
+    
+    interface JfpStatic {
+    
+        /**
+         * Converts string to decimal safely 
+         */
+        toDec(value: any): number;
+    
+    }
+    
+    interface JfpStatic {
+    
+        /**
+         * Adds two numbers
+         */
+        add(a: number, b: number): number;
+        
+        /**
+         * Divides first number by second
+         */
+        divide(numerator: number, denominator: number): number;
+        
+        /**
+         * Takes the factorial of passed number
+         */
+        fac(n: number): number;
+        
+        /**
+         * Increments a number
+         */
+        inc(value: number): number;
+        
+        /**
+         * Takes the maximum of two numbers
+         */
+        max(a: number, b: number): number;
+        
+        /**
+         * Takes the minimum of two numbers
+         */
+        min(a: number, b: number): number;
+        
+        /**
+         * Takes the modulus of first number against second number
+         */
+        mod(a: number, b: number): number;
+        
+        /**
+         * Takes mathematical modulo of first number against second number
+         */
+        modulo(a: number, b: number): number;
+        
+        /**
+         * Multiplies two numbers
+         */
+        multiply(a: number, b: number): number;
+        
+        /**
+         * Creates a range either from 0 to an integer or from one integer to another
+         */
+        range(end: number): number[];
+        range(start: number, end: number): number[];
+        
+        /**
+         * Subtracts second argument from first
+         */
+        subtract(a: number, b: number): number;
+        
+        /**
+         * Truncates number to floor if positive or to ceil if negative
+         */
+        truncate(value: number): number;
+    
+    }
+
+    interface JfpStatic {
+    
+        /**
+         * Checks if number is negative
+         */
+        isNegative(value: number): boolean;
+        
+        /**
+         * Checks if number is positive
+         */
+        isPositive(value: number): boolean;
+        
+        /**
+         * Checks if number is 0
+         */
+        isZero(value: number): boolean;
+        
+        /**
+         * Checks if number is between two values
+         */
+        between(bounds: number[], value: number): boolean;
+        
+        /**
+         * Checks if value is even
+         */
+        isEven(value: number): boolean;
+        
+        /**
+         * Checks if value is an integer
+         */
+        isInt(value: number): boolean;
+        
+        /**
+         * Checks if value is a multiple of base value
+         */
+        isMultipleOf(base: number, value: number): boolean;
+        
+        /**
+         * Checks if value is positive or 0
+         */
+        isNonNegative(value: number): boolean;
+        
+        /**
+         * Checks if value is negative or 0
+         */
+        isNonPositive(value: number): boolean;
+        
+        /**
+         * Checks if value is not 0
+         */
+        isNonZero(value: number): boolean;
+        
+        /**
+         * Checks if value is odd
+         */
+        isOdd(value: number): boolean;
+        
+        /**
+         * Checks if a is greater or equal to b
+         */
+        geq(a: number, b: number): boolean;
+        
+        /**
+         * Checks if a is greater than b
+         */
+        greater(a: number, b: number): boolean;
+        
+        /**
+         * Checks if a is less than or equal to b
+         */
+        leq(a: number, b: number): boolean;
+        
+        /**
+         * Checks if a is less than b
+         */
+        less(a: number, b: number): boolean;
+    
+    }
+
+    interface JfpStatic {
+    
+        /**
+         * Gets object keys
+         */
+        getKeys(dataset: {}): string[];
+        
+        /**
+         * Merges right object into a copy of left object
+         */
+        merge(left: {}, right: {}): {};
+        
+        /**
+         * Picks key from object
+         */
+        pick(key: string, dataset: {}): any;
+    
+    }
+
+    interface JfpStatic {
+    
+        /**
+         * Traverses object tree and retrieves dot-delimited key or returns null
+         */
+        deref(key: string, dataset: {}): any;
+        
+        /**
+         * Picks value from object by key and returns a new object containing key value pair
+         */
+        pluck(key: string, dataset: {}): {};
+        
+        /**
+         * Performs pluck across an array of keys, returns a single object containing all key value pairs
+         */
+        pluckKeys(keys: string[], dataset: {}): {};
+        
+        /**
+         * Converts object to an array of values
+         */
+        toValues(dataset: {}): any[];
+        
+        /**
+         * Transforms object to a new object containing transformed keys
+         */
+        transform(transformation: string[][], dataset: {}): {};
+    
+    }
+
+    interface JfpStatic {
+    
+        /**
+         * Performs a conjunction (and) operation on two or more booleans
+         */
+        and(a: boolean, b: boolean, ...arguments: boolean[]): boolean;
+        
+        /**
+         * Performs a disjunction (or) operation on two or more booleans
+         */
+        or(a: boolean, b: boolean, ...arguments: boolean[]): boolean;
+        
+        /**
+         * Performs an exclusive or operation on two booleans
+         */
+        xor(a: boolean, b: boolean): boolean;
+        
+        /**
+         * Creates composite predicate which performs each check on a value and then conjoins the result
+         */
+        composePredicate(...arguments: (() => boolean)[]): () => boolean;
+        
+    
+    }
 
 }
 
