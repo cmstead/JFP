@@ -69,7 +69,6 @@
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
-    //j.each = each;
     j.first = first;
     j.init = j.dropLast;
     j.last = last;
