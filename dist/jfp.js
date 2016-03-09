@@ -340,7 +340,6 @@ var jfp = (function(){
     j.drop = drop;
     j.dropFirst = j.partial(drop, 0);
     j.dropLast = dropLast;
-    //j.each = each;
     j.first = first;
     j.init = j.dropLast;
     j.last = last;
@@ -428,30 +427,32 @@ var jfp = (function(){
     }
 
     //zOMG! TAIL OPTIMIZED RECURSION
-    function recursor(recurFn) {
-        var args = j.slice(1, arguments);
+    function RecursionIntermediateValue (args) {
+        this.args = args;
+    }
+    
+    RecursionIntermediateValue.prototype = {
+        valueOf: function () {
+            return this.args;
+        }
+    };
 
-        //This is to make the returned function distinct and identifiable.
-        return function recursorFn(localRecursor) {
-            return j.apply(recurFn, j.concat([localRecursor], args));
-        };
+    function recursionIVFactory () {
+        var args = j.slice(0, arguments);
+        return new RecursionIntermediateValue(args);
     }
 
-    function verifyRecurValue(recurValue) {
-        return typeof recurValue === 'function' &&
-            recurValue.toString().match('recursorFn');
-    }
-
-    //Tail optimization with managed recursion is really complicated.
-    //Please don't muck with this unless you TRULY understand what is happening.
+    //Tail optimization with managed recursion is slightly complicated.
+    //Please don't muck with this unless you understand what is happening.
     function recur(userFn) {
-        var recursingFn = j.either(j.identity, userFn, 'function'),
-            localRecursor = j.partial(recursor, recursingFn),
-            recurValue = j.apply(localRecursor, j.slice(1, arguments));
+        var recursingFn = j.either(j.identity, userFn, 'function');
+        var callResult = j.apply(recursionIVFactory, j.slice(1, arguments));
 
-        while (verifyRecurValue(recurValue = recurValue(localRecursor)) && recursingFn !== j.identity);
+        while(callResult instanceof RecursionIntermediateValue) {
+            callResult = j.apply(recursingFn, j.cons(recursionIVFactory, callResult.valueOf()));
+        }
 
-        return recurValue;
+        return callResult;
     }
 
 	/*
