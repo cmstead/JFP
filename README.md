@@ -21,6 +21,12 @@ If the text file has been removed, please visit:
 
 https://www.mozilla.org/MPL/
 
+###v2.8.0
+
+- [x] Enclose - dynamically manage closures and function environment tables
+- [x] Recursible - Wraps a function in a callable recursion managed-scope function
+- [x] Refactoring - refactor recur to use recursion intermediate value for trampolining
+
 ###V2.7.0
 
 - [x] repeat - Repeats a string n times

@@ -531,4 +531,37 @@ var jfp = require('../../dist/jfp.js'),
         });
     });
 
+    describe('recursible', function () {
+        
+        function add (a, b){
+            return a + b;
+        }
+        
+        it('should return a function', function () {
+            expect(typeof j.recursible(add)).toBe('function');
+        });
+        
+        it('should call passed function', function () {
+            expect(j.recursible(add)(1, 2)).toBe(3);
+        });
+        
+        it('should recur over function behavior properly', function () {
+            function sumTo (value, lastSum){
+                var sum = j.either(0, lastSum, 'number');
+                return value === 0 ? sum : recur(value - 1, sum + value);
+            }
+            
+            expect(j.recursible(sumTo)(5)).toBe(15);
+        });
+        
+        it('should accept a closure object to capture any external references', function () {
+            function sumTo (value, lastSum) {
+                var sum = j.either(0, lastSum, 'number');
+                return value === 0 ? sum : recur(add(value, -1), add(sum, value));
+            }
+            
+            expect(j.recursible(sumTo, { add: add })(6)).toBe(21);
+        });
+    });
+
 })();

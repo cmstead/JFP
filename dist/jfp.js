@@ -455,6 +455,25 @@ var jfp = (function(){
         return callResult;
     }
 
+    function buildRecursionEnvironment (environment) {
+        var baseEnvironment = { j: jfp, jfp: jfp, recur: recursionIVFactory };
+        return j.merge(baseEnvironment, j.either({}, environment, 'object'));
+    }
+
+    function recursible (userFn, environment){
+        var recursibleFn = enclose(userFn, buildRecursionEnvironment(environment));
+        
+        return function () {
+            var callResult = j.apply(recursionIVFactory, j.slice(0, arguments));
+            
+            while(callResult instanceof RecursionIntermediateValue) {
+                callResult = j.apply(recursibleFn, callResult.valueOf());
+            }
+            
+            return callResult;
+        };
+    }
+
 	/*
      * Reduce uses tail-optimized (while-trampolined, fully returning) recursion to resolve reductions.
      * Reducer is a pure function for handling a single reduction step.
@@ -566,6 +585,7 @@ var jfp = (function(){
     j.pipeline = pipeline;
     j.rcompose = j.reverseArgs(compose);
     j.recur = recur;
+    j.recursible = recursible;
     j.reduce = reduce;
     j.repeat = repeat;
     j.times = times;
