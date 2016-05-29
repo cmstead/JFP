@@ -5,18 +5,7 @@
     "dist": {
         "src": [
             "scripts/src/jfp.js",
-            "scripts/src/modules/core/predicate.js",
-            "scripts/src/modules/core/core.js",
-            "scripts/src/modules/convert.js",
-            "scripts/src/modules/array.js",
-            "scripts/src/modules/object.js",
-            "scripts/src/modules/composite.js",
-            "scripts/src/modules/array-composite.js",
-            "scripts/src/modules/predicate-composite.js",
-            "scripts/src/modules/object-composite.js",
-            "scripts/src/modules/math.js",
-            "scripts/src/modules/math-predicate.js",
-            "scripts/src/modules/plugins.js",
+            "scripts/src/modules/core.js",
             "scripts/src/jfp.expose.js"
         ],
         "dest": "dist/jfp.js"
