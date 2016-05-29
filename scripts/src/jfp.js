@@ -32,4 +32,6 @@ var jfp = (function(){
     //     return jfp.apply(resolver, args);
     // };
     
+    return function () {};
+    
 })();

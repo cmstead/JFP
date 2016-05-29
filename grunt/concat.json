@@ -5,6 +5,7 @@
     "dist": {
         "src": [
             "scripts/src/jfp.js",
+            "scripts/src/modules/types.js",
             "scripts/src/modules/core.js",
             "scripts/src/jfp.expose.js"
         ],
