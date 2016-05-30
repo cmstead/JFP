@@ -131,11 +131,11 @@ var jfp = (function(){
         return either(typeStr)(j.nil);
     }
 
-    function concat (xs, ys) {
-        var result = xs.slice(0);
+    function concat (valuesa, valuesb) {
+        var result = valuesa.slice(0);
         
-        for(var i = 0; i < ys.length; i++) {
-            result.push(ys[i]);
+        for(var i = 0; i < valuesb.length; i++) {
+            result.push(valuesb[i]);
         }
         
         return result;
@@ -191,7 +191,7 @@ var jfp = (function(){
     }
     
     // JFP core functions
-    j.always = j.enforce('* => () => *', always);
+    j.always = j.enforce('* => [*] => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.either = j.enforce('string => * => * => *', either);
