@@ -63,12 +63,12 @@
     // JFP core functions
     j.always = j.enforce('* => () => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
-    j.cons = j.enforce('*, array => array', cons);
+    j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.either = j.enforce('string => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
     j.maybe = j.enforce('string => * => maybe<*>', maybe);
     j.partial = j.enforce('function, [*] => [*] => *', partial('left'));
     j.rpartial = j.enforce('function, [*] => [*] => *', partial('right'));
-    j.slice = j.enforce('int, taggedUnion<array;arguments>, [int] => array', slice);
+    j.slice = j.enforce('int, taggedUnion<array<*>;arguments>, [int] => array<*>', slice);
 
 })(jfp);
