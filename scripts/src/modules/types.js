@@ -23,15 +23,31 @@
         return Object.prototype.toString.call(value) === '[object Arguments]';
     }
 
+    function checkNull(value) {
+        return value === null;
+    }
+
+    function checkDefined (value){
+        return !signet.isTypeOf('undefined')(value);
+    }
+
+    function checkIndex (value){
+        return value >= 0;
+    }
+
     function setJfpTypes(_signet) {
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
         _signet.subtype('array')('nil', checkNil);
+        _signet.subtype('int')('index', checkIndex);
         _signet.subtype('object')('arguments', checkArguments);
         _signet.subtype('object')('signet', checkSignet);
 
-        _signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
-
         _signet.extend('maybe', checkMaybe);
+        _signet.extend('null', checkNull);
+        _signet.extend('defined', checkDefined);
+
+        _signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
+        _signet.alias('comparable', 'taggedUnion<boolean;number;string;symbol;null>');
 
         return _signet;
     }

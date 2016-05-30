@@ -7,6 +7,8 @@
             "scripts/src/jfp.js",
             "scripts/src/modules/types.js",
             "scripts/src/modules/core.js",
+            "scripts/src/modules/predicates.js",
+            "scripts/src/modules/array.js",
             "scripts/src/jfp.expose.js"
         ],
         "dest": "dist/jfp.js"

@@ -61,15 +61,31 @@ var jfp = (function(){
         return Object.prototype.toString.call(value) === '[object Arguments]';
     }
 
+    function checkNull(value) {
+        return value === null;
+    }
+
+    function checkDefined (value){
+        return !signet.isTypeOf('undefined')(value);
+    }
+
+    function checkIndex (value){
+        return value >= 0;
+    }
+
     function setJfpTypes(_signet) {
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
         _signet.subtype('array')('nil', checkNil);
+        _signet.subtype('int')('index', checkIndex);
         _signet.subtype('object')('arguments', checkArguments);
         _signet.subtype('object')('signet', checkSignet);
 
-        _signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
-
         _signet.extend('maybe', checkMaybe);
+        _signet.extend('null', checkNull);
+        _signet.extend('defined', checkDefined);
+
+        _signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
+        _signet.alias('comparable', 'taggedUnion<boolean;number;string;symbol;null>');
 
         return _signet;
     }
@@ -129,8 +145,10 @@ var jfp = (function(){
         return j.isTypeOf('undefined')(value) ? values : concat([value], values);
     }
 
-    function slice (start, valueSet, end) {
-        return Array.prototype.slice.apply(valueSet, cons(start, cons(end, j.nil)));
+    function slice (start){
+        return function (valueSet, end) {
+            return Array.prototype.slice.apply(valueSet, cons(start, cons(end, j.nil)));
+        };
     }
     
     function apply(fn, args) {
@@ -141,14 +159,34 @@ var jfp = (function(){
         var isLeft = direction === 'left';
         
         return function (fn) {
-            var initial = slice(1, arguments);
+            var initial = slice(1)(arguments);
             
             return function () {
-                var remaining = slice(0, arguments);
+                var remaining = slice(0)(arguments);
                 var argSet = isLeft ? [initial, remaining] : [remaining, initial];
                 
                 return apply(fn, apply(concat, argSet));
             };
+        };
+    }
+    
+    function RecurObj (args){
+        this.args = args;
+    }
+    
+    function recursor (){
+        return new RecurObj(slice(0)(arguments));
+    }
+    
+    function recur (fn){
+        return function () {
+            var result = new RecurObj(slice(0)(arguments));
+            
+            while (result instanceof RecurObj) {
+                result = apply(fn, cons(recursor, result.args));
+            }
+            
+            return result;
         };
     }
     
@@ -160,9 +198,63 @@ var jfp = (function(){
     j.identity = j.enforce('* => *', identity);
     j.maybe = j.enforce('string => * => maybe<*>', maybe);
     j.partial = j.enforce('function, [*] => [*] => *', partial('left'));
+    j.recur = j.enforce('function => [*] => *', recur);
     j.rpartial = j.enforce('function, [*] => [*] => *', partial('right'));
-    j.slice = j.enforce('int, taggedUnion<array<*>;arguments>, [int] => array<*>', slice);
+    j.slice = j.enforce('int => taggedUnion<array<*>;arguments>, [int] => array<*>', slice);
 
+})(jfp);
+
+(function (j) {
+    'use strict';
+    
+    function equal (a, b){
+        return a === b;
+    }
+    
+    function not (a) {
+        return !a;
+    }
+    
+    j.equal = j.enforce('comparable, comparable => boolean', equal);
+    j.not = j.enforce('boolean => boolean', not);
+    
+})(jfp);
+
+(function (j) {
+    'use strict';
+    
+    function nth (index){
+        return function (values) {
+            return j.maybe('defined')(values[index]);
+        };
+    }
+    
+    function lastIndexOf (values){
+        var length = values.length;
+        return length === 0 ? length : length - 1;
+    }
+    
+    function take (count){
+        return function (values) {
+            return j.slice(0)(values, count);
+        };
+    }
+    
+    function drop (index){
+        return function (values) {
+            var result = j.slice(0)(values);
+            result.splice(index, 1);
+            return result;
+        };
+    }
+    
+    j.drop = j.enforce('index => array<*> => array<*>', drop);
+    j.first = j.enforce('array<*> => maybe<*>', nth(0));
+    j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
+    j.nth = j.enforce('index => array<*> => maybe<*>', nth);
+    j.rest = j.slice(1);
+    j.take = j.enforce('index => array<*> => array<*>', take);
+    
 })(jfp);
 
 var j = jfp;

@@ -65,12 +65,12 @@ describe('jfp core', function () {
     describe('slice', function () {
         
         it('should slice starting at an initial index', function () {
-            var result = j.slice(1, [1, 2, 3, 4]);
+            var result = j.slice(1)([1, 2, 3, 4]);
             expect(JSON.stringify(result)).toBe('[2,3,4]');
         });
         
         it('should slice starting at an initial index', function () {
-            var result = j.slice(1, [1, 2, 3, 4], 3);
+            var result = j.slice(1)([1, 2, 3, 4], 3);
             expect(JSON.stringify(result)).toBe('[2,3]');
         });
         
@@ -98,6 +98,27 @@ describe('jfp core', function () {
         it('should partially apply values to a function', function () {
             var appliedCompute = j.rpartial(compute, 1, 2);
             expect(appliedCompute(4, 5)).toBe(3);
+        });
+        
+    });
+    
+    describe('recur', function () {
+        
+        function fac (recur, n, current){
+            var result = !j.isTypeOf('undefined')(current) ? current : 1;
+            return n === 0 ? result : recur(n-1, result * n); 
+        }
+        
+        it('should evaluate fac 0 correctly', function () {
+            expect(j.recur(fac)(0)).toBe(1);
+        });
+        
+        it('should evaluate fac 2 correctly', function () {
+            expect(j.recur(fac)(2)).toBe(2);
+        });
+        
+        it('should evaluate fac 30 correctly', function () {
+            expect(j.recur(fac)(30)).toBe(2.652528598121911e+32);
         });
         
     });
