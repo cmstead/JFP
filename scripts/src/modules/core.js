@@ -37,8 +37,8 @@
         return j.isTypeOf('undefined')(value) ? values : concat([value], values);
     }
 
-    function slice (start){
-        return function (valueSet, end) {
+    function slice (start, end){
+        return function (valueSet) {
             return Array.prototype.slice.apply(valueSet, cons(start, cons(end, j.nil)));
         };
     }
@@ -82,16 +82,32 @@
         };
     }
     
+    function compose (){
+        var fns = slice(0)(arguments).reverse();
+        var fn = fns.shift();
+        var isNil = j.isTypeOf('nil');
+        
+        return function () {
+            return recur(execCompose)(apply(fn, slice(0)(arguments)), fns);
+            
+            function execCompose (recur, result, fns){
+                return isNil(fns) ? result : recur(fns[0](result), slice(1)(fns));
+            }
+        };
+    }
+    
     // JFP core functions
     j.always = j.enforce('* => [*] => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
+    j.compose = j.enforce('function<*>, [function<*>] => function<*>', compose);
+    j.concat = j.enforce('array<*>, array<*> => array<*>', concat);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.either = j.enforce('string => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
     j.maybe = j.enforce('string => * => maybe<*>', maybe);
-    j.partial = j.enforce('function, [*] => [*] => *', partial('left'));
-    j.recur = j.enforce('function => [*] => *', recur);
-    j.rpartial = j.enforce('function, [*] => [*] => *', partial('right'));
-    j.slice = j.enforce('int => taggedUnion<array<*>;arguments>, [int] => array<*>', slice);
+    j.partial = j.enforce('function, [*] => function<*>', partial('left'));
+    j.recur = j.enforce('function => function<*>', recur);
+    j.rpartial = j.enforce('function, [*] => function<*>', partial('right'));
+    j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
 
 })(jfp);

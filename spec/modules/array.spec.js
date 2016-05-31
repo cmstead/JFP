@@ -63,16 +63,31 @@ describe('jfp array', function () {
         
     });
     
-    describe('drop', function () {
+    describe('dropNth', function () {
        
         it('should drop 0th element', function () {
-            var result = j.drop(0)([1, 2, 3, 4]);
+            var result = j.dropNth(0)([1, 2, 3, 4]);
             expect(JSON.stringify(result)).toBe('[2,3,4]');
         });
         
         it('should drop 3rd element', function () {
-            var result = j.drop(2)([1, 2, 3, 4]);
+            var result = j.dropNth(2)([1, 2, 3, 4]);
             expect(JSON.stringify(result)).toBe('[1,2,4]');
+        });
+        
+    });
+    
+    describe('reverse', function () {
+        
+        it('should return a reversed array', function () {
+            var result = j.reverse([1, 2, 3, 4]);
+            expect(JSON.stringify(result)).toBe('[4,3,2,1]');
+        });
+        
+        it('should not reverse array in place', function () {
+            var original = [1, 2, 3, 4];
+            var result = j.reverse(original);
+            expect(JSON.stringify(original)).toBe('[1,2,3,4]');
         });
         
     });
@@ -105,6 +120,76 @@ describe('jfp array', function () {
         
         it('should fold from right to left', function () {
             expect(j.foldr(reverseDivide, 1)([12, 36, 6, 2])).toBe(1.2);
+        });
+        
+    });
+    
+    describe('filter', function () {
+        
+        var isInt = j.isTypeOf('int');
+        
+        it('should remove all non-integer values', function () {
+            var result = j.filter(isInt)([1.2, 3, 4.4, 5, 6]);
+            expect(JSON.stringify(result)).toBe('[3,5,6]');
+        });
+        
+    });
+    
+    describe('map', function () {
+        
+        function triple (value){
+            return value * 3;
+        }
+        
+        it('should triple all values', function () {
+            var result = j.map(triple)([1, 2, 3, 4]);
+            expect(JSON.stringify(result)).toBe('[3,6,9,12]');
+        });
+        
+    });
+    
+    describe('some', function () {
+        
+        var isInt = j.isTypeOf('int');
+        
+        it('should return true if array contains an element which matches predicate', function () {
+            expect(j.some(isInt)([1, 2, 3, 4])).toBe(true);
+        });
+        
+        it('should return false if array contains no an element which matches predicate', function () {
+            expect(j.some(isInt)([1.1, 2.2, 3.3, 4.4])).toBe(false);
+        });
+        
+    });
+    
+    describe('none', function () {
+        
+        var isInt = j.isTypeOf('int');
+        
+        it('should return false if array contains an element which matches predicate', function () {
+            expect(j.none(isInt)([1, 2, 3, 4])).toBe(false);
+        });
+        
+        it('should return true if array contains no an element which matches predicate', function () {
+            expect(j.none(isInt)([1.1, 2.2, 3.3, 4.4])).toBe(true);
+        });
+        
+    });
+    
+    describe('all', function () {
+        
+        var isInt = j.isTypeOf('int');
+        
+        it('should return true if all elements of array match predicate', function () {
+            expect(j.all(isInt)([1, 2, 3, 4])).toBe(true);
+        });
+        
+        it('should return true if no elements of array match predicate', function () {
+            expect(j.all(isInt)([1.1, 2.2, 3.3, 4.4])).toBe(false);
+        });
+        
+        it('should return true if some, but not all elements of array match predicate', function () {
+            expect(j.all(isInt)([1.1, 2, 3.3, 4.4])).toBe(false);
         });
         
     });

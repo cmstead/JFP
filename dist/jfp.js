@@ -145,8 +145,8 @@ var jfp = (function(){
         return j.isTypeOf('undefined')(value) ? values : concat([value], values);
     }
 
-    function slice (start){
-        return function (valueSet, end) {
+    function slice (start, end){
+        return function (valueSet) {
             return Array.prototype.slice.apply(valueSet, cons(start, cons(end, j.nil)));
         };
     }
@@ -190,38 +190,63 @@ var jfp = (function(){
         };
     }
     
+    function compose (){
+        var fns = slice(0)(arguments).reverse();
+        var fn = fns.shift();
+        var isNil = j.isTypeOf('nil');
+        
+        return function () {
+            return recur(execCompose)(apply(fn, slice(0)(arguments)), fns);
+            
+            function execCompose (recur, result, fns){
+                return isNil(fns) ? result : recur(fns[0](result), slice(1)(fns));
+            }
+        };
+    }
+    
     // JFP core functions
     j.always = j.enforce('* => [*] => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
+    j.compose = j.enforce('function<*>, [function<*>] => function<*>', compose);
+    j.concat = j.enforce('array<*>, array<*> => array<*>', concat);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.either = j.enforce('string => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
     j.maybe = j.enforce('string => * => maybe<*>', maybe);
-    j.partial = j.enforce('function, [*] => [*] => *', partial('left'));
-    j.recur = j.enforce('function => [*] => *', recur);
-    j.rpartial = j.enforce('function, [*] => [*] => *', partial('right'));
-    j.slice = j.enforce('int => taggedUnion<array<*>;arguments>, [int] => array<*>', slice);
+    j.partial = j.enforce('function, [*] => function<*>', partial('left'));
+    j.recur = j.enforce('function => function<*>', recur);
+    j.rpartial = j.enforce('function, [*] => function<*>', partial('right'));
+    j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
 
 })(jfp);
 
 (function (j) {
     'use strict';
-    
-    function equal (a, b){
+
+    function equal(a, b) {
         return a === b;
     }
-    
-    function not (a) {
+
+    function not(a) {
         return !a;
     }
-    
+
+    function invert(pred) {
+        return j.compose(j.not, pred);
+    }
+
+
+
     j.equal = j.enforce('comparable, comparable => boolean', equal);
+    j.invert = j.enforce('function<*> => function<*>', invert);
     j.not = j.enforce('boolean => boolean', not);
-    
+
 })(jfp);
 
 (function (j) {
     'use strict';
+
+    var isNil = j.isTypeOf('nil');
 
     function nth(index) {
         return function (values) {
@@ -236,11 +261,11 @@ var jfp = (function(){
 
     function take(count) {
         return function (values) {
-            return j.slice(0)(values, count);
+            return j.slice(0, count)(values);
         };
     }
 
-    function drop(index) {
+    function dropNth(index) {
         return function (values) {
             var result = j.slice(0)(values);
             result.splice(index, 1);
@@ -248,9 +273,15 @@ var jfp = (function(){
         };
     }
 
-    function folder(fn) {
-        var isNil = j.isTypeOf('nil');
+    var reverse = j.partial(j.recur(reverser), []);
+    
+    function reverser(recur, result, valueSet) {
+        return !isNil(valueSet) ? 
+            recur(j.cons(j.first(valueSet), result), j.rest(valueSet)) : 
+            result;
+    }
 
+    function folder(fn) {
         return j.recur(function (recur, result, values) {
             return isNil(values) ? result : recur(fn(result, j.first(values)), j.rest(values));
         });
@@ -260,25 +291,102 @@ var jfp = (function(){
         return function (fn, initial) {
             return function (values) {
                 var noInitial = j.isTypeOf('undefined')(initial);
-                var valueSet = direction === 'left' ? values : values.reverse();
-                
+                var valueSet = direction === 'left' ? values : reverse(values);
+
                 var value = noInitial ? j.first(valueSet) : initial;
                 var list = noInitial ? j.rest(valueSet) : valueSet;
-                
+
                 return folder(fn)(value, list);
             };
         };
     }
 
-    j.drop = j.enforce('index => array<*> => array<*>', drop);
+    function foldApplicator(behavior) {
+        return function (fn) {
+            return function (values) {
+                return fold('left')(behavior(fn), [])(values);
+            };
+        };
+    }
+
+    function filterer(pred) {
+        return function (result, value) {
+            return pred(value) ? j.concat(result, [value]) : result;
+        };
+    }
+
+    function mapper(fn) {
+        return function (result, value) {
+            return j.concat(result, [fn(value)]);
+        };
+    }
+
+    function some(pred) {
+        return j.recur(check);
+
+        function check(recur, values) {
+            var match = pred(j.first(values));
+            var done = j.isTypeOf('nil')(values);
+
+            return match || done ? match && !done : recur(j.rest(values));
+        }
+    }
+
+    var none = j.compose(j.invert, some);
+    var all = j.compose(none, j.invert);
+    
+    var filter = foldApplicator(filterer);
+    var map = foldApplicator(mapper);
+
+    j.all = j.enforce('function<*> => array<*> => boolean', all);
+    j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
+    j.filter = j.enforce('function<*> => array<*> => array<*>', filter);
     j.first = j.enforce('array<*> => maybe<*>', nth(0));
-    j.foldl = j.enforce('function, [*] => array<*> => *', fold('left'));
-    j.foldr = j.enforce('function, [*] => array<*> => *', fold('right'));
+    j.foldl = j.enforce('function<*;*>, [*] => array<*> => *', fold('left'));
+    j.foldr = j.enforce('function<*;*>, [*] => array<*> => *', fold('right'));
     j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
+    j.map = j.enforce('function<*> => array<*> => array<*>', map);
+    j.none = j.enforce('function<*> => array<*> => boolean', none);
     j.nth = j.enforce('index => array<*> => maybe<*>', nth);
     j.rest = j.slice(1);
+    j.reverse = j.enforce('array<*> => array<*>', reverse);
+    j.some = j.enforce('function<*> => array<*> => boolean', some);
     j.take = j.enforce('index => array<*> => array<*>', take);
 
+})(jfp);
+
+(function (j) {
+    'use strict';
+    
+    var isUndefined = j.isTypeOf('undefined');
+    
+    function add (a, b){
+        return a + b;
+    }
+    
+    function subtract (a, b){
+        return a - b;
+    }
+    
+    function multiply (a, b){
+        return a * b;
+    }
+    
+    function divide (a, b){
+        return a / b;
+    }
+    
+    function curryOperation (operation) {
+        return function (a, b) {
+            return isUndefined(b) ? j.partial(operation, a) : operation(a, b);
+        };
+    }
+    
+    j.add = j.enforce('number, [number] => taggedUnion<function;number>', curryOperation(add));
+    j.subtract = j.enforce('number, [number] => taggedUnion<function;number>', curryOperation(subtract));
+    j.multiply = j.enforce('number, [number] => taggedUnion<function;number>', curryOperation(multiply));
+    j.divide = j.enforce('number, [number] => taggedUnion<function;number>', curryOperation(divide));
+    
 })(jfp);
 
 var j = jfp;

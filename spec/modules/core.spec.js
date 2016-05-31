@@ -70,7 +70,7 @@ describe('jfp core', function () {
         });
         
         it('should slice starting at an initial index', function () {
-            var result = j.slice(1)([1, 2, 3, 4], 3);
+            var result = j.slice(1, 3)([1, 2, 3, 4]);
             expect(JSON.stringify(result)).toBe('[2,3]');
         });
         
@@ -119,6 +119,32 @@ describe('jfp core', function () {
         
         it('should evaluate fac 30 correctly', function () {
             expect(j.recur(fac)(30)).toBe(2.652528598121911e+32);
+        });
+        
+    });
+    
+    describe('compose', function () {
+        
+        function inc (value){
+            return value + 1;
+        }
+        
+        it('should compose one function', function () {
+            var add1 = j.compose(inc);
+            
+            expect(add1(5)).toBe(6);
+        });
+        
+        it('should compose two functions', function () {
+            var add2 = j.compose(inc, inc);
+            
+            expect(add2(5)).toBe(7);
+        });
+        
+        it('should compose multiple functions', function () {
+            var addMany = j.compose(inc, inc, inc, inc, inc, inc);
+            
+            expect(addMany(5)).toBe(11);
         });
         
     });
