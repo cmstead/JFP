@@ -84,15 +84,15 @@ describe('jfp array', function () {
         }
         
         it('should add no values', function () {
-            expect(j.foldl(0)(add)([])).toBe(0);
+            expect(j.foldl(add, 0)([])).toBe(0);
         });
         
         it('should add the initial value and a single value', function () {
-            expect(j.foldl(0)(add)([1])).toBe(1);
+            expect(j.foldl(add, 0)([1])).toBe(1);
         });
         
         it('should add the initial value and multiple values', function () {
-            expect(j.foldl(0)(add)([1, 2, 3, 4])).toBe(10);
+            expect(j.foldl(add)([1, 2, 3, 4])).toBe(10);
         });
         
     });
@@ -104,7 +104,7 @@ describe('jfp array', function () {
         }
         
         it('should fold from right to left', function () {
-            expect(j.foldr(1)(reverseDivide)([12, 36, 6, 2])).toBe(1.2);
+            expect(j.foldr(reverseDivide, 1)([12, 36, 6, 2])).toBe(1.2);
         });
         
     });

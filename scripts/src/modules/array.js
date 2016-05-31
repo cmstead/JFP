@@ -35,21 +35,23 @@
     }
 
     function fold(direction) {
-        return function (initial){
-            return function (fn) {
-                return function (values) {
-                    return direction === 'left' ? 
-                        folder(fn)(initial, values) :
-                        folder(fn)(initial, values.reverse());
-                };
+        return function (fn, initial) {
+            return function (values) {
+                var noInitial = j.isTypeOf('undefined')(initial);
+                var valueSet = direction === 'left' ? values : values.reverse();
+                
+                var value = noInitial ? j.first(valueSet) : initial;
+                var list = noInitial ? j.rest(valueSet) : valueSet;
+                
+                return folder(fn)(value, list);
             };
         };
     }
 
     j.drop = j.enforce('index => array<*> => array<*>', drop);
     j.first = j.enforce('array<*> => maybe<*>', nth(0));
-    j.foldl = j.enforce('* => function => array<*> => *', fold('left'));
-    j.foldr = j.enforce('* => function => array<*> => *', fold('right'));
+    j.foldl = j.enforce('function, [*] => array<*> => *', fold('left'));
+    j.foldr = j.enforce('function, [*] => array<*> => *', fold('right'));
     j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
     j.nth = j.enforce('index => array<*> => maybe<*>', nth);
     j.rest = j.slice(1);
