@@ -72,7 +72,7 @@
     
     function recur (fn){
         return function () {
-            var result = new RecurObj(slice(0)(arguments));
+            var result = apply(recursor, slice(0)(arguments));
             
             while (result instanceof RecurObj) {
                 result = apply(fn, cons(recursor, result.args));

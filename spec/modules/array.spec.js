@@ -77,4 +77,36 @@ describe('jfp array', function () {
         
     });
     
+    describe('foldl', function () {
+        
+        function add (a, b){
+            return a + b;
+        }
+        
+        it('should add no values', function () {
+            expect(j.foldl(0)(add)([])).toBe(0);
+        });
+        
+        it('should add the initial value and a single value', function () {
+            expect(j.foldl(0)(add)([1])).toBe(1);
+        });
+        
+        it('should add the initial value and multiple values', function () {
+            expect(j.foldl(0)(add)([1, 2, 3, 4])).toBe(10);
+        });
+        
+    });
+    
+    describe('foldr', function () {
+        
+        function reverseDivide (a, b) {
+            return b / (a + 1);
+        }
+        
+        it('should fold from right to left', function () {
+            expect(j.foldr(1)(reverseDivide)([12, 36, 6, 2])).toBe(1.2);
+        });
+        
+    });
+    
 });
