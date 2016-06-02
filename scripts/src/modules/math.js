@@ -68,6 +68,9 @@
     j.multiplyBy = j.enforce('number => number => number', curry(j.multiply));
     j.subtractBy = j.enforce('number => number => number', curry(reverse(j.subtract)));
 
+    j.min = j.enforce('number, [number] => taggedUnion<function;number>', curry(min));
+    j.max = j.enforce('number, [number] => taggedUnion<function;number>', curry(max));
+
     j.range = j.enforce('int, [int] => int => array<int>', range);
 
 })(jfp);

@@ -28,12 +28,14 @@
         };
     }
 
-    var reverse = j.partial(j.recur(reverser), []);
-    
-    function reverser(recur, result, valueSet) {
-        return !isNil(valueSet) ? 
-            recur(j.cons(j.first(valueSet), result), j.rest(valueSet)) : 
-            result;
+    function reverse(values) {
+        return j.recur(reverser)([], values);
+
+        function reverser(recur, result, valueSet) {
+            return !isNil(valueSet) ?
+                recur(j.cons(j.first(valueSet), result), j.rest(valueSet)) :
+                result;
+        }
     }
 
     function folder(fn) {
@@ -81,31 +83,31 @@
 
         function check(recur, values) {
             var match = pred(j.first(values));
-            var done = j.isTypeOf('nil')(values);
+            var done = isNil(values);
 
             return match || done ? match && !done : recur(j.rest(values));
         }
     }
 
-    var none = j.compose(j.invert, some);
-    var all = j.compose(none, j.invert);
-    
+    var none = function (pred) { return j.compose(j.invert, some)(pred); };
+    var all = function (pred) { return j.compose(none, j.invert)(pred); };
+
     var filter = foldApplicator(filterer);
     var map = foldApplicator(mapper);
 
-    j.all = j.enforce('function<*> => array<*> => boolean', all);
+    j.all = j.enforce('function => array<*> => boolean', all);
     j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
-    j.filter = j.enforce('function<*> => array<*> => array<*>', filter);
+    j.filter = j.enforce('function => array<*> => array<*>', filter);
     j.first = j.enforce('array<*> => maybe<*>', nth(0));
-    j.foldl = j.enforce('function<*;*>, [*] => array<*> => *', fold('left'));
-    j.foldr = j.enforce('function<*;*>, [*] => array<*> => *', fold('right'));
+    j.foldl = j.enforce('function, [*] => array<*> => *', fold('left'));
+    j.foldr = j.enforce('function, [*] => array<*> => *', fold('right'));
     j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
-    j.map = j.enforce('function<*> => array<*> => array<*>', map);
-    j.none = j.enforce('function<*> => array<*> => boolean', none);
+    j.map = j.enforce('function => array<*> => array<*>', map);
+    j.none = j.enforce('function => array<*> => boolean', none);
     j.nth = j.enforce('index => array<*> => maybe<*>', nth);
     j.rest = j.slice(1);
     j.reverse = j.enforce('array<*> => array<*>', reverse);
-    j.some = j.enforce('function<*> => array<*> => boolean', some);
+    j.some = j.enforce('function => array<*> => boolean', some);
     j.take = j.enforce('index => array<*> => array<*>', take);
 
 })(jfp);

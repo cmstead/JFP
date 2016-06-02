@@ -16,7 +16,7 @@
 
 
     j.equal = j.enforce('comparable, comparable => boolean', equal);
-    j.invert = j.enforce('function<*> => function<*>', invert);
+    j.invert = j.enforce('function => function', invert);
     j.not = j.enforce('boolean => boolean', not);
 
 })(jfp);

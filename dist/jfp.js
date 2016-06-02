@@ -213,16 +213,16 @@ var jfp = (function(){
     // JFP core functions
     j.always = j.enforce('* => [*] => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
-    j.compose = j.enforce('function<*>, [function<*>] => function<*>', compose);
+    j.compose = j.enforce('[function] => function', compose);
     j.concat = j.enforce('array<*>, array<*> => array<*>', concat);
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.either = j.enforce('string => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
     j.maybe = j.enforce('string => * => maybe<*>', maybe);
-    j.partial = j.enforce('function, [*] => function<*>', partial('left'));
-    j.recur = j.enforce('function => function<*>', recur);
-    j.rpartial = j.enforce('function, [*] => function<*>', partial('right'));
+    j.partial = j.enforce('function, [*] => function', partial('left'));
+    j.recur = j.enforce('function => function', recur);
+    j.rpartial = j.enforce('function, [*] => function', partial('right'));
     j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
 
 })(jfp);
@@ -245,7 +245,7 @@ var jfp = (function(){
 
 
     j.equal = j.enforce('comparable, comparable => boolean', equal);
-    j.invert = j.enforce('function<*> => function<*>', invert);
+    j.invert = j.enforce('function => function', invert);
     j.not = j.enforce('boolean => boolean', not);
 
 })(jfp);
@@ -280,12 +280,14 @@ var jfp = (function(){
         };
     }
 
-    var reverse = j.partial(j.recur(reverser), []);
-    
-    function reverser(recur, result, valueSet) {
-        return !isNil(valueSet) ? 
-            recur(j.cons(j.first(valueSet), result), j.rest(valueSet)) : 
-            result;
+    function reverse(values) {
+        return j.recur(reverser)([], values);
+
+        function reverser(recur, result, valueSet) {
+            return !isNil(valueSet) ?
+                recur(j.cons(j.first(valueSet), result), j.rest(valueSet)) :
+                result;
+        }
     }
 
     function folder(fn) {
@@ -333,31 +335,31 @@ var jfp = (function(){
 
         function check(recur, values) {
             var match = pred(j.first(values));
-            var done = j.isTypeOf('nil')(values);
+            var done = isNil(values);
 
             return match || done ? match && !done : recur(j.rest(values));
         }
     }
 
-    var none = j.compose(j.invert, some);
-    var all = j.compose(none, j.invert);
-    
+    var none = function (pred) { return j.compose(j.invert, some)(pred); };
+    var all = function (pred) { return j.compose(none, j.invert)(pred); };
+
     var filter = foldApplicator(filterer);
     var map = foldApplicator(mapper);
 
-    j.all = j.enforce('function<*> => array<*> => boolean', all);
+    j.all = j.enforce('function => array<*> => boolean', all);
     j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
-    j.filter = j.enforce('function<*> => array<*> => array<*>', filter);
+    j.filter = j.enforce('function => array<*> => array<*>', filter);
     j.first = j.enforce('array<*> => maybe<*>', nth(0));
-    j.foldl = j.enforce('function<*;*>, [*] => array<*> => *', fold('left'));
-    j.foldr = j.enforce('function<*;*>, [*] => array<*> => *', fold('right'));
+    j.foldl = j.enforce('function, [*] => array<*> => *', fold('left'));
+    j.foldr = j.enforce('function, [*] => array<*> => *', fold('right'));
     j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
-    j.map = j.enforce('function<*> => array<*> => array<*>', map);
-    j.none = j.enforce('function<*> => array<*> => boolean', none);
+    j.map = j.enforce('function => array<*> => array<*>', map);
+    j.none = j.enforce('function => array<*> => boolean', none);
     j.nth = j.enforce('index => array<*> => maybe<*>', nth);
     j.rest = j.slice(1);
     j.reverse = j.enforce('array<*> => array<*>', reverse);
-    j.some = j.enforce('function<*> => array<*> => boolean', some);
+    j.some = j.enforce('function => array<*> => boolean', some);
     j.take = j.enforce('index => array<*> => array<*>', take);
 
 })(jfp);
@@ -411,8 +413,12 @@ var jfp = (function(){
         };
     }
 
-    function max (){
-        
+    function max (a, b){
+        return a > b ? a : b;
+    }
+    
+    function min (a, b){
+        return a < b ? a : b;
     }
 
     // Arithmetic
@@ -427,6 +433,9 @@ var jfp = (function(){
     j.modBy = j.enforce('number => number => number', curry(reverse(j.mod)));
     j.multiplyBy = j.enforce('number => number => number', curry(j.multiply));
     j.subtractBy = j.enforce('number => number => number', curry(reverse(j.subtract)));
+
+    j.min = j.enforce('number, [number] => taggedUnion<function;number>', curry(min));
+    j.max = j.enforce('number, [number] => taggedUnion<function;number>', curry(max));
 
     j.range = j.enforce('int, [int] => int => array<int>', range);
 
