@@ -62,6 +62,20 @@ describe('jfp core', function () {
         
     });
     
+    describe('conj', function () {
+        
+        it('should return new array with value prepended', function () {
+            var result = j.conj(1, [2, 3, 4]);
+            expect(JSON.stringify(result)).toBe('[2,3,4,1]');
+        });
+        
+        it('should return new array without undefined prepended', function () {
+            var result = j.conj(undefined, [2, 3, 4]);
+            expect(JSON.stringify(result)).toBe('[2,3,4]');
+        });
+        
+    });
+    
     describe('slice', function () {
         
         it('should slice starting at an initial index', function () {

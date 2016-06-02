@@ -109,6 +109,8 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
+    var isUndefined = j.isTypeOf('undefined');
+
     function identity (value){
         return value;
     }
@@ -142,7 +144,11 @@ var jfp = (function(){
     }
 
     function cons (value, values){
-        return j.isTypeOf('undefined')(value) ? values : concat([value], values);
+        return isUndefined(value) ? values : concat([value], values);
+    }
+    
+    function conj (value, values){
+        return isUndefined(value) ? values : concat(values, [value]);
     }
 
     function slice (start, end){
@@ -209,6 +215,7 @@ var jfp = (function(){
     j.apply = j.enforce('function, array<*> => *', apply);
     j.compose = j.enforce('function<*>, [function<*>] => function<*>', compose);
     j.concat = j.enforce('array<*>, array<*> => array<*>', concat);
+    j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.either = j.enforce('string => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
@@ -311,13 +318,13 @@ var jfp = (function(){
 
     function filterer(pred) {
         return function (result, value) {
-            return pred(value) ? j.concat(result, [value]) : result;
+            return pred(value) ? j.conj(value, result) : result;
         };
     }
 
     function mapper(fn) {
         return function (result, value) {
-            return j.concat(result, [fn(value)]);
+            return j.conj(fn(value), result);
         };
     }
 
@@ -357,54 +364,72 @@ var jfp = (function(){
 
 (function (j) {
     'use strict';
-    
+
     var isUndefined = j.isTypeOf('undefined');
-    
-    function add (a, b){
-        return a + b;
-    }
-    
-    function subtract (a, b){
-        return a - b;
-    }
-    
-    function multiply (a, b){
-        return a * b;
-    }
-    
-    function divide (a, b){
-        return a / b;
-    }
-    
-    function mod (a, b){
-        return a % b;
-    }
-    
-    function curryOperation (operation) {
+
+    function operation (operator){
         return function (a, b) {
-            return isUndefined(b) ? j.rpartial(operation, a) : operation(a, b);
+            switch (operator) {
+                case '+':
+                    return a + b;
+                case '-':
+                    return a - b;
+                case '*':
+                    return a * b;
+                case '/':
+                    return a / b;
+                case '%':
+                    return a % b;
+                default:
+                    return new Error('Bad operator');
+            }
         };
     }
-    
-    function range (a, b, interval){
-        var min = isUndefined(b) ? 1 : a;
-        var max = isUndefined(b) ? a : b;
-        var offset = isUndefined(interval) ? 1 : interval;
-        
-        return j.recur(buildRange)(min, []);
-        
-        function buildRange (recur, value, output){
-            return value > max ? output : recur(value + offset, j.concat(output, [value]));
-        }
+
+    function reverse (fn){
+        return function (a, b) {
+            return fn(b, a);
+        };
     }
-    
-    j.add = j.enforce('number, [number] => taggedUnion<function;number>', curryOperation(add));
-    j.divide = j.enforce('number, [number] => taggedUnion<function;number>', curryOperation(divide));
-    j.mod = j.enforce('number, [number] => taggedUnion<function;number>', curryOperation(mod));
-    j.multiply = j.enforce('number, [number] => taggedUnion<function;number>', curryOperation(multiply));
-    j.range = j.enforce('int, [int], [int] => array<int>', range);
-    j.subtract = j.enforce('number, [number] => taggedUnion<function;number>', curryOperation(subtract));
-    
+
+    function curry(operation) {
+        return function (a) {
+            var b = arguments[1];
+            return isUndefined(b) ? j.partial(operation, a) : operation(a, b);
+        };
+    }
+
+    function range(min, increment) {
+        var offset = isUndefined(increment) ? 1 : increment;
+        
+        return function (max) {
+            return j.recur(buildRange)(min, []);
+
+            function buildRange(recur, value, output) {
+                return value > max ? output : recur(value + offset, j.conj(value, output));
+            }
+        };
+    }
+
+    function max (){
+        
+    }
+
+    // Arithmetic
+    j.add = j.enforce('number, number => number', operation('+'));
+    j.divide = j.enforce('number, number => number', operation('/'));
+    j.mod = j.enforce('number, number => number', operation('%'));
+    j.multiply = j.enforce('number, number => number', operation('*'));
+    j.subtract = j.enforce('number, number => number', operation('-'));
+
+    j.addBy = j.enforce('number => number => number', curry(j.add));
+    j.divideBy = j.enforce('number => number => number', curry(reverse(j.divide)));
+    j.modBy = j.enforce('number => number => number', curry(reverse(j.mod)));
+    j.multiplyBy = j.enforce('number => number => number', curry(j.multiply));
+    j.subtractBy = j.enforce('number => number => number', curry(reverse(j.subtract)));
+
+    j.range = j.enforce('int, [int] => int => array<int>', range);
+
 })(jfp);
 
 var j = jfp;

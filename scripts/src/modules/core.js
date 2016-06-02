@@ -1,6 +1,8 @@
 (function (j) {
     'use strict';
 
+    var isUndefined = j.isTypeOf('undefined');
+
     function identity (value){
         return value;
     }
@@ -34,7 +36,11 @@
     }
 
     function cons (value, values){
-        return j.isTypeOf('undefined')(value) ? values : concat([value], values);
+        return isUndefined(value) ? values : concat([value], values);
+    }
+    
+    function conj (value, values){
+        return isUndefined(value) ? values : concat(values, [value]);
     }
 
     function slice (start, end){
@@ -101,6 +107,7 @@
     j.apply = j.enforce('function, array<*> => *', apply);
     j.compose = j.enforce('function<*>, [function<*>] => function<*>', compose);
     j.concat = j.enforce('array<*>, array<*> => array<*>', concat);
+    j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.either = j.enforce('string => * => * => *', either);
     j.identity = j.enforce('* => *', identity);

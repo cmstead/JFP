@@ -66,13 +66,13 @@
 
     function filterer(pred) {
         return function (result, value) {
-            return pred(value) ? j.concat(result, [value]) : result;
+            return pred(value) ? j.conj(value, result) : result;
         };
     }
 
     function mapper(fn) {
         return function (result, value) {
-            return j.concat(result, [fn(value)]);
+            return j.conj(fn(value), result);
         };
     }
 
