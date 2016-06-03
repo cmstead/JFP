@@ -388,6 +388,23 @@ var jfp = (function(){
         };
     }
 
+    function compare (operator){
+        return function (a) {
+            return function (b) {
+                switch(operator) {
+                    case '>':
+                        return a > b;
+                    case '<':
+                        return a < b;
+                    case '>=':
+                        return a >= b;
+                    case '<=':
+                        return a <= b;
+                }
+            };
+        };
+    }
+
     function reverse (fn){
         return function (a, b) {
             return fn(b, a);
@@ -397,7 +414,7 @@ var jfp = (function(){
     function curry(operation) {
         return function (a) {
             var b = arguments[1];
-            return isUndefined(b) ? j.partial(operation, a) : operation(a, b);
+            return isUndefined(b) ? function (b) { return operation(a, b); } : operation(a, b);
         };
     }
 
@@ -421,6 +438,20 @@ var jfp = (function(){
         return a < b ? a : b;
     }
 
+    function equal(a, b) {
+        return a === b;
+    }
+
+    function between (min, max){
+        if(min >= max) {
+            throw new Error('Invalid range, ' + min + ' is not less than ' + max);
+        }
+        
+        return function (value) {
+            return min <= value && value <= max;
+        };
+    }
+
     // Arithmetic
     j.add = j.enforce('number, number => number', operation('+'));
     j.divide = j.enforce('number, number => number', operation('/'));
@@ -437,7 +468,17 @@ var jfp = (function(){
     j.min = j.enforce('number, [number] => taggedUnion<function;number>', curry(min));
     j.max = j.enforce('number, [number] => taggedUnion<function;number>', curry(max));
 
+    j.inc = j.enforce('int => int', curry(j.add)(1));
+    j.dec = j.enforce('int => int', curry(j.add)(-1));
+
     j.range = j.enforce('int, [int] => int => array<int>', range);
+    
+    j.gt = j.enforce('number => number => boolean', compare('>'));
+    j.geq = j.enforce('number => number => boolean', compare('>='));
+    j.lt = j.enforce('number => number => boolean', compare('<'));
+    j.leq = j.enforce('number => number => boolean', compare('<='));
+    j.equal = j.enforce('number, [number] => taggedUnion<function;boolean>', curry(equal));
+    j.between = j.enforce('number, number => number => boolean', between);
 
 })(jfp);
 

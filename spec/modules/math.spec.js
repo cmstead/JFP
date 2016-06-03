@@ -94,4 +94,61 @@ describe('JFP math', function () {
         
     });
     
+    describe('inc', function () {
+        
+        it('should increment a number', function () {
+            expect(j.inc(5)).toBe(6);
+        });
+        
+    });
+    
+    describe('dec', function () {
+        
+        it('should decrement a number', function () {
+            expect(j.dec(5)).toBe(4);
+        });
+        
+    });
+    
+    describe('comparison', function () {
+        
+        it('should perform greater than comparison', function () {
+            expect(j.gt(5)(4)).toBe(true);
+            expect(j.gt(5)(6)).toBe(false);
+        });
+        
+        it('should perform greater than ore equal comparison', function () {
+            expect(j.geq(5)(4)).toBe(true);
+            expect(j.geq(5)(5)).toBe(true);
+            expect(j.geq(5)(6)).toBe(false);
+        });
+        
+        it('should perform less than comparison', function () {
+            expect(j.lt(5)(4)).toBe(false);
+            expect(j.lt(5)(6)).toBe(true);
+        });
+        
+        it('should perform less than or equal comparison', function () {
+            expect(j.leq(5)(4)).toBe(false);
+            expect(j.leq(5)(5)).toBe(true);
+            expect(j.leq(5)(6)).toBe(true);
+        });
+        
+        it('should perform equality comparison', function () {
+            expect(j.equal(5, 5)).toBe(true);
+            expect(j.equal(5)(5)).toBe(true);
+            expect(j.equal(5, 6)).toBe(false);
+        });
+        
+        it('should perform between comparison', function () {
+            expect(j.between(1, 10)(4)).toBe(true);
+            expect(j.between(1, 10)(1)).toBe(true);
+            expect(j.between(1, 10)(10)).toBe(true);
+            expect(j.between(1, 10)(-5)).toBe(false);
+            expect(j.between(1, 10)(15)).toBe(false);
+            expect(j.between.bind(null, 6, 5)).toThrow();
+        });
+        
+    });
+    
 });
