@@ -163,4 +163,27 @@ describe('jfp core', function () {
         
     });
     
+    describe('curry', function () {
+        
+        function add3Vals (a, b, c){
+            return a + b + c;
+        }
+        
+        it('should return a function which can be called as usual', function () {
+            expect(j.curry(add3Vals)(1, 2, 3)).toBe(6);
+        });
+        
+        it('should return a curried function', function () {
+            expect(j.curry(add3Vals)(1)(2)(4)).toBe(7);
+            expect(j.curry(add3Vals)(1, 2)(5)).toBe(8);
+            expect(j.curry(add3Vals)(1)(2, 6)).toBe(9);
+            expect(j.curry(add3Vals)()()()(1)(2, 4)).toBe(7);
+        });
+
+        it('should curry to a specified length', function () {
+            expect(typeof j.curry(add3Vals, 4)(1, 2, 3)).toBe('function');
+        });
+
+    });
+    
 });
