@@ -90,32 +90,6 @@ describe('jfp core', function () {
         
     });
     
-    describe('partial', function () {
-        
-        function add (a, b, c, d){
-            return a + b + c + d;
-        }
-        
-        it('should partially apply values to a function', function () {
-            var appliedAdd = j.partial(add, 1, 2);
-            expect(appliedAdd(3, 4)).toBe(10);
-        });
-        
-    });
-    
-    describe('rpartial', function () {
-        
-        function compute (a, b, c, d){
-            return (a + b) / (c + d);
-        }
-        
-        it('should partially apply values to a function', function () {
-            var appliedCompute = j.rpartial(compute, 1, 2);
-            expect(appliedCompute(4, 5)).toBe(3);
-        });
-        
-    });
-    
     describe('recur', function () {
         
         function fac (recur, n, current){
@@ -182,6 +156,23 @@ describe('jfp core', function () {
 
         it('should curry to a specified length', function () {
             expect(typeof j.curry(add3Vals, 4)(1, 2, 3)).toBe('function');
+        });
+
+    });
+    
+    describe('rcurry', function () {
+        
+        function div (a, b){
+            return a / b;
+        }
+        
+        it('should return a curried function', function () {
+            expect(j.rcurry(div)(3)(12)).toBe(4);
+            expect(j.rcurry(div)(12, 4)).toBe(3);
+        });
+
+        it('should curry to a specified length', function () {
+            expect(typeof j.rcurry(div, 3)(1, 2)).toBe('function');
         });
 
     });

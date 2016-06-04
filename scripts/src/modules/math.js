@@ -39,13 +39,7 @@
         };
     }
 
-    function reverse (fn){
-        return function (a, b) {
-            return fn(b, a);
-        };
-    }
-
-    function curry(operation) {
+    function operationCurry(operation) {
         return function (a) {
             var b = arguments[1];
             return isUndefined(b) ? function (b) { return operation(a, b); } : operation(a, b);
@@ -93,17 +87,17 @@
     j.multiply = j.enforce('number, number => number', operation('*'));
     j.subtract = j.enforce('number, number => number', operation('-'));
 
-    j.addBy = j.enforce('number => number => number', curry(j.add));
-    j.divideBy = j.enforce('number => number => number', curry(reverse(j.divide)));
-    j.modBy = j.enforce('number => number => number', curry(reverse(j.mod)));
-    j.multiplyBy = j.enforce('number => number => number', curry(j.multiply));
-    j.subtractBy = j.enforce('number => number => number', curry(reverse(j.subtract)));
+    j.addBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.add));
+    j.divideBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.reverseArgs(j.divide)));
+    j.modBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.reverseArgs(j.mod)));
+    j.multiplyBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.multiply));
+    j.subtractBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.reverseArgs(j.subtract)));
 
-    j.min = j.enforce('number, [number] => taggedUnion<function;number>', curry(min));
-    j.max = j.enforce('number, [number] => taggedUnion<function;number>', curry(max));
+    j.min = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(min));
+    j.max = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(max));
 
-    j.inc = j.enforce('int => int', curry(j.add)(1));
-    j.dec = j.enforce('int => int', curry(j.add)(-1));
+    j.inc = j.enforce('[int] => int', operationCurry(j.add)(1));
+    j.dec = j.enforce('[int] => int', operationCurry(j.add)(-1));
 
     j.range = j.enforce('int, [int] => int => array<int>', range);
     
@@ -111,7 +105,7 @@
     j.geq = j.enforce('number => number => boolean', compare('>='));
     j.lt = j.enforce('number => number => boolean', compare('<'));
     j.leq = j.enforce('number => number => boolean', compare('<='));
-    j.equal = j.enforce('number, [number] => taggedUnion<function;boolean>', curry(equal));
+    j.equal = j.enforce('[number], [number] => taggedUnion<function;boolean>', operationCurry(equal));
     j.between = j.enforce('number, number => number => boolean', between);
 
 })(jfp);

@@ -98,13 +98,13 @@
     j.all = j.enforce('function => array<*> => boolean', all);
     j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
     j.filter = j.enforce('function => array<*> => array<*>', filter);
-    j.first = j.enforce('array<*> => maybe<*>', nth(0));
+    j.first = j.enforce('array<*> => maybe<defined>', nth(0));
     j.foldl = j.enforce('function, [*] => array<*> => *', fold('left'));
     j.foldr = j.enforce('function, [*] => array<*> => *', fold('right'));
     j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
     j.map = j.enforce('function => array<*> => array<*>', map);
     j.none = j.enforce('function => array<*> => boolean', none);
-    j.nth = j.enforce('index => array<*> => maybe<*>', nth);
+    j.nth = j.enforce('index => array<*> => maybe<defined>', nth);
     j.rest = j.slice(1);
     j.reverse = j.enforce('array<*> => array<*>', reverse);
     j.some = j.enforce('function => array<*> => boolean', some);

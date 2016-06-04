@@ -1,4 +1,6 @@
 {
     "files": ["scripts/src/**"],
-    "options": {}
+    "options": {
+        "evil": true
+    }
 }
