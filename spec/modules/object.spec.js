@@ -43,4 +43,34 @@ describe('jfp object', function () {
         
     });
     
+    describe('merge', function () {
+        
+        it('should merge two objects left to right', function () {
+            
+            var objA = {
+                test1: 'test1a',
+                test2: 'test2a'
+            };
+            
+            var objB = {
+                test2: 'test2b',
+                test3: 'test2c'
+            };
+            
+            var expected = {
+                test1: 'test1a',
+                test2: 'test2b',
+                test3: 'test2c'
+            };
+            
+            var result = j.merge(objA, objB);
+            
+            expect(result).not.toBe(objA);
+            expect(result).not.toBe(objB);
+            expect(JSON.stringify(result)).toBe(JSON.stringify(expected));
+            
+        });
+        
+    });
+    
 });

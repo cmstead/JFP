@@ -78,6 +78,17 @@
         };
     }
 
+    function find (pred){
+        return function (values) {
+            return j.recur(finder)(values);
+            
+            function finder (recur, values){
+                var value = j.first(values);
+                return isNil(values) || pred(value) ? value : recur(j.rest(values));
+            }
+        };
+    }
+
     function some(pred) {
         return j.recur(check);
 
@@ -99,6 +110,7 @@
     j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
     j.filter = j.enforce('function => array<*> => array<*>', filter);
     j.first = j.enforce('array<*> => maybe<defined>', nth(0));
+    j.find = j.enforce('function<*> => array<*> => maybe<defined>', find);
     j.foldl = j.enforce('function, [*] => array<*> => *', fold('left'));
     j.foldr = j.enforce('function, [*] => array<*> => *', fold('right'));
     j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);

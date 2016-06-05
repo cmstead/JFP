@@ -105,7 +105,6 @@
     j.geq = j.enforce('number => number => boolean', compare('>='));
     j.lt = j.enforce('number => number => boolean', compare('<'));
     j.leq = j.enforce('number => number => boolean', compare('<='));
-    j.equal = j.enforce('[number], [number] => taggedUnion<function;boolean>', operationCurry(equal));
     j.between = j.enforce('number, number => number => boolean', between);
 
 })(jfp);

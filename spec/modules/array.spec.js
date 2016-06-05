@@ -194,4 +194,19 @@ describe('jfp array', function () {
         
     });
     
+    describe('find', function () {
+
+        var isEven = j.compose(j.equal(0), j.modBy(2));
+        
+        it('should return a found element', function () {
+            expect(j.find(isEven)([1, 2, 3, 4])).toBe(2);
+        });
+        
+        it('should return nil if no element is found', function () {
+            var result = j.find(isEven)([1, 3, 5, 7]);
+            expect(j.isTypeOf('nil')(result)).toBe(true);
+        });
+        
+    });
+    
 });

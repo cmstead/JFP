@@ -24,7 +24,20 @@
         };
     }
 
+    function setValue (obj){
+        return function (result, key) {
+            result[key] = obj[key];
+            return result;
+        };
+    }
+
+    function merge (objA, objB){
+        var newObj = j.foldl(setValue(objA), {})(Object.keys(objA));
+        return j.foldl(setValue(objB), newObj)(Object.keys(objB));
+    }
+
     j.pick = j.enforce('string => object => maybe<defined>', pick);
     j.deref = j.enforce('string => object => maybe<defined>', deref);
+    j.merge = j.enforce('object, object => object', merge);
 
 })(jfp);

@@ -85,7 +85,7 @@ var jfp = (function(){
         _signet.extend('defined', checkDefined);
 
         _signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
-        _signet.alias('comparable', 'taggedUnion<boolean;number;string;symbol;null>');
+        _signet.alias('comparable', 'taggedUnion<boolean;number;string>');
 
         return _signet;
     }
@@ -265,11 +265,37 @@ var jfp = (function(){
         return j.compose(j.not, pred);
     }
 
+    function and (a, b){
+        return Boolean(a && b);
+    }
+    
+    function or (a, b){
+        return Boolean(a || b);
+    }
+    
+    function xor (a, b) {
+        return Boolean(a ? !b : b);
+    }
 
+    var isUndefined = j.isTypeOf('undefined');
 
-    j.equal = j.enforce('comparable, comparable => boolean', equal);
+    function operationCurry (fn){
+        return function (a, b) {
+            return isUndefined(b) ? function (c) { return fn(a, c); } : fn(a, b);
+        };
+    }
+
+    var currySignature = 'comparable, [comparable] => taggedUnion<function<comparable>;boolean>';
+
     j.invert = j.enforce('function => function', invert);
-    j.not = j.enforce('boolean => boolean', not);
+    j.equal = j.enforce(currySignature, operationCurry(equal));
+    j.and = j.enforce(currySignature, operationCurry(and));
+    j.or = j.enforce(currySignature, operationCurry(or));
+    j.xor = j.enforce(currySignature, operationCurry(xor));
+    j.not = j.enforce('comparable => boolean', not);
+
+    j.isNil = j.isTypeOf('nil');
+    j.isUndefined = j.isTypeOf('undefined');
 
 })(jfp);
 
@@ -353,6 +379,17 @@ var jfp = (function(){
         };
     }
 
+    function find (pred){
+        return function (values) {
+            return j.recur(finder)(values);
+            
+            function finder (recur, values){
+                var value = j.first(values);
+                return isNil(values) || pred(value) ? value : recur(j.rest(values));
+            }
+        };
+    }
+
     function some(pred) {
         return j.recur(check);
 
@@ -374,6 +411,7 @@ var jfp = (function(){
     j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
     j.filter = j.enforce('function => array<*> => array<*>', filter);
     j.first = j.enforce('array<*> => maybe<defined>', nth(0));
+    j.find = j.enforce('function<*> => array<*> => maybe<defined>', find);
     j.foldl = j.enforce('function, [*] => array<*> => *', fold('left'));
     j.foldr = j.enforce('function, [*] => array<*> => *', fold('right'));
     j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
@@ -494,7 +532,6 @@ var jfp = (function(){
     j.geq = j.enforce('number => number => boolean', compare('>='));
     j.lt = j.enforce('number => number => boolean', compare('<'));
     j.leq = j.enforce('number => number => boolean', compare('<='));
-    j.equal = j.enforce('[number], [number] => taggedUnion<function;boolean>', operationCurry(equal));
     j.between = j.enforce('number, number => number => boolean', between);
 
 })(jfp);
@@ -525,9 +562,72 @@ var jfp = (function(){
         };
     }
 
+    function setValue (obj){
+        return function (result, key) {
+            result[key] = obj[key];
+            return result;
+        };
+    }
+
+    function merge (objA, objB){
+        var newObj = j.foldl(setValue(objA), {})(Object.keys(objA));
+        return j.foldl(setValue(objB), newObj)(Object.keys(objB));
+    }
+
     j.pick = j.enforce('string => object => maybe<defined>', pick);
     j.deref = j.enforce('string => object => maybe<defined>', deref);
+    j.merge = j.enforce('object, object => object', merge);
 
+})(jfp);
+
+(function (j) {
+    'use strict';
+    
+    var isFunction = j.isTypeOf('function');
+    
+    function then (fn){
+        var index = isFunction(fn) ? 1 : 0;
+        var action = index === 1 ? fn : j.identity;
+        
+        return [action, j.slice(index)(arguments)];
+    }
+    
+    function when (condArray){
+        return function (prop, behavior) {
+            condArray.push([prop, behavior]);
+        };
+    }
+    
+    var isResult = j.compose(Boolean, j.first);
+    
+    function throwOnNil (result, condFn){
+        if(j.isNil(result)) {
+            throw new Error('All possible conditions were not represented in ' + condFn.toString());
+        }
+    }
+
+    function callBehavior (behavior){
+        var fn = behavior[0];
+        var args = behavior[1];
+        
+        return j.apply(fn, args);
+    }
+    
+    function cond (condFn){
+        var condArray = [];
+        
+        condFn(when(condArray), then, true);
+                
+        var result = j.find(isResult)(condArray);
+        var behavior = result[1];
+        
+        throwOnNil(result, condFn);
+        
+        return callBehavior(behavior);
+    }
+    
+    j.cond = j.enforce('function<function;function;function> => *', cond);
+    
 })(jfp);
 
 var j = jfp;

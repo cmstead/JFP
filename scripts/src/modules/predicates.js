@@ -13,10 +13,36 @@
         return j.compose(j.not, pred);
     }
 
+    function and (a, b){
+        return Boolean(a && b);
+    }
+    
+    function or (a, b){
+        return Boolean(a || b);
+    }
+    
+    function xor (a, b) {
+        return Boolean(a ? !b : b);
+    }
 
+    var isUndefined = j.isTypeOf('undefined');
 
-    j.equal = j.enforce('comparable, comparable => boolean', equal);
+    function operationCurry (fn){
+        return function (a, b) {
+            return isUndefined(b) ? function (c) { return fn(a, c); } : fn(a, b);
+        };
+    }
+
+    var currySignature = 'comparable, [comparable] => taggedUnion<function<comparable>;boolean>';
+
     j.invert = j.enforce('function => function', invert);
-    j.not = j.enforce('boolean => boolean', not);
+    j.equal = j.enforce(currySignature, operationCurry(equal));
+    j.and = j.enforce(currySignature, operationCurry(and));
+    j.or = j.enforce(currySignature, operationCurry(or));
+    j.xor = j.enforce(currySignature, operationCurry(xor));
+    j.not = j.enforce('comparable => boolean', not);
+
+    j.isNil = j.isTypeOf('nil');
+    j.isUndefined = j.isTypeOf('undefined');
 
 })(jfp);

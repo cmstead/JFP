@@ -47,7 +47,7 @@
         _signet.extend('defined', checkDefined);
 
         _signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
-        _signet.alias('comparable', 'taggedUnion<boolean;number;string;symbol;null>');
+        _signet.alias('comparable', 'taggedUnion<boolean;number;string>');
 
         return _signet;
     }

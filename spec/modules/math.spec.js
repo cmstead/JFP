@@ -134,12 +134,6 @@ describe('JFP math', function () {
             expect(j.leq(5)(6)).toBe(true);
         });
         
-        it('should perform equality comparison', function () {
-            expect(j.equal(5, 5)).toBe(true);
-            expect(j.equal(5)(5)).toBe(true);
-            expect(j.equal(5, 6)).toBe(false);
-        });
-        
         it('should perform between comparison', function () {
             expect(j.between(1, 10)(4)).toBe(true);
             expect(j.between(1, 10)(1)).toBe(true);
