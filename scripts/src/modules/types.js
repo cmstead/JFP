@@ -48,6 +48,7 @@
 
         _signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
         _signet.alias('comparable', 'taggedUnion<boolean;number;string>');
+        _signet.alias('objectKey', 'taggedUnion<string;symbol>');
 
         return _signet;
     }

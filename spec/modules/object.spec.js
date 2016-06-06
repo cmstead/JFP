@@ -73,4 +73,32 @@ describe('jfp object', function () {
         
     });
     
+    describe('toArray', function () {
+        
+        it('should convert an empty object to an empty array', function () {
+            var result = j.toArray({});
+            expect(JSON.stringify(result)).toBe('[]')
+        });
+        
+        it('should convert an object to an array of tuples', function () {
+            var result = j.toArray({ foo: 'bar', baz: 'quux' });
+            expect(JSON.stringify(result)).toBe('[["foo","bar"],["baz","quux"]]')
+        });
+        
+    });
+    
+    describe('toObject', function () {
+        
+        it('should convert an empty array to an empty object', function () {
+            var result = j.toObject([]);
+            expect(JSON.stringify(result)).toBe('{}')
+        });
+        
+        it('should convert an array of tuples to object', function () {
+            var result = j.toObject([['foo','bar'],['baz','quux']]);
+            expect(JSON.stringify(result)).toBe('{"foo":"bar","baz":"quux"}');
+        });
+        
+    });
+    
 });
