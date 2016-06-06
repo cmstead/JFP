@@ -1,12 +1,11 @@
 (function (j) {
     'use strict';
 
-    var isNil = j.isTypeOf('nil');
-    var maybe = j.maybe('defined');
+    var maybeDefined = j.maybe('defined');
 
     function pick(key) {
         return function (obj) {
-            return maybe(obj[key]);
+            return maybeDefined(obj[key]);
         };
     }
 
@@ -19,7 +18,7 @@
             function derefStep(recur, obj, keyTokens) {
                 var key = j.first(keyTokens);
 
-                return isNil(keyTokens) ? obj : recur(pick(key)(obj), j.rest(keyTokens));
+                return j.isNil(keyTokens) ? obj : recur(pick(key)(obj), j.rest(keyTokens));
             }
         };
     }
@@ -47,10 +46,8 @@
 
     var second = j.nth(1);
 
-    function addTuple(obj, objTuple) {
-        if (!j.isNil(objTuple)) {
-            obj[j.first(objTuple)] = second(objTuple);
-        }
+    function addRecord(obj, record) {
+        obj[j.first(record)] = second(record);
 
         return obj;
     }
@@ -61,7 +58,11 @@
         function convertTuples(recur, result, objTuples) {
             return j.cond(function (when, then, _default) {
                 when(j.isNil(objTuples), then(result));
-                when(_default, then(recur, addTuple(result, j.first(objTuples)), j.rest(objTuples)));
+                
+                when(_default, then(function (tuples) {
+                    var obj = addRecord(result, j.first(objTuples));
+                    return recur(obj, j.rest(objTuples));
+                }));
             });
         }
     }
