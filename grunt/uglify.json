@@ -3,9 +3,9 @@
         "options": {
             "banner": "/*! <%= pkg.name %> <%= grunt.template.today('dd-mm-yyyy') %> */\n",
             "compress": false,
-            "mangle": false,
+            "mangle": true,
             "sourceMap": true,
-            "sourceMapIncludeSources": true
+            "sourceMapIncludeSources": false
         },
         "files": {
             "dist/jfp.min.js": ["./dist/jfp.js"]

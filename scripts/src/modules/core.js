@@ -131,6 +131,14 @@
         return curry;
     }
 
+    function partial (fn){
+        var args = slice(1)(arguments);
+        
+        return function () {
+            return apply(fn, concat(args, slice(0)(arguments)));
+        };
+    }
+
     // JFP core functions
     j.always = j.enforce('* => [*] => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
@@ -143,6 +151,7 @@
     j.either = j.enforce('string => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
     j.maybe = j.enforce('string => * => maybe<defined>', maybe);
+    j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.recur = j.enforce('function => function', recur);
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);

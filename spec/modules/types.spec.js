@@ -1,4 +1,4 @@
-var j = require('../../dist/jfp.js');
+var j = require('../../dist/jfp.min');
 var signet = require('signet');
 
 describe('jfp types', function () {

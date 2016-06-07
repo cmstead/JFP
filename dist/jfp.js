@@ -240,6 +240,14 @@ var jfp = (function(){
         return curry;
     }
 
+    function partial (fn){
+        var args = slice(1)(arguments);
+        
+        return function () {
+            return apply(fn, concat(args, slice(0)(arguments)));
+        };
+    }
+
     // JFP core functions
     j.always = j.enforce('* => [*] => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
@@ -252,6 +260,7 @@ var jfp = (function(){
     j.either = j.enforce('string => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
     j.maybe = j.enforce('string => * => maybe<defined>', maybe);
+    j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.recur = j.enforce('function => function', recur);
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
@@ -602,8 +611,8 @@ var jfp = (function(){
         return j.recur(convertTuples)({}, tupleArray);
 
         function convertTuples(recur, result, objTuples) {
-            var next = j.rcurry(recur, 2)(j.rest(objTuples));
-            var updateObj = j.compose(j.curry(addRecord)(result), j.first);
+            var next = j.rcurry (recur, 2) (j.rest(objTuples));
+            var updateObj = j.compose(j.curry (addRecord) (result), j.first);
             
             return j.cond(function (when, then, _default) {
                 when(j.isNil(objTuples), then(result));

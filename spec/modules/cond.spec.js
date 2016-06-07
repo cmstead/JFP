@@ -1,4 +1,4 @@
-var j = require('../../dist/jfp');
+var j = require('../../dist/jfp.min');
 
 describe('jfp cond', function () {
 

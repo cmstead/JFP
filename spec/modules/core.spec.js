@@ -1,4 +1,4 @@
-var j = require('../../dist/jfp.js');
+var j = require('../../dist/jfp.min');
 
 describe('jfp core', function () {
     
@@ -175,6 +175,20 @@ describe('jfp core', function () {
             expect(typeof j.rcurry(div, 3)(1, 2)).toBe('function');
         });
 
+    });
+    
+    describe('partial', function () {
+        
+        function add (a, b){
+            return a + b;
+        }
+        
+        it('should partially apply arguments to a function', function () {
+            expect(j.partial(add, 5, 6)()).toBe(11);
+            expect(j.partial(add, 6)(7)).toBe(13);
+            expect(j.partial(add)(7, 8)).toBe(15);
+        });
+        
     });
     
 });
