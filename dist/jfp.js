@@ -162,20 +162,27 @@ var jfp = (function(){
         return fn.apply(null, args);
     }
 
-    function RecurObj(args) {
+    function RecurObj(id, args) {
+        this.id = id;
         this.args = args;
     }
 
-    function recursor() {
-        return new RecurObj(slice(0)(arguments));
+    function recursor (id){
+        return function () {
+            return new RecurObj(id, slice(0)(arguments));
+        };
     }
 
     function recur(fn) {
+        // Each recursion needs to be signed to avoid collisions
+        var id = Math.floor(Math.random() * 1000000);
+        var signedRecursor = recursor(id);
+        
         return function () {
-            var result = apply(recursor, slice(0)(arguments));
+            var result = apply(signedRecursor, slice(0)(arguments));
 
-            while (result instanceof RecurObj) {
-                result = apply(fn, cons(recursor, result.args));
+            while (result instanceof RecurObj && result.id === id) {
+                result = apply(fn, cons(signedRecursor, result.args));
             }
 
             return result;
@@ -595,13 +602,12 @@ var jfp = (function(){
         return j.recur(convertTuples)({}, tupleArray);
 
         function convertTuples(recur, result, objTuples) {
+            var next = j.rcurry(recur, 2)(j.rest(objTuples));
+            var updateObj = j.compose(j.curry(addRecord)(result), j.first);
+            
             return j.cond(function (when, then, _default) {
                 when(j.isNil(objTuples), then(result));
-                
-                when(_default, then(function (tuples) {
-                    var obj = addRecord(result, j.first(objTuples));
-                    return recur(obj, j.rest(objTuples));
-                }));
+                when(_default, then(j.compose(next, updateObj), objTuples));
             });
         }
     }

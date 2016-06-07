@@ -53,20 +53,27 @@
         return fn.apply(null, args);
     }
 
-    function RecurObj(args) {
+    function RecurObj(id, args) {
+        this.id = id;
         this.args = args;
     }
 
-    function recursor() {
-        return new RecurObj(slice(0)(arguments));
+    function recursor (id){
+        return function () {
+            return new RecurObj(id, slice(0)(arguments));
+        };
     }
 
     function recur(fn) {
+        // Each recursion needs to be signed to avoid collisions
+        var id = Math.floor(Math.random() * 1000000);
+        var signedRecursor = recursor(id);
+        
         return function () {
-            var result = apply(recursor, slice(0)(arguments));
+            var result = apply(signedRecursor, slice(0)(arguments));
 
-            while (result instanceof RecurObj) {
-                result = apply(fn, cons(recursor, result.args));
+            while (result instanceof RecurObj && result.id === id) {
+                result = apply(fn, cons(signedRecursor, result.args));
             }
 
             return result;

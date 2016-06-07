@@ -56,13 +56,12 @@
         return j.recur(convertTuples)({}, tupleArray);
 
         function convertTuples(recur, result, objTuples) {
+            var next = j.rcurry (recur, 2) (j.rest(objTuples));
+            var updateObj = j.compose(j.curry (addRecord) (result), j.first);
+            
             return j.cond(function (when, then, _default) {
                 when(j.isNil(objTuples), then(result));
-                
-                when(_default, then(function (tuples) {
-                    var obj = addRecord(result, j.first(objTuples));
-                    return recur(obj, j.rest(objTuples));
-                }));
+                when(_default, then(j.compose(next, updateObj), objTuples));
             });
         }
     }
