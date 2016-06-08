@@ -209,4 +209,24 @@ describe('jfp array', function () {
         
     });
     
+    describe('compact', function () {
+        
+        it('should remove all falsey values from an array', function () {
+            expect(JSON.stringify(j.compact([1, 2, 0, false, '', null, 3]))).toBe('[1,2,3]');
+        });
+
+    });
+
+    describe('sort', function () {
+        it('should sort using standard sort', function () {
+            var result = j.sort()([2, 3, 1, 5, 4]);
+            expect(JSON.stringify(result)).toBe('[1,2,3,4,5]');
+        });
+
+        it('should sort using standard sort', function () {
+            var result = j.sort(j.reverseArgs(j.subtract))([2, 3, 1, 5, 4]);
+            expect(JSON.stringify(result)).toBe('[5,4,3,2,1]');
+        });
+    });
+
 });

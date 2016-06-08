@@ -14,12 +14,6 @@
         return length === 0 ? length : length - 1;
     }
 
-    function take(count) {
-        return function (values) {
-            return j.slice(0, count)(values);
-        };
-    }
-
     function dropNth(index) {
         return function (values) {
             var result = j.slice(0)(values);
@@ -100,13 +94,29 @@
         }
     }
 
-    var none = function (pred) { return j.compose(j.invert, some)(pred); };
-    var all = function (pred) { return j.compose(none, j.invert)(pred); };
+    function sort (comparator){
+        return function (values) {
+            var valuesCopy = j.slice(0)(values);
+
+            if(j.isTypeOf('function')(comparator)) {
+                valuesCopy.sort(comparator);
+            } else {
+                valuesCopy.sort();
+            }
+
+            return valuesCopy; 
+        };
+    }
+
+    function none(pred) { return j.compose(j.invert, some)(pred); }
+    function all(pred) { return j.compose(none, j.invert)(pred); }
+    function take(count) { return j.slice(0, count); }
 
     var filter = foldApplicator(filterer);
     var map = foldApplicator(mapper);
 
     j.all = j.enforce('function => array<*> => boolean', all);
+    j.compact = j.enforce('[array] => array<*>', filter(Boolean));
     j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
     j.filter = j.enforce('function => array<*> => array<*>', filter);
     j.first = j.enforce('array<*> => maybe<defined>', nth(0));
@@ -120,6 +130,7 @@
     j.rest = j.slice(1);
     j.reverse = j.enforce('array<*> => array<*>', reverse);
     j.some = j.enforce('function => array<*> => boolean', some);
-    j.take = j.enforce('index => array<*> => array<*>', take);
+    j.sort = j.enforce('[*] => array<*> => array<*>', sort);
+    j.take = j.enforce('[index] => function<array<*>>', take);
 
 })(jfp);
