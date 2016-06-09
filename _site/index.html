@@ -132,6 +132,10 @@
   <li>Performance: O(n) (for n = number of leaves in type tree)</li>
 </ul>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>var add = j.enforce('number, number =&gt; number', function add (a, b) { return a + b; });
+</code></pre>
+</div>
+
 <h3 id="istypeof">isTypeOf</h3>
 
 <ul>
@@ -139,12 +143,23 @@
   <li>Performance: O(1)</li>
 </ul>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isTypeOf('string')(5); // false
+j,.isTypeOf('nil')(j.nil); // true
+</code></pre>
+</div>
+
 <h3 id="setjfptypes">setJfpTypes</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">signet =&gt; signet</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var signetFactory = require('signet');
+
+var signet = setJfpTypes(signetFactory());
+</code></pre>
+</div>
 
 <h3 id="type-list">Type List</h3>
 
@@ -254,12 +269,23 @@
   <li>Performance: O(1)</li>
 </ul>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>var alwaysTrue = j.always(true);
+
+alwaysTrue(); // true
+alwaysTrue('over 9000'); // true
+</code></pre>
+</div>
+
 <h3 id="apply">apply</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function, array&lt;*&gt; =&gt; *</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.apply(add, [1, 2]); // 3
+</code></pre>
+</div>
 
 <h3 id="compose">compose</h3>
 
@@ -268,12 +294,28 @@
   <li>Performance: O(n) (for n = length of function list)</li>
 </ul>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>var isNotNumber = j.compose(j.not, j.isTypeOf('number'));
+
+isNotNumber(5); // false
+isNotNumber('string'); // true
+</code></pre>
+</div>
+
 <h3 id="concat">concat</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">array&lt;*&gt;, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var arr1 = [1, 2, 3];
+var arr2 = [4, 5, 6];
+var newArr = j.concat(arr1, arr2); // [1, 2, 3, 4, 5, 6]
+
+arr1 === newArr; // false
+arr2 === newArr; // false
+</code></pre>
+</div>
 
 <h3 id="conj">conj</h3>
 
@@ -282,12 +324,20 @@
   <li>Performance: O(n) (based on slice performance)</li>
 </ul>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>j.conj(4, [1, 2, 3]); // [1, 2, 3, 4];
+</code></pre>
+</div>
+
 <h3 id="cons">cons</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">*, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n) (based on slice performance)</li>
 </ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.cons(4, [1, 2, 3]); // [4, 1, 2, 3];
+</code></pre>
+</div>
 
 <h3 id="curry">curry</h3>
 
@@ -296,6 +346,16 @@
   <li>Performance: O(1)</li>
 </ul>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>function add  (a, b) {
+    return a + b;
+}
+
+j.curry(add)(1)(2); // 3
+j.curry(add)(1, 2); // 3
+j.curry(add, 3)(1)(2)(3); // 3
+</code></pre>
+</div>
+
 <h3 id="rcurry">rcurry</h3>
 
 <ul>
@@ -303,12 +363,27 @@
   <li>performance: O(1)</li>
 </ul>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>function divide (a, b) {
+    return a / b;
+}
+
+j.rcurry(divide)(1)(2); // 2
+j.rcurry(divide)(1, 2); // 0.5
+j.rcurry(divide)(2)(1); // 0.5
+</code></pre>
+</div>
+
 <h3 id="either">either</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">string =&gt; * =&gt; * =&gt; *</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.either('number')(5)(0); // 0
+j.either('number')(5)('foo'); // 5
+</code></pre>
+</div>
 
 <h3 id="identity">identity</h3>
 
