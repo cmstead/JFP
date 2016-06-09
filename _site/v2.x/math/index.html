@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>JFP - Javascript Function Processor</title>
+  <meta name="description" content="JFP, the Javascript Function Processor is a language as a library functional programming utility for Javascript
+">
+
+  <link rel="stylesheet" href="/JFP/v2.x/css/screen.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://cmstead.github.io/JFP/v2.x/math/">
+  <link rel="alternate" type="application/rss+xml" title="JFP - Javascript Function Processor" href="http://cmstead.github.io/JFP/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header>
+    <div class="link-wrapper">
+        <div class="library-links">
+            <div class="release">
+                <a href="https://github.com/cmstead/JFP/releases">RELEASES</a>
+                <span>Current Version: v2.5.0</span>
+            </div>
+            <div>
+                <a href="https://github.com/cmstead/JFP/archive/v2.5.0.tar.gz">
+                    <i class="fa fa-arrow-circle-down"></i>TAR.GZ
+                </a>
+            </div>
+            <div>
+                <a href="https://github.com/cmstead/JFP/archive/v2.5.0.zip">
+                    <i class="fa fa-arrow-circle-down"></i>ZIP
+                </a>
+            </div>
+            <div>
+                <a href="https://www.npmjs.com/package/jfp" target="_blank">
+                    NPM
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="head-wrapper">
+        <div class="lambda">&lambda;</div>
+        <h1><a href="/JFP/v2.x/">JFP: Javascript Function Processor</a></h1>
+    </div>
+    <div class="menu-wrapper">
+        <ul class="menu">
+            <li><a href="/JFP/v2.x/array/">Array</a></li>
+            <li><a href="/JFP/v2.x/conditional/">Conditional</a></li>
+            <li><a href="/JFP/v2.x/conversion/">Conversion</a></li>
+            <li><a href="/JFP/v2.x/core/">Core</a></li>
+            <li><a href="/JFP/v2.x/math/">Math</a></li>
+            <li><a href="/JFP/v2.x/object/">Object</a></li>
+            <li><a href="/JFP/v2.x/predicate/">Predicate</a></li>
+        </ul>
+    </div>
+</header>
+
+
+
+    <div class="body-container">
+        <p>##Math Functions</p>
+
+<p><strong>add</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] arguments</li>
+  <li>Description: Returns the sum of all numbers passed to add</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.add();
+
+//0
+
+j.add(1);
+
+//1
+
+j.add(1, 2);
+
+//3
+
+j.add(1, 2, 3, 4, 5);
+
+//15
+</code></pre>
+</div>
+
+<p><strong>divide</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] arguments</li>
+  <li>Description: divides first value by each other value passed to divide</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.divide();
+
+//1
+
+j.divide(12);
+
+//1
+
+j.divide(12, 2);
+
+//6
+
+j.divide(12, 2, 3);
+
+//2
+</code></pre>
+</div>
+
+<p><strong>equal</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} a, {any} b</li>
+  <li>Description: returns true if a and b are strictly equal, false otherwise</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.equal(1, 1);
+
+//true
+
+j.equal(1, 2);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>fac</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns factorial of value</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.fac(0);
+
+//1
+
+j.fac(5);
+
+//120
+</code></pre>
+</div>
+
+<p><strong>inc</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns value + 1</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.inc(5);
+
+//6
+</code></pre>
+</div>
+
+<p><strong>geq</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: Returns true if a is greater or equal to b, false otherwise</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.geq(1, 1);
+
+//true
+
+j.geq(2, 1);
+
+//true
+
+j.geq(1, 2);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>greater</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: Returns true if a is greater than b, false otherwise</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.greater(2, 1);
+
+//true
+
+j.greater(1, 1);
+
+//false
+
+j.greater(1, 2);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>leq</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: Returns true if a is less or equal to b, false otherwise</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.leq(1, 2);
+
+//true
+
+j.leq(1, 1);
+
+//true
+
+j.leq(2, 1);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>less</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: Returns true if a is less than b, false otherwise</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.leq(1, 2);
+
+//true
+
+j.leq(1, 1);
+
+//true
+
+j.leq(2, 1);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>max</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: returns the max of either a or b. If no values are passed, max returns -Number.MAX_VALUE</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.max();
+
+//-1.7976931348623157e+308
+
+j.max(5);
+
+//5
+
+j.max(5, 6);
+
+//6
+</code></pre>
+</div>
+
+<p><strong>min</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: returns the minimum of either a or b. If no values are passed, min returns Number.MAX_VALUE</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.min();
+
+//1.7976931348623157e+308
+
+j.min(5);
+
+//5
+
+j.min(5, 6);
+
+//5
+</code></pre>
+</div>
+
+<p><strong>mod</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} a, {number} b</li>
+  <li>Description: Returns the modulus of a and b</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.mod(4, 2);
+
+//0
+
+j.mod(11, 4);
+
+//3
+</code></pre>
+</div>
+
+<p><strong>multiply</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] arguments</li>
+  <li>Description: Returns the product of all values passed to multiply</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.multiply();
+
+//1
+
+j.multiply(2);
+
+//2
+
+j.multiply(2, 3);
+
+//6
+
+j.multiply(2, 3, 4, 5);
+
+//120
+</code></pre>
+</div>
+
+<p><strong>range</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {int} a, {int} b, {int} inc</li>
+  <li>Description: returns range from a to b, excluding b, incremented by inc</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.range(4);
+
+//[0, 1, 2, 3]
+
+j.range(2, 10);
+
+//[2, 3, 4, 5, 6, 7, 8, 9]
+
+j.range(0, 20, 4);
+
+//[0, 4, 8, 12, 16]
+
+j.range(100, 0, -10);
+
+//[100, 90, 80, 70, 60, 50, 40, 30, 20, 10]
+</code></pre>
+</div>
+
+<p><strong>subtract</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] arguments</li>
+  <li>Description: Returns sum of the first value and the negative of all other provided values</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.subtract();
+
+//0
+
+j.subtract(1);
+
+//1
+
+j.subtract(3, 2);
+
+//1
+
+j.subtract(8, 5, 3, 2, 1);
+
+//-3
+</code></pre>
+</div>
+
+
+    </div>
+
+  </body>
+
+</html>

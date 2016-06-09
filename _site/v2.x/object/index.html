@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>JFP - Javascript Function Processor</title>
+  <meta name="description" content="JFP, the Javascript Function Processor is a language as a library functional programming utility for Javascript
+">
+
+  <link rel="stylesheet" href="/JFP/v2.x/css/screen.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://cmstead.github.io/JFP/v2.x/object/">
+  <link rel="alternate" type="application/rss+xml" title="JFP - Javascript Function Processor" href="http://cmstead.github.io/JFP/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header>
+    <div class="link-wrapper">
+        <div class="library-links">
+            <div class="release">
+                <a href="https://github.com/cmstead/JFP/releases">RELEASES</a>
+                <span>Current Version: v2.5.0</span>
+            </div>
+            <div>
+                <a href="https://github.com/cmstead/JFP/archive/v2.5.0.tar.gz">
+                    <i class="fa fa-arrow-circle-down"></i>TAR.GZ
+                </a>
+            </div>
+            <div>
+                <a href="https://github.com/cmstead/JFP/archive/v2.5.0.zip">
+                    <i class="fa fa-arrow-circle-down"></i>ZIP
+                </a>
+            </div>
+            <div>
+                <a href="https://www.npmjs.com/package/jfp" target="_blank">
+                    NPM
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="head-wrapper">
+        <div class="lambda">&lambda;</div>
+        <h1><a href="/JFP/v2.x/">JFP: Javascript Function Processor</a></h1>
+    </div>
+    <div class="menu-wrapper">
+        <ul class="menu">
+            <li><a href="/JFP/v2.x/array/">Array</a></li>
+            <li><a href="/JFP/v2.x/conditional/">Conditional</a></li>
+            <li><a href="/JFP/v2.x/conversion/">Conversion</a></li>
+            <li><a href="/JFP/v2.x/core/">Core</a></li>
+            <li><a href="/JFP/v2.x/math/">Math</a></li>
+            <li><a href="/JFP/v2.x/object/">Object</a></li>
+            <li><a href="/JFP/v2.x/predicate/">Predicate</a></li>
+        </ul>
+    </div>
+</header>
+
+
+
+    <div class="body-container">
+        <p>##Object Functions</p>
+
+<p><strong>clone</strong></p>
+
+<ul>
+  <li>Performance: O(n) where n is the count of elements in your object tree</li>
+  <li>Arguments: {any} object[, {int} depth]</li>
+  <li>Description: Deep clones an object or clones to a particular depth</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var original = { foo: 'bar', baz: ['quux'] },
+    clone = j.clone(original),
+    shallowCopy = j.clone(original, 0);
+
+JSON.stringify(original) === JSON.stringify(clone); // true
+original === clone; // false
+original.baz === clone.baz; // false
+
+original === shallowCopy; // false
+original.baz === shallowCopy.baz; // true
+</code></pre>
+</div>
+
+<p><strong>getKeys</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {object} value</li>
+  <li>Description: returns an array of keys. If obj is empty or value is not an object, getKeys will return an empty array</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var myObj = { foo: 'foo', bar: 'bar' };
+
+j.getKeys(myObj); // ['foo', 'bar']
+j.getKeys('Bloop!'); // []
+j.getKeys(null); // []
+</code></pre>
+</div>
+
+<p><strong>merge</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {object} defaultObject, {object} mergeData</li>
+  <li>Description: Merges data from mergeData into new object, filling missing data with default object</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var defaultData = {
+        1: 'foo',
+        2: 'bar',
+        3: 'baz'
+    },
+    mergeData = {
+        1: 'baz',
+        3: 'quux'
+    };
+
+j.merge(defaultData, mergeData);
+
+// {
+//     1: 'baz',
+//     2: 'bar',
+//     3: 'quux'
+// }
+</code></pre>
+</div>
+
+<p><strong>pick</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {string, number} key, {map} valueMap</li>
+  <li>Description: Returns value at key in valueMap</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.pick('test1', {
+    'test1': 'test value 1',
+    'test2': 'test value 2',
+    'test3': 'test value 3',
+});
+
+//test value 1
+
+j.pick('test1', { 'test2': 'not returned' });
+
+//null
+</code></pre>
+</div>
+
+<p><strong>pluck</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {string, number} key, {map} valueMap</li>
+  <li>Description: Returns object containing key and value from valueMap at key</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.pluck('test1', {
+    'test1': 'test value 1',
+    'test2': 'test value 2',
+    'test3': 'test value 3',
+});
+
+//{ 'test1': 'test value 1' }
+</code></pre>
+</div>
+
+<p><strong>pluckKeys</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {array of strings or numbers} keys, {map} valueMap</li>
+  <li>Description: Returns object containing keys and values from valueMap at keys</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.pluckKeys(['test1', 'test3'], {
+    'test1': 'test value 1',
+    'test2': 'test value 2',
+    'test3': 'test value 3',
+});
+
+//{ 'test1': 'test value 1', 'test3': 'test value 3' }
+</code></pre>
+</div>
+
+<p><strong>transform</strong></p>
+
+<ul>
+  <li>Performance: O(n) to O(n^2) – O(n^2) is pathological case</li>
+  <li>Arguments: {array} transformPairs, {object} obj</li>
+  <li>Description: transforms array from any one structure to a flattened new structure – each pair represents a from key and a to key. The from key will be dereferenced and a new property will be assigned to the to-key. Any non-pair values in the array will be ignored.</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var myObj = {
+    test: 'bar',
+    bar: {
+        value: 'bar',
+        baz: {
+            value: 'quux'
+        }
+    }
+},
+newObj = j.transform([['test', 'foo'], ['bar.baz', 'baz']], myObj);
+
+JSON.stringify(newObj); // {"foo":"bar","baz":"quux"}
+</code></pre>
+</div>
+
+
+    </div>
+
+  </body>
+
+</html>

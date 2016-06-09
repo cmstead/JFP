@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>JFP - Javascript Function Processor</title>
+  <meta name="description" content="JFP, the Javascript Function Processor is a language as a library functional programming utility for Javascript
+">
+
+  <link rel="stylesheet" href="/JFP/v2.x/css/screen.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://cmstead.github.io/JFP/v2.x/core/">
+  <link rel="alternate" type="application/rss+xml" title="JFP - Javascript Function Processor" href="http://cmstead.github.io/JFP/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header>
+    <div class="link-wrapper">
+        <div class="library-links">
+            <div class="release">
+                <a href="https://github.com/cmstead/JFP/releases">RELEASES</a>
+                <span>Current Version: v2.5.0</span>
+            </div>
+            <div>
+                <a href="https://github.com/cmstead/JFP/archive/v2.5.0.tar.gz">
+                    <i class="fa fa-arrow-circle-down"></i>TAR.GZ
+                </a>
+            </div>
+            <div>
+                <a href="https://github.com/cmstead/JFP/archive/v2.5.0.zip">
+                    <i class="fa fa-arrow-circle-down"></i>ZIP
+                </a>
+            </div>
+            <div>
+                <a href="https://www.npmjs.com/package/jfp" target="_blank">
+                    NPM
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="head-wrapper">
+        <div class="lambda">&lambda;</div>
+        <h1><a href="/JFP/v2.x/">JFP: Javascript Function Processor</a></h1>
+    </div>
+    <div class="menu-wrapper">
+        <ul class="menu">
+            <li><a href="/JFP/v2.x/array/">Array</a></li>
+            <li><a href="/JFP/v2.x/conditional/">Conditional</a></li>
+            <li><a href="/JFP/v2.x/conversion/">Conversion</a></li>
+            <li><a href="/JFP/v2.x/core/">Core</a></li>
+            <li><a href="/JFP/v2.x/math/">Math</a></li>
+            <li><a href="/JFP/v2.x/object/">Object</a></li>
+            <li><a href="/JFP/v2.x/predicate/">Predicate</a></li>
+        </ul>
+    </div>
+</header>
+
+
+
+    <div class="body-container">
+        <p>##Core Functions</p>
+
+<p><strong>j</strong></p>
+
+<ul>
+  <li>Performance: Identical to j.curry</li>
+  <li>Arguments: {string} jfpFunctionName[, {any} arguments]</li>
+  <li>Description: Shorthand for j.curry, only accepts string arguments for jfp functions</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j('conj')(1)([2, 3, 4]); // [1, 2, 3, 4]
+j('pick', 'key')({ key: 'foo' }); // 'foo'
+</code></pre>
+</div>
+
+<p><strong>always</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns a function which always returns provided value. Returns null if original argument is undefined</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var alwaysTrue = j.always(true),
+    alwaysFoo = j.always('foo');
+
+alwaysTrue(); // true
+alwaysFoo('bar'); // 'foo'
+
+j.filter(alwaysTrue, [1, 2, 3, 4]); // [1, 2, 3, 4] -- identity filter
+</code></pre>
+</div>
+
+<p><strong>apply</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {function} userFn, {array} values</li>
+  <li>Description: Calls provided function with values in passed array</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function add(a, b){
+    return a + b;
+}
+
+j.apply(add, [1, 2]);
+
+//3
+</code></pre>
+</div>
+
+<p><strong>compose</strong></p>
+
+<ul>
+  <li>Performance: O(n) on setup where n is the function count, O(1) at execution time</li>
+  <li>Arguments: {function} [arguments]</li>
+  <li>Description: Performs function composition on functions provided</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function isUndefined(value){
+    return typeof value === 'undefined';
+}
+
+function not(value){
+    return !value;
+}
+
+var notUndefined = j.compose(not, isUndefined);
+
+notUndefined(null);
+
+//true
+
+notUndefined(undefined);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>countArguments</strong></p>
+
+<ul>
+  <li>Performance: unmeasured</li>
+  <li>Arguments: {function} userFn</li>
+  <li>Description: Counts the number of arguments required for a function</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.countArguments(function(arg1, arg2, arg3){});
+
+//3
+</code></pre>
+</div>
+
+<p><strong>curry</strong></p>
+
+<ul>
+  <li>Performance: unmeasured - relies on countArguments</li>
+  <li>Arguments: {function} userFn, [optional] arguments</li>
+  <li>Description: Curries function based on argument count – partial application special case</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function add(a, b);
+
+j.curry(add)(1)(2);
+
+//3
+
+j.curry(add, 1)(2);
+
+//3
+
+j.curry(add, 1, 2);
+
+//3
+</code></pre>
+</div>
+
+<p><strong>deref</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Arguments: {string} deepReference, {object</td>
+          <td>array} source</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Optional argument arrangement: {object</td>
+          <td>array} source, {string} deepReference</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>Description: Deref resolves a dot-delimited deep object reference</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var myObj = {
+    data: {
+        aList: [
+            'foo',
+            'bar',
+            'baz'
+        ]
+    }
+};
+
+j.deref('data.aList.1', myObj); // bar
+j.deref('data.aList.baz', myObj); // null
+</code></pre>
+</div>
+
+<p><strong>empty</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {string} type</li>
+  <li>Description: returns empty value of type “type”</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.empty('object'); // {}
+j.empty('array'); // []
+j.empty('boolean'); // false
+</code></pre>
+</div>
+
+<p><strong>execute</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {function} userFn, [optional] arguments</li>
+  <li>Description: Executes function with provided arguments</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.execute(j.add); // 0
+j.execute(j.add, 5); // 5
+j.execute(j.add, 5, 7); // 12
+</code></pre>
+</div>
+
+<p><strong>getType</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any}</li>
+  <li>Description: returns type of value; handles array case</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.getType('foo'); // string
+j.getType({}); // object
+j.getType([]); // array
+</code></pre>
+</div>
+
+<p><strong>identity</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns value passed in, via direct return</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.identity('my value');
+
+//my value
+</code></pre>
+</div>
+
+<p><strong>partial</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {function} userFn, [optional] arguments</li>
+  <li>Description: Generalized partial application function.</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function divide(a, b){
+    return a / b;
+}
+
+j.partial(divide, 6)(2);
+
+//3
+</code></pre>
+</div>
+
+<p><strong>partialReverse</strong></p>
+
+<ul>
+  <li>Performance: O(n) where n is the number of arguments</li>
+  <li>Arguments: {function} userFn[, {any} arguments]</li>
+  <li>Description: Performs partial application and returns a function with remaining arguments reversed</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function concatThree(astr, bstr, cstr){
+    return astr + bstr + cstr;
+}
+
+j.partialReverse(concatThree, 'foo')('bar', 'baz'); // foobazbar
+</code></pre>
+</div>
+
+<p><strong>pipeline</strong></p>
+
+<ul>
+  <li>Performance: O(n) where n is the number of functions</li>
+  <li>Arguments: {any} value {function} pipelinedFunctions</li>
+  <li>Description: Executes functions in order, passing value to first and output from previous to input of next</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.pipeline([1, 2, 3, 4],
+           j('reduce', j.add, 0),
+           j('multiply', 3));
+// 30
+</code></pre>
+</div>
+
+<p><strong>recur</strong></p>
+
+<ul>
+  <li>Performance: O(n) - best case, depends on outside operations</li>
+  <li>Arguments: {function} userFn, [optional] arguments</li>
+  <li>Description: Tail-optimized recursion function</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function factorial(recur, base, result){
+    var sanitizedResult = j.either(1, result);
+    return (base &gt;= 0) ? recur(base - 1, sanitizedResult * base) : sanitizedResult;
+}
+
+j.recur(factorial, 5);
+
+//120
+</code></pre>
+</div>
+
+<p><strong>reverseArgs</strong></p>
+
+<ul>
+  <li>Performance: O(1) on return, O(n) on function execution, where n is the number of arguments</li>
+  <li>Arguments: {function} userFn</li>
+  <li>Description: Returns a function which takes arguments in reverse order</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function strConcat(astr, bstr){
+    return astr + bstr;
+}
+
+j.reverseArgs(strConcat)('foo', 'bar'); // barfoo
+</code></pre>
+</div>
+
+<p><strong>rpartial</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {function} userFn, [optional] arguments</li>
+  <li>Description: partial application, applies initial arguments to the right-most position of userFn</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function divide(a, b){
+return a / b;
+}
+
+j.rpartial(divide, 4)(2);
+
+//0.5
+</code></pre>
+</div>
+
+<p><strong>splitPartial</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {function} userFn[, {array} leftArguments[, {array} rightArguments]]</li>
+  <li>Description: partially applies left and right arguments to a function, resolving remaining arguments in the middle</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function addToFakeSet (obj, value) {
+    obj[key] = true;
+    return obj;
+}
+
+var reduceToSet = j.splitPartial(j.reduce, [addToFakeSet], [{}]);
+
+reduceToSet([1, 2, 3, 4, 2, 5, 1, 1, 3]); // { 1: true, 2: true, 3: true, 4: true, 5: true }
+</code></pre>
+</div>
+
+<p><strong>shortCircuit</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} defaultValue, {function} userFn, {any} testValue</li>
+  <li>Description: Tests testValue for truthy value, if true, userFn is executed with testValue, otherwise returns default value</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.shortCircuit(0, j('apply', j.add), [1, 2]); // 3
+j.shortCircuit(0, j('apply', j.add), null); // 0
+</code></pre>
+</div>
+
+
+    </div>
+
+  </body>
+
+</html>

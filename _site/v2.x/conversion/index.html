@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>JFP - Javascript Function Processor</title>
+  <meta name="description" content="JFP, the Javascript Function Processor is a language as a library functional programming utility for Javascript
+">
+
+  <link rel="stylesheet" href="/JFP/v2.x/css/screen.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://cmstead.github.io/JFP/v2.x/conversion/">
+  <link rel="alternate" type="application/rss+xml" title="JFP - Javascript Function Processor" href="http://cmstead.github.io/JFP/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header>
+    <div class="link-wrapper">
+        <div class="library-links">
+            <div class="release">
+                <a href="https://github.com/cmstead/JFP/releases">RELEASES</a>
+                <span>Current Version: v2.5.0</span>
+            </div>
+            <div>
+                <a href="https://github.com/cmstead/JFP/archive/v2.5.0.tar.gz">
+                    <i class="fa fa-arrow-circle-down"></i>TAR.GZ
+                </a>
+            </div>
+            <div>
+                <a href="https://github.com/cmstead/JFP/archive/v2.5.0.zip">
+                    <i class="fa fa-arrow-circle-down"></i>ZIP
+                </a>
+            </div>
+            <div>
+                <a href="https://www.npmjs.com/package/jfp" target="_blank">
+                    NPM
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="head-wrapper">
+        <div class="lambda">&lambda;</div>
+        <h1><a href="/JFP/v2.x/">JFP: Javascript Function Processor</a></h1>
+    </div>
+    <div class="menu-wrapper">
+        <ul class="menu">
+            <li><a href="/JFP/v2.x/array/">Array</a></li>
+            <li><a href="/JFP/v2.x/conditional/">Conditional</a></li>
+            <li><a href="/JFP/v2.x/conversion/">Conversion</a></li>
+            <li><a href="/JFP/v2.x/core/">Core</a></li>
+            <li><a href="/JFP/v2.x/math/">Math</a></li>
+            <li><a href="/JFP/v2.x/object/">Object</a></li>
+            <li><a href="/JFP/v2.x/predicate/">Predicate</a></li>
+        </ul>
+    </div>
+</header>
+
+
+
+    <div class="body-container">
+        <p>##Conversion Functions</p>
+
+<p><strong>toDec</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {string or number} value</li>
+  <li>Description: Converts string or numeric value to decimal value</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.toDec('1.234');
+
+// 1.234
+
+j.toDec(0xA);
+
+// 11
+
+j.toDec(010);
+
+// 8
+</code></pre>
+</div>
+
+<p><strong>toValues</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {map} valueMap</li>
+  <li>Description: Returns array of values contained in hashmap</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.toValues({
+    1: "Value 1",
+    2: "Value 2",
+    3: "Value 3",
+    4: "Value 4",
+});
+
+// [ "Value 1", "Value 2", "Value 3", "Value 4" ]
+</code></pre>
+</div>
+
+
+    </div>
+
+  </body>
+
+</html>

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>JFP - Javascript Function Processor</title>
+  <meta name="description" content="JFP, the Javascript Function Processor is a language as a library functional programming utility for Javascript
+">
+
+  <link rel="stylesheet" href="/JFP/v2.x/css/screen.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://cmstead.github.io/JFP/v2.x/predicate/">
+  <link rel="alternate" type="application/rss+xml" title="JFP - Javascript Function Processor" href="http://cmstead.github.io/JFP/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header>
+    <div class="link-wrapper">
+        <div class="library-links">
+            <div class="release">
+                <a href="https://github.com/cmstead/JFP/releases">RELEASES</a>
+                <span>Current Version: v2.5.0</span>
+            </div>
+            <div>
+                <a href="https://github.com/cmstead/JFP/archive/v2.5.0.tar.gz">
+                    <i class="fa fa-arrow-circle-down"></i>TAR.GZ
+                </a>
+            </div>
+            <div>
+                <a href="https://github.com/cmstead/JFP/archive/v2.5.0.zip">
+                    <i class="fa fa-arrow-circle-down"></i>ZIP
+                </a>
+            </div>
+            <div>
+                <a href="https://www.npmjs.com/package/jfp" target="_blank">
+                    NPM
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="head-wrapper">
+        <div class="lambda">&lambda;</div>
+        <h1><a href="/JFP/v2.x/">JFP: Javascript Function Processor</a></h1>
+    </div>
+    <div class="menu-wrapper">
+        <ul class="menu">
+            <li><a href="/JFP/v2.x/array/">Array</a></li>
+            <li><a href="/JFP/v2.x/conditional/">Conditional</a></li>
+            <li><a href="/JFP/v2.x/conversion/">Conversion</a></li>
+            <li><a href="/JFP/v2.x/core/">Core</a></li>
+            <li><a href="/JFP/v2.x/math/">Math</a></li>
+            <li><a href="/JFP/v2.x/object/">Object</a></li>
+            <li><a href="/JFP/v2.x/predicate/">Predicate</a></li>
+        </ul>
+    </div>
+</header>
+
+
+
+    <div class="body-container">
+        <p>##Predicate Functions</p>
+
+<p><strong>and</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] {boolean} arguments</li>
+  <li>Description: Checks that all provided values are truthy</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.and();
+
+//true
+
+j.and(true, 1);
+
+//true
+
+j.and(true, false);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>composePredicate</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: {function} predicate[, … {function} predicate[, {function} combinator]]</li>
+  <li>Description: composes predicates using either the “and” or the “or” combinator to produce a new composite predcate function</li>
+  <li>Note: Combinator must be j.or or j.and all other functions will be treated as predicates</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var between3And5 = j.composePredicate(j('less', 3), j('greater', 5)),
+    multipleOf3Or5 = j.composePredicate(j('isMultipleOf', 3), j('isMultipleOf', 5), j.or);
+
+j.filter(between3And5, [1, 2, 3, 4, 5]); // [4]
+j.filter(multipleOf3Or5, [1, 2, 3, 4, 5, 6]); // [3, 5, 6]
+</code></pre>
+</div>
+
+<p><strong>isArray</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is an array, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isArray([]);
+
+//true
+
+j.isArray({});
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isBoolean</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is a boolean value, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isBoolean(false);
+
+//true
+
+j.isBoolean('true');
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isEven</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is even, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isEven(2);
+
+//true
+
+j.isEven(3);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isInt</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is an integer, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isInt(2);
+
+//true
+
+j.isInt(3.14159);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isMultiple</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {int} baseValue, {int} testValue</li>
+  <li>Description: returns true if testValue is a multiple of baseValue else false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isMultiple(3, 6); // true
+j.isMultiple(2, 15); // false
+</code></pre>
+</div>
+
+<p><strong>isNegative</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is less than 0, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isNegative(-2);
+
+//true
+
+j.isNegative(5);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isNonNegative</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is 0 or greater, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isNonNegative(0);
+
+//true
+
+j.isNonNegative(3);
+
+//true
+
+j.isNonNegative(-5);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isNonPositive</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is 0 or less, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isNonPositive(0);
+
+//true
+
+j.isNonPositive(-2);
+
+//true
+
+j.isNonPositive(7);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isNonZero</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is not 0, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isNonZero(6);
+
+//true
+
+j.isNonZero(-2.85);
+
+//true
+
+j.isNonZero(0);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isNull</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is null, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isNull(null);
+
+//true
+
+j.isNull(undefined);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isNumber</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is a number, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isNumber(1234);
+
+//true
+
+j.isNumber(0x1A);
+
+//true
+
+j.isNumber('1234);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isNumeric</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is a number or a string matching a numeric pattern, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isNumeric(1234.33);
+
+//true
+
+j.isNumeric('0x1A');
+
+//true
+
+j.isNumeric('1234');
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isObject</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is an object, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isObject({});
+
+//true
+
+j.isObject([]);
+
+//true
+
+j.isObject(undefined);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isOdd</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is odd, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isOdd(3);
+
+//true
+
+j.isOdd(10);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isPair</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {array} value</li>
+  <li>Description: Verifies provided value is an array of length 2. Shorthand for j(‘isTuple’, 2)</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isPair(null); // false
+j.isPair([1, 2]); // true
+j.isPair([1, 2, 3, 4]); // false
+</code></pre>
+</div>
+
+<p><strong>isPositive</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number greater than 0, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isPositive(3);
+
+//true
+
+j.isPositive(-2.414);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isPrimitive</strong></p>
+
+<ul>
+  <li>Performance: O(1);</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: returns true if value has a primitive type, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isPrimitive(55); // true
+j.isPrimitive({}); // false
+</code></pre>
+</div>
+
+<p><strong>isSingle</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {array} value</li>
+  <li>Description: Verifies provided value is an array of length 1. Shorthand for j(‘isTuple’, 1)</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isSingle(null); // false
+j.isSingle([1]); // true
+j.isSingle([1, 2, 3, 4]); // false
+</code></pre>
+</div>
+
+<p><strong>isString</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is a string, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isString('A string');
+
+//true
+
+j.isString([]);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isTriple</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {array} value</li>
+  <li>Description: Verifies provided value is an array of length 3. Shorthand for j(‘isTuple’, 3)</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isTriple(null); // false
+j.isTriple([1, 2, 3]); // true
+j.isTriple([1, 2, 3, 4]); // false
+</code></pre>
+</div>
+
+<p><strong>isTruthy</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value resolves to truthy, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isTruthy(true);
+
+//true
+
+j.isTruthy(1);
+
+//true
+
+j.isTruthy('I am a string.');
+
+//true
+
+j.isTruthy(null);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isTuple</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {int} size, {array} value</li>
+  <li>Description: Verifies provided value is an array and that the array is of length “size”</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isTuple(3, null); // false
+j.isTuple(2, [1, 2]); // true
+j.isTuple(1, [1, 2, 3, 4]); // false
+</code></pre>
+</div>
+
+<p><strong>isType</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {string} typeString, {any} value</li>
+  <li>Description: returns true if value type and typeString match</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isType('string', 'foo'); // true
+j.isType('string', null); // false
+j.isType('array', []); // true
+</code></pre>
+</div>
+
+<p><strong>isUndefined</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is undefined, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isUndefined(undefined);
+
+//true
+
+j.isUndefined(null);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>isZero</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {number} value</li>
+  <li>Description: returns true if number is 0, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.isZero(0);
+
+//true
+
+j.isZero(1);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>not</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {any} value</li>
+  <li>Description: Returns true if value is falsey, otherwise false</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.not(true);
+
+//false
+
+j.not(0);
+
+//true
+</code></pre>
+</div>
+
+<p><strong>or</strong></p>
+
+<ul>
+  <li>Performance: O(n)</li>
+  <li>Arguments: [optional] {boolean} arguments</li>
+  <li>Description: Checks that any of the provided values are truthy</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.or();
+
+//false
+
+j.or(true);
+
+//true
+
+j.or(true, false, 'true');
+
+//true
+
+j.or(0, false, null);
+
+//false
+</code></pre>
+</div>
+
+<p><strong>xor</strong></p>
+
+<ul>
+  <li>Performance: O(1)</li>
+  <li>Arguments: {boolean} a, {boolean} b</li>
+  <li>Description: performs an exclusive or check on passed boolean values</li>
+</ul>
+
+<p>####Example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>j.xor(true, false);
+
+//true
+
+j.xor(false, true);
+
+//true
+
+j.xor(true, true);
+
+//false
+
+j.xor(false, false);
+
+//false
+</code></pre>
+</div>
+
+
+    </div>
+
+  </body>
+
+</html>
