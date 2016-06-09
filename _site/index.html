@@ -129,18 +129,21 @@
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">string =&gt; function</code></li>
+  <li>Performance: O(n) (for n = number of leaves in type tree)</li>
 </ul>
 
 <h3 id="istypeof">isTypeOf</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">string =&gt; * =&gt; boolean</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="setjfptypes">setJfpTypes</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">signet =&gt; signet</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="type-list">Type List</h3>
@@ -248,96 +251,112 @@
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">* =&gt; [*] =&gt; *</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="apply">apply</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function, array&lt;*&gt; =&gt; *</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="compose">compose</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[function] =&gt; function</code></li>
+  <li>Performance: O(n) (for n = length of function list)</li>
 </ul>
 
 <h3 id="concat">concat</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">array&lt;*&gt;, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="conj">conj</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">*, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n) (based on slice performance)</li>
 </ul>
 
 <h3 id="cons">cons</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">*, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n) (based on slice performance)</li>
 </ul>
 
 <h3 id="curry">curry</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function, [int], [array&lt;*&gt;] =&gt; [*] =&gt; *</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="rcurry">rcurry</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function, [int], [array&lt;*&gt;] =&gt; [*] =&gt; *</code></li>
+  <li>performance: O(1)</li>
 </ul>
 
 <h3 id="either">either</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">string =&gt; * =&gt; * =&gt; *</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="identity">identity</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">* =&gt; *</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="maybe">maybe</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">string =&gt; * =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="partial">partial</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function, [*] =&gt; [*] =&gt; *</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="recur">recur</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function =&gt; function</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="reverseargs">reverseArgs</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function =&gt; [*] =&gt; *</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="slice">slice</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">int, [int] =&gt; taggedUnion&lt;array&lt;*&gt;;arguments&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n) (estimated JS performance characteristic)</li>
 </ul>
 
 <h3 id="cond">cond</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function&lt;function;function;boolean&gt; =&gt; *</code></li>
+  <li>Performance: O(n) (for n = number of conditions)</li>
 </ul>
 
 <h2 id="array-1">Array</h2>
@@ -346,102 +365,119 @@
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function =&gt; array&lt;*&gt; =&gt; boolean</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="compact">compact</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[array] =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="dropnth">dropNth</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">index =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n) (based on the performance of splice)</li>
 </ul>
 
 <h3 id="filter">filter</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="first">first</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">array&lt;*&gt; =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="find">find</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function&lt;*&gt; =&gt; array&lt;*&gt; =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="foldl">foldl</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function, [*] =&gt; array&lt;*&gt; =&gt; *</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="foldr">foldr</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function, [*] =&gt; array&lt;*&gt; =&gt; *</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="lastindexof">lastIndexOf</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">array&lt;*&gt; =&gt; index</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="map">map</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="none">none</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function =&gt; array&lt;*&gt; =&gt; boolean</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="nth">nth</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">index =&gt; array&lt;*&gt; =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="rest">rest</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">taggedUnion&lt;array&lt;*&gt;;arguments&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n) (based on performance of slice)</li>
 </ul>
 
 <h3 id="reverse">reverse</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="some">some</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function =&gt; array&lt;*&gt; =&gt; boolean</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="sort">sort</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[*] =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Performance: O(n) + quicksort perf</li>
 </ul>
 
 <h3 id="take">take</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[index] =&gt; function&lt;array&lt;*&gt;&gt;</code></li>
+  <li>Performance: O(n) (based on performance of slice)</li>
 </ul>
 
 <h2 id="math-1">Math</h2>
@@ -450,120 +486,140 @@
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">number, number =&gt; number</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="divide">divide</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">number, number =&gt; number</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="mod">mod</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">number, number =&gt; number</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="multiply">multiply</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">number, number =&gt; number</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="subtract">subtract</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">number, number =&gt; number</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="addby">addBy</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="divideby">divideBy</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="modby">modBy</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="multiplyby">multiplyBy</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="subtractby">subtractBy</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="min">min</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="max">max</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="inc">inc</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[int] =&gt; int</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="dec">dec</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">[int] =&gt; int</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="range">range</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">int, [int] =&gt; int =&gt; array&lt;int&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="gt">gt</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">number =&gt; number =&gt; boolean</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="geq">geq</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">number =&gt; number =&gt; boolean</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="lt">lt</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">number =&gt; number =&gt; boolean</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="leq">leq</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">number =&gt; number =&gt; boolean</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="between">between</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">number, number =&gt; number =&gt; boolean</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h2 id="object-1">Object</h2>
@@ -572,30 +628,35 @@
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">string =&gt; object =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="deref">deref</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">string =&gt; object =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Performance: O(n) (depends on key token length)</li>
 </ul>
 
 <h3 id="merge">merge</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">object, object =&gt; object</code></li>
+  <li>Performance: O(n)</li>
 </ul>
 
 <h3 id="toarray">toArray</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">object =&gt; array&lt;tuple&lt;objectKey;*&gt;&gt;</code></li>
+  <li>Performance: O(n) (for n = number of keys)</li>
 </ul>
 
 <h3 id="toobject">toObject</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">array&lt;tuple&lt;objectKey;*&gt;&gt; =&gt; object</code></li>
+  <li>Performance: O(n) (for n = length of array)</li>
 </ul>
 
 <h2 id="predicates">Predicates</h2>
@@ -604,49 +665,58 @@
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">function =&gt; function</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="equal">equal</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="and">and</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="or">or</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="xor">xor</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="not">not</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">comparable =&gt; boolean</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="isnil">isNil</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">* =&gt; boolean</code></li>
+  <li>Performance: O(1)</li>
 </ul>
 
 <h3 id="isundefined">isUndefined</h3>
 
 <ul>
   <li>Signature: <code class="highlighter-rouge">* =&gt; boolean</code></li>
+  <li>Performance: O(1)</li>
 </ul>
+
 
     </div>
 
