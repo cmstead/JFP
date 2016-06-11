@@ -188,25 +188,66 @@ j.either('number')(5)('foo'); // 5
 - Signature: `* => *`
 - Performance: O(1)
 
+```
+j.identity('foo'); // foo
+j.identity(42); // 42
+```
+
 ### maybe
 
 - Signature: `string => * => maybe<defined>`
 - Performance: O(1)
+
+```
+j.maybe('string')('foo'); // 'foo'
+j.maybe('number')('foo'); // j.nil
+```
 
 ### partial
 
 - Signature: `function, [*] => [*] => *`
 - Performance: O(1)
 
+```
+function add (a, b) {
+    return a + b;
+}
+
+var inc = j.partial(add, 1);
+
+inc(1); // 2
+inc(5); // 6
+
+inc(inc(inc(inc(1)))); // 4
+```
+
 ### recur
 
 - Signature: `function => function`
 - Performance: O(1)
 
+```
+var isUndefined = j.isTypeOf('undefined');
+var isNil = j.isTypeOf('nil');
+
+var sum = j.recur(function (recur, values, total) {
+    var result = isUndefined(total) ? 0 : total;
+    return isNil(values) ? total : recur(j.rest(values), total + j.first(values));
+});
+```
+
 ### reverseArgs
 
 - Signature: `function => [*] => *`
 - Performance: O(n)
+
+```
+function divide (a, b) {
+    return a / b;
+}
+
+j.reverseArgs(divide)(2, 12); // 6
+```
 
 ### slice
 
