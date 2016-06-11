@@ -3,25 +3,21 @@ body{
   font-family: helvetica, arial, sans-serif;
   font-size: 16px;
   text-align: center;
+  line-height: 1.8em !important;
 }
 
-a{
-  color: $link-color;
+a:link, a:visited, a:active, a:hover{
+  color: $link-color !important;
+  text-decoration: none !important;
+  
 }
 
-dl{
-  margin-bottom: 15px;
-}
-
-dt{
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 2em;
-}
-
-dd{
-  line-height: 1.6em;
-  margin-left: 15px;
+a {
+  border-bottom: 1px dotted;
+  
+  &:hover {
+    border-bottom: 1px solid;
+  }
 }
 
 h1{
@@ -37,13 +33,22 @@ h1{
 
 h2{
   font-size: 24px;
-  font-weight: bold;
+  font-weight: normal;
   line-height: 1.8em;
+  margin-top: 1.4rem;
+  margin-left: -20px;
 }
 
-h4{
-  font-size: 16px;
-  font-weight: bold;
+h3 {
+  font-size: 18px;
+  font-weight: normal;
+  margin-top: 2.4rem;
+  margin-bottom: 1.8rem;
+}
+
+pre {
+  margin-top: 1.6rem;
+  padding: 10px;
 }
 
 p{
@@ -79,4 +84,32 @@ ol{
   margin: 45px auto 45px auto;
   text-align: left;
   width: 960px;
+}
+
+#function-list {
+  border: 1px solid #ccc;
+  border-width: 0 1px 0 0;
+  float: left;
+  margin-right: 10%;
+  width: 17%;
+  opacity: 0.4;
+  
+  &:hover {
+    opacity: 1;
+  }
+  
+  ul{
+    margin: 10px;
+  }
+  
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+#function-info {
+  float:left;
+  width: 70%;
 }

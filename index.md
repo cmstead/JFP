@@ -2,5 +2,10 @@
 layout: default
 ---
 
-{% include content/sidebar.md %}
-{% include content/index.md %}
+<div id="function-list">
+    {% markdown content/sidebar.md %}
+</div>
+
+<div id="function-info">
+    {% markdown content/index.md %}
+</div>

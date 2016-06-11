@@ -10,7 +10,7 @@
   <meta name="description" content="JFP, the Javascript Function Processor is a language as a library functional programming utility for Javascript
 ">
 
-  <link rel="stylesheet" href="/JFP/v2.x/css/screen.css">
+  <link rel="stylesheet" href="/JFP/css/screen.css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -24,7 +24,8 @@
     
 
     <div class="body-container">
-        <h3 id="types">Types</h3>
+      <div id="function-list">
+    <h3 id="types">Types</h3>
 
 <ul>
   <li><a href="#enforce">enforce</a></li>
@@ -121,677 +122,873 @@
   <li><a href="#xor">xor</a></li>
   <li><a href="#not">not</a></li>
   <li><a href="#isnil">isNil</a></li>
-  <li><a href="#isundefined">isUndefined</a>
-## Types</li>
+  <li><a href="#isundefined">isUndefined</a></li>
 </ul>
+
+</div>
+
+<div id="function-info">
+    <h2 id="types">Types</h2>
 
 <h3 id="enforce">enforce</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">string =&gt; function</code></li>
+  <li>Signature: <code>string =&gt; function</code></li>
   <li>Performance: O(n) (for n = number of leaves in type tree)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>var add = j.enforce('number, number =&gt; number', function add (a, b) { return a + b; });
+<pre><code>var add = j.enforce('number, number =&gt; number', function add (a, b) { return a + b; });
 </code></pre>
-</div>
 
 <h3 id="istypeof">isTypeOf</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">string =&gt; * =&gt; boolean</code></li>
+  <li>Signature: <code>string =&gt; * =&gt; boolean</code></li>
   <li>Performance: O(1)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>j.isTypeOf('string')(5); // false
-j,.isTypeOf('nil')(j.nil); // true
+<pre><code>j.isTypeOf('string')(5); // false
+j.isTypeOf('nil')(j.nil); // true
 </code></pre>
-</div>
 
 <h3 id="setjfptypes">setJfpTypes</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">signet =&gt; signet</code></li>
+  <li>Signature: <code>signet =&gt; signet</code></li>
   <li>Performance: O(1)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>var signetFactory = require('signet');
+<pre><code>var signetFactory = require('signet');
 
 var signet = setJfpTypes(signetFactory());
 </code></pre>
-</div>
 
 <h3 id="type-list">Type List</h3>
 
 <ul>
-  <li><code class="highlighter-rouge">()</code></li>
-  <li><code class="highlighter-rouge">*</code></li>
-  <li><code class="highlighter-rouge">boolean</code></li>
-  <li><code class="highlighter-rouge">function</code></li>
-  <li><code class="highlighter-rouge">number</code></li>
-  <li><code class="highlighter-rouge">object</code></li>
-  <li><code class="highlighter-rouge">string</code></li>
-  <li><code class="highlighter-rouge">symbol</code></li>
-  <li><code class="highlighter-rouge">undefined</code></li>
-  <li><code class="highlighter-rouge">array</code>
-    <ul>
-      <li><code class="highlighter-rouge">object -&gt; array</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">int</code>
-    <ul>
-      <li><code class="highlighter-rouge">number -&gt; int</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">bounded&lt;&gt;</code>
-    <ul>
-      <li><code class="highlighter-rouge">number -&gt; bounded</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">boundedInt&lt;&gt;</code>
-    <ul>
-      <li><code class="highlighter-rouge">number -&gt; int -&gt; bounded</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">tuple&lt;&gt;</code>
-    <ul>
-      <li><code class="highlighter-rouge">object -&gt; array -&gt; tuple</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">boundedString&lt;&gt;</code>
-    <ul>
-      <li><code class="highlighter-rouge">string -&gt; boundedString</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">formattedString&lt;&gt;</code>
-    <ul>
-      <li><code class="highlighter-rouge">string -&gt; formattedString</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">taggedUnion&lt;&gt;</code>
-    <ul>
-      <li><code class="highlighter-rouge">* -&gt; taggedUnion</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">nil</code>
-    <ul>
-      <li><code class="highlighter-rouge">object -&gt; array -&gt; nil</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">index</code>
-    <ul>
-      <li><code class="highlighter-rouge">number -&gt; int -&gt; index</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">arguments</code>
-    <ul>
-      <li><code class="highlighter-rouge">object -&gt; arguments</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">maybe</code>
-    <ul>
-      <li><code class="highlighter-rouge">* -&gt; maybe</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">null</code>
-    <ul>
-      <li><code class="highlighter-rouge">object -&gt; null</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">defined</code>
-    <ul>
-      <li><code class="highlighter-rouge">* -&gt; defined</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">numeric</code>
-    <ul>
-      <li><code class="highlighter-rouge">* -&gt; numeric</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">comparable</code>
-    <ul>
-      <li><code class="highlighter-rouge">* -&gt; comparable</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">objectKey</code>
-    <ul>
-      <li><code class="highlighter-rouge">* -&gt; objectKey</code></li>
-    </ul>
-  </li>
+  <li><code>()</code></li>
+  <li><code>*</code></li>
+  <li><code>boolean</code></li>
+  <li><code>function</code></li>
+  <li><code>number</code></li>
+  <li><code>object</code></li>
+  <li><code>string</code></li>
+  <li><code>symbol</code></li>
+  <li><code>undefined</code></li>
+  <li><code>array</code></li>
+  <li><code>int</code></li>
+  <li><code>bounded&lt;&gt;</code></li>
+  <li><code>boundedInt&lt;&gt;</code></li>
+  <li><code>tuple&lt;&gt;</code></li>
+  <li><code>boundedString&lt;&gt;</code></li>
+  <li><code>formattedString&lt;&gt;</code></li>
+  <li><code>taggedUnion&lt;&gt;</code></li>
+  <li><code>nil</code></li>
+  <li><code>index</code></li>
+  <li><code>arguments</code></li>
+  <li><code>maybe</code></li>
+  <li><code>null</code></li>
+  <li><code>defined</code></li>
+  <li><code>numeric</code></li>
+  <li><code>comparable</code></li>
+  <li><code>objectKey</code></li>
 </ul>
 
-<h2 id="core-1">Core</h2>
+<h2 id="core">Core</h2>
 
 <h3 id="always">always</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">* =&gt; [*] =&gt; *</code></li>
+  <li>Signature: <code>* =&gt; [*] =&gt; *</code></li>
   <li>Performance: O(1)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>var alwaysTrue = j.always(true);
+<pre><code>var alwaysTrue = j.always(true);
 
 alwaysTrue(); // true
 alwaysTrue('over 9000'); // true
 </code></pre>
-</div>
 
 <h3 id="apply">apply</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function, array&lt;*&gt; =&gt; *</code></li>
+  <li>Signature: <code>function, array&lt;*&gt; =&gt; *</code></li>
   <li>Performance: O(1)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>j.apply(add, [1, 2]); // 3
+<pre><code>j.apply(add, [1, 2]); // 3
 </code></pre>
-</div>
 
 <h3 id="compose">compose</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[function] =&gt; function</code></li>
+  <li>Signature: <code>[function] =&gt; function</code></li>
   <li>Performance: O(n) (for n = length of function list)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>var isNotNumber = j.compose(j.not, j.isTypeOf('number'));
+<pre><code>var isNotNumber = j.compose(j.not, j.isTypeOf('number'));
 
 isNotNumber(5); // false
 isNotNumber('string'); // true
 </code></pre>
-</div>
 
 <h3 id="concat">concat</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">array&lt;*&gt;, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>array&lt;*&gt;, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>var arr1 = [1, 2, 3];
+<pre><code>var arr1 = [1, 2, 3];
 var arr2 = [4, 5, 6];
 var newArr = j.concat(arr1, arr2); // [1, 2, 3, 4, 5, 6]
 
 arr1 === newArr; // false
 arr2 === newArr; // false
 </code></pre>
-</div>
 
 <h3 id="conj">conj</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">*, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>*, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n) (based on slice performance)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>j.conj(4, [1, 2, 3]); // [1, 2, 3, 4];
+<pre><code>j.conj(4, [1, 2, 3]); // [1, 2, 3, 4];
 </code></pre>
-</div>
 
 <h3 id="cons">cons</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">*, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>*, array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n) (based on slice performance)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>j.cons(4, [1, 2, 3]); // [4, 1, 2, 3];
+<pre><code>j.cons(4, [1, 2, 3]); // [4, 1, 2, 3];
 </code></pre>
-</div>
 
 <h3 id="curry">curry</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function, [int], [array&lt;*&gt;] =&gt; [*] =&gt; *</code></li>
+  <li>Signature: <code>function, [int], [array&lt;*&gt;] =&gt; [*] =&gt; *</code></li>
   <li>Performance: O(1)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>function add  (a, b) {
-    return a + b;
+<pre><code>function add  (a, b) {
+return a + b;
 }
 
 j.curry(add)(1)(2); // 3
 j.curry(add)(1, 2); // 3
 j.curry(add, 3)(1)(2)(3); // 3
 </code></pre>
-</div>
 
 <h3 id="rcurry">rcurry</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function, [int], [array&lt;*&gt;] =&gt; [*] =&gt; *</code></li>
+  <li>Signature: <code>function, [int], [array&lt;*&gt;] =&gt; [*] =&gt; *</code></li>
   <li>performance: O(1)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>function divide (a, b) {
-    return a / b;
+<pre><code>function divide (a, b) {
+return a / b;
 }
 
 j.rcurry(divide)(1)(2); // 2
 j.rcurry(divide)(1, 2); // 0.5
 j.rcurry(divide)(2)(1); // 0.5
 </code></pre>
-</div>
 
 <h3 id="either">either</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">string =&gt; * =&gt; * =&gt; *</code></li>
+  <li>Signature: <code>string =&gt; * =&gt; * =&gt; *</code></li>
   <li>Performance: O(1)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>j.either('number')(5)(0); // 0
+<pre><code>j.either('number')(5)(0); // 0
 j.either('number')(5)('foo'); // 5
 </code></pre>
-</div>
 
 <h3 id="identity">identity</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">* =&gt; *</code></li>
+  <li>Signature: <code>* =&gt; *</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.identity('foo'); // foo
+j.identity(42); // 42
+</code></pre>
 
 <h3 id="maybe">maybe</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">string =&gt; * =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Signature: <code>string =&gt; * =&gt; maybe&lt;defined&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.maybe('string')('foo'); // 'foo'
+j.maybe('number')('foo'); // j.nil
+</code></pre>
 
 <h3 id="partial">partial</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function, [*] =&gt; [*] =&gt; *</code></li>
+  <li>Signature: <code>function, [*] =&gt; [*] =&gt; *</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>function add (a, b) {
+return a + b;
+}
+
+var inc = j.partial(add, 1);
+
+inc(1); // 2
+inc(5); // 6
+
+inc(inc(inc(inc(1)))); // 4
+</code></pre>
 
 <h3 id="recur">recur</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function =&gt; function</code></li>
+  <li>Signature: <code>function =&gt; function</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>var isUndefined = j.isTypeOf('undefined');
+var isNil = j.isTypeOf('nil');
+
+var sum = j.recur(function (recur, values, total) {
+var result = isUndefined(total) ? 0 : total;
+return isNil(values) ? total : recur(j.rest(values), total + j.first(values));
+});
+</code></pre>
 
 <h3 id="reverseargs">reverseArgs</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function =&gt; [*] =&gt; *</code></li>
+  <li>Signature: <code>function =&gt; [*] =&gt; *</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>function divide (a, b) {
+return a / b;
+}
+
+j.reverseArgs(divide)(2, 12); // 6
+</code></pre>
 
 <h3 id="slice">slice</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">int, [int] =&gt; taggedUnion&lt;array&lt;*&gt;;arguments&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>int, [int] =&gt; taggedUnion&lt;array&lt;*&gt;;arguments&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n) (estimated JS performance characteristic)</li>
 </ul>
+
+<pre><code>j.slice(1)([1, 2, 3, 4]); // [2, 3, 4]
+
+function foo() {
+var args = j.slice(0)(arguments);
+// ...
+}
+</code></pre>
 
 <h3 id="cond">cond</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function&lt;function;function;boolean&gt; =&gt; *</code></li>
+  <li>Signature: <code>function&lt;function;function;boolean&gt; =&gt; *</code></li>
   <li>Performance: O(n) (for n = number of conditions)</li>
 </ul>
 
-<h2 id="array-1">Array</h2>
+<pre><code>j.cond(function(where, then, _default){
+when(j.isTypeOf(number)(a), then(j.multiplyBy(3), a));
+when(_default, then(j.always(a)));
+});
+</code></pre>
+
+<h2 id="array">Array</h2>
 
 <h3 id="all">all</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function =&gt; array&lt;*&gt; =&gt; boolean</code></li>
+  <li>Signature: <code>function =&gt; array&lt;*&gt; =&gt; boolean</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>j.all(j.isTypeOf('string'), ['foo', 'bar', 'baz']); // true
+j.all(j.isTypeOf('string'), ['foo', 'bar', 42]); // false
+</code></pre>
 
 <h3 id="compact">compact</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[array] =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>[array] =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>j.compact([1, 2, 0, '', false, null, 3]); // [1, 2, 3]
+</code></pre>
 
 <h3 id="dropnth">dropNth</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">index =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>index =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n) (based on the performance of splice)</li>
 </ul>
+
+<pre><code>j.dropNth(0)([1, 2, 3, 4]); // [2, 3, 4];
+j.dropNth(2)([1, 2, 3, 4]); // [1, 2, 4];
+</code></pre>
 
 <h3 id="filter">filter</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>function =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>var isEven = j.compose(j.equal(0), j.modBy(2));
+j.filter(isEven, [1, 2, 3, 4]); // [2, 4]
+</code></pre>
 
 <h3 id="first">first</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">array&lt;*&gt; =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Signature: <code>array&lt;*&gt; =&gt; maybe&lt;defined&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.first([1, 2, 3, 4]); // 1
+</code></pre>
 
 <h3 id="find">find</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function&lt;*&gt; =&gt; array&lt;*&gt; =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Signature: <code>function&lt;*&gt; =&gt; array&lt;*&gt; =&gt; maybe&lt;defined&gt;</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>var divisibleBy3 = j.compose(j.equal(0), j.modBy(3));
+j.find(divisibleBy3, [1, 2, 4, 5, 6]); 6
+j.find(divisibleBy3, [1, 2, 4, 5, 7]); j.nil
+</code></pre>
 
 <h3 id="foldl">foldl</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function, [*] =&gt; array&lt;*&gt; =&gt; *</code></li>
+  <li>Signature: <code>function, [*] =&gt; array&lt;*&gt; =&gt; *</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>j.foldl(j.add)([1, 2, 3, 4]); // 10
+j.foldl(j.add, 5)([1, 2, 3, 4]); // 15
+</code></pre>
 
 <h3 id="foldr">foldr</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function, [*] =&gt; array&lt;*&gt; =&gt; *</code></li>
+  <li>Signature: <code>function, [*] =&gt; array&lt;*&gt; =&gt; *</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>j.foldr(j.mod, [2, 5, 8]); // 1
+j.foldr(j.mod, [8, 5, 2]); // 2
+</code></pre>
 
 <h3 id="lastindexof">lastIndexOf</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">array&lt;*&gt; =&gt; index</code></li>
+  <li>Signature: <code>array&lt;*&gt; =&gt; index</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.lastIndexOf([1, 2, 3, 4]); // 3
+</code></pre>
 
 <h3 id="map">map</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>function =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>j.map(j.divideBy(3), [3, 6, 9, 12]); // [1, 2, 3, 4]
+</code></pre>
 
 <h3 id="none">none</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function =&gt; array&lt;*&gt; =&gt; boolean</code></li>
+  <li>Signature: <code>function =&gt; array&lt;*&gt; =&gt; boolean</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>j.none(j.isTypeOf('number'), ['foo', 'bar', 'baz']); // true
+j.none(j.isTypeOf('number'), ['foo', 'bar', 51]); // false
+</code></pre>
 
 <h3 id="nth">nth</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">index =&gt; array&lt;*&gt; =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Signature: <code>index =&gt; array&lt;*&gt; =&gt; maybe&lt;defined&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.nth(2)([1, 2, 3, 4]); // 3;
+</code></pre>
 
 <h3 id="rest">rest</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">taggedUnion&lt;array&lt;*&gt;;arguments&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>taggedUnion&lt;array&lt;*&gt;;arguments&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n) (based on performance of slice)</li>
 </ul>
+
+<pre><code>j.rest([1, 2, 3, 4]); // [2, 3, 4]
+</code></pre>
 
 <h3 id="reverse">reverse</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>j.reverse([1, 2, 3, 4]); // [4, 3, 2, 1]
+</code></pre>
 
 <h3 id="some">some</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function =&gt; array&lt;*&gt; =&gt; boolean</code></li>
+  <li>Signature: <code>function =&gt; array&lt;*&gt; =&gt; boolean</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>j.none(j.isTypeOf('number'), ['foo', 'bar', 'baz']); // false
+j.none(j.isTypeOf('number'), ['foo', 'bar', 51]); // true
+</code></pre>
 
 <h3 id="sort">sort</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[*] =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
+  <li>Signature: <code>[*] =&gt; array&lt;*&gt; =&gt; array&lt;*&gt;</code></li>
   <li>Performance: O(n) + quicksort perf</li>
 </ul>
+
+<pre><code>j.sort()([2, 4, 1, 3, 5]); // [1, 2, 3, 4, 5]
+j.sort(j.reverseArgs(j.subtract))([2, 4, 1, 3, 5]); // [5, 4, 3, 2, 1]
+</code></pre>
 
 <h3 id="take">take</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[index] =&gt; function&lt;array&lt;*&gt;&gt;</code></li>
+  <li>Signature: <code>[index] =&gt; function&lt;array&lt;*&gt;&gt;</code></li>
   <li>Performance: O(n) (based on performance of slice)</li>
 </ul>
 
-<h2 id="math-1">Math</h2>
+<pre><code>j.take(3)([1, 2, 3, 4, 5]); // [1, 2, 3];
+</code></pre>
+
+<h2 id="math">Math</h2>
 
 <h3 id="add">add</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">number, number =&gt; number</code></li>
+  <li>Signature: <code>number, number =&gt; number</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.add(1, 2); // 3
+j.add(3)(4); // 7
+</code></pre>
 
 <h3 id="divide">divide</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">number, number =&gt; number</code></li>
+  <li>Signature: <code>number, number =&gt; number</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.divide(6, 3); // 2
+j.divide(8)(2); // 4
+</code></pre>
 
 <h3 id="mod">mod</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">number, number =&gt; number</code></li>
+  <li>Signature: <code>number, number =&gt; number</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.mod(4, 3); // 1
+j.mod(7)(5); // 2
+</code></pre>
 
 <h3 id="multiply">multiply</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">number, number =&gt; number</code></li>
+  <li>Signature: <code>number, number =&gt; number</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.multiply(2, 4); // 8
+j.multiply(3)(5); // 15
+</code></pre>
 
 <h3 id="subtract">subtract</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">number, number =&gt; number</code></li>
+  <li>Signature: <code>number, number =&gt; number</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.subtract(5, 4); // 1
+j.subtract(3)(5); // -2
+</code></pre>
 
 <h3 id="addby">addBy</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.addBy(5)(6); // 11
+</code></pre>
 
 <h3 id="divideby">divideBy</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.divideBy(3)(12); // 4
+</code></pre>
 
 <h3 id="modby">modBy</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.modBy(5)(7); // 2
+</code></pre>
 
 <h3 id="multiplyby">multiplyBy</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.multiplyBy(7)(8); // 56
+</code></pre>
 
 <h3 id="subtractby">subtractBy</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.subtractBy(3)(7); // 4
+</code></pre>
 
 <h3 id="min">min</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.min(5, 6); // 5
+j.min(9)(4); // 4
+</code></pre>
 
 <h3 id="max">max</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.max(7, 2); // 7
+j.max(8)(5); // 8
+</code></pre>
 
 <h3 id="inc">inc</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[int] =&gt; int</code></li>
+  <li>Signature: <code>[int] =&gt; int</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.inc(4); // 5
+</code></pre>
 
 <h3 id="dec">dec</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">[int] =&gt; int</code></li>
+  <li>Signature: <code>[int] =&gt; int</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.dec(9); // 8
+</code></pre>
 
 <h3 id="range">range</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">int, [int] =&gt; int =&gt; array&lt;int&gt;</code></li>
+  <li>Signature: <code>int, [int] =&gt; int =&gt; array&lt;int&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.range(1)(10); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+j.range(1, 3)(10); // [1, 4, 7, 10] 
+</code></pre>
 
 <h3 id="gt">gt</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">number =&gt; number =&gt; boolean</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; boolean</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.gt(5)(2); // true
+j.gt(5)(7); // false
+</code></pre>
 
 <h3 id="geq">geq</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">number =&gt; number =&gt; boolean</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; boolean</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.geq(5)(2); // true
+j.geq(5)(5); // true
+j.geq(5)(7); // false
+</code></pre>
 
 <h3 id="lt">lt</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">number =&gt; number =&gt; boolean</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; boolean</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.gt(5)(2); // false
+j.gt(5)(7); // true
+</code></pre>
 
 <h3 id="leq">leq</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">number =&gt; number =&gt; boolean</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; boolean</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.geq(5)(2); // false
+j.geq(5)(5); // true
+j.geq(5)(7); // true
+</code></pre>
 
 <h3 id="between">between</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">number, number =&gt; number =&gt; boolean</code></li>
+  <li>Signature: <code>number, number =&gt; number =&gt; boolean</code></li>
   <li>Performance: O(1)</li>
 </ul>
 
-<h2 id="object-1">Object</h2>
+<pre><code>j.between(1, 5)(4); // true
+j.between(1, 5)(5); // true
+j.between(1, 5)(10); // false
+</code></pre>
+
+<h2 id="object">Object</h2>
 
 <h3 id="pick">pick</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">string =&gt; object =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Signature: <code>string =&gt; object =&gt; maybe&lt;defined&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.pick('foo')({ foo: 'bar' }); // bar
+j.pick('foo')({ baz: 'bar' }); // j.nil
+</code></pre>
 
 <h3 id="deref">deref</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">string =&gt; object =&gt; maybe&lt;defined&gt;</code></li>
+  <li>Signature: <code>string =&gt; object =&gt; maybe&lt;defined&gt;</code></li>
   <li>Performance: O(n) (depends on key token length)</li>
 </ul>
+
+<pre><code>var testObj = {
+foo: {
+bar: {
+baz: [1, 2, 3]
+}
+}
+};
+
+j.deref('foo.bar.baz')(testObj); // [1, 2, 3]
+j.deref('foo.bar.baz.1')(testObj); // 2
+j.deref('foo.bar.baz.4')(testObj); // j.nil
+</code></pre>
 
 <h3 id="merge">merge</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">object, object =&gt; object</code></li>
+  <li>Signature: <code>object, object =&gt; object</code></li>
   <li>Performance: O(n)</li>
 </ul>
+
+<pre><code>var testObj1 = {
+foo: 'bar',
+baz: 'quux'
+};
+
+var testObj2 = {
+baz: 'foo',
+quux: 'bar'
+};
+
+j.merge(testObj1, testObj2);
+
+// {
+// foo: 'bar',
+// baz: 'foo',
+// quux: 'bar'
+// }
+</code></pre>
 
 <h3 id="toarray">toArray</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">object =&gt; array&lt;tuple&lt;objectKey;*&gt;&gt;</code></li>
+  <li>Signature: <code>object =&gt; array&lt;tuple&lt;objectKey;*&gt;&gt;</code></li>
   <li>Performance: O(n) (for n = number of keys)</li>
 </ul>
+
+<pre><code>var testObj = {
+foo: 'bar',
+baz: 'quux'
+};
+
+j.toArray(testObj); // [['foo', 'bar'], ['baz', 'quux']]
+</code></pre>
 
 <h3 id="toobject">toObject</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">array&lt;tuple&lt;objectKey;*&gt;&gt; =&gt; object</code></li>
+  <li>Signature: <code>array&lt;tuple&lt;objectKey;*&gt;&gt; =&gt; object</code></li>
   <li>Performance: O(n) (for n = length of array)</li>
 </ul>
+
+<pre><code>var testArray = [['foo', 'bar'], ['baz', 'quux']];
+
+j.toObject(testArray); // { foo: 'bar', baz: 'quux' }
+</code></pre>
 
 <h2 id="predicates">Predicates</h2>
 
 <h3 id="invert">invert</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">function =&gt; function</code></li>
+  <li>Signature: <code>function =&gt; function</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.invert(j.isTypeOf('string')('foo')); // false
+</code></pre>
 
 <h3 id="equal">equal</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Signature: <code>*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.equal(5, 5); // true;
+j.equal(5, 7); // false;
+j.equal(5)(7); // false;
+</code></pre>
 
 <h3 id="and">and</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Signature: <code>*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.and(true, true); // true
+j.and(true, false); // false
+</code></pre>
 
 <h3 id="or">or</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Signature: <code>*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.or(true, true); // true
+j.or(true, false); // true
+j.or(false, false); // false
+</code></pre>
 
 <h3 id="xor">xor</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Signature: <code>*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.xor(true, true); // false
+j.xor(true, false); // true
+j.xor(false, false); // false
+</code></pre>
 
 <h3 id="not">not</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">comparable =&gt; boolean</code></li>
+  <li>Signature: <code>comparable =&gt; boolean</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.not(true); // false
+j.not(5); // false
+</code></pre>
 
 <h3 id="isnil">isNil</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">* =&gt; boolean</code></li>
+  <li>Signature: <code>* =&gt; boolean</code></li>
   <li>Performance: O(1)</li>
 </ul>
+
+<pre><code>j.isNil(j.nil); // true
+j.isNil([]); // true
+j.isNil({}); // false
+</code></pre>
 
 <h3 id="isundefined">isUndefined</h3>
 
 <ul>
-  <li>Signature: <code class="highlighter-rouge">* =&gt; boolean</code></li>
+  <li>Signature: <code>* =&gt; boolean</code></li>
   <li>Performance: O(1)</li>
 </ul>
 
+<pre><code>j.isUndefined(undefined); // true
+j.isUndefined(null); // false
+</code></pre>
+
+</div>
 
     </div>
 
