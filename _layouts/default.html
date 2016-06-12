@@ -3,13 +3,15 @@
 
   {% include head.html %}
 
-  <body>
+  <body class="language-javascript">
 
     {% include header.html %}
 
     <div class="body-container">
       {{ content }}
     </div>
+
+    <script src="{{ "/page-includes/prism.js" | prepend: site.baseurl }}"></script>
 
   </body>
 

@@ -6,8 +6,8 @@ body{
   line-height: 1.8em !important;
 }
 
-a:link, a:visited, a:active, a:hover{
-  color: $link-color !important;
+a:link, a:visited, a:active{
+  color: scale-lightness($link-color, 30%) !important;
   text-decoration: none !important;
   
 }
@@ -16,6 +16,7 @@ a {
   border-bottom: 1px dotted;
   
   &:hover {
+    color: $link-color !important;
     border-bottom: 1px solid;
   }
 }
@@ -24,11 +25,7 @@ h1{
   font-size: 32px;
   font-weight: normal;
   line-height: 2em;
-
-  a{
-    color: $text-color;
-    text-decoration: none;
-  }
+  padding-top: 20px;
 }
 
 h2{

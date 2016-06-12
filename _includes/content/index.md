@@ -1,9 +1,19 @@
+## Signatures
+
+JFP is enforced with Signet types and function signatures. Signature metadata can be accessed via the signature property.
+All type signature information presented in the documentation reflects the Signet signatures attached to the functions.
+
+~~~~
+j.isTypeOf.signature; // string => * => boolean
+j.slice.signature; // index => array<*> => array<*>
+~~~~
+
 ## Types
 
 ### enforce
 
-- Signature: `string => function`
 - Performance: O(n) (for n = number of leaves in type tree)
+- Signature: `string => function`
 
 ~~~~
 var add = j.enforce('number, number => number', function add (a, b) { return a + b; });
@@ -11,8 +21,8 @@ var add = j.enforce('number, number => number', function add (a, b) { return a +
 
 ### isTypeOf
 
-- Signature: `string => * => boolean`
 - Performance: O(1)
+- Signature: `string => * => boolean`
 
 ~~~~
 j.isTypeOf('string')(5); // false
@@ -21,8 +31,8 @@ j.isTypeOf('nil')(j.nil); // true
 
 ### setJfpTypes
 
-- Signature: `signet => signet`
 - Performance: O(1)
+- Signature: `signet => signet`
 
 ~~~~
 var signetFactory = require('signet');
@@ -63,8 +73,8 @@ var signet = setJfpTypes(signetFactory());
 
 ### always
 
-- Signature: `* => [*] => *`
 - Performance: O(1)
+- Signature: `* => [*] => *`
 
 ~~~~
 var alwaysTrue = j.always(true);
@@ -75,8 +85,8 @@ alwaysTrue('over 9000'); // true
 
 ### apply
 
-- Signature: `function, array<*> => *`
 - Performance: O(1)
+- Signature: `function, array<*> => *`
 
 ~~~~
 j.apply(add, [1, 2]); // 3
@@ -84,8 +94,8 @@ j.apply(add, [1, 2]); // 3
 
 ### compose
 
-- Signature: `[function] => function`
 - Performance: O(n) (for n = length of function list)
+- Signature: `[function] => function`
 
 ~~~~
 var isNotNumber = j.compose(j.not, j.isTypeOf('number'));
@@ -96,8 +106,8 @@ isNotNumber('string'); // true
 
 ### concat
 
-- Signature: `array<*>, array<*> => array<*>`
 - Performance: O(n)
+- Signature: `array<*>, array<*> => array<*>`
 
 ~~~~
 var arr1 = [1, 2, 3];
@@ -110,8 +120,8 @@ arr2 === newArr; // false
 
 ### conj
 
-- Signature: `*, array<*> => array<*>`
 - Performance: O(n) (based on slice performance)
+- Signature: `*, array<*> => array<*>`
 
 ~~~~
 j.conj(4, [1, 2, 3]); // [1, 2, 3, 4];
@@ -119,8 +129,8 @@ j.conj(4, [1, 2, 3]); // [1, 2, 3, 4];
 
 ### cons
 
-- Signature: `*, array<*> => array<*>`
 - Performance: O(n) (based on slice performance)
+- Signature: `*, array<*> => array<*>`
 
 ~~~~
 j.cons(4, [1, 2, 3]); // [4, 1, 2, 3];
@@ -128,8 +138,8 @@ j.cons(4, [1, 2, 3]); // [4, 1, 2, 3];
 
 ### curry
 
-- Signature: `function, [int], [array<*>] => [*] => *`
 - Performance: O(1)
+- Signature: `function, [int], [array<*>] => [*] => *`
 
 ~~~~
 function add  (a, b) {
@@ -143,8 +153,8 @@ j.curry(add, 3)(1)(2)(3); // 3
 
 ### rcurry
 
-- Signature: `function, [int], [array<*>] => [*] => *`
 - performance: O(1)
+- Signature: `function, [int], [array<*>] => [*] => *`
 
 ~~~~
 function divide (a, b) {
@@ -158,8 +168,8 @@ j.rcurry(divide)(2)(1); // 0.5
 
 ### either
 
-- Signature: `string => * => * => *`
 - Performance: O(1)
+- Signature: `string => * => * => *`
 
 ~~~~
 j.either('number')(5)(0); // 0
@@ -168,8 +178,8 @@ j.either('number')(5)('foo'); // 5
 
 ### identity
 
-- Signature: `* => *`
 - Performance: O(1)
+- Signature: `* => *`
 
 ~~~~
 j.identity('foo'); // foo
@@ -178,8 +188,8 @@ j.identity(42); // 42
 
 ### maybe
 
-- Signature: `string => * => maybe<defined>`
 - Performance: O(1)
+- Signature: `string => * => maybe<defined>`
 
 ~~~~
 j.maybe('string')('foo'); // 'foo'
@@ -188,8 +198,8 @@ j.maybe('number')('foo'); // j.nil
 
 ### partial
 
-- Signature: `function, [*] => [*] => *`
 - Performance: O(1)
+- Signature: `function, [*] => [*] => *`
 
 ~~~~
 function add (a, b) {
@@ -206,8 +216,8 @@ inc(inc(inc(inc(1)))); // 4
 
 ### recur
 
-- Signature: `function => function`
 - Performance: O(1)
+- Signature: `function => function`
 
 ~~~~
 var isUndefined = j.isTypeOf('undefined');
@@ -221,8 +231,8 @@ return isNil(values) ? total : recur(j.rest(values), total + j.first(values));
 
 ### reverseArgs
 
-- Signature: `function => [*] => *`
 - Performance: O(n)
+- Signature: `function => [*] => *`
 
 ~~~~
 function divide (a, b) {
@@ -234,8 +244,8 @@ j.reverseArgs(divide)(2, 12); // 6
 
 ### slice
 
-- Signature: `int, [int] => taggedUnion<array<*>;arguments> => array<*>`
 - Performance: O(n) (estimated JS performance characteristic)
+- Signature: `int, [int] => taggedUnion<array<*>;arguments> => array<*>`
 
 ~~~~
 j.slice(1)([1, 2, 3, 4]); // [2, 3, 4]
@@ -248,8 +258,8 @@ var args = j.slice(0)(arguments);
 
 ### cond
 
-- Signature: `function<function;function;boolean> => *`
 - Performance: O(n) (for n = number of conditions)
+- Signature: `function<function;function;boolean> => *`
 
 ~~~~
 j.cond(function(where, then, _default){
@@ -262,8 +272,8 @@ when(_default, then(j.always(a)));
 
 ### all
 
-- Signature: `function => array<*> => boolean`
 - Performance: O(n)
+- Signature: `function => array<*> => boolean`
 
 ~~~~
 j.all(j.isTypeOf('string'), ['foo', 'bar', 'baz']); // true
@@ -272,8 +282,8 @@ j.all(j.isTypeOf('string'), ['foo', 'bar', 42]); // false
 
 ### compact
 
-- Signature: `[array] => array<*>`
 - Performance: O(n)
+- Signature: `[array] => array<*>`
 
 ~~~~
 j.compact([1, 2, 0, '', false, null, 3]); // [1, 2, 3]
@@ -281,8 +291,8 @@ j.compact([1, 2, 0, '', false, null, 3]); // [1, 2, 3]
 
 ### dropNth
 
-- Signature: `index => array<*> => array<*>`
 - Performance: O(n) (based on the performance of splice)
+- Signature: `index => array<*> => array<*>`
 
 ~~~~
 j.dropNth(0)([1, 2, 3, 4]); // [2, 3, 4];
@@ -291,8 +301,8 @@ j.dropNth(2)([1, 2, 3, 4]); // [1, 2, 4];
 
 ### filter
 
-- Signature: `function => array<*> => array<*>`
 - Performance: O(n)
+- Signature: `function => array<*> => array<*>`
 
 ~~~~
 var isEven = j.compose(j.equal(0), j.modBy(2));
@@ -301,8 +311,8 @@ j.filter(isEven, [1, 2, 3, 4]); // [2, 4]
 
 ### first
 
-- Signature: `array<*> => maybe<defined>`
 - Performance: O(1)
+- Signature: `array<*> => maybe<defined>`
 
 ~~~~
 j.first([1, 2, 3, 4]); // 1
@@ -310,8 +320,8 @@ j.first([1, 2, 3, 4]); // 1
 
 ### find
 
-- Signature: `function<*> => array<*> => maybe<defined>`
 - Performance: O(n)
+- Signature: `function<*> => array<*> => maybe<defined>`
 
 ~~~~
 var divisibleBy3 = j.compose(j.equal(0), j.modBy(3));
@@ -321,8 +331,8 @@ j.find(divisibleBy3, [1, 2, 4, 5, 7]); j.nil
 
 ### foldl
 
-- Signature: `function, [*] => array<*> => *`
 - Performance: O(n)
+- Signature: `function, [*] => array<*> => *`
 
 ~~~~
 j.foldl(j.add)([1, 2, 3, 4]); // 10
@@ -331,8 +341,8 @@ j.foldl(j.add, 5)([1, 2, 3, 4]); // 15
 
 ### foldr
 
-- Signature: `function, [*] => array<*> => *`
 - Performance: O(n)
+- Signature: `function, [*] => array<*> => *`
 
 ~~~~
 j.foldr(j.mod, [2, 5, 8]); // 1
@@ -341,8 +351,8 @@ j.foldr(j.mod, [8, 5, 2]); // 2
 
 ### lastIndexOf
 
-- Signature: `array<*> => index`
 - Performance: O(1)
+- Signature: `array<*> => index`
 
 ~~~~
 j.lastIndexOf([1, 2, 3, 4]); // 3
@@ -350,8 +360,8 @@ j.lastIndexOf([1, 2, 3, 4]); // 3
 
 ### map
 
-- Signature: `function => array<*> => array<*>`
 - Performance: O(n)
+- Signature: `function => array<*> => array<*>`
 
 ~~~~
 j.map(j.divideBy(3), [3, 6, 9, 12]); // [1, 2, 3, 4]
@@ -359,8 +369,8 @@ j.map(j.divideBy(3), [3, 6, 9, 12]); // [1, 2, 3, 4]
 
 ### none
 
-- Signature: `function => array<*> => boolean`
 - Performance: O(n)
+- Signature: `function => array<*> => boolean`
 
 ~~~~
 j.none(j.isTypeOf('number'), ['foo', 'bar', 'baz']); // true
@@ -369,8 +379,8 @@ j.none(j.isTypeOf('number'), ['foo', 'bar', 51]); // false
 
 ### nth
 
-- Signature: `index => array<*> => maybe<defined>`
 - Performance: O(1)
+- Signature: `index => array<*> => maybe<defined>`
 
 ~~~~
 j.nth(2)([1, 2, 3, 4]); // 3;
@@ -378,8 +388,8 @@ j.nth(2)([1, 2, 3, 4]); // 3;
 
 ### rest
 
-- Signature: `taggedUnion<array<*>;arguments> => array<*>`
 - Performance: O(n) (based on performance of slice)
+- Signature: `taggedUnion<array<*>;arguments> => array<*>`
 
 ~~~~
 j.rest([1, 2, 3, 4]); // [2, 3, 4]
@@ -387,8 +397,8 @@ j.rest([1, 2, 3, 4]); // [2, 3, 4]
 
 ### reverse
 
-- Signature: `array<*> => array<*>`
 - Performance: O(n)
+- Signature: `array<*> => array<*>`
 
 ~~~~
 j.reverse([1, 2, 3, 4]); // [4, 3, 2, 1]
@@ -396,8 +406,8 @@ j.reverse([1, 2, 3, 4]); // [4, 3, 2, 1]
 
 ### some
 
-- Signature: `function => array<*> => boolean`
 - Performance: O(n)
+- Signature: `function => array<*> => boolean`
 
 ~~~~
 j.none(j.isTypeOf('number'), ['foo', 'bar', 'baz']); // false
@@ -406,8 +416,8 @@ j.none(j.isTypeOf('number'), ['foo', 'bar', 51]); // true
 
 ### sort
 
-- Signature: `[*] => array<*> => array<*>`
 - Performance: O(n) + quicksort perf
+- Signature: `[*] => array<*> => array<*>`
 
 ~~~~
 j.sort()([2, 4, 1, 3, 5]); // [1, 2, 3, 4, 5]
@@ -416,8 +426,8 @@ j.sort(j.reverseArgs(j.subtract))([2, 4, 1, 3, 5]); // [5, 4, 3, 2, 1]
 
 ### take
 
-- Signature: `[index] => function<array<*>>`
 - Performance: O(n) (based on performance of slice)
+- Signature: `[index] => function<array<*>>`
 
 ~~~~
 j.take(3)([1, 2, 3, 4, 5]); // [1, 2, 3];
@@ -427,8 +437,8 @@ j.take(3)([1, 2, 3, 4, 5]); // [1, 2, 3];
 
 ### add
 
-- Signature: `number, number => number`
 - Performance: O(1)
+- Signature: `number, number => number`
 
 ~~~~
 j.add(1, 2); // 3
@@ -437,8 +447,8 @@ j.add(3)(4); // 7
 
 ### divide
 
-- Signature: `number, number => number`
 - Performance: O(1)
+- Signature: `number, number => number`
 
 ~~~~
 j.divide(6, 3); // 2
@@ -447,8 +457,8 @@ j.divide(8)(2); // 4
 
 ### mod
 
-- Signature: `number, number => number`
 - Performance: O(1)
+- Signature: `number, number => number`
 
 ~~~~
 j.mod(4, 3); // 1
@@ -457,8 +467,8 @@ j.mod(7)(5); // 2
 
 ### multiply
 
-- Signature: `number, number => number`
 - Performance: O(1)
+- Signature: `number, number => number`
 
 ~~~~
 j.multiply(2, 4); // 8
@@ -467,8 +477,8 @@ j.multiply(3)(5); // 15
 
 ### subtract
 
-- Signature: `number, number => number`
 - Performance: O(1)
+- Signature: `number, number => number`
 
 ~~~~
 j.subtract(5, 4); // 1
@@ -477,8 +487,8 @@ j.subtract(3)(5); // -2
 
 ### addBy
 
-- Signature: `[number], [number] => taggedUnion<function;number>`
 - Performance: O(1)
+- Signature: `[number], [number] => taggedUnion<function;number>`
 
 ~~~~
 j.addBy(5)(6); // 11
@@ -486,8 +496,8 @@ j.addBy(5)(6); // 11
 
 ### divideBy
 
-- Signature: `[number], [number] => taggedUnion<function;number>`
 - Performance: O(1)
+- Signature: `[number], [number] => taggedUnion<function;number>`
 
 ~~~~
 j.divideBy(3)(12); // 4
@@ -495,8 +505,8 @@ j.divideBy(3)(12); // 4
 
 ### modBy
 
-- Signature: `[number], [number] => taggedUnion<function;number>`
 - Performance: O(1)
+- Signature: `[number], [number] => taggedUnion<function;number>`
 
 ~~~~
 j.modBy(5)(7); // 2
@@ -504,8 +514,8 @@ j.modBy(5)(7); // 2
 
 ### multiplyBy
 
-- Signature: `[number], [number] => taggedUnion<function;number>`
 - Performance: O(1)
+- Signature: `[number], [number] => taggedUnion<function;number>`
 
 ~~~~
 j.multiplyBy(7)(8); // 56
@@ -513,8 +523,8 @@ j.multiplyBy(7)(8); // 56
 
 ### subtractBy
 
-- Signature: `[number], [number] => taggedUnion<function;number>`
 - Performance: O(1)
+- Signature: `[number], [number] => taggedUnion<function;number>`
 
 ~~~~
 j.subtractBy(3)(7); // 4
@@ -522,8 +532,8 @@ j.subtractBy(3)(7); // 4
 
 ### min
 
-- Signature: `[number], [number] => taggedUnion<function;number>`
 - Performance: O(1)
+- Signature: `[number], [number] => taggedUnion<function;number>`
 
 ~~~~
 j.min(5, 6); // 5
@@ -532,8 +542,8 @@ j.min(9)(4); // 4
 
 ### max
 
-- Signature: `[number], [number] => taggedUnion<function;number>`
 - Performance: O(1)
+- Signature: `[number], [number] => taggedUnion<function;number>`
 
 ~~~~
 j.max(7, 2); // 7
@@ -542,8 +552,8 @@ j.max(8)(5); // 8
 
 ### inc
 
-- Signature: `[int] => int`
 - Performance: O(1)
+- Signature: `[int] => int`
 
 ~~~~
 j.inc(4); // 5
@@ -551,8 +561,8 @@ j.inc(4); // 5
 
 ### dec
 
-- Signature: `[int] => int`
 - Performance: O(1)
+- Signature: `[int] => int`
 
 ~~~~
 j.dec(9); // 8
@@ -560,8 +570,8 @@ j.dec(9); // 8
 
 ### range
 
-- Signature: `int, [int] => int => array<int>`
 - Performance: O(1)
+- Signature: `int, [int] => int => array<int>`
 
 ~~~~
 j.range(1)(10); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -570,8 +580,8 @@ j.range(1, 3)(10); // [1, 4, 7, 10]
 
 ### gt
 
-- Signature: `number => number => boolean`
 - Performance: O(1)
+- Signature: `number => number => boolean`
 
 ~~~~
 j.gt(5)(2); // true
@@ -580,8 +590,8 @@ j.gt(5)(7); // false
 
 ### geq
 
-- Signature: `number => number => boolean`
 - Performance: O(1)
+- Signature: `number => number => boolean`
 
 ~~~~
 j.geq(5)(2); // true
@@ -591,8 +601,8 @@ j.geq(5)(7); // false
 
 ### lt
 
-- Signature: `number => number => boolean`
 - Performance: O(1)
+- Signature: `number => number => boolean`
 
 ~~~~
 j.gt(5)(2); // false
@@ -601,8 +611,8 @@ j.gt(5)(7); // true
 
 ### leq
 
-- Signature: `number => number => boolean`
 - Performance: O(1)
+- Signature: `number => number => boolean`
 
 ~~~~
 j.geq(5)(2); // false
@@ -612,8 +622,8 @@ j.geq(5)(7); // true
 
 ### between
 
-- Signature: `number, number => number => boolean`
 - Performance: O(1)
+- Signature: `number, number => number => boolean`
 
 ~~~~
 j.between(1, 5)(4); // true
@@ -625,8 +635,8 @@ j.between(1, 5)(10); // false
 
 ### pick
 
-- Signature: `string => object => maybe<defined>`
 - Performance: O(1)
+- Signature: `string => object => maybe<defined>`
 
 ~~~~
 j.pick('foo')({ foo: 'bar' }); // bar
@@ -635,8 +645,8 @@ j.pick('foo')({ baz: 'bar' }); // j.nil
 
 ### deref
 
-- Signature: `string => object => maybe<defined>`
 - Performance: O(n) (depends on key token length)
+- Signature: `string => object => maybe<defined>`
 
 ~~~~
 var testObj = {
@@ -654,8 +664,8 @@ j.deref('foo.bar.baz.4')(testObj); // j.nil
 
 ### merge
 
-- Signature: `object, object => object`
 - Performance: O(n)
+- Signature: `object, object => object`
 
 ~~~~
 var testObj1 = {
@@ -679,8 +689,8 @@ j.merge(testObj1, testObj2);
 
 ### toArray
 
-- Signature: `object => array<tuple<objectKey;*>>`
 - Performance: O(n) (for n = number of keys)
+- Signature: `object => array<tuple<objectKey;*>>`
 
 ~~~~
 var testObj = {
@@ -693,8 +703,8 @@ j.toArray(testObj); // [['foo', 'bar'], ['baz', 'quux']]
 
 ### toObject
 
-- Signature: `array<tuple<objectKey;*>> => object`
 - Performance: O(n) (for n = length of array)
+- Signature: `array<tuple<objectKey;*>> => object`
 
 ~~~~
 var testArray = [['foo', 'bar'], ['baz', 'quux']];
@@ -706,8 +716,8 @@ j.toObject(testArray); // { foo: 'bar', baz: 'quux' }
 
 ### invert
 
-- Signature: `function => function`
 - Performance: O(1)
+- Signature: `function => function`
 
 ~~~~
 j.invert(j.isTypeOf('string')('foo')); // false
@@ -715,8 +725,8 @@ j.invert(j.isTypeOf('string')('foo')); // false
 
 ### equal
 
-- Signature: `*, [*] => taggedUnion<function;boolean>`
 - Performance: O(1)
+- Signature: `*, [*] => taggedUnion<function;boolean>`
 
 ~~~~
 j.equal(5, 5); // true;
@@ -726,8 +736,8 @@ j.equal(5)(7); // false;
 
 ### and
 
-- Signature: `*, [*] => taggedUnion<function;boolean>`
 - Performance: O(1)
+- Signature: `*, [*] => taggedUnion<function;boolean>`
 
 ~~~~
 j.and(true, true); // true
@@ -736,8 +746,8 @@ j.and(true, false); // false
 
 ### or
 
-- Signature: `*, [*] => taggedUnion<function;boolean>`
 - Performance: O(1)
+- Signature: `*, [*] => taggedUnion<function;boolean>`
 
 ~~~~
 j.or(true, true); // true
@@ -747,8 +757,8 @@ j.or(false, false); // false
 
 ### xor
 
-- Signature: `*, [*] => taggedUnion<function;boolean>`
 - Performance: O(1)
+- Signature: `*, [*] => taggedUnion<function;boolean>`
 
 ~~~~
 j.xor(true, true); // false
@@ -758,8 +768,8 @@ j.xor(false, false); // false
 
 ### not
 
-- Signature: `comparable => boolean`
 - Performance: O(1)
+- Signature: `comparable => boolean`
 
 ~~~~
 j.not(true); // false
@@ -768,8 +778,8 @@ j.not(5); // false
 
 ### isNil
 
-- Signature: `* => boolean`
 - Performance: O(1)
+- Signature: `* => boolean`
 
 ~~~~
 j.isNil(j.nil); // true
@@ -779,8 +789,8 @@ j.isNil({}); // false
 
 ### isUndefined
 
-- Signature: `* => boolean`
 - Performance: O(1)
+- Signature: `* => boolean`
 
 ~~~~
 j.isUndefined(undefined); // true
