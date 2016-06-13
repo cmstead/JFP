@@ -240,11 +240,13 @@ var jfp = (function(){
         return curry;
     }
 
-    function partial (fn){
-        var args = slice(1)(arguments);
-        
-        return function () {
-            return apply(fn, concat(args, slice(0)(arguments)));
+    function directionalPartial (directionalConcat){
+        return function (fn) {
+            var args = slice(1)(arguments);
+
+            return function () {
+                return apply(fn, directionalConcat(args, slice(0)(arguments)));
+            };        
         };
     }
 
@@ -260,8 +262,9 @@ var jfp = (function(){
     j.either = j.enforce('string => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
     j.maybe = j.enforce('string => * => maybe<defined>', maybe);
-    j.partial = j.enforce('function, [*] => [*] => *', partial);
+    j.partial = j.enforce('function, [*] => [*] => *', directionalPartial(concat));
     j.recur = j.enforce('function => function', recur);
+    j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
 
@@ -686,9 +689,10 @@ var jfp = (function(){
         return callBehavior(behavior);
     }
     
-    j.cond = j.enforce('function<function;function;function> => *', cond);
+    j.cond = j.enforce('function<function;function;boolean> => *', cond);
     
 })(jfp);
+
 
 var j = jfp;
 
