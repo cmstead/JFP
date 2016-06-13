@@ -1,10 +1,6 @@
 (function (j) {
     'use strict';
 
-    function equal(a, b) {
-        return a === b;
-    }
-
     function not(a) {
         return !a;
     }
@@ -13,34 +9,32 @@
         return j.compose(j.not, pred);
     }
 
-    function and (a, b){
-        return Boolean(a && b);
-    }
-    
-    function or (a, b){
-        return Boolean(a || b);
-    }
-    
-    function xor (a, b) {
-        return Boolean(a ? !b : b);
-    }
-
-    var isUndefined = j.isTypeOf('undefined');
-
-    function operationCurry (fn){
-        return function (a, b) {
-            return isUndefined(b) ? function (c) { return fn(a, c); } : fn(a, b);
+    function compare (operator){
+        return function (a) {
+            return function (b) {
+                switch(operator) {
+                    case '===':
+                        return a === b;
+                    case '&&':
+                        return Boolean(a && b);
+                    case '||':
+                        return Boolean(a || b);
+                    case 'xor':
+                        return Boolean(a ? !b : b);
+                }
+            };
         };
     }
 
-    var currySignature = 'comparable, [comparable] => taggedUnion<function<comparable>;boolean>';
+    var currySignature = 'comparable => comparable => boolean';
 
     j.invert = j.enforce('function => function', invert);
-    j.equal = j.enforce(currySignature, operationCurry(equal));
-    j.and = j.enforce(currySignature, operationCurry(and));
-    j.or = j.enforce(currySignature, operationCurry(or));
-    j.xor = j.enforce(currySignature, operationCurry(xor));
     j.not = j.enforce('comparable => boolean', not);
+
+    j.equal = j.enforce(currySignature, compare('==='));
+    j.and = j.enforce(currySignature,compare('&&'));
+    j.or = j.enforce(currySignature, compare('||'));
+    j.xor = j.enforce(currySignature, compare('xor'));
 
     j.isNil = j.isTypeOf('nil');
     j.isUndefined = j.isTypeOf('undefined');

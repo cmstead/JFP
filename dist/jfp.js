@@ -1,37 +1,6 @@
 var jfp = (function(){
     'use strict';
     
-    // function resolveFunction(functionValue){
-    //     return typeof functionValue === 'string' ? jfp[functionValue] : functionValue;
-    // }
-    
-    // function curryAlias(){
-    //     var args = jfp.slice(0, arguments);
-
-    //     args[0] = resolveFunction(args[0]);
-        
-    //     return jfp.apply(jfp.curry, args);
-    // }
-    
-    // function pickAlias(key, value){
-    //     var cleanKey = key.slice(1);
-        
-    //     return Boolean(value) ? jfp.pick(cleanKey, value) : jfp.partial(jfp.pick, cleanKey);
-    // }
-    
-    // function chooseResolver(value){
-    //     var resolveToPick = typeof value === 'string' && value.charAt(0) === ':';
-        
-    //     return resolveToPick ? pickAlias : curryAlias;
-    // }
-    
-    // return function(){
-    //     var args = jfp.slice(0, arguments),
-    //         resolver = chooseResolver(args[0]);
-        
-    //     return jfp.apply(resolver, args);
-    // };
-    
     return function () {};
     
 })();
@@ -273,10 +242,6 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    function equal(a, b) {
-        return a === b;
-    }
-
     function not(a) {
         return !a;
     }
@@ -285,34 +250,32 @@ var jfp = (function(){
         return j.compose(j.not, pred);
     }
 
-    function and (a, b){
-        return Boolean(a && b);
-    }
-    
-    function or (a, b){
-        return Boolean(a || b);
-    }
-    
-    function xor (a, b) {
-        return Boolean(a ? !b : b);
-    }
-
-    var isUndefined = j.isTypeOf('undefined');
-
-    function operationCurry (fn){
-        return function (a, b) {
-            return isUndefined(b) ? function (c) { return fn(a, c); } : fn(a, b);
+    function compare (operator){
+        return function (a) {
+            return function (b) {
+                switch(operator) {
+                    case '===':
+                        return a === b;
+                    case '&&':
+                        return Boolean(a && b);
+                    case '||':
+                        return Boolean(a || b);
+                    case 'xor':
+                        return Boolean(a ? !b : b);
+                }
+            };
         };
     }
 
-    var currySignature = 'comparable, [comparable] => taggedUnion<function<comparable>;boolean>';
+    var currySignature = 'comparable => comparable => boolean';
 
     j.invert = j.enforce('function => function', invert);
-    j.equal = j.enforce(currySignature, operationCurry(equal));
-    j.and = j.enforce(currySignature, operationCurry(and));
-    j.or = j.enforce(currySignature, operationCurry(or));
-    j.xor = j.enforce(currySignature, operationCurry(xor));
     j.not = j.enforce('comparable => boolean', not);
+
+    j.equal = j.enforce(currySignature, compare('==='));
+    j.and = j.enforce(currySignature,compare('&&'));
+    j.or = j.enforce(currySignature, compare('||'));
+    j.xor = j.enforce(currySignature, compare('xor'));
 
     j.isNil = j.isTypeOf('nil');
     j.isUndefined = j.isTypeOf('undefined');
@@ -497,10 +460,12 @@ var jfp = (function(){
         };
     }
 
-    function operationCurry(operation) {
+    function operateBy (operator){
+        var localOperation = operation(operator);
         return function (a) {
-            var b = arguments[1];
-            return isUndefined(b) ? function (b) { return operation(a, b); } : operation(a, b);
+            return function (b){
+                return localOperation(b, a);
+            };
         };
     }
 
@@ -516,16 +481,10 @@ var jfp = (function(){
         };
     }
 
-    function max (a, b){
-        return a > b ? a : b;
-    }
-    
-    function min (a, b){
-        return a < b ? a : b;
-    }
-
-    function equal(a, b) {
-        return a === b;
+    function extrema (comparator){
+        return function (a, b) {
+            return comparator(a)(b) ? a : b;
+        };
     }
 
     function between (min, max){
@@ -538,6 +497,12 @@ var jfp = (function(){
         };
     }
 
+    function incBy (value){
+        return function (a) {
+            return a + value;
+        };
+    }
+
     // Arithmetic
     j.add = j.enforce('number, number => number', operation('+'));
     j.divide = j.enforce('number, number => number', operation('/'));
@@ -545,17 +510,17 @@ var jfp = (function(){
     j.multiply = j.enforce('number, number => number', operation('*'));
     j.subtract = j.enforce('number, number => number', operation('-'));
 
-    j.addBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.add));
-    j.divideBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.reverseArgs(j.divide)));
-    j.modBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.reverseArgs(j.mod)));
-    j.multiplyBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.multiply));
-    j.subtractBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.reverseArgs(j.subtract)));
+    j.addBy = j.enforce('number => number => number', operateBy('+'));
+    j.divideBy = j.enforce('number => number => number', operateBy('/'));
+    j.modBy = j.enforce('number => number => number', operateBy('%'));
+    j.multiplyBy = j.enforce('number => number => number', operateBy('*'));
+    j.subtractBy = j.enforce('number => number => number', operateBy('-'));
 
-    j.min = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(min));
-    j.max = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(max));
+    j.min = j.enforce('number, number => number', extrema(compare('<')));
+    j.max = j.enforce('number, number => number', extrema(compare('>')));
 
-    j.inc = j.enforce('[int] => int', operationCurry(j.add)(1));
-    j.dec = j.enforce('[int] => int', operationCurry(j.add)(-1));
+    j.inc = j.enforce('int => int', incBy(1));
+    j.dec = j.enforce('int => int', incBy(-1));
 
     j.range = j.enforce('int, [int] => int => array<int>', range);
     

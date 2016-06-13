@@ -5,11 +5,11 @@ describe('jfp predicates', function () {
     describe('equal', function () {
         
         it('should return true when two values are equal', function () {
-            expect(j.equal(10, 10)).toBe(true);
+            expect(j.equal(10)(10)).toBe(true);
         });
         
         it('should return false when two values are not equal', function () {
-            expect(j.equal(10, 12)).toBe(false);
+            expect(j.equal(10)(12)).toBe(false);
         });
         
     });
@@ -29,13 +29,13 @@ describe('jfp predicates', function () {
     describe('and', function () {
         
         it('should perform a positive conjunction', function () {
-            expect(j.and(true, true)).toBe(true);
-            expect(j.and(5, 'foo')).toBe(true);
+            expect(j.and(true)(true)).toBe(true);
+            expect(j.and(5)('foo')).toBe(true);
         });
         
         it('should perform a negative conjunction', function () {
-            expect(j.and(true, false)).toBe(false);
-            expect(j.and(5, '')).toBe(false);
+            expect(j.and(true)(false)).toBe(false);
+            expect(j.and(5)('')).toBe(false);
         });
         
     });
@@ -43,13 +43,13 @@ describe('jfp predicates', function () {
     describe('or', function () {
         
         it('should perform a positive disjunction', function () {
-            expect(j.or(true, false)).toBe(true);
-            expect(j.or(5, '')).toBe(true);
+            expect(j.or(true)(false)).toBe(true);
+            expect(j.or(5)('')).toBe(true);
         });
         
         it('should perform a negative disjunction', function () {
-            expect(j.or(false, false)).toBe(false);
-            expect(j.or(0, '')).toBe(false);
+            expect(j.or(false)(false)).toBe(false);
+            expect(j.or(0)('')).toBe(false);
         });
         
     });
@@ -57,14 +57,14 @@ describe('jfp predicates', function () {
     describe('xor', function () {
         
         it('should perform a positive exclusive or behavior', function () {
-            expect(j.xor(true, false)).toBe(true);
-            expect(j.xor(5, '')).toBe(true);
+            expect(j.xor(true)(false)).toBe(true);
+            expect(j.xor(5)('')).toBe(true);
         });
         
         it('should perform a negative exclusive or behavior', function () {
-            expect(j.xor(true, true)).toBe(false);
-            expect(j.xor(false, false)).toBe(false);
-            expect(j.xor(0, '')).toBe(false);
+            expect(j.xor(true)(true)).toBe(false);
+            expect(j.xor(false)(false)).toBe(false);
+            expect(j.xor(0)('')).toBe(false);
         });
         
     });

@@ -39,10 +39,12 @@
         };
     }
 
-    function operationCurry(operation) {
+    function operateBy (operator){
+        var localOperation = operation(operator);
         return function (a) {
-            var b = arguments[1];
-            return isUndefined(b) ? function (b) { return operation(a, b); } : operation(a, b);
+            return function (b){
+                return localOperation(b, a);
+            };
         };
     }
 
@@ -58,16 +60,10 @@
         };
     }
 
-    function max (a, b){
-        return a > b ? a : b;
-    }
-    
-    function min (a, b){
-        return a < b ? a : b;
-    }
-
-    function equal(a, b) {
-        return a === b;
+    function extrema (comparator){
+        return function (a, b) {
+            return comparator(a)(b) ? a : b;
+        };
     }
 
     function between (min, max){
@@ -80,6 +76,12 @@
         };
     }
 
+    function incBy (value){
+        return function (a) {
+            return a + value;
+        };
+    }
+
     // Arithmetic
     j.add = j.enforce('number, number => number', operation('+'));
     j.divide = j.enforce('number, number => number', operation('/'));
@@ -87,17 +89,17 @@
     j.multiply = j.enforce('number, number => number', operation('*'));
     j.subtract = j.enforce('number, number => number', operation('-'));
 
-    j.addBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.add));
-    j.divideBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.reverseArgs(j.divide)));
-    j.modBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.reverseArgs(j.mod)));
-    j.multiplyBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.multiply));
-    j.subtractBy = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(j.reverseArgs(j.subtract)));
+    j.addBy = j.enforce('number => number => number', operateBy('+'));
+    j.divideBy = j.enforce('number => number => number', operateBy('/'));
+    j.modBy = j.enforce('number => number => number', operateBy('%'));
+    j.multiplyBy = j.enforce('number => number => number', operateBy('*'));
+    j.subtractBy = j.enforce('number => number => number', operateBy('-'));
 
-    j.min = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(min));
-    j.max = j.enforce('[number], [number] => taggedUnion<function;number>', operationCurry(max));
+    j.min = j.enforce('number, number => number', extrema(compare('<')));
+    j.max = j.enforce('number, number => number', extrema(compare('>')));
 
-    j.inc = j.enforce('[int] => int', operationCurry(j.add)(1));
-    j.dec = j.enforce('[int] => int', operationCurry(j.add)(-1));
+    j.inc = j.enforce('int => int', incBy(1));
+    j.dec = j.enforce('int => int', incBy(-1));
 
     j.range = j.enforce('int, [int] => int => array<int>', range);
     

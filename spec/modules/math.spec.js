@@ -73,11 +73,6 @@ describe('JFP math', function () {
             expect(j.min(2, 1)).toBe(1);
         });
         
-        it('should find the min of two numbers when curried', function () {
-            expect(j.min(1)(2)).toBe(1);
-            expect(j.min(2)(1)).toBe(1);
-        });
-        
     });
     
     describe('max', function () {
@@ -85,11 +80,6 @@ describe('JFP math', function () {
         it('should find the max of two numbers', function () {
             expect(j.max(1, 2)).toBe(2);
             expect(j.max(3, 1)).toBe(3);
-        });
-        
-        it('should find the max of two numbers when curried', function () {
-            expect(j.max(1)(4)).toBe(4);
-            expect(j.max(5)(1)).toBe(5);
         });
         
     });
