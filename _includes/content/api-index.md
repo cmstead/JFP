@@ -506,7 +506,7 @@ j.subtract(3)(5); // -2
 ### addBy
 
 - Performance: O(1)
-- Signature: `[number], [number] => taggedUnion<function;number>`
+- Signature: `number => number => number`
 
 ~~~~
 j.addBy(5)(6); // 11
@@ -515,7 +515,7 @@ j.addBy(5)(6); // 11
 ### divideBy
 
 - Performance: O(1)
-- Signature: `[number], [number] => taggedUnion<function;number>`
+- Signature: `number => number => number`
 
 ~~~~
 j.divideBy(3)(12); // 4
@@ -524,7 +524,7 @@ j.divideBy(3)(12); // 4
 ### modBy
 
 - Performance: O(1)
-- Signature: `[number], [number] => taggedUnion<function;number>`
+- Signature: `number => number => number`
 
 ~~~~
 j.modBy(5)(7); // 2
@@ -533,7 +533,7 @@ j.modBy(5)(7); // 2
 ### multiplyBy
 
 - Performance: O(1)
-- Signature: `[number], [number] => taggedUnion<function;number>`
+- Signature: `number => number => number`
 
 ~~~~
 j.multiplyBy(7)(8); // 56
@@ -542,7 +542,7 @@ j.multiplyBy(7)(8); // 56
 ### subtractBy
 
 - Performance: O(1)
-- Signature: `[number], [number] => taggedUnion<function;number>`
+- Signature: `number => number => number`
 
 ~~~~
 j.subtractBy(3)(7); // 4
@@ -551,7 +551,7 @@ j.subtractBy(3)(7); // 4
 ### min
 
 - Performance: O(1)
-- Signature: `[number], [number] => taggedUnion<function;number>`
+- Signature: `number => number => number`
 
 ~~~~
 j.min(5, 6); // 5
@@ -561,7 +561,7 @@ j.min(9)(4); // 4
 ### max
 
 - Performance: O(1)
-- Signature: `[number], [number] => taggedUnion<function;number>`
+- Signature: `number => number => number`
 
 ~~~~
 j.max(7, 2); // 7
@@ -571,7 +571,7 @@ j.max(8)(5); // 8
 ### inc
 
 - Performance: O(1)
-- Signature: `[int] => int`
+- Signature: `int => int`
 
 ~~~~
 j.inc(4); // 5
@@ -580,7 +580,7 @@ j.inc(4); // 5
 ### dec
 
 - Performance: O(1)
-- Signature: `[int] => int`
+- Signature: `int => int`
 
 ~~~~
 j.dec(9); // 8
@@ -744,7 +744,7 @@ j.invert(j.isTypeOf('string')('foo')); // false
 ### equal
 
 - Performance: O(1)
-- Signature: `*, [*] => taggedUnion<function;boolean>`
+- Signature: `comparable => comparable => boolean`
 
 ~~~~
 j.equal(5, 5); // true;
@@ -755,7 +755,7 @@ j.equal(5)(7); // false;
 ### and
 
 - Performance: O(1)
-- Signature: `*, [*] => taggedUnion<function;boolean>`
+- Signature: `comparable => comparable => boolean`
 
 ~~~~
 j.and(true, true); // true
@@ -765,7 +765,7 @@ j.and(true, false); // false
 ### or
 
 - Performance: O(1)
-- Signature: `*, [*] => taggedUnion<function;boolean>`
+- Signature: `comparable => comparable => boolean`
 
 ~~~~
 j.or(true, true); // true
@@ -776,7 +776,7 @@ j.or(false, false); // false
 ### xor
 
 - Performance: O(1)
-- Signature: `*, [*] => taggedUnion<function;boolean>`
+- Signature: `comparable => comparable => boolean`
 
 ~~~~
 j.xor(true, true); // false
