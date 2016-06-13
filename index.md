@@ -3,7 +3,7 @@ layout: default
 ---
 
 <div id="function-list">
-    {% markdown content/sidebar.md %}
+    {% include sidebar.html %}
 </div>
 
 <div id="function-info">

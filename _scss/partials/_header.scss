@@ -29,25 +29,24 @@
     }
   }
   
-}
+  ul {
+    float: left;
+    margin: 0;
+    padding: 5px 0;
 
-.nav-wrapper {
-    background-color: #fafafa;
-    border: 1px solid #ddd;
-    border-width: 1px 0;
-    margin: 20px 0;
-    padding: 7px;
-    
-    ul {
-        margin: 0;
-        li {
-            display: inline-block;
-            list-style: none;
-            margin-right: 10px;
-            
-            a {
-                color: #777 !important;
-            }
+    li {
+      display: inline-block;
+      list-style: none;
+      margin-right: 10px;
+      
+      a {
+        color: #777 !important;
+        opacity: 0.5;
+        
+        &:hover {
+          opacity: 1;
         }
+      }
     }
+  }
 }

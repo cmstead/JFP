@@ -3,9 +3,9 @@ layout: default
 ---
 
 <div id="function-list">
-    {% markdown content/sidebar.md %}
+    {% include sidebar.html %}
 </div>
 
 <div id="function-info">
-    {% markdown content/index.md %}
+    {% markdown content/api-index.md %}
 </div>

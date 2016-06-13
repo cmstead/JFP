@@ -641,26 +641,24 @@ ol li {
   text-align: right;
   width: 600px;
 }
-
-/* line 34, ../_scss/partials/_header.scss */
-.nav-wrapper {
-  background-color: #fafafa;
-  border: 1px solid #ddd;
-  border-width: 1px 0;
-  margin: 20px 0;
-  padding: 7px;
-}
-/* line 41, ../_scss/partials/_header.scss */
-.nav-wrapper ul {
+/* line 32, ../_scss/partials/_header.scss */
+.head-wrapper ul {
+  float: left;
   margin: 0;
+  padding: 5px 0;
 }
-/* line 43, ../_scss/partials/_header.scss */
-.nav-wrapper ul li {
+/* line 37, ../_scss/partials/_header.scss */
+.head-wrapper ul li {
   display: inline-block;
   list-style: none;
   margin-right: 10px;
 }
-/* line 48, ../_scss/partials/_header.scss */
-.nav-wrapper ul li a {
+/* line 42, ../_scss/partials/_header.scss */
+.head-wrapper ul li a {
   color: #777 !important;
+  opacity: 0.5;
+}
+/* line 46, ../_scss/partials/_header.scss */
+.head-wrapper ul li a:hover {
+  opacity: 1;
 }
