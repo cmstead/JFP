@@ -44,6 +44,6 @@
         return callBehavior(behavior);
     }
     
-    j.cond = j.enforce('function<function;function;function> => *', cond);
+    j.cond = j.enforce('function<function;function;boolean> => *', cond);
     
 })(jfp);

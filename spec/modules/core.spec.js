@@ -191,4 +191,22 @@ describe('jfp core', function () {
         
     });
     
+    describe('rpartial', function () {
+        
+        function divide (a, b){
+            return a / b;
+        }
+        
+        function truncate (value){
+            return Math.floor(value * 1000) / 1000;
+        }
+        
+        it('should partially apply arguments to a function from right to left', function () {
+            expect(j.rpartial(divide, 6, 12)()).toBe(0.5);
+            expect(j.rpartial(divide, 3)(12)).toBe(4);
+            expect(truncate(j.rpartial(divide)(4, 12))).toBe(0.333);
+        });
+        
+    });
+    
 });
