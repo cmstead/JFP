@@ -36,7 +36,4 @@
     j.or = j.enforce(currySignature, compare('||'));
     j.xor = j.enforce(currySignature, compare('xor'));
 
-    j.isNil = j.isTypeOf('nil');
-    j.isUndefined = j.isTypeOf('undefined');
-
 })(jfp);

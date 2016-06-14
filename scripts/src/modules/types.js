@@ -28,10 +28,14 @@
     }
 
     function checkDefined (value){
-        return !signet.isTypeOf('undefined')(value);
+        return typeof value !== 'undefined';
     }
 
     function checkIndex (value){
+        return value >= 0;
+    }
+
+    function checkNatural (value){
         return value >= 0;
     }
 
@@ -39,6 +43,7 @@
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
         _signet.subtype('array')('nil', checkNil);
         _signet.subtype('int')('index', checkIndex);
+        _signet.subtype('int')('natural', checkNatural);
         _signet.subtype('object')('arguments', checkArguments);
         _signet.subtype('object')('signet', checkSignet);
 

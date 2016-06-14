@@ -16,8 +16,6 @@
         };
     }
     
-    var isResult = j.compose(Boolean, j.first);
-    
     function throwOnNil (result, condFn){
         if(j.isNil(result)) {
             throw new Error('All possible conditions were not represented in ' + condFn.toString());
@@ -36,7 +34,7 @@
         
         condFn(when(condArray), then, true);
                 
-        var result = j.find(isResult)(condArray);
+        var result = j.find(j.compose(Boolean, j.first))(condArray);
         var behavior = result[1];
         
         throwOnNil(result, condFn);

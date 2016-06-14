@@ -1,8 +1,6 @@
 (function (j) {
     'use strict';
 
-    var isNil = j.isTypeOf('nil');
-
     function nth(index) {
         return function (values) {
             return j.maybe('defined')(values[index]);
@@ -10,8 +8,7 @@
     }
 
     function lastIndexOf(values) {
-        var length = values.length;
-        return length === 0 ? length : length - 1;
+        return j.either('natural')(0)(values.length - 1);
     }
 
     function dropNth(index) {
@@ -23,29 +20,22 @@
     }
 
     function reverse(values) {
-        return j.recur(reverser)([], values);
-
-        function reverser(recur, result, valueSet) {
-            return !isNil(valueSet) ?
-                recur(j.cons(j.first(valueSet), result), j.rest(valueSet)) :
-                result;
-        }
+        return j.slice(0)(values).reverse();
     }
 
     function folder(fn) {
         return j.recur(function (recur, result, values) {
-            return isNil(values) ? result : recur(fn(result, j.first(values)), j.rest(values));
+            return j.isNil(values) ? result : recur(fn(result, j.first(values)), j.rest(values));
         });
     }
 
-    function fold(direction) {
+    function fold(directionProcess) {
         return function (fn, initial) {
             return function (values) {
-                var noInitial = j.isTypeOf('undefined')(initial);
-                var valueSet = direction === 'left' ? values : reverse(values);
+                var valueSet = directionProcess(values);
 
-                var value = noInitial ? j.first(valueSet) : initial;
-                var list = noInitial ? j.rest(valueSet) : valueSet;
+                var value = j.isUndefined(initial) ? j.first(valueSet) : initial;
+                var list = j.isUndefined(initial) ? j.rest(valueSet) : valueSet;
 
                 return folder(fn)(value, list);
             };
@@ -55,7 +45,7 @@
     function foldApplicator(behavior) {
         return function (fn) {
             return function (values) {
-                return fold('left')(behavior(fn), [])(values);
+                return j.foldl(behavior(fn), [])(values);
             };
         };
     }
@@ -72,39 +62,29 @@
         };
     }
 
-    function find (pred){
+    function find(pred) {
         return function (values) {
             return j.recur(finder)(values);
-            
-            function finder (recur, values){
+
+            function finder(recur, values) {
                 var value = j.first(values);
-                return isNil(values) || pred(value) ? value : recur(j.rest(values));
+                return j.isNil(values) || pred(value) ? value : recur(j.rest(values));
             }
         };
     }
 
-    function some(pred) {
-        return j.recur(check);
+    var filter = foldApplicator(filterer);
+    var map = foldApplicator(mapper);
 
-        function check(recur, values) {
-            var match = pred(j.first(values));
-            var done = isNil(values);
-
-            return match || done ? match && !done : recur(j.rest(values));
-        }
+    function sort(comparator) {
+        return function (values) {
+            return j.slice(0)(values).sort(j.either('function')(j.subtract)(comparator));
+        };
     }
 
-    function sort (comparator){
+    function some(pred) {
         return function (values) {
-            var valuesCopy = j.slice(0)(values);
-
-            if(j.isTypeOf('function')(comparator)) {
-                valuesCopy.sort(comparator);
-            } else {
-                valuesCopy.sort();
-            }
-
-            return valuesCopy; 
+            return filter(pred)(values).length > 0;
         };
     }
 
@@ -112,17 +92,14 @@
     function all(pred) { return j.compose(none, j.invert)(pred); }
     function take(count) { return j.slice(0, count); }
 
-    var filter = foldApplicator(filterer);
-    var map = foldApplicator(mapper);
-
     j.all = j.enforce('function => array<*> => boolean', all);
     j.compact = j.enforce('[array] => array<*>', filter(Boolean));
     j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
     j.filter = j.enforce('function => array<*> => array<*>', filter);
     j.first = j.enforce('array<*> => maybe<defined>', nth(0));
     j.find = j.enforce('function<*> => array<*> => maybe<defined>', find);
-    j.foldl = j.enforce('function, [*] => array<*> => *', fold('left'));
-    j.foldr = j.enforce('function, [*] => array<*> => *', fold('right'));
+    j.foldl = j.enforce('function, [*] => array<*> => *', fold(j.identity));
+    j.foldr = j.enforce('function, [*] => array<*> => *', fold(reverse));
     j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
     j.map = j.enforce('function => array<*> => array<*>', map);
     j.none = j.enforce('function => array<*> => boolean', none);

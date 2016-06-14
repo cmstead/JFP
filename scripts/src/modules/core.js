@@ -2,13 +2,16 @@
     'use strict';
 
     var isUndefined = j.isTypeOf('undefined');
-
-    function identity(value) {
-        return value;
-    }
+    var isNil = j.isTypeOf('nil');
 
     function always(value) {
-        return identity.bind(null, value);
+        return function () {
+            return value;
+        };
+    }
+
+    function identity(value) {
+        return always(value)();
     }
 
     function either(typeStr) {
@@ -83,7 +86,6 @@
     function compose() {
         var fns = slice(0)(arguments).reverse();
         var fn = fns.shift();
-        var isNil = j.isTypeOf('nil');
 
         return function () {
             return recur(execCompose)(apply(fn, slice(0)(arguments)), fns);
@@ -100,17 +102,14 @@
         };
     }
 
-    var maybeArray = maybe('array');
-    var eitherInt = either('int');
-
     function attachCurryData (curriable, fn, count, args){
         Object.defineProperty(curriable, 'fnLength', {
-            value: eitherInt(fn.length)(count),
+            value: either('int')(fn.length)(count),
             writeable: false
         });
         
         curriable.fn = fn;
-        curriable.args = maybeArray(args);
+        curriable.args = maybe('array')(args);
 
         return curriable;
     }
@@ -158,5 +157,8 @@
     j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
+
+    j.isNil = isNil;
+    j.isUndefined = isUndefined;
 
 })(jfp);

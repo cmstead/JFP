@@ -1,8 +1,6 @@
 (function (j) {
     'use strict';
 
-    var isUndefined = j.isTypeOf('undefined');
-
     function operation (operator){
         return function (a, b) {
             switch (operator) {
@@ -16,8 +14,6 @@
                     return a / b;
                 case '%':
                     return a % b;
-                default:
-                    return new Error('Bad operator');
             }
         };
     }
@@ -40,16 +36,15 @@
     }
 
     function operateBy (operator){
-        var localOperation = operation(operator);
         return function (a) {
             return function (b){
-                return localOperation(b, a);
+                return operation(operator)(b, a);
             };
         };
     }
 
     function range(min, increment) {
-        var offset = isUndefined(increment) ? 1 : increment;
+        var offset = j.isUndefined(increment) ? 1 : increment;
         
         return function (max) {
             return j.recur(buildRange)(min, []);
@@ -76,12 +71,6 @@
         };
     }
 
-    function incBy (value){
-        return function (a) {
-            return a + value;
-        };
-    }
-
     // Arithmetic
     j.add = j.enforce('number, number => number', operation('+'));
     j.divide = j.enforce('number, number => number', operation('/'));
@@ -98,8 +87,8 @@
     j.min = j.enforce('number, number => number', extrema(compare('<')));
     j.max = j.enforce('number, number => number', extrema(compare('>')));
 
-    j.inc = j.enforce('int => int', incBy(1));
-    j.dec = j.enforce('int => int', incBy(-1));
+    j.inc = j.enforce('int => int', function (a) { return a + 1; });
+    j.dec = j.enforce('int => int', function (a) { return a - 1; });
 
     j.range = j.enforce('int, [int] => int => array<int>', range);
     

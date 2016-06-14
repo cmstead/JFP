@@ -35,10 +35,14 @@ var jfp = (function(){
     }
 
     function checkDefined (value){
-        return !signet.isTypeOf('undefined')(value);
+        return typeof value !== 'undefined';
     }
 
     function checkIndex (value){
+        return value >= 0;
+    }
+
+    function checkNatural (value){
         return value >= 0;
     }
 
@@ -46,6 +50,7 @@ var jfp = (function(){
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
         _signet.subtype('array')('nil', checkNil);
         _signet.subtype('int')('index', checkIndex);
+        _signet.subtype('int')('natural', checkNatural);
         _signet.subtype('object')('arguments', checkArguments);
         _signet.subtype('object')('signet', checkSignet);
 
@@ -80,13 +85,16 @@ var jfp = (function(){
     'use strict';
 
     var isUndefined = j.isTypeOf('undefined');
-
-    function identity(value) {
-        return value;
-    }
+    var isNil = j.isTypeOf('nil');
 
     function always(value) {
-        return identity.bind(null, value);
+        return function () {
+            return value;
+        };
+    }
+
+    function identity(value) {
+        return always(value)();
     }
 
     function either(typeStr) {
@@ -161,7 +169,6 @@ var jfp = (function(){
     function compose() {
         var fns = slice(0)(arguments).reverse();
         var fn = fns.shift();
-        var isNil = j.isTypeOf('nil');
 
         return function () {
             return recur(execCompose)(apply(fn, slice(0)(arguments)), fns);
@@ -178,17 +185,14 @@ var jfp = (function(){
         };
     }
 
-    var maybeArray = maybe('array');
-    var eitherInt = either('int');
-
     function attachCurryData (curriable, fn, count, args){
         Object.defineProperty(curriable, 'fnLength', {
-            value: eitherInt(fn.length)(count),
+            value: either('int')(fn.length)(count),
             writeable: false
         });
         
         curriable.fn = fn;
-        curriable.args = maybeArray(args);
+        curriable.args = maybe('array')(args);
 
         return curriable;
     }
@@ -237,6 +241,9 @@ var jfp = (function(){
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
 
+    j.isNil = isNil;
+    j.isUndefined = isUndefined;
+
 })(jfp);
 
 (function (j) {
@@ -277,15 +284,10 @@ var jfp = (function(){
     j.or = j.enforce(currySignature, compare('||'));
     j.xor = j.enforce(currySignature, compare('xor'));
 
-    j.isNil = j.isTypeOf('nil');
-    j.isUndefined = j.isTypeOf('undefined');
-
 })(jfp);
 
 (function (j) {
     'use strict';
-
-    var isNil = j.isTypeOf('nil');
 
     function nth(index) {
         return function (values) {
@@ -294,8 +296,7 @@ var jfp = (function(){
     }
 
     function lastIndexOf(values) {
-        var length = values.length;
-        return length === 0 ? length : length - 1;
+        return j.either('natural')(0)(values.length - 1);
     }
 
     function dropNth(index) {
@@ -307,29 +308,22 @@ var jfp = (function(){
     }
 
     function reverse(values) {
-        return j.recur(reverser)([], values);
-
-        function reverser(recur, result, valueSet) {
-            return !isNil(valueSet) ?
-                recur(j.cons(j.first(valueSet), result), j.rest(valueSet)) :
-                result;
-        }
+        return j.slice(0)(values).reverse();
     }
 
     function folder(fn) {
         return j.recur(function (recur, result, values) {
-            return isNil(values) ? result : recur(fn(result, j.first(values)), j.rest(values));
+            return j.isNil(values) ? result : recur(fn(result, j.first(values)), j.rest(values));
         });
     }
 
-    function fold(direction) {
+    function fold(directionProcess) {
         return function (fn, initial) {
             return function (values) {
-                var noInitial = j.isTypeOf('undefined')(initial);
-                var valueSet = direction === 'left' ? values : reverse(values);
+                var valueSet = directionProcess(values);
 
-                var value = noInitial ? j.first(valueSet) : initial;
-                var list = noInitial ? j.rest(valueSet) : valueSet;
+                var value = j.isUndefined(initial) ? j.first(valueSet) : initial;
+                var list = j.isUndefined(initial) ? j.rest(valueSet) : valueSet;
 
                 return folder(fn)(value, list);
             };
@@ -339,7 +333,7 @@ var jfp = (function(){
     function foldApplicator(behavior) {
         return function (fn) {
             return function (values) {
-                return fold('left')(behavior(fn), [])(values);
+                return j.foldl(behavior(fn), [])(values);
             };
         };
     }
@@ -356,39 +350,29 @@ var jfp = (function(){
         };
     }
 
-    function find (pred){
+    function find(pred) {
         return function (values) {
             return j.recur(finder)(values);
-            
-            function finder (recur, values){
+
+            function finder(recur, values) {
                 var value = j.first(values);
-                return isNil(values) || pred(value) ? value : recur(j.rest(values));
+                return j.isNil(values) || pred(value) ? value : recur(j.rest(values));
             }
         };
     }
 
-    function some(pred) {
-        return j.recur(check);
+    var filter = foldApplicator(filterer);
+    var map = foldApplicator(mapper);
 
-        function check(recur, values) {
-            var match = pred(j.first(values));
-            var done = isNil(values);
-
-            return match || done ? match && !done : recur(j.rest(values));
-        }
+    function sort(comparator) {
+        return function (values) {
+            return j.slice(0)(values).sort(j.either('function')(j.subtract)(comparator));
+        };
     }
 
-    function sort (comparator){
+    function some(pred) {
         return function (values) {
-            var valuesCopy = j.slice(0)(values);
-
-            if(j.isTypeOf('function')(comparator)) {
-                valuesCopy.sort(comparator);
-            } else {
-                valuesCopy.sort();
-            }
-
-            return valuesCopy; 
+            return filter(pred)(values).length > 0;
         };
     }
 
@@ -396,17 +380,14 @@ var jfp = (function(){
     function all(pred) { return j.compose(none, j.invert)(pred); }
     function take(count) { return j.slice(0, count); }
 
-    var filter = foldApplicator(filterer);
-    var map = foldApplicator(mapper);
-
     j.all = j.enforce('function => array<*> => boolean', all);
     j.compact = j.enforce('[array] => array<*>', filter(Boolean));
     j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
     j.filter = j.enforce('function => array<*> => array<*>', filter);
     j.first = j.enforce('array<*> => maybe<defined>', nth(0));
     j.find = j.enforce('function<*> => array<*> => maybe<defined>', find);
-    j.foldl = j.enforce('function, [*] => array<*> => *', fold('left'));
-    j.foldr = j.enforce('function, [*] => array<*> => *', fold('right'));
+    j.foldl = j.enforce('function, [*] => array<*> => *', fold(j.identity));
+    j.foldr = j.enforce('function, [*] => array<*> => *', fold(reverse));
     j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
     j.map = j.enforce('function => array<*> => array<*>', map);
     j.none = j.enforce('function => array<*> => boolean', none);
@@ -422,8 +403,6 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    var isUndefined = j.isTypeOf('undefined');
-
     function operation (operator){
         return function (a, b) {
             switch (operator) {
@@ -437,8 +416,6 @@ var jfp = (function(){
                     return a / b;
                 case '%':
                     return a % b;
-                default:
-                    return new Error('Bad operator');
             }
         };
     }
@@ -461,16 +438,15 @@ var jfp = (function(){
     }
 
     function operateBy (operator){
-        var localOperation = operation(operator);
         return function (a) {
             return function (b){
-                return localOperation(b, a);
+                return operation(operator)(b, a);
             };
         };
     }
 
     function range(min, increment) {
-        var offset = isUndefined(increment) ? 1 : increment;
+        var offset = j.isUndefined(increment) ? 1 : increment;
         
         return function (max) {
             return j.recur(buildRange)(min, []);
@@ -497,12 +473,6 @@ var jfp = (function(){
         };
     }
 
-    function incBy (value){
-        return function (a) {
-            return a + value;
-        };
-    }
-
     // Arithmetic
     j.add = j.enforce('number, number => number', operation('+'));
     j.divide = j.enforce('number, number => number', operation('/'));
@@ -519,8 +489,8 @@ var jfp = (function(){
     j.min = j.enforce('number, number => number', extrema(compare('<')));
     j.max = j.enforce('number, number => number', extrema(compare('>')));
 
-    j.inc = j.enforce('int => int', incBy(1));
-    j.dec = j.enforce('int => int', incBy(-1));
+    j.inc = j.enforce('int => int', function (a) { return a + 1; });
+    j.dec = j.enforce('int => int', function (a) { return a - 1; });
 
     j.range = j.enforce('int, [int] => int => array<int>', range);
     
@@ -626,8 +596,6 @@ var jfp = (function(){
         };
     }
     
-    var isResult = j.compose(Boolean, j.first);
-    
     function throwOnNil (result, condFn){
         if(j.isNil(result)) {
             throw new Error('All possible conditions were not represented in ' + condFn.toString());
@@ -646,7 +614,7 @@ var jfp = (function(){
         
         condFn(when(condArray), then, true);
                 
-        var result = j.find(isResult)(condArray);
+        var result = j.find(j.compose(Boolean, j.first))(condArray);
         var behavior = result[1];
         
         throwOnNil(result, condFn);
