@@ -7,5 +7,6 @@ layout: default
 </div>
 
 <div id="function-info">
-    {% markdown content/api-index.md %}
+    {% capture page-body %}{% include content/api-index.md %}{% endcapture %}
+    {{ page-body | markdownify }}
 </div>
