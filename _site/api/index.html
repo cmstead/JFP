@@ -31,7 +31,6 @@
     <div class="title">
         <h1>JFP</h1>
         <ul>
-            <!-- li><a href="/JFP/api">v3.x API</a></li -->
             <li><a href="/JFP/v2.x">Visit v2.x docs</a></li>
         </ul>
         <h2>The Javascript Function Processor</h2>
@@ -697,7 +696,7 @@ j.subtract(3)(5); // -2
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; number</code></li>
 </ul>
 
 <pre><code>j.addBy(5)(6); // 11
@@ -707,7 +706,7 @@ j.subtract(3)(5); // -2
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; number</code></li>
 </ul>
 
 <pre><code>j.divideBy(3)(12); // 4
@@ -717,7 +716,7 @@ j.subtract(3)(5); // -2
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; number</code></li>
 </ul>
 
 <pre><code>j.modBy(5)(7); // 2
@@ -727,7 +726,7 @@ j.subtract(3)(5); // -2
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; number</code></li>
 </ul>
 
 <pre><code>j.multiplyBy(7)(8); // 56
@@ -737,7 +736,7 @@ j.subtract(3)(5); // -2
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; number</code></li>
 </ul>
 
 <pre><code>j.subtractBy(3)(7); // 4
@@ -747,7 +746,7 @@ j.subtract(3)(5); // -2
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; number</code></li>
 </ul>
 
 <pre><code>j.min(5, 6); // 5
@@ -758,7 +757,7 @@ j.min(9)(4); // 4
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>[number], [number] =&gt; taggedUnion&lt;function;number&gt;</code></li>
+  <li>Signature: <code>number =&gt; number =&gt; number</code></li>
 </ul>
 
 <pre><code>j.max(7, 2); // 7
@@ -769,7 +768,7 @@ j.max(8)(5); // 8
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>[int] =&gt; int</code></li>
+  <li>Signature: <code>int =&gt; int</code></li>
 </ul>
 
 <pre><code>j.inc(4); // 5
@@ -779,7 +778,7 @@ j.max(8)(5); // 8
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>[int] =&gt; int</code></li>
+  <li>Signature: <code>int =&gt; int</code></li>
 </ul>
 
 <pre><code>j.dec(9); // 8
@@ -956,7 +955,7 @@ j.toObject(testArray); // { foo: 'bar', baz: 'quux' }
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Signature: <code>comparable =&gt; comparable =&gt; boolean</code></li>
 </ul>
 
 <pre><code>j.equal(5, 5); // true;
@@ -968,7 +967,7 @@ j.equal(5)(7); // false;
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Signature: <code>comparable =&gt; comparable =&gt; boolean</code></li>
 </ul>
 
 <pre><code>j.and(true, true); // true
@@ -979,7 +978,7 @@ j.and(true, false); // false
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Signature: <code>comparable =&gt; comparable =&gt; boolean</code></li>
 </ul>
 
 <pre><code>j.or(true, true); // true
@@ -991,7 +990,7 @@ j.or(false, false); // false
 
 <ul>
   <li>Performance: O(1)</li>
-  <li>Signature: <code>*, [*] =&gt; taggedUnion&lt;function;boolean&gt;</code></li>
+  <li>Signature: <code>comparable =&gt; comparable =&gt; boolean</code></li>
 </ul>
 
 <pre><code>j.xor(true, true); // false

@@ -229,6 +229,19 @@ return isNil(values) ? total : recur(j.rest(values), total + j.first(values));
 });
 ~~~~
 
+### reverseArgs
+
+- Performance: O(n)
+- Signature: `function => [*] => *`
+
+~~~~
+function divide (a, b) {
+return a / b;
+}
+
+j.reverseArgs(divide)(2, 12); // 6
+~~~~
+
 ### rpartial
 
 - Performance: O(1)
@@ -245,19 +258,6 @@ divBy2(1); // 0.5
 divBy2(4); // 2
 
 divBy2(divBy2(divBy2(divBy2(12)))); // 0.75
-~~~~
-
-### reverseArgs
-
-- Performance: O(n)
-- Signature: `function => [*] => *`
-
-~~~~
-function divide (a, b) {
-return a / b;
-}
-
-j.reverseArgs(divide)(2, 12); // 6
 ~~~~
 
 ### slice
