@@ -29,7 +29,7 @@ module.exports = function(grunt){
     /* Register composite grunt tasks */
 
     grunt.registerTask('test', ['clean', 'concat', 'uglify', 'copy:nuget', 'jshint', 'jasmine_nodejs']);
-    grunt.registerTask('build', ['clean', 'concat', 'jshint', 'jasmine_nodejs', 'uglify', 'copy:nuget']);
+    grunt.registerTask('build', ['clean', 'concat', 'jshint', 'uglify', 'jasmine_nodejs', 'copy:nuget']);
 
     grunt.registerTask('default', ['build']);
 };
