@@ -59,6 +59,8 @@ var signet = setJfpTypes(signetFactory());
 - `boundedString<>`
 - `formattedString<>`
 - `taggedUnion<>`
+- `typeString`
+- `predicate`
 - `nil`
 - `index`
 - `arguments`
@@ -169,7 +171,7 @@ j.rcurry(divide)(2)(1); // 0.5
 ### either
 
 - Performance: O(1)
-- Signature: `string => * => * => *`
+- Signature: `taggedUnion<typeString;predicate> => * => * => *`
 
 ~~~~
 j.either('number')(5)(0); // 0
@@ -189,7 +191,7 @@ j.identity(42); // 42
 ### maybe
 
 - Performance: O(1)
-- Signature: `string => * => maybe<defined>`
+- Signature: `taggedUnion<typeString;predicate> => * => maybe<defined>`
 
 ~~~~
 j.maybe('string')('foo'); // 'foo'
