@@ -4,7 +4,7 @@
     var signet = typeof signet !== 'undefined' ? signet : require('signet')();
 
     function checkNil(value) {
-        return value.length === 0 && Object.keys(value).length === 0;
+        return value.length === 0;
     }
 
     function checkMaybe(value, typeObj) {
@@ -39,9 +39,14 @@
         return value >= 0;
     }
 
+    function checkPair (value){
+        return value.length > 0;
+    }
+
     function setJfpTypes(_signet) {
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
         _signet.subtype('array')('nil', checkNil);
+        _signet.subtype('array')('pair', checkPair);
         _signet.subtype('int')('index', checkIndex);
         _signet.subtype('int')('natural', checkNatural);
         _signet.subtype('object')('arguments', checkArguments);
