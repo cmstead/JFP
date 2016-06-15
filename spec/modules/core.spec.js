@@ -18,6 +18,12 @@ describe('jfp core', function () {
             expect(result).toBe('foo');
         });
         
+        it('should take a predicate function in place of a type', function () {
+            var isEven = j.compose(j.equal(0), j.modBy(2));
+            expect(j.isNil(j.maybe(isEven)(3))).toBe(true);
+            expect(j.maybe(isEven)(4)).toBe(4);
+        });
+
     });
     
     describe('either', function () {
@@ -28,6 +34,12 @@ describe('jfp core', function () {
         
         it('should return default value if value does not match type', function () {
             expect(j.either('number')(0)('foo')).toBe(0);
+        });
+        
+        it('should take a predicate function in place of a type', function () {
+            var isEven = j.compose(j.equal(0), j.modBy(2));
+            expect(j.either(isEven)(0)(3)).toBe(0);
+            expect(j.either(isEven)(0)(4)).toBe(4);
         });
         
     });

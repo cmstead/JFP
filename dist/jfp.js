@@ -58,6 +58,8 @@ var jfp = (function(){
         _signet.extend('null', checkNull);
         _signet.extend('defined', checkDefined);
 
+        _signet.alias('typeString', 'string');
+        _signet.alias('predicate', 'function');
         _signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
         _signet.alias('comparable', 'taggedUnion<boolean;number;string>');
         _signet.alias('objectKey', 'taggedUnion<string;symbol>');
@@ -97,8 +99,8 @@ var jfp = (function(){
         return always(value)();
     }
 
-    function either(typeStr) {
-        var checkType = j.isTypeOf(typeStr);
+    function either(typeDef) {
+        var checkType = j.isTypeOf('predicate')(typeDef) ? typeDef : j.isTypeOf(typeDef);
 
         return function (defaultValue) {
             return function (value) {
@@ -107,8 +109,8 @@ var jfp = (function(){
         };
     }
 
-    function maybe(typeStr) {
-        return either(typeStr)(j.nil);
+    function maybe(typeDef) {
+        return either(typeDef)(j.nil);
     }
 
     function concat(valuesa, valuesb) {
@@ -232,9 +234,9 @@ var jfp = (function(){
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', directionalCurry(concat));
     j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', directionalCurry(reverseArgs(concat)));
-    j.either = j.enforce('string => * => * => *', either);
+    j.either = j.enforce('taggedUnion<typeString;predicate> => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
-    j.maybe = j.enforce('string => * => maybe<defined>', maybe);
+    j.maybe = j.enforce('taggedUnion<typeString;predicate> => * => maybe<defined>', maybe);
     j.partial = j.enforce('function, [*] => [*] => *', directionalPartial(concat));
     j.recur = j.enforce('function => function', recur);
     j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));

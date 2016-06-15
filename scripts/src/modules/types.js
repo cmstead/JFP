@@ -51,6 +51,8 @@
         _signet.extend('null', checkNull);
         _signet.extend('defined', checkDefined);
 
+        _signet.alias('typeString', 'string');
+        _signet.alias('predicate', 'function');
         _signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
         _signet.alias('comparable', 'taggedUnion<boolean;number;string>');
         _signet.alias('objectKey', 'taggedUnion<string;symbol>');
