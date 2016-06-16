@@ -84,7 +84,7 @@ var jfp = (function(){
     j.enforce = signet.enforce;
     j.isTypeOf = signet.isTypeOf;
     j.setJfpTypes = signet.enforce('signet => signet', setJfpTypes);
-
+    j.typeChain = signet.typeChain;
 
 })(jfp);
 
