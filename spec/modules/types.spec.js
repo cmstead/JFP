@@ -9,15 +9,6 @@ describe('jfp types', function () {
             expect(j.isTypeOf('array')([])).toBe(true);
         });
         
-        it('should properly verify nil', function () {
-            var modifiedArray = [];
-            modifiedArray['foo'] = 'bar';
-            
-            expect(j.isTypeOf('nil')([])).toBe(true);
-            expect(j.isTypeOf('nil')([1, 2, 3])).toBe(false);
-            expect(j.isTypeOf('nil')(modifiedArray)).toBe(false);
-        });
-        
     });
 
     describe('nil', function () {
