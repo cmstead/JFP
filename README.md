@@ -13,6 +13,10 @@ NuGet Package Information
 
 https://www.nuget.org/packages/JFP/
 
+Package dependency for web deployment:
+
+https://www.npmjs.com/package/signet
+
 JFP is an opinionated, type-enforced functional programming library. JFP makes use of the Signet type
 library, not only relying on the types for its own signatures, but also to provide rich type
 interactions for the user of JFP.
