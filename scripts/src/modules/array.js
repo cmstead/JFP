@@ -76,6 +76,29 @@
     var filter = foldApplicator(filterer);
     var map = foldApplicator(mapper);
 
+    var isArray = j.isTypeOf('array');
+
+    function rreduce(fn, initialValue) {
+        return function (values) {
+            var initValue = j.isUndefined(initialValue) ? nth(0)(values) : initialValue;
+            var rest = j.isUndefined(initialValue) ? j.slice(1)(values) : values;
+
+            return j.recur(function (recur, lastResult, values) {
+                return j.cond(function (when, then, _default) {
+                    when(j.isNil(values), then(lastResult));
+
+                    when(isArray(nth(0)(values)), then(function () {
+                        return recur(lastResult, j.concat(j.slice(1)(values), nth(0)(values)));
+                    }));
+
+                    when(_default, then(function () {
+                        return recur(fn(lastResult, nth(0)(values)), j.slice(1)(values));
+                    }));
+                });
+            })(initValue, rest);
+        };
+    }
+
     function sort(comparator) {
         return function (values) {
             return j.slice(0)(values).sort(j.either('function')(j.subtract)(comparator));
@@ -106,6 +129,7 @@
     j.nth = j.enforce('index => array<*> => maybe<defined>', nth);
     j.rest = j.slice(1);
     j.reverse = j.enforce('array<*> => array<*>', reverse);
+    j.rreduce = j.enforce('function, [*] => array<*> => *', rreduce);
     j.some = j.enforce('function => array<*> => boolean', some);
     j.sort = j.enforce('[*] => array<*> => array<*>', sort);
     j.take = j.enforce('[index] => function<array<*>>', take);
