@@ -1,12 +1,12 @@
 (function (j) {
     'use strict';
 
+    var eitherNotNull = j.either('notNull')({});
     var eitherDefined = j.either('defined')(null);
-    var maybeReferencible = j.maybe('referencible');
 
     function pick(key) {
         return function (obj) {
-            return eitherDefined(maybeReferencible(obj)[key]);
+            return eitherDefined(eitherNotNull(obj)[key]);
         };
     }
 
@@ -67,8 +67,8 @@
         }
     }
 
-    j.pick = j.enforce('string => object => maybe<defined>', pick);
-    j.deref = j.enforce('string => object => maybe<defined>', deref);
+    j.pick = j.enforce('referencible => object => maybe<defined>', pick);
+    j.deref = j.enforce('referencible => object => maybe<defined>', deref);
     j.merge = j.enforce('object, object => object', merge);
     j.toArray = j.enforce('object => array<tuple<objectKey;*>>', toArray);
     j.toObject = j.enforce('array<tuple<objectKey;*>> => object', toObject);

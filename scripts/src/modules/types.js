@@ -27,6 +27,10 @@
         return value === null;
     }
 
+    function checkNotNull(value) {
+        return !checkNull(value);
+    }
+
     function checkDefined (value){
         return typeof value !== 'undefined';
     }
@@ -44,8 +48,7 @@
     }
 
     function checkReferencible (value){
-        var isValidType = signet.isTypeOf('taggedUnion<object;string;function>');
-        return isValidType(value) && value !== null;
+        return signet.isTypeOf('taggedUnion<object;string;function>');
     }
 
     function setJfpTypes(_signet) {
@@ -59,6 +62,7 @@
 
         _signet.extend('maybe', checkMaybe);
         _signet.extend('null', checkNull);
+        _signet.extend('notNull', checkNotNull);
         _signet.extend('defined', checkDefined);
         _signet.extend('referencible', checkReferencible);
 

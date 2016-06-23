@@ -9,8 +9,9 @@ describe('jfp object', function () {
             expect(j.pick('foo')(testObj)).toBe('bar');
         });
         
-        it('should return nil if value does not exist', function () {
+        it('should return null if value does not exist', function () {
             var testObj = { foo: 'bar' };
+            console.log((null === j.pick('bar')(testObj)) + '********************************');
             expect(j.isTypeOf('null')(j.pick('bar')(testObj))).toBe(true);
         });
         
