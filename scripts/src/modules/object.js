@@ -1,11 +1,12 @@
 (function (j) {
     'use strict';
 
-    var maybeDefined = j.maybe('defined');
+    var eitherDefined = j.either('defined')(null);
+    var maybeReferencible = j.maybe('referencible');
 
     function pick(key) {
         return function (obj) {
-            return maybeDefined(obj[key]);
+            return eitherDefined(maybeReferencible(obj)[key]);
         };
     }
 

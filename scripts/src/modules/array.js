@@ -99,6 +99,17 @@
         };
     }
 
+    function rreduceApplicator(behavior) {
+        return function (fn) {
+            return function (values) {
+                return rreduce(behavior(fn), [])(values);
+            };
+        };
+    }
+
+    var rfilter = rreduceApplicator(filterer);
+    var rmap = rreduceApplicator(mapper);
+
     function sort(comparator) {
         return function (values) {
             return j.slice(0)(values).sort(j.either('function')(j.subtract)(comparator));
@@ -129,6 +140,8 @@
     j.nth = j.enforce('index => array<*> => maybe<defined>', nth);
     j.rest = j.slice(1);
     j.reverse = j.enforce('array<*> => array<*>', reverse);
+    j.rfilter = j.enforce('function => array<*> => array<*>', rfilter);
+    j.rmap = j.enforce('function => array<*> => array<*>', rmap);
     j.rreduce = j.enforce('function, [*] => array<*> => *', rreduce);
     j.some = j.enforce('function => array<*> => boolean', some);
     j.sort = j.enforce('[*] => array<*> => array<*>', sort);

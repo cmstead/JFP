@@ -50,6 +50,11 @@ var jfp = (function(){
         return value.length > 0;
     }
 
+    function checkReferencible (value){
+        var isValidType = signet.isTypeOf('taggedUnion<object;string;function>');
+        return isValidType(value) && value !== null;
+    }
+
     function setJfpTypes(_signet) {
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
         _signet.subtype('array')('nil', checkNil);
@@ -62,6 +67,7 @@ var jfp = (function(){
         _signet.extend('maybe', checkMaybe);
         _signet.extend('null', checkNull);
         _signet.extend('defined', checkDefined);
+        _signet.extend('referencible', checkReferencible);
 
         _signet.alias('typeString', 'string');
         _signet.alias('predicate', 'function');
@@ -394,6 +400,17 @@ var jfp = (function(){
         };
     }
 
+    function rreduceApplicator(behavior) {
+        return function (fn) {
+            return function (values) {
+                return rreduce(behavior(fn), [])(values);
+            };
+        };
+    }
+
+    var rfilter = rreduceApplicator(filterer);
+    var rmap = rreduceApplicator(mapper);
+
     function sort(comparator) {
         return function (values) {
             return j.slice(0)(values).sort(j.either('function')(j.subtract)(comparator));
@@ -424,6 +441,8 @@ var jfp = (function(){
     j.nth = j.enforce('index => array<*> => maybe<defined>', nth);
     j.rest = j.slice(1);
     j.reverse = j.enforce('array<*> => array<*>', reverse);
+    j.rfilter = j.enforce('function => array<*> => array<*>', rfilter);
+    j.rmap = j.enforce('function => array<*> => array<*>', rmap);
     j.rreduce = j.enforce('function, [*] => array<*> => *', rreduce);
     j.some = j.enforce('function => array<*> => boolean', some);
     j.sort = j.enforce('[*] => array<*> => array<*>', sort);
@@ -536,11 +555,12 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    var maybeDefined = j.maybe('defined');
+    var eitherDefined = j.either('defined')(null);
+    var maybeReferencible = j.maybe('referencible');
 
     function pick(key) {
         return function (obj) {
-            return maybeDefined(obj[key]);
+            return eitherDefined(maybeReferencible(obj)[key]);
         };
     }
 

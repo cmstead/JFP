@@ -11,7 +11,11 @@ describe('jfp object', function () {
         
         it('should return nil if value does not exist', function () {
             var testObj = { foo: 'bar' };
-            expect(j.isTypeOf('nil')(j.pick('bar')(testObj))).toBe(true);
+            expect(j.isTypeOf('null')(j.pick('bar')(testObj))).toBe(true);
+        });
+        
+        it('should return null if object is null', function () {
+            expect(j.isTypeOf('null')(j.pick('bar')(null))).toBe(true);
         });
         
     });
@@ -34,7 +38,7 @@ describe('jfp object', function () {
         });
         
         it('should return a value for a single layer dereference', function () {
-            expect(j.isTypeOf('nil')(j.deref('blar')(testObj))).toBe(true);
+            expect(j.isTypeOf('null')(j.deref('blar')(testObj))).toBe(true);
         });
         
         it('should return a value for a single layer dereference', function () {

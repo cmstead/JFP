@@ -164,6 +164,26 @@ describe('jfp array', function () {
 
     });
 
+    describe('rfilter', function () {
+        
+        var isEven = j.compose(j.equal(0), j.modBy(2));
+
+        it('should filter recursively and return a flat array', function () {
+            var result = j.rfilter(isEven)([1, 2, [3, 4, [5, 6, 7]]]);
+            expect(JSON.stringify(result)).toBe('[2,4,6]');
+        });
+
+    });
+
+    describe('rmap', function () {
+        
+        it('should filter recursively and return a flat array', function () {
+            var result = j.rmap(j.multiplyBy(3))([1, 2, [3, 4, [5, 6, 7]]]);
+            expect(JSON.stringify(result)).toBe('[3,6,9,12,15,18,21]');
+        });
+
+    });
+
     describe('some', function () {
 
         var isInt = j.isTypeOf('int');

@@ -43,6 +43,11 @@
         return value.length > 0;
     }
 
+    function checkReferencible (value){
+        var isValidType = signet.isTypeOf('taggedUnion<object;string;function>');
+        return isValidType(value) && value !== null;
+    }
+
     function setJfpTypes(_signet) {
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
         _signet.subtype('array')('nil', checkNil);
@@ -55,6 +60,7 @@
         _signet.extend('maybe', checkMaybe);
         _signet.extend('null', checkNull);
         _signet.extend('defined', checkDefined);
+        _signet.extend('referencible', checkReferencible);
 
         _signet.alias('typeString', 'string');
         _signet.alias('predicate', 'function');
