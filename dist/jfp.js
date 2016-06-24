@@ -389,16 +389,21 @@ var jfp = (function(){
             var rest = j.isUndefined(initialValue) ? j.slice(1)(values) : values;
 
             return j.recur(function (recur, lastResult, values) {
+                var first = nth(0)(values);
+                var rest = j.slice(1)(values);
+
                 return j.cond(function (when, then, _default) {
                     when(j.isNil(values), then(lastResult));
 
-                    when(isArray(nth(0)(values)), then(function () {
-                        return recur(lastResult, j.concat(j.slice(1)(values), nth(0)(values)));
-                    }));
+                    when(isArray(first), 
+                        then(function () {
+                            return recur(lastResult, j.concat(rest, first));
+                        }));
 
-                    when(_default, then(function () {
-                        return recur(fn(lastResult, nth(0)(values)), j.slice(1)(values));
-                    }));
+                    when(_default,
+                        then(function () {
+                            return recur(fn(lastResult, first), rest);
+                        }));
                 });
             })(initValue, rest);
         };
