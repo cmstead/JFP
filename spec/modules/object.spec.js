@@ -11,7 +11,6 @@ describe('jfp object', function () {
         
         it('should return null if value does not exist', function () {
             var testObj = { foo: 'bar' };
-            console.log((null === j.pick('bar')(testObj)) + '********************************');
             expect(j.isTypeOf('null')(j.pick('bar')(testObj))).toBe(true);
         });
         
@@ -104,6 +103,15 @@ describe('jfp object', function () {
             expect(JSON.stringify(result)).toBe('{"foo":"bar","baz":"quux"}');
         });
         
+    });
+
+    describe('toValues', function () {
+        
+        it('should convert an object to an array of values', function () {
+            var result = j.toValues({ foo: 'bar', baz: 'quux' });
+            expect(JSON.stringify(result)).toBe('["bar","quux"]');
+        });
+
     });
     
 });

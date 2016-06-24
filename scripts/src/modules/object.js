@@ -3,6 +3,7 @@
 
     var eitherNotNull = j.either('notNull')({});
     var eitherDefined = j.either('defined')(null);
+    var eitherReferencible = j.either('referencible')({});
 
     function pick(key) {
         return function (obj) {
@@ -10,16 +11,20 @@
         };
     }
 
+    function pickByObj (obj){
+        return function (key){
+            return pick(key)(obj);
+        };
+    }
+
     function deref(key) {
         var keyTokens = key.split('.');
 
         return function (obj) {
-            return j.recur(derefStep)(obj, keyTokens);
+            return j.foldl(pickKey, obj)(keyTokens);
 
-            function derefStep(recur, obj, keyTokens) {
-                var key = j.first(keyTokens);
-
-                return j.isNil(keyTokens) ? obj : recur(pick(key)(obj), j.rest(keyTokens));
+            function pickKey(result, key) {
+                return pick(key)(result);
             }
         };
     }
@@ -37,34 +42,27 @@
     }
 
     function toArray(obj) {
-        return j.recur(convertKeys)([], Object.keys(obj));
+        var pickKey = pickByObj(obj);
+        return j.map(captureTuple)(Object.keys(obj));
 
-        function convertKeys(recur, result, keys) {
-            var key = j.first(keys);
-            return j.isNil(keys) ? result : recur(j.conj([key, obj[key]], result), j.rest(keys));
+        function captureTuple(key) {
+            return [key, pickKey(key)];
         }
+    }
+
+    function toValues(obj) {
+        return j.map(pickByObj(obj))(Object.keys(obj));
     }
 
     var second = j.nth(1);
 
-    function addRecord(obj, record) {
-        obj[j.first(record)] = second(record);
-
+    function addProperty(obj, propertyPair) {
+        obj[propertyPair[0]] = propertyPair[1];
         return obj;
     }
 
     function toObject(tupleArray) {
-        return j.recur(convertTuples)({}, tupleArray);
-
-        function convertTuples(recur, result, objTuples) {
-            var next = j.rcurry (recur, 2) (j.rest(objTuples));
-            var updateObj = j.compose(j.curry (addRecord) (result), j.first);
-            
-            return j.cond(function (when, then, _default) {
-                when(j.isNil(objTuples), then(result));
-                when(_default, then(j.compose(next, updateObj), objTuples));
-            });
-        }
+        return j.foldl(addProperty, {})(tupleArray);
     }
 
     j.pick = j.enforce('referencible => object => maybe<defined>', pick);
@@ -72,5 +70,6 @@
     j.merge = j.enforce('object, object => object', merge);
     j.toArray = j.enforce('object => array<tuple<objectKey;*>>', toArray);
     j.toObject = j.enforce('array<tuple<objectKey;*>> => object', toObject);
+    j.toValues = j.enforce('object => array<*>', toValues);
 
 })(jfp);
