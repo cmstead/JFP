@@ -4,18 +4,18 @@
     var isUndefined = j.isTypeOf('undefined');
     var isNil = j.isTypeOf('nil');
 
-    function always(value) {
-        return function () {
-            return value;
-        };
+    function identity(value) {
+        return value;
     }
 
-    function identity(value) {
-        return always(value)();
+    function always(value) {
+        return identity.bind(null, value);
     }
+
+    var isPredicate = j.isTypeOf('predicate');
 
     function either(typeDef) {
-        var checkType = j.isTypeOf('predicate')(typeDef) ? typeDef : j.isTypeOf(typeDef);
+        var checkType = isPredicate(typeDef) ? typeDef : j.isTypeOf(typeDef);
 
         return function (defaultValue) {
             return function (value) {
@@ -28,14 +28,8 @@
         return either(typeDef)(j.nil);
     }
 
-    function concat(valuesa, valuesb) {
-        var result = valuesa.slice(0);
-
-        for (var i = 0; i < valuesb.length; i++) {
-            result.push(valuesb[i]);
-        }
-
-        return result;
+    function concat(valuesA, valuesB) {
+        return valuesA.concat(valuesB);
     }
 
     function cons(value, values) {
@@ -115,7 +109,7 @@
     }
 
     function directionalCurry (directionalConcat) {
-        var curry = function (fn, count, args) {
+        return function curry (fn, count, args) {
             
             var curriable = function () {
                 var args = directionalConcat(curriable.args, slice(0)(arguments));
@@ -126,8 +120,6 @@
 
             return attachCurryData(curriable, fn, count, args);
         };
-        
-        return curry;
     }
 
     function directionalPartial (directionalConcat){
