@@ -1,47 +1,47 @@
 (function (j) {
     'use strict';
-    
-    var isFunction = j.isTypeOf('function');
-    
-    function then (fn){
-        var index = isFunction(fn) ? 1 : 0;
-        var action = index === 1 ? fn : j.identity;
-        
+
+    function then(fn) {
+        var action = j.either('function')(j.identity)(fn);
+        var index = j.isTypeOf('function')(fn) ? 1 : 0;
+
         return [action, j.slice(index)(arguments)];
     }
-    
-    function when (condArray){
+
+    function when(condArray) {
         return function (prop, behavior) {
             condArray.push([prop, behavior]);
         };
     }
-    
-    function throwOnNil (result, condFn){
-        if(j.isNil(result)) {
-            throw new Error('All possible conditions were not represented in ' + condFn.toString());
-        }
+
+    function throwOnNil(condFn) {
+        var condSource = condFn.toString();
+
+        return function (result) {
+            if (j.isNil(result)) {
+                throw new Error('All possible conditions were not represented in ' + condSourcesT);
+            }
+        };
     }
 
-    function callBehavior (behavior){
-        var fn = behavior[0];
-        var args = behavior[1];
-        
-        return j.apply(fn, args);
+    function handleResult(result, throwOnNil) {
+        throwOnNil(result);
+
+        var action = result[1][0];
+        var args = result[1][1];
+
+        return j.apply(action, args);
     }
-    
-    function cond (condFn){
+
+    function cond(condFn) {
         var condArray = [];
-        
+        var findTrue = j.find(j.compose(Boolean, j.first));
+
         condFn(when(condArray), then, true);
-                
-        var result = j.find(j.compose(Boolean, j.first))(condArray);
-        var behavior = result[1];
-        
-        throwOnNil(result, condFn);
-        
-        return callBehavior(behavior);
+
+        return handleResult(findTrue(condArray), throwOnNil(condFn));
     }
-    
+
     j.cond = j.enforce('function<function;function;boolean> => *', cond);
-    
+
 })(jfp);

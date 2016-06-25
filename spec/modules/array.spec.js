@@ -265,4 +265,24 @@ describe('jfp array', function () {
         });
     });
 
+    describe('partition', function () {
+        
+        it('should partition array on predicate', function () {
+            var isEven = j.compose(j.equal(0), j.modBy(2));
+            var result = j.partition(isEven)([1, 2, 3, 4]);
+            expect(JSON.stringify(result)).toBe('[[2,4],[1,3]]');
+        });
+
+    });
+
+    describe('rpartition', function () {
+        
+        it('should partition array on predicate', function () {
+            var isEven = j.compose(j.equal(0), j.modBy(2));
+            var result = j.rpartition(isEven)([1, [2, [3, [4]]]]);
+            expect(JSON.stringify(result)).toBe('[[2,4],[1,3]]');
+        });
+
+    });
+
 });

@@ -19,13 +19,16 @@
         };
     }
 
+    var first = nth(0);
+    var rest = j.slice(1);
+
     function reverse(values) {
         return j.slice(0)(values).reverse();
     }
 
     function folder(fn) {
         return j.recur(function (recur, result, values) {
-            return j.isNil(values) ? result : recur(fn(result, j.first(values)), j.rest(values));
+            return j.isNil(values) ? result : recur(fn(result, first(values)), rest(values));
         });
     }
 
@@ -34,18 +37,20 @@
             return function (values) {
                 var valueSet = directionProcess(values);
 
-                var value = j.isUndefined(initial) ? j.first(valueSet) : initial;
-                var list = j.isUndefined(initial) ? j.rest(valueSet) : valueSet;
+                var value = j.isUndefined(initial) ? first(valueSet) : initial;
+                var list = j.isUndefined(initial) ? rest(valueSet) : valueSet;
 
                 return folder(fn)(value, list);
             };
         };
     }
 
-    function foldApplicator(behavior) {
-        return function (fn) {
-            return function (values) {
-                return j.foldl(behavior(fn), [])(values);
+    function operationApplicator (operation){
+        return function (behavior, initial) {
+            return function (fn) {
+                return function (values) {
+                    return operation(behavior(fn), initial)(values);
+                };
             };
         };
     }
@@ -62,59 +67,60 @@
         };
     }
 
+    function partitioner(pred) {
+        return function (result, value) {
+            var index = pred(value) ? 0 : 1;
+            result[index] = j.conj(value, result[index]);
+            return result;
+        };
+    }
+
     function find(pred) {
         return function (values) {
             return j.recur(finder)(values);
 
             function finder(recur, values) {
-                var value = j.first(values);
-                return j.isNil(values) || pred(value) ? value : recur(j.rest(values));
+                var value = first(values);
+                return j.isNil(values) || pred(value) ? value : recur(rest(values));
             }
         };
     }
 
-    var filter = foldApplicator(filterer);
-    var map = foldApplicator(mapper);
+    var foldApplicator = operationApplicator(fold(j.identity));
+    var filter = foldApplicator(filterer, []);
+    var map = foldApplicator(mapper, []);
+    var partition = foldApplicator(partitioner, [[],[]]);
 
     var isArray = j.isTypeOf('array');
 
     function rreduce(fn, initialValue) {
         return function (values) {
-            var initValue = j.isUndefined(initialValue) ? nth(0)(values) : initialValue;
-            var rest = j.isUndefined(initialValue) ? j.slice(1)(values) : values;
+            var initValue = j.either('defined')(first(values))(initialValue);
+            var remaining = j.isUndefined(initialValue) ? rest(values) : values;
 
             return j.recur(function (recur, lastResult, values) {
-                var first = nth(0)(values);
-                var rest = j.slice(1)(values);
-
                 return j.cond(function (when, then, _default) {
                     when(j.isNil(values),
                         then(lastResult));
 
-                    when(isArray(first), 
+                    when(isArray(first(values)), 
                         then(function () {
-                            return recur(lastResult, j.concat(rest, first));
+                            return recur(lastResult, j.concat(rest(values), first(values)));
                         }));
 
                     when(_default,
                         then(function () {
-                            return recur(fn(lastResult, first), rest);
+                            return recur(fn(lastResult, first(values)), rest(values));
                         }));
                 });
-            })(initValue, rest);
+            })(initValue, remaining);
         };
     }
 
-    function rreduceApplicator(behavior) {
-        return function (fn) {
-            return function (values) {
-                return rreduce(behavior(fn), [])(values);
-            };
-        };
-    }
-
-    var rfilter = rreduceApplicator(filterer);
-    var rmap = rreduceApplicator(mapper);
+    var rreduceApplicator = operationApplicator(rreduce);
+    var rfilter = rreduceApplicator(filterer, []);
+    var rmap = rreduceApplicator(mapper, []);
+    var rpartition = rreduceApplicator(partitioner, [[],[]]);
 
     function sort(comparator) {
         return function (values) {
@@ -136,7 +142,7 @@
     j.compact = j.enforce('[array] => array<*>', filter(Boolean));
     j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
     j.filter = j.enforce('function => array<*> => array<*>', filter);
-    j.first = j.enforce('array<*> => maybe<defined>', nth(0));
+    j.first = j.enforce('array<*> => maybe<defined>', first);
     j.find = j.enforce('function<*> => array<*> => maybe<defined>', find);
     j.foldl = j.enforce('function, [*] => array<*> => *', fold(j.identity));
     j.foldr = j.enforce('function, [*] => array<*> => *', fold(reverse));
@@ -144,10 +150,12 @@
     j.map = j.enforce('function => array<*> => array<*>', map);
     j.none = j.enforce('function => array<*> => boolean', none);
     j.nth = j.enforce('index => array<*> => maybe<defined>', nth);
-    j.rest = j.slice(1);
+    j.partition = j.enforce('function => array<*> => array<array<*>;array<*>>', partition);
+    j.rest = rest;
     j.reverse = j.enforce('array<*> => array<*>', reverse);
     j.rfilter = j.enforce('function => array<*> => array<*>', rfilter);
     j.rmap = j.enforce('function => array<*> => array<*>', rmap);
+    j.rpartition = j.enforce('function => array<*> => array<array<*>;array<*>>', rpartition);
     j.rreduce = j.enforce('function, [*] => array<*> => *', rreduce);
     j.some = j.enforce('function => array<*> => boolean', some);
     j.sort = j.enforce('[*] => array<*> => array<*>', sort);
