@@ -8,7 +8,11 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    var signet = typeof signet !== 'undefined' ? signet : require('signet')();
+    var signet = typeof signet !== 'undefined' ? signet : null;
+
+    if(typeof require === 'function') {
+        signet = require('signet')();
+    }
 
     function checkNil(value) {
         return value.length === 0;
