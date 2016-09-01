@@ -8,10 +8,10 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    var signet = typeof signet !== 'undefined' ? signet : null;
+    var _signet = typeof signet !== 'undefined' ? signet : null;
 
     if(typeof require === 'function') {
-        signet = require('signet')();
+        _signet = require('signet')();
     }
 
     function checkNil(value) {
@@ -19,15 +19,15 @@ var jfp = (function(){
     }
 
     function checkMaybe(value, typeObj) {
-        return signet.isTypeOf(typeObj.valueType[0])(value) || checkNil(value);
+        return _signet.isTypeOf(typeObj.valueType[0])(value) || checkNil(value);
     }
 
     function checkSignet(value) {
-        var isFunction = signet.isTypeOf('function');
+        var isFunction = _signet.isTypeOf('function');
 
         return isFunction(value.subtype) &&
             isFunction(value.extend) &&
-            isFunction(signet.isTypeOf);
+            isFunction(_signet.isTypeOf);
     }
 
     function checkArguments(value) {
@@ -59,34 +59,34 @@ var jfp = (function(){
     }
 
     function checkReferencible (value){
-        return signet.isTypeOf('taggedUnion<object;string;function>');
+        return _signet.isTypeOf('taggedUnion<object;string;function>');
     }
 
-    function setJfpTypes(_signet) {
+    function setJfpTypes(__signet) {
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
-        _signet.subtype('array')('nil', checkNil);
-        _signet.subtype('array')('pair', checkPair);
-        _signet.subtype('int')('index', checkIndex);
-        _signet.subtype('int')('natural', checkNatural);
-        _signet.subtype('object')('arguments', checkArguments);
-        _signet.subtype('object')('signet', checkSignet);
+        __signet.subtype('array')('nil', checkNil);
+        __signet.subtype('array')('pair', checkPair);
+        __signet.subtype('int')('index', checkIndex);
+        __signet.subtype('int')('natural', checkNatural);
+        __signet.subtype('object')('arguments', checkArguments);
+        __signet.subtype('object')('signet', checkSignet);
 
-        _signet.extend('maybe', checkMaybe);
-        _signet.extend('null', checkNull);
-        _signet.extend('notNull', checkNotNull);
-        _signet.extend('defined', checkDefined);
-        _signet.extend('referencible', checkReferencible);
+        __signet.extend('maybe', checkMaybe);
+        __signet.extend('null', checkNull);
+        __signet.extend('notNull', checkNotNull);
+        __signet.extend('defined', checkDefined);
+        __signet.extend('referencible', checkReferencible);
 
-        _signet.alias('typeString', 'string');
-        _signet.alias('predicate', 'function');
-        _signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
-        _signet.alias('comparable', 'taggedUnion<boolean;number;string>');
-        _signet.alias('objectKey', 'taggedUnion<string;symbol>');
+        __signet.alias('typeString', 'string');
+        __signet.alias('predicate', 'function');
+        __signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
+        __signet.alias('comparable', 'taggedUnion<boolean;number;string>');
+        __signet.alias('objectKey', 'taggedUnion<string;symbol>');
 
-        return _signet;
+        return __signet;
     }
 
-    setJfpTypes(signet);
+    setJfpTypes(_signet);
 
     Object.defineProperty(j, 'nil', {
         get: function () {
@@ -95,10 +95,10 @@ var jfp = (function(){
     });
 
     // Type system behaviors
-    j.enforce = signet.enforce;
-    j.isTypeOf = signet.isTypeOf;
-    j.setJfpTypes = signet.enforce('signet => signet', setJfpTypes);
-    j.typeChain = signet.typeChain;
+    j.enforce = _signet.enforce;
+    j.isTypeOf = _signet.isTypeOf;
+    j.setJfpTypes = _signet.enforce('signet => signet', setJfpTypes);
+    j.typeChain = _signet.typeChain;
 
 })(jfp);
 
