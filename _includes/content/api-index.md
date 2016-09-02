@@ -58,12 +58,15 @@ var signet = setJfpTypes(signetFactory());
 - `boundedString<>`
 - `comparable`
 - `defined`
+- `exists`
 - `formattedString<>`
 - `function`
 - `index`
 - `int`
 - `maybe`
 - `nil`
+- `notNull`
+- `notNil`
 - `null`
 - `number`
 - `numeric`
