@@ -280,6 +280,26 @@ return isNil(values) ? total : recur(j.rest(values), total + j.first(values));
 });
 ~~~~
 
+### repeat
+
+- Performance: O(n)
+- Signature: `function => number => * => *`
+- Behavior: `function to repeat => times to repeat => initial value => result`
+- Description: Repeats provided function n times applying the result from the previous operation
+
+~~~~
+var isEven = j.isTypeOf(function (value) {
+    return j.isTypeOf('int')(value) && value % 2 === 0;
+});
+
+function threeXPlusOneProblem (value) {
+    return isEven(value) ? (value / 2) : (3 * value + 1);
+}
+
+j.repeat(threeXPlusOneProblem)(15)(7); // 1
+j.repeat(j.concat('foo'))(3)(''); // "foofoofoo"
+~~~~
+
 ### reverseArgs
 
 - Performance: O(n)
