@@ -1,4 +1,5 @@
 var j = require('../../dist/jfp.min');
+var sinon = require('sinon');
 
 describe('jfp core', function () {
     
@@ -168,6 +169,7 @@ describe('jfp core', function () {
 
         it('should curry to a specified length', function () {
             expect(typeof j.curry(add3Vals, 4)(1, 2, 3)).toBe('function');
+            expect(typeof j.curry(add3Vals, 4)(1, 2, 3, 4)).toBe('number');
         });
 
     });
@@ -219,6 +221,45 @@ describe('jfp core', function () {
             expect(truncate(j.rpartial(divide)(4, 12))).toBe(0.333);
         });
         
+    });
+
+    describe('repeat', function(){
+
+        it('should repeat an operation one time', function () {
+            var callCount = 0;
+
+            function spy (){
+                callCount ++;
+            }
+
+            j.repeat(spy)(1)();
+
+            expect(callCount).toBe(1);
+        });
+
+        it('should repeat an operation multiple times', function () {
+            var callCount = 0;
+
+            function spy (){
+                callCount ++;
+            }
+
+            j.repeat(spy)(5)();
+
+            expect(callCount).toBe(5);
+        });
+
+        it('should repeat with previous result', function () {
+            function repeatStr (astr){
+                return function (count) {
+                    return j.repeat(j.concat(astr))(count)('');
+                };
+            }
+
+            expect(j.repeat(j.inc)(5)(2)).toBe(7);
+            expect(repeatStr('a')(5)).toBe('aaaaa');
+        });
+
     });
     
 });

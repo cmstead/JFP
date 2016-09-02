@@ -2,7 +2,7 @@
   "name": "jfp",
   "description": "A language as a library borrowing concepts from Lisp, Haskell and Scala. JFP contains functions which allow for gentle adoption of functional programming ideas for developers who are new to the functional paradigm. JFP embraces the dynamic nature of Javascript while supporting safe data typing.",
   "main": "dist/jfp.js",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/cmstead/JFP.git"
@@ -20,6 +20,7 @@
     "grunt-contrib-uglify": "^0.6.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-jasmine-nodejs": "^1.4.0",
+    "sinon": "^1.17.5",
     "uglify-js": "^2.4.15"
   },
   "dependencies": {

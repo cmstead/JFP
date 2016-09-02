@@ -65,6 +65,10 @@
         return _signet.isTypeOf('taggedUnion<object;string;function>');
     }
 
+    function checkConcatable (value) {
+        return checkDefined(value) && checkNotNull(value) && _signet.isTypeOf('function')(value.concat);
+    }
+
     function setJfpTypes(__signet) {
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
         __signet.subtype('array')('nil', checkNil);
@@ -79,6 +83,7 @@
         __signet.extend('notNull', checkNotNull);
         __signet.extend('notNil', checkNotNil);
         __signet.extend('exists', checkExists);
+        __signet.extend('concatable', checkConcatable);
 
         __signet.extend('defined', checkDefined);
         __signet.extend('referencible', checkReferencible);

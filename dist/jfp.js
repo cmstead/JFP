@@ -72,6 +72,10 @@ var jfp = (function(){
         return _signet.isTypeOf('taggedUnion<object;string;function>');
     }
 
+    function checkConcatable (value) {
+        return checkDefined(value) && checkNotNull(value) && _signet.isTypeOf('function')(value.concat);
+    }
+
     function setJfpTypes(__signet) {
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
         __signet.subtype('array')('nil', checkNil);
@@ -86,6 +90,7 @@ var jfp = (function(){
         __signet.extend('notNull', checkNotNull);
         __signet.extend('notNil', checkNotNil);
         __signet.extend('exists', checkExists);
+        __signet.extend('concatable', checkConcatable);
 
         __signet.extend('defined', checkDefined);
         __signet.extend('referencible', checkReferencible);
@@ -172,7 +177,7 @@ var jfp = (function(){
         this.args = args;
     }
 
-    function recursor (id){
+    function recursor(id) {
         return function () {
             return new RecurObj(id, slice(0)(arguments));
         };
@@ -182,7 +187,7 @@ var jfp = (function(){
         // Each recursion needs to be signed to avoid collisions
         var id = Math.floor(Math.random() * 1000000);
         var signedRecursor = recursor(id);
-        
+
         return function () {
             var result = apply(signedRecursor, slice(0)(arguments));
 
@@ -213,21 +218,21 @@ var jfp = (function(){
         };
     }
 
-    function attachCurryData (curriable, fn, count, args){
+    function attachCurryData(curriable, fn, count, args) {
         Object.defineProperty(curriable, 'fnLength', {
             value: either('int')(fn.length)(count),
             writeable: false
         });
-        
+
         curriable.fn = fn;
         curriable.args = maybe('array')(args);
 
         return curriable;
     }
 
-    function directionalCurry (directionalConcat) {
-        return function curry (fn, count, args) {
-            
+    function directionalCurry(directionalConcat) {
+        return function curry(fn, count, args) {
+
             var curriable = function () {
                 var args = directionalConcat(curriable.args, slice(0)(arguments));
                 var done = curriable.fnLength <= args.length;
@@ -239,30 +244,42 @@ var jfp = (function(){
         };
     }
 
-    function directionalPartial (directionalConcat){
+    function directionalPartial(directionalConcat) {
         return function (fn) {
             var args = slice(1)(arguments);
 
             return function () {
                 return apply(fn, directionalConcat(args, slice(0)(arguments)));
-            };        
+            };
         };
+    }
+
+    var curry = directionalCurry(concat);
+    var partial = directionalPartial(concat);
+
+    function repeat(fn) {
+        function repeater (recur, count, value) {
+            return count < 1 ? value : recur(count - 1, fn(value));
+        }
+
+        return curry(partial, 2)(recur(repeater));
     }
 
     // JFP core functions
     j.always = j.enforce('* => [*] => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
     j.compose = j.enforce('[function] => function', compose);
-    j.concat = j.enforce('array<*>, array<*> => array<*>', concat);
+    j.concat = curry(j.enforce('concatable, concatable => concatable', concat), 2);
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
-    j.curry = j.enforce('function, [int], [array<*>] => [*] => *', directionalCurry(concat));
+    j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
     j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', directionalCurry(reverseArgs(concat)));
     j.either = j.enforce('taggedUnion<typeString;predicate> => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
     j.maybe = j.enforce('taggedUnion<typeString;predicate> => * => maybe<defined>', maybe);
-    j.partial = j.enforce('function, [*] => [*] => *', directionalPartial(concat));
+    j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.recur = j.enforce('function => function', recur);
+    j.repeat = j.enforce('function => int => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
