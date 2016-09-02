@@ -42,8 +42,18 @@ var jfp = (function(){
         return !checkNull(value);
     }
 
+    function checkNotNil(value) {
+        return !checkNil(value);
+    }
+
     function checkDefined (value){
         return typeof value !== 'undefined';
+    }
+
+    function checkExists(value) {
+        return checkNotNull(value) &&
+            checkNotNil(value) &&
+            checkDefined(value);
     }
 
     function checkIndex (value){
@@ -74,6 +84,9 @@ var jfp = (function(){
         __signet.extend('maybe', checkMaybe);
         __signet.extend('null', checkNull);
         __signet.extend('notNull', checkNotNull);
+        __signet.extend('notNil', checkNotNil);
+        __signet.extend('exists', checkExists);
+
         __signet.extend('defined', checkDefined);
         __signet.extend('referencible', checkReferencible);
 

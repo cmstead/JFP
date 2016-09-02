@@ -1,8 +1,8 @@
 {
   "name": "jfp",
-  "description": "A language as a library borrowing concepts from Lisp and Haskell. JFP contains functions which allow for gentle adoption of functional programming ideas for developers who are new to the functional paradigm. JFP embraces the dynamic nature of Javascript while supporting safe data typing.",
+  "description": "A language as a library borrowing concepts from Lisp, Haskell and Scala. JFP contains functions which allow for gentle adoption of functional programming ideas for developers who are new to the functional paradigm. JFP embraces the dynamic nature of Javascript while supporting safe data typing.",
   "main": "dist/jfp.js",
-  "version": "3.4.2",
+  "version": "3.5.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/cmstead/JFP.git"

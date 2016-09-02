@@ -37,6 +37,14 @@ If the text file has been removed, please visit:
 
 https://www.mozilla.org/MPL/
 
+### v3.5.0
+
+Added notNil and exists types
+
+### v3.4.2
+
+Fixed client-side dependency issues
+
 ### v3.0.0
 
 System overhaul. Code written with earlier versions of JFP will be incompatible with v3.0.0. 
