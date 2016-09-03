@@ -279,7 +279,7 @@ var jfp = (function(){
     j.maybe = j.enforce('taggedUnion<typeString;predicate> => * => maybe<defined>', maybe);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.recur = j.enforce('function => function', recur);
-    j.repeat = j.enforce('function => int => *', repeat);
+    j.repeat = j.enforce('function => int => * => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
