@@ -411,7 +411,7 @@ j.dropNth(2)([1, 2, 3, 4]); // [1, 2, 4];
 
 ~~~~
 var isEven = j.compose(j.equal(0), j.modBy(2));
-j.filter(isEven, [1, 2, 3, 4]); // [2, 4]
+j.filter(isEven)([1, 2, 3, 4]); // [2, 4]
 ~~~~
 
 ### first
@@ -454,8 +454,8 @@ j.foldl(j.add, 5)([1, 2, 3, 4]); // 15
 - Signature: `function, [*] => array<*> => *`
 
 ~~~~
-j.foldr(j.mod, [2, 5, 8]); // 1
-j.foldr(j.mod, [8, 5, 2]); // 2
+j.foldr(j.mod)([2, 5, 8]); // 1
+j.foldr(j.mod)([8, 5, 2]); // 2
 ~~~~
 
 ### lastIndexOf
@@ -473,7 +473,7 @@ j.lastIndexOf([1, 2, 3, 4]); // 3
 - Signature: `function => array<*> => array<*>`
 
 ~~~~
-j.map(j.divideBy(3), [3, 6, 9, 12]); // [1, 2, 3, 4]
+j.map(j.divideBy(3))([3, 6, 9, 12]); // [1, 2, 3, 4]
 ~~~~
 
 ### none
@@ -511,6 +511,37 @@ j.rest([1, 2, 3, 4]); // [2, 3, 4]
 
 ~~~~
 j.reverse([1, 2, 3, 4]); // [4, 3, 2, 1]
+~~~~
+
+### rfilter
+
+- Performance: O(n)
+- Signature: `function => array<*> => array<*>`
+- Behavior: `filtering predicate => array to filter => filtered array`
+- Description: Filters values from multi-dimensional array which fail to pass predicate check
+
+~~~~
+var isEven = j.compose(j.equal(0), j.modBy(2));
+j.filter(isEven)([1, [2, [3, 4]]]); // [2, 4]
+~~~~
+
+### rmap
+
+- Performance: O(n)
+- Signature: `function => array<*> => array<*>`
+
+~~~~
+j.rmap(j.divideBy(3))([3, 6, [9, 12]]); // [1, 2, 3, 4]
+~~~~
+
+### rreduce
+
+- Performance: O(n)
+- Signature: `function, [*] => array<*> => *`
+
+~~~~
+j.rreduce(j.add)([1, [2, 3, [4]]]); // 10
+j.rreduce(j.add, 5)([1, [2, 3, [4]]]); // 15
 ~~~~
 
 ### some
