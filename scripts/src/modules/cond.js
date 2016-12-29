@@ -1,16 +1,22 @@
 (function (j) {
     'use strict';
 
+    var isFunctionType = j.isTypeOf('function');
+    var eitherFunction = j.either(isFunctionType);
+
     function then(fn) {
-        var action = j.either('function')(j.identity)(fn);
-        var index = j.isTypeOf('function')(fn) ? 1 : 0;
+        var isFunction = isFunctionType(fn);
+        var action = isFunction ? fn : j.identity;
+        var index = isFunction ? 1 : 0;
 
         return [action, j.slice(index)(arguments)];
     }
 
     function when(condArray) {
         return function (prop, behavior) {
-            condArray.push([prop, behavior]);
+            if (Boolean(prop)) {
+                condArray.push(behavior);
+            }
         };
     }
 
@@ -19,27 +25,29 @@
 
         return function (result) {
             if (j.isNil(result)) {
-                throw new Error('All possible conditions were not represented in ' + condSourcesT);
+                throw new Error('All possible conditions were not represented in ' + condSource);
             }
         };
     }
 
-    function handleResult(result, throwOnNil) {
+    function handleResult(resultSet, throwOnNil) {
         throwOnNil(result);
 
-        var action = result[1][0];
-        var args = result[1][1];
+        var result = j.first(resultSet);
+
+        var action = result[0];
+        var args = result[1];
 
         return j.apply(action, args);
     }
 
     function cond(condFn) {
         var condArray = [];
-        var findTrue = j.find(j.compose(Boolean, j.first));
+        var _default = true;
 
-        condFn(when(condArray), then, true);
+        condFn(when(condArray), then, _default);
 
-        return handleResult(findTrue(condArray), throwOnNil(condFn));
+        return handleResult(condArray, throwOnNil(condFn));
     }
 
     j.cond = j.enforce('function<function;function;boolean> => *', cond);

@@ -12,7 +12,7 @@
     }
 
     function checkMaybe(value, typeObj) {
-        return _signet.isTypeOf(typeObj.valueType[0])(value) || checkNil(value);
+        return _signet.isTypeOf(typeObj[0])(value) || _signet.isTypeOf('null')(value);
     }
 
     function checkSignet(value) {
@@ -21,10 +21,6 @@
         return isFunction(value.subtype) &&
             isFunction(value.extend) &&
             isFunction(_signet.isTypeOf);
-    }
-
-    function checkArguments(value) {
-        return Object.prototype.toString.call(value) === '[object Arguments]';
     }
 
     function checkNull(value) {
@@ -62,11 +58,15 @@
     }
 
     function checkReferencible (value){
-        return _signet.isTypeOf('taggedUnion<object;string;function>');
+        return _signet.isTypeOf('variant<object;string;function>');
     }
 
     function checkConcatable (value) {
         return checkDefined(value) && checkNotNull(value) && _signet.isTypeOf('function')(value.concat);
+    }
+
+    function checkFalse(value) {
+        return value === false;
     }
 
     function setJfpTypes(__signet) {
@@ -75,11 +75,10 @@
         __signet.subtype('array')('pair', checkPair);
         __signet.subtype('int')('index', checkIndex);
         __signet.subtype('int')('natural', checkNatural);
-        __signet.subtype('object')('arguments', checkArguments);
         __signet.subtype('object')('signet', checkSignet);
+        __signet.subtype('boolean')('false', checkFalse);
 
         __signet.extend('maybe', checkMaybe);
-        __signet.extend('null', checkNull);
         __signet.extend('notNull', checkNotNull);
         __signet.extend('notNil', checkNotNil);
         __signet.extend('exists', checkExists);
@@ -90,9 +89,9 @@
 
         __signet.alias('typeString', 'string');
         __signet.alias('predicate', 'function');
-        __signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
-        __signet.alias('comparable', 'taggedUnion<boolean;number;string>');
-        __signet.alias('objectKey', 'taggedUnion<string;symbol>');
+        __signet.alias('numeric', 'variant<number;formattedString<' + numberPattern + '>>');
+        __signet.alias('comparable', 'variant<boolean;number;string>');
+        __signet.alias('objectKey', 'variant<string;symbol>');
 
         return __signet;
     }

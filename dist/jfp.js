@@ -19,7 +19,7 @@ var jfp = (function(){
     }
 
     function checkMaybe(value, typeObj) {
-        return _signet.isTypeOf(typeObj.valueType[0])(value) || checkNil(value);
+        return _signet.isTypeOf(typeObj[0])(value) || _signet.isTypeOf('null')(value);
     }
 
     function checkSignet(value) {
@@ -28,10 +28,6 @@ var jfp = (function(){
         return isFunction(value.subtype) &&
             isFunction(value.extend) &&
             isFunction(_signet.isTypeOf);
-    }
-
-    function checkArguments(value) {
-        return Object.prototype.toString.call(value) === '[object Arguments]';
     }
 
     function checkNull(value) {
@@ -69,11 +65,15 @@ var jfp = (function(){
     }
 
     function checkReferencible (value){
-        return _signet.isTypeOf('taggedUnion<object;string;function>');
+        return _signet.isTypeOf('variant<object;string;function>');
     }
 
     function checkConcatable (value) {
         return checkDefined(value) && checkNotNull(value) && _signet.isTypeOf('function')(value.concat);
+    }
+
+    function checkFalse(value) {
+        return value === false;
     }
 
     function setJfpTypes(__signet) {
@@ -82,11 +82,10 @@ var jfp = (function(){
         __signet.subtype('array')('pair', checkPair);
         __signet.subtype('int')('index', checkIndex);
         __signet.subtype('int')('natural', checkNatural);
-        __signet.subtype('object')('arguments', checkArguments);
         __signet.subtype('object')('signet', checkSignet);
+        __signet.subtype('boolean')('false', checkFalse);
 
         __signet.extend('maybe', checkMaybe);
-        __signet.extend('null', checkNull);
         __signet.extend('notNull', checkNotNull);
         __signet.extend('notNil', checkNotNil);
         __signet.extend('exists', checkExists);
@@ -97,9 +96,9 @@ var jfp = (function(){
 
         __signet.alias('typeString', 'string');
         __signet.alias('predicate', 'function');
-        __signet.alias('numeric', 'taggedUnion<number;formattedString<' + numberPattern + '>>');
-        __signet.alias('comparable', 'taggedUnion<boolean;number;string>');
-        __signet.alias('objectKey', 'taggedUnion<string;symbol>');
+        __signet.alias('numeric', 'variant<number;formattedString<' + numberPattern + '>>');
+        __signet.alias('comparable', 'variant<boolean;number;string>');
+        __signet.alias('objectKey', 'variant<string;symbol>');
 
         return __signet;
     }
@@ -147,11 +146,14 @@ var jfp = (function(){
     }
 
     function maybe(typeDef) {
-        return either(typeDef)(j.nil);
+        return either(typeDef)(null);
     }
 
+    var eitherArray = either('array');
+    var eitherConcatable = either('concatable');
+
     function concat(valuesA, valuesB) {
-        return valuesA.concat(valuesB);
+        return eitherConcatable([])(valuesA).concat(valuesB);
     }
 
     function cons(value, values) {
@@ -225,24 +227,26 @@ var jfp = (function(){
         });
 
         curriable.fn = fn;
-        curriable.args = maybe('array')(args);
+        curriable.args = eitherArray([])(args);
 
         return curriable;
     }
 
-    function directionalCurry(directionalConcat) {
+    function directionalCurry(directedConcat) {
         return function curry(fn, count, args) {
 
             var curriable = function () {
-                var args = directionalConcat(curriable.args, slice(0)(arguments));
+                var args = directedConcat(curriable.args, slice(0)(arguments));
                 var done = curriable.fnLength <= args.length;
 
-                return done ? apply(curriable.fn, args) : curry(fn, curriable.fnLength, args);
+                return done ? apply(curriable.fn, args) : directionalCurry(directedConcat)(fn, curriable.fnLength, args);
             };
 
             return attachCurryData(curriable, fn, count, args);
         };
     }
+
+    var curry = directionalCurry(concat);
 
     function directionalPartial(directionalConcat) {
         return function (fn) {
@@ -254,7 +258,6 @@ var jfp = (function(){
         };
     }
 
-    var curry = directionalCurry(concat);
     var partial = directionalPartial(concat);
 
     function repeat(fn) {
@@ -274,15 +277,15 @@ var jfp = (function(){
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
     j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', directionalCurry(reverseArgs(concat)));
-    j.either = j.enforce('taggedUnion<typeString;predicate> => * => * => *', either);
+    j.either = j.enforce('variant<typeString;predicate> => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
-    j.maybe = j.enforce('taggedUnion<typeString;predicate> => * => maybe<defined>', maybe);
+    j.maybe = j.enforce('variant<typeString;predicate> => * => maybe<defined>', maybe);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.recur = j.enforce('function => function', recur);
     j.repeat = j.enforce('function => int => * => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
-    j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
+    j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
 
     j.isNil = isNil;
     j.isUndefined = isUndefined;
@@ -352,6 +355,14 @@ var jfp = (function(){
 
     var first = nth(0);
     var rest = j.slice(1);
+    var isNull = j.isTypeOf('null');
+    var isFalse = j.isTypeOf('false');
+
+    function isFoldBreak(value) {
+        return typeof value === 'undefined' || 
+            value === null || 
+            value === false;
+    }
 
     function reverse(values) {
         return j.slice(0)(values).reverse();
@@ -359,7 +370,7 @@ var jfp = (function(){
 
     function folder(fn) {
         return j.recur(function (recur, result, values) {
-            return j.isNil(values) ? result : recur(fn(result, first(values)), rest(values));
+            return j.isNil(values) || isFoldBreak(result) ? result : recur(fn(result, first(values)), rest(values));
         });
     }
 
@@ -376,7 +387,7 @@ var jfp = (function(){
         };
     }
 
-    function operationApplicator (operation){
+    function operationApplicator(operation) {
         return function (behavior, initial) {
             return function (fn) {
                 return function (values) {
@@ -420,9 +431,20 @@ var jfp = (function(){
     var foldApplicator = operationApplicator(fold(j.identity));
     var filter = foldApplicator(filterer, []);
     var map = foldApplicator(mapper, []);
-    var partition = foldApplicator(partitioner, [[],[]]);
+    var partition = foldApplicator(partitioner, [[], []]);
 
     var isArray = j.isTypeOf('array');
+
+    function rreduceRecur (recur, fn, lastResult, values) {
+        var firstValue = first(values);
+        var restValues = rest(values);
+        var firstIsArray = isArray(firstValue);
+
+        var nextResult = firstIsArray ? lastResult : fn(lastResult, firstValue);
+        var nextRemaining = firstIsArray ? j.concat(restValues, firstValue) : restValues;
+
+        return recur(nextResult, nextRemaining);
+    }
 
     function rreduce(fn, initialValue) {
         return function (values) {
@@ -430,20 +452,7 @@ var jfp = (function(){
             var remaining = j.isUndefined(initialValue) ? rest(values) : values;
 
             return j.recur(function (recur, lastResult, values) {
-                return j.cond(function (when, then, _default) {
-                    when(j.isNil(values),
-                        then(lastResult));
-
-                    when(isArray(first(values)), 
-                        then(function () {
-                            return recur(lastResult, j.concat(rest(values), first(values)));
-                        }));
-
-                    when(_default,
-                        then(function () {
-                            return recur(fn(lastResult, first(values)), rest(values));
-                        }));
-                });
+                return j.isNil(values) ? lastResult : rreduceRecur(recur, fn, lastResult, values);
             })(initValue, remaining);
         };
     }
@@ -451,7 +460,7 @@ var jfp = (function(){
     var rreduceApplicator = operationApplicator(rreduce);
     var rfilter = rreduceApplicator(filterer, []);
     var rmap = rreduceApplicator(mapper, []);
-    var rpartition = rreduceApplicator(partitioner, [[],[]]);
+    var rpartition = rreduceApplicator(partitioner, [[], []]);
 
     function sort(comparator) {
         return function (values) {
@@ -663,8 +672,8 @@ var jfp = (function(){
         return j.foldl(addProperty, {})(tupleArray);
     }
 
-    j.pick = j.enforce('referencible => object => maybe<defined>', pick);
-    j.deref = j.enforce('referencible => object => maybe<defined>', deref);
+    j.pick = j.enforce('string => * => maybe<defined>', pick);
+    j.deref = j.enforce('string => * => maybe<defined>', deref);
     j.merge = j.enforce('object, object => object', merge);
     j.toArray = j.enforce('object => array<tuple<objectKey;*>>', toArray);
     j.toObject = j.enforce('array<tuple<objectKey;*>> => object', toObject);
@@ -675,16 +684,22 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
+    var isFunctionType = j.isTypeOf('function');
+    var eitherFunction = j.either(isFunctionType);
+
     function then(fn) {
-        var action = j.either('function')(j.identity)(fn);
-        var index = j.isTypeOf('function')(fn) ? 1 : 0;
+        var isFunction = isFunctionType(fn);
+        var action = isFunction ? fn : j.identity;
+        var index = isFunction ? 1 : 0;
 
         return [action, j.slice(index)(arguments)];
     }
 
     function when(condArray) {
         return function (prop, behavior) {
-            condArray.push([prop, behavior]);
+            if (Boolean(prop)) {
+                condArray.push(behavior);
+            }
         };
     }
 
@@ -693,27 +708,29 @@ var jfp = (function(){
 
         return function (result) {
             if (j.isNil(result)) {
-                throw new Error('All possible conditions were not represented in ' + condSourcesT);
+                throw new Error('All possible conditions were not represented in ' + condSource);
             }
         };
     }
 
-    function handleResult(result, throwOnNil) {
+    function handleResult(resultSet, throwOnNil) {
         throwOnNil(result);
 
-        var action = result[1][0];
-        var args = result[1][1];
+        var result = j.first(resultSet);
+
+        var action = result[0];
+        var args = result[1];
 
         return j.apply(action, args);
     }
 
     function cond(condFn) {
         var condArray = [];
-        var findTrue = j.find(j.compose(Boolean, j.first));
+        var _default = true;
 
-        condFn(when(condArray), then, true);
+        condFn(when(condArray), then, _default);
 
-        return handleResult(findTrue(condArray), throwOnNil(condFn));
+        return handleResult(condArray, throwOnNil(condFn));
     }
 
     j.cond = j.enforce('function<function;function;boolean> => *', cond);

@@ -25,11 +25,14 @@
     }
 
     function maybe(typeDef) {
-        return either(typeDef)(j.nil);
+        return either(typeDef)(null);
     }
 
+    var eitherArray = either('array');
+    var eitherConcatable = either('concatable');
+
     function concat(valuesA, valuesB) {
-        return valuesA.concat(valuesB);
+        return eitherConcatable([])(valuesA).concat(valuesB);
     }
 
     function cons(value, values) {
@@ -103,24 +106,26 @@
         });
 
         curriable.fn = fn;
-        curriable.args = maybe('array')(args);
+        curriable.args = eitherArray([])(args);
 
         return curriable;
     }
 
-    function directionalCurry(directionalConcat) {
+    function directionalCurry(directedConcat) {
         return function curry(fn, count, args) {
 
             var curriable = function () {
-                var args = directionalConcat(curriable.args, slice(0)(arguments));
+                var args = directedConcat(curriable.args, slice(0)(arguments));
                 var done = curriable.fnLength <= args.length;
 
-                return done ? apply(curriable.fn, args) : curry(fn, curriable.fnLength, args);
+                return done ? apply(curriable.fn, args) : directionalCurry(directedConcat)(fn, curriable.fnLength, args);
             };
 
             return attachCurryData(curriable, fn, count, args);
         };
     }
+
+    var curry = directionalCurry(concat);
 
     function directionalPartial(directionalConcat) {
         return function (fn) {
@@ -132,7 +137,6 @@
         };
     }
 
-    var curry = directionalCurry(concat);
     var partial = directionalPartial(concat);
 
     function repeat(fn) {
@@ -152,15 +156,15 @@
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
     j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', directionalCurry(reverseArgs(concat)));
-    j.either = j.enforce('taggedUnion<typeString;predicate> => * => * => *', either);
+    j.either = j.enforce('variant<typeString;predicate> => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
-    j.maybe = j.enforce('taggedUnion<typeString;predicate> => * => maybe<defined>', maybe);
+    j.maybe = j.enforce('variant<typeString;predicate> => * => maybe<defined>', maybe);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.recur = j.enforce('function => function', recur);
     j.repeat = j.enforce('function => int => * => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
-    j.slice = j.enforce('int, [int] => taggedUnion<array<*>;arguments> => array<*>', slice);
+    j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
 
     j.isNil = isNil;
     j.isUndefined = isUndefined;

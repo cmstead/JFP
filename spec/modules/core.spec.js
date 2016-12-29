@@ -1,16 +1,27 @@
 var j = require('../../dist/jfp.min');
 var sinon = require('sinon');
+var timer = require('../timer/test-timer')();
 
 describe('jfp core', function () {
     
+    beforeEach(function () {
+        timer.reset();
+        timer.start();
+    });
+
+    afterEach(function () {
+        timer.stop();
+        console.log('total runtime: ' + timer.getTotal());
+    });
+
     describe('maybe', function () {
         
-        var isNil = j.isTypeOf('nil');
+        var isNull = j.isTypeOf('null');
         
-        it('should return nil if value is not a type match', function () {
+        it('should return null if value is not a type match', function () {
             var result = j.maybe('number')('foo');
             
-            expect(isNil(result)).toBe(true);
+            expect(isNull(result)).toBe(true);
         });
         
         it('should return value if value is a type match', function () {
@@ -21,7 +32,8 @@ describe('jfp core', function () {
         
         it('should take a predicate function in place of a type', function () {
             var isEven = j.compose(j.equal(0), j.modBy(2));
-            expect(j.isNil(j.maybe(isEven)(3))).toBe(true);
+            
+            expect(isNull(j.maybe(isEven)(3))).toBe(true);
             expect(j.maybe(isEven)(4)).toBe(4);
         });
 

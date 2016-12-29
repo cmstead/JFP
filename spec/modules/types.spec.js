@@ -1,8 +1,19 @@
 var j = require('../../dist/jfp.min');
 var signet = require('signet');
+var timer = require('../timer/test-timer')();
 
 describe('jfp types', function () {
     
+    beforeEach(function () {
+        timer.reset();
+        timer.start();
+    });
+
+    afterEach(function () {
+        timer.stop();
+        console.log('total runtime: ' + timer.getTotal());
+    });
+
     describe('isTypeOf', function () {
         
         it('should perform a curried type check', function () {
@@ -25,8 +36,8 @@ describe('jfp types', function () {
     
     describe('maybe', function () {
         
-        it('should always verify nil', function () {
-            expect(j.isTypeOf('maybe<number>')([])).toBe(true);
+        it('should always verify null', function () {
+            expect(j.isTypeOf('maybe<number>')(null)).toBe(true);
         });
         
         it('should always verify specified type', function () {
@@ -47,18 +58,6 @@ describe('jfp types', function () {
         
         it('should fail a bad object', function () {
             expect(j.isTypeOf('signet')({})).toBe(false);
-        });
-        
-    });
-    
-    describe('arguments', function () {
-        
-        it('should verify an arguments object', function () {
-            expect(j.isTypeOf('arguments')(arguments)).toBe(true);
-        });
-        
-        it('should fail on an array', function () {
-            expect(j.isTypeOf('arguments')([])).toBe(false);
         });
         
     });

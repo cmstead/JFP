@@ -1,6 +1,17 @@
 var j = require('../../dist/jfp.min');
+var timer = require('../timer/test-timer')();
 
 describe('jfp array', function () {
+
+    beforeEach(function () {
+        timer.reset();
+        timer.start();
+    });
+
+    afterEach(function () {
+        timer.stop();
+        console.log('total runtime: ' + timer.getTotal());
+    });
 
     describe('nth', function () {
 
@@ -8,9 +19,9 @@ describe('jfp array', function () {
             expect(j.nth(1)([1, 2, 3, 4])).toBe(2);
         });
 
-        it('should return nil if value is undefined', function () {
+        it('should return null if value is undefined', function () {
             var result = j.nth(1)([]);
-            expect(j.isTypeOf('nil')(result)).toBe(true);
+            expect(j.isTypeOf('null')(result)).toBe(true);
         });
 
     });
@@ -21,9 +32,9 @@ describe('jfp array', function () {
             expect(j.first([1, 2, 3])).toBe(1);
         });
 
-        it('should return nil if first element does not exist', function () {
+        it('should return null if first element does not exist', function () {
             var result = j.first([]);
-            expect(j.isTypeOf('nil')(result)).toBe(true);
+            expect(j.isTypeOf('null')(result)).toBe(true);
         });
 
     });
@@ -238,9 +249,9 @@ describe('jfp array', function () {
             expect(j.find(isEven)([1, 2, 3, 4])).toBe(2);
         });
 
-        it('should return nil if no element is found', function () {
+        it('should return null if no element is found', function () {
             var result = j.find(isEven)([1, 3, 5, 7]);
-            expect(j.isTypeOf('nil')(result)).toBe(true);
+            expect(j.isTypeOf('null')(result)).toBe(true);
         });
 
     });

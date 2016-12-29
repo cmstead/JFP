@@ -21,6 +21,14 @@
 
     var first = nth(0);
     var rest = j.slice(1);
+    var isNull = j.isTypeOf('null');
+    var isFalse = j.isTypeOf('false');
+
+    function isFoldBreak(value) {
+        return typeof value === 'undefined' || 
+            value === null || 
+            value === false;
+    }
 
     function reverse(values) {
         return j.slice(0)(values).reverse();
@@ -28,7 +36,7 @@
 
     function folder(fn) {
         return j.recur(function (recur, result, values) {
-            return j.isNil(values) ? result : recur(fn(result, first(values)), rest(values));
+            return j.isNil(values) || isFoldBreak(result) ? result : recur(fn(result, first(values)), rest(values));
         });
     }
 
@@ -45,7 +53,7 @@
         };
     }
 
-    function operationApplicator (operation){
+    function operationApplicator(operation) {
         return function (behavior, initial) {
             return function (fn) {
                 return function (values) {
@@ -89,9 +97,20 @@
     var foldApplicator = operationApplicator(fold(j.identity));
     var filter = foldApplicator(filterer, []);
     var map = foldApplicator(mapper, []);
-    var partition = foldApplicator(partitioner, [[],[]]);
+    var partition = foldApplicator(partitioner, [[], []]);
 
     var isArray = j.isTypeOf('array');
+
+    function rreduceRecur (recur, fn, lastResult, values) {
+        var firstValue = first(values);
+        var restValues = rest(values);
+        var firstIsArray = isArray(firstValue);
+
+        var nextResult = firstIsArray ? lastResult : fn(lastResult, firstValue);
+        var nextRemaining = firstIsArray ? j.concat(restValues, firstValue) : restValues;
+
+        return recur(nextResult, nextRemaining);
+    }
 
     function rreduce(fn, initialValue) {
         return function (values) {
@@ -99,20 +118,7 @@
             var remaining = j.isUndefined(initialValue) ? rest(values) : values;
 
             return j.recur(function (recur, lastResult, values) {
-                return j.cond(function (when, then, _default) {
-                    when(j.isNil(values),
-                        then(lastResult));
-
-                    when(isArray(first(values)), 
-                        then(function () {
-                            return recur(lastResult, j.concat(rest(values), first(values)));
-                        }));
-
-                    when(_default,
-                        then(function () {
-                            return recur(fn(lastResult, first(values)), rest(values));
-                        }));
-                });
+                return j.isNil(values) ? lastResult : rreduceRecur(recur, fn, lastResult, values);
             })(initValue, remaining);
         };
     }
@@ -120,7 +126,7 @@
     var rreduceApplicator = operationApplicator(rreduce);
     var rfilter = rreduceApplicator(filterer, []);
     var rmap = rreduceApplicator(mapper, []);
-    var rpartition = rreduceApplicator(partitioner, [[],[]]);
+    var rpartition = rreduceApplicator(partitioner, [[], []]);
 
     function sort(comparator) {
         return function (values) {

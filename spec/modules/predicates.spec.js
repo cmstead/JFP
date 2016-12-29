@@ -1,7 +1,18 @@
 var j = require('../../dist/jfp.min');
+var timer = require('../timer/test-timer')();
 
 describe('jfp predicates', function () {
     
+    beforeEach(function () {
+        timer.reset();
+        timer.start();
+    });
+
+    afterEach(function () {
+        timer.stop();
+        console.log('total runtime: ' + timer.getTotal());
+    });
+
     describe('equal', function () {
         
         it('should return true when two values are equal', function () {

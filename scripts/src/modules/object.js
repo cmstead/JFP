@@ -65,8 +65,8 @@
         return j.foldl(addProperty, {})(tupleArray);
     }
 
-    j.pick = j.enforce('referencible => object => maybe<defined>', pick);
-    j.deref = j.enforce('referencible => object => maybe<defined>', deref);
+    j.pick = j.enforce('string => * => maybe<defined>', pick);
+    j.deref = j.enforce('string => * => maybe<defined>', deref);
     j.merge = j.enforce('object, object => object', merge);
     j.toArray = j.enforce('object => array<tuple<objectKey;*>>', toArray);
     j.toObject = j.enforce('array<tuple<objectKey;*>> => object', toObject);

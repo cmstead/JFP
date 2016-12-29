@@ -1,6 +1,17 @@
 var j = require('../../dist/jfp.min');
+var timer = require('../timer/test-timer')();
 
 describe('jfp cond', function () {
+
+    beforeEach(function () {
+        timer.reset();
+        timer.start();
+    });
+
+    afterEach(function () {
+        timer.stop();
+        console.log('total runtime: ' + timer.getTotal());
+    });
 
     function condTest1(value) {
         return j.cond(function (when, then) {

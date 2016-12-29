@@ -1,7 +1,18 @@
 var j = require('../../dist/jfp.min');
+var timer = require('../timer/test-timer')();
 
 describe('JFP math', function () {
     
+    beforeEach(function () {
+        timer.reset();
+        timer.start();
+    });
+
+    afterEach(function () {
+        timer.stop();
+        console.log('total runtime: ' + timer.getTotal());
+    });
+
     describe('arithmetic', function () {
         
         it('should add two numbers with a standard call', function () {
