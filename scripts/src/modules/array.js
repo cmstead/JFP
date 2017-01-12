@@ -3,12 +3,13 @@
 
     function nth(index) {
         return function (values) {
-            return j.maybe('defined')(values[index]);
+            return j.maybeDefined(values[index]);
         };
     }
 
+
     function lastIndexOf(values) {
-        return j.either('natural')(0)(values.length - 1);
+        return j.eitherNatural(0)(values.length - 1);
     }
 
     function dropNth(index) {
@@ -21,8 +22,6 @@
 
     var first = nth(0);
     var rest = j.slice(1);
-    var isNull = j.isTypeOf('null');
-    var isFalse = j.isTypeOf('false');
 
     function isFoldBreak(value) {
         return typeof value === 'undefined' || 
@@ -99,12 +98,10 @@
     var map = foldApplicator(mapper, []);
     var partition = foldApplicator(partitioner, [[], []]);
 
-    var isArray = j.isTypeOf('array');
-
     function rreduceRecur (recur, fn, lastResult, values) {
         var firstValue = first(values);
         var restValues = rest(values);
-        var firstIsArray = isArray(firstValue);
+        var firstIsArray = j.isArray(firstValue);
 
         var nextResult = firstIsArray ? lastResult : fn(lastResult, firstValue);
         var nextRemaining = firstIsArray ? j.concat(restValues, firstValue) : restValues;
@@ -114,7 +111,7 @@
 
     function rreduce(fn, initialValue) {
         return function (values) {
-            var initValue = j.either('defined')(first(values))(initialValue);
+            var initValue = j.eitherDefined(first(values))(initialValue);
             var remaining = j.isUndefined(initialValue) ? rest(values) : values;
 
             return j.recur(function (recur, lastResult, values) {
@@ -130,7 +127,7 @@
 
     function sort(comparator) {
         return function (values) {
-            return j.slice(0)(values).sort(j.either('function')(j.subtract)(comparator));
+            return j.slice(0)(values).sort(j.eitherFunction(j.subtract)(comparator));
         };
     }
 

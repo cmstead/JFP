@@ -14,17 +14,19 @@ var jfp = (function(){
         _signet = require('signet')();
     }
 
+    var isFunction = _signet.isTypeOf('function');
+    var isNull = _signet.isTypeOf('null');
+    var isUndefined = _signet.isTypeOf('undefined');
+
     function checkNil(value) {
         return value.length === 0;
     }
 
     function checkMaybe(value, typeObj) {
-        return _signet.isTypeOf(typeObj[0])(value) || _signet.isTypeOf('null')(value);
+        return _signet.isTypeOf(typeObj[0])(value) || isNull(value);
     }
 
     function checkSignet(value) {
-        var isFunction = _signet.isTypeOf('function');
-
         return isFunction(value.subtype) &&
             isFunction(value.extend) &&
             isFunction(_signet.isTypeOf);
@@ -43,17 +45,13 @@ var jfp = (function(){
     }
 
     function checkDefined (value){
-        return typeof value !== 'undefined';
+        return !isUndefined(value) && checkNotNull(value);
     }
 
     function checkExists(value) {
         return checkNotNull(value) &&
             checkNotNil(value) &&
             checkDefined(value);
-    }
-
-    function checkIndex (value){
-        return value >= 0;
     }
 
     function checkNatural (value){
@@ -64,26 +62,22 @@ var jfp = (function(){
         return value.length > 0;
     }
 
-    function checkReferencible (value){
-        return _signet.isTypeOf('variant<object;string;function>');
-    }
-
     function checkConcatable (value) {
-        return checkDefined(value) && checkNotNull(value) && _signet.isTypeOf('function')(value.concat);
+        return checkDefined(value) && checkNotNull(value) && isFunction(value.concat);
     }
 
-    function checkFalse(value) {
-        return value === false;
+    function checkObjectInstance (value) {
+        return value !== null;
     }
 
     function setJfpTypes(__signet) {
         var numberPattern = '^[0-9]+((\\.[0-9]+)|(e\\-?[0-9]+))?$';
+
         __signet.subtype('array')('nil', checkNil);
         __signet.subtype('array')('pair', checkPair);
-        __signet.subtype('int')('index', checkIndex);
         __signet.subtype('int')('natural', checkNatural);
         __signet.subtype('object')('signet', checkSignet);
-        __signet.subtype('boolean')('false', checkFalse);
+        __signet.subtype('object')('objectInstance', checkObjectInstance);
 
         __signet.extend('maybe', checkMaybe);
         __signet.extend('notNull', checkNotNull);
@@ -92,13 +86,14 @@ var jfp = (function(){
         __signet.extend('concatable', checkConcatable);
 
         __signet.extend('defined', checkDefined);
-        __signet.extend('referencible', checkReferencible);
 
+        __signet.alias('index', 'natural');
         __signet.alias('typeString', 'string');
         __signet.alias('predicate', 'function');
-        __signet.alias('numeric', 'variant<number;formattedString<' + numberPattern + '>>');
         __signet.alias('comparable', 'variant<boolean;number;string>');
+        __signet.alias('numeric', 'variant<number;formattedString<' + numberPattern + '>>');
         __signet.alias('objectKey', 'variant<string;symbol>');
+        __signet.alias('referencible', 'variant<objectInstance;string;function>');
 
         return __signet;
     }
@@ -111,32 +106,8 @@ var jfp = (function(){
         }
     });
 
-    // Type system behaviors
-    j.enforce = _signet.enforce;
-    j.isTypeOf = _signet.isTypeOf;
-    j.setJfpTypes = _signet.enforce('signet => signet', setJfpTypes);
-    j.typeChain = _signet.typeChain;
-
-})(jfp);
-
-(function (j) {
-    'use strict';
-
-    var isUndefined = j.isTypeOf('undefined');
-    var isNil = j.isTypeOf('nil');
-
-    function identity(value) {
-        return value;
-    }
-
-    function always(value) {
-        return identity.bind(null, value);
-    }
-
-    var isPredicate = j.isTypeOf('predicate');
-
     function either(typeDef) {
-        var checkType = isPredicate(typeDef) ? typeDef : j.isTypeOf(typeDef);
+        var checkType = isFunction(typeDef) ? typeDef : _signet.isTypeOf(typeDef);
 
         return function (defaultValue) {
             return function (value) {
@@ -149,19 +120,125 @@ var jfp = (function(){
         return either(typeDef)(null);
     }
 
-    var eitherArray = either('array');
-    var eitherConcatable = either('concatable');
+    // Type system behaviors
+    j.either = either;
+    j.enforce = _signet.enforce;
+    j.isTypeOf = _signet.isTypeOf;
+    j.maybe = maybe;
+    j.setJfpTypes = _signet.enforce('signet => signet', setJfpTypes);
+    j.typeChain = _signet.typeChain;
+
+    // Prefab either checks
+
+    j.eitherArray = either('array');
+    j.eitherBoolean = either('boolean');
+    j.eitherFunction = either('function');
+    j.eitherInt = either('int');
+    j.eitherNatural = either('natural');
+    j.eitherNumber = either('number');
+    j.eitherObject = either('object');
+    j.eitherString = either('string');
+    
+    j.eitherConcatable = either('concatable');
+    j.eitherReferencible = either('referencible');
+
+    j.eitherDefined = either('defined');
+    j.eitherNotNull = either('notNull');
+
+    j.maybeDefined = maybe('defined');
+
+
+})(jfp);
+
+(function (j) {
+    'use strict';
+
+    function not(a) {
+        return !a;
+    }
+
+    function invert(pred) {
+        return function (value) {
+            return !pred(value);
+        };
+    }
+
+    function compare (operator){
+        return function (a) {
+            return function (b) {
+                switch(operator) {
+                    case '===':
+                        return a === b;
+                    case '&&':
+                        return Boolean(a && b);
+                    case '||':
+                        return Boolean(a || b);
+                    case 'xor':
+                        return Boolean(a ? !b : b);
+                }
+            };
+        };
+    }
+
+    var currySignature = 'comparable => comparable => boolean';
+
+    j.invert = j.enforce('function => function', invert);
+    j.not = j.enforce('comparable => boolean', not);
+
+    j.equal = j.enforce(currySignature, compare('==='));
+    j.and = j.enforce(currySignature, compare('&&'));
+    j.or = j.enforce(currySignature, compare('||'));
+    j.xor = j.enforce(currySignature, compare('xor'));
+
+    // Type functions (for speed and reuse)
+
+    j.isArray = j.isTypeOf('array');
+    j.isBoolean = j.isTypeOf('boolean');
+    j.isFunction = j.isTypeOf('function');
+    j.isNull = j.isTypeOf('null');
+    j.isNumber = j.isTypeOf('number');
+    j.isObject = j.isTypeOf('object');
+    j.isString = j.isTypeOf('string');
+    j.isUndefined = j.isTypeOf('undefined');
+
+    j.isNil = j.isTypeOf('nil');
+    j.isPair = j.isTypeOf('pair');
+    j.isPredicate = j.isTypeOf('predicate');
+    j.isInt = j.isTypeOf('int');
+    j.isNatural = j.isTypeOf('natural');
+    j.isObjectInstance = j.isTypeOf('objectInstance');
+    j.isNotNull = j.isTypeOf('notNull');
+    j.isNotNil = j.isTypeOf('notNil');
+    j.exists = j.isTypeOf('exists');
+    j.isConcatable = j.isTypeOf('concatable');
+    j.isDefined = j.isTypeOf('defined');
+    j.isComparable = j.isTypeOf('comparable');
+    j.isNumeric = j.isTypeOf('numeric');
+    j.isReferencible = j.isTypeOf('referencible');
+
+})(jfp);
+
+(function (j) {
+    'use strict';
+
+    function identity(value) {
+        return value;
+    }
+
+    function always(value) {
+        return identity.bind(null, value);
+    }
 
     function concat(valuesA, valuesB) {
-        return eitherConcatable([])(valuesA).concat(valuesB);
+        return j.eitherConcatable([])(valuesA).concat(valuesB);
     }
 
     function cons(value, values) {
-        return isUndefined(value) ? values : concat([value], values);
+        return j.isUndefined(value) ? values : concat([value], values);
     }
 
     function conj(value, values) {
-        return isUndefined(value) ? values : concat(values, [value]);
+        return j.isUndefined(value) ? values : concat(values, [value]);
     }
 
     function slice(start, end) {
@@ -209,7 +286,7 @@ var jfp = (function(){
             return recur(execCompose)(apply(fn, slice(0)(arguments)), fns);
 
             function execCompose(recur, result, fns) {
-                return isNil(fns) ? result : recur(fns[0](result), slice(1)(fns));
+                return j.isNil(fns) ? result : recur(fns[0](result), slice(1)(fns));
             }
         };
     }
@@ -222,12 +299,12 @@ var jfp = (function(){
 
     function attachCurryData(curriable, fn, count, args) {
         Object.defineProperty(curriable, 'fnLength', {
-            value: either('int')(fn.length)(count),
+            value: j.eitherInt(fn.length)(count),
             writeable: false
         });
 
         curriable.fn = fn;
-        curriable.args = eitherArray([])(args);
+        curriable.args = j.eitherArray([])(args);
 
         return curriable;
     }
@@ -277,58 +354,13 @@ var jfp = (function(){
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
     j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', directionalCurry(reverseArgs(concat)));
-    j.either = j.enforce('variant<typeString;predicate> => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
-    j.maybe = j.enforce('variant<typeString;predicate> => * => maybe<defined>', maybe);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.recur = j.enforce('function => function', recur);
     j.repeat = j.enforce('function => int => * => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
-
-    j.isNil = isNil;
-    j.isUndefined = isUndefined;
-
-})(jfp);
-
-(function (j) {
-    'use strict';
-
-    function not(a) {
-        return !a;
-    }
-
-    function invert(pred) {
-        return j.compose(j.not, pred);
-    }
-
-    function compare (operator){
-        return function (a) {
-            return function (b) {
-                switch(operator) {
-                    case '===':
-                        return a === b;
-                    case '&&':
-                        return Boolean(a && b);
-                    case '||':
-                        return Boolean(a || b);
-                    case 'xor':
-                        return Boolean(a ? !b : b);
-                }
-            };
-        };
-    }
-
-    var currySignature = 'comparable => comparable => boolean';
-
-    j.invert = j.enforce('function => function', invert);
-    j.not = j.enforce('comparable => boolean', not);
-
-    j.equal = j.enforce(currySignature, compare('==='));
-    j.and = j.enforce(currySignature,compare('&&'));
-    j.or = j.enforce(currySignature, compare('||'));
-    j.xor = j.enforce(currySignature, compare('xor'));
 
 })(jfp);
 
@@ -337,12 +369,13 @@ var jfp = (function(){
 
     function nth(index) {
         return function (values) {
-            return j.maybe('defined')(values[index]);
+            return j.maybeDefined(values[index]);
         };
     }
 
+
     function lastIndexOf(values) {
-        return j.either('natural')(0)(values.length - 1);
+        return j.eitherNatural(0)(values.length - 1);
     }
 
     function dropNth(index) {
@@ -355,8 +388,6 @@ var jfp = (function(){
 
     var first = nth(0);
     var rest = j.slice(1);
-    var isNull = j.isTypeOf('null');
-    var isFalse = j.isTypeOf('false');
 
     function isFoldBreak(value) {
         return typeof value === 'undefined' || 
@@ -433,12 +464,10 @@ var jfp = (function(){
     var map = foldApplicator(mapper, []);
     var partition = foldApplicator(partitioner, [[], []]);
 
-    var isArray = j.isTypeOf('array');
-
     function rreduceRecur (recur, fn, lastResult, values) {
         var firstValue = first(values);
         var restValues = rest(values);
-        var firstIsArray = isArray(firstValue);
+        var firstIsArray = j.isArray(firstValue);
 
         var nextResult = firstIsArray ? lastResult : fn(lastResult, firstValue);
         var nextRemaining = firstIsArray ? j.concat(restValues, firstValue) : restValues;
@@ -448,7 +477,7 @@ var jfp = (function(){
 
     function rreduce(fn, initialValue) {
         return function (values) {
-            var initValue = j.either('defined')(first(values))(initialValue);
+            var initValue = j.eitherDefined(first(values))(initialValue);
             var remaining = j.isUndefined(initialValue) ? rest(values) : values;
 
             return j.recur(function (recur, lastResult, values) {
@@ -464,7 +493,7 @@ var jfp = (function(){
 
     function sort(comparator) {
         return function (values) {
-            return j.slice(0)(values).sort(j.either('function')(j.subtract)(comparator));
+            return j.slice(0)(values).sort(j.eitherFunction(j.subtract)(comparator));
         };
     }
 
@@ -608,13 +637,9 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    var eitherNotNull = j.either('notNull')({});
-    var eitherDefined = j.either('defined')(null);
-    var eitherReferencible = j.either('referencible')({});
-
     function pick(key) {
         return function (obj) {
-            return eitherDefined(eitherNotNull(obj)[key]);
+            return j.maybeDefined(j.eitherReferencible({})(obj)[key]);
         };
     }
 
@@ -684,11 +709,8 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    var isFunctionType = j.isTypeOf('function');
-    var eitherFunction = j.either(isFunctionType);
-
     function then(fn) {
-        var isFunction = isFunctionType(fn);
+        var isFunction = j.isFunction(fn);
         var action = isFunction ? fn : j.identity;
         var index = isFunction ? 1 : 0;
 

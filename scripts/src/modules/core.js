@@ -1,9 +1,6 @@
 (function (j) {
     'use strict';
 
-    var isUndefined = j.isTypeOf('undefined');
-    var isNil = j.isTypeOf('nil');
-
     function identity(value) {
         return value;
     }
@@ -12,35 +9,16 @@
         return identity.bind(null, value);
     }
 
-    var isPredicate = j.isTypeOf('predicate');
-
-    function either(typeDef) {
-        var checkType = isPredicate(typeDef) ? typeDef : j.isTypeOf(typeDef);
-
-        return function (defaultValue) {
-            return function (value) {
-                return checkType(value) ? value : defaultValue;
-            };
-        };
-    }
-
-    function maybe(typeDef) {
-        return either(typeDef)(null);
-    }
-
-    var eitherArray = either('array');
-    var eitherConcatable = either('concatable');
-
     function concat(valuesA, valuesB) {
-        return eitherConcatable([])(valuesA).concat(valuesB);
+        return j.eitherConcatable([])(valuesA).concat(valuesB);
     }
 
     function cons(value, values) {
-        return isUndefined(value) ? values : concat([value], values);
+        return j.isUndefined(value) ? values : concat([value], values);
     }
 
     function conj(value, values) {
-        return isUndefined(value) ? values : concat(values, [value]);
+        return j.isUndefined(value) ? values : concat(values, [value]);
     }
 
     function slice(start, end) {
@@ -88,7 +66,7 @@
             return recur(execCompose)(apply(fn, slice(0)(arguments)), fns);
 
             function execCompose(recur, result, fns) {
-                return isNil(fns) ? result : recur(fns[0](result), slice(1)(fns));
+                return j.isNil(fns) ? result : recur(fns[0](result), slice(1)(fns));
             }
         };
     }
@@ -101,12 +79,12 @@
 
     function attachCurryData(curriable, fn, count, args) {
         Object.defineProperty(curriable, 'fnLength', {
-            value: either('int')(fn.length)(count),
+            value: j.eitherInt(fn.length)(count),
             writeable: false
         });
 
         curriable.fn = fn;
-        curriable.args = eitherArray([])(args);
+        curriable.args = j.eitherArray([])(args);
 
         return curriable;
     }
@@ -156,17 +134,12 @@
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
     j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', directionalCurry(reverseArgs(concat)));
-    j.either = j.enforce('variant<typeString;predicate> => * => * => *', either);
     j.identity = j.enforce('* => *', identity);
-    j.maybe = j.enforce('variant<typeString;predicate> => * => maybe<defined>', maybe);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.recur = j.enforce('function => function', recur);
     j.repeat = j.enforce('function => int => * => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
-
-    j.isNil = isNil;
-    j.isUndefined = isUndefined;
 
 })(jfp);

@@ -1,13 +1,9 @@
 (function (j) {
     'use strict';
 
-    var eitherNotNull = j.either('notNull')({});
-    var eitherDefined = j.either('defined')(null);
-    var eitherReferencible = j.either('referencible')({});
-
     function pick(key) {
         return function (obj) {
-            return eitherDefined(eitherNotNull(obj)[key]);
+            return j.maybeDefined(j.eitherReferencible({})(obj)[key]);
         };
     }
 

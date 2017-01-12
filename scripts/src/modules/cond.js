@@ -1,11 +1,8 @@
 (function (j) {
     'use strict';
 
-    var isFunctionType = j.isTypeOf('function');
-    var eitherFunction = j.either(isFunctionType);
-
     function then(fn) {
-        var isFunction = isFunctionType(fn);
+        var isFunction = j.isFunction(fn);
         var action = isFunction ? fn : j.identity;
         var index = isFunction ? 1 : 0;
 
