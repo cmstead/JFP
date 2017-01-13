@@ -346,7 +346,30 @@ var jfp = (function(){
         };
     }
 
-    var curry = directionalCurry(concat);
+    //var curry = directionalCurry(concat);
+
+
+    function buildCurriable(fn, count, args){
+        var curryCount = j.eitherNatural(fn.length)(count);
+        var initialArgs = j.eitherArray([])(args);
+
+        function curriable (){
+            var args = concat(curriable.args, slice(0)(arguments));
+            var argsFulfilled = args.length >= curriable.count;
+
+            return argsFulfilled ? apply(curriable.fn, args) : buildCurriable(curriable.fn, curriable.count, args);
+        }
+
+        curriable.fn = fn;
+        curriable.count = curryCount;
+        curriable.args = initialArgs;
+
+        return curriable;
+    }
+
+    function curry(fn, count, args){
+        return buildCurriable(fn, count, args);
+    }
 
     function directionalPartial(directionalConcat) {
         return function (fn) {
@@ -505,7 +528,6 @@ var jfp = (function(){
             return j.maybeDefined(values[index]);
         };
     }
-
 
     function lastIndexOf(values) {
         return j.eitherNatural(0)(values.length - 1);
@@ -723,8 +745,8 @@ var jfp = (function(){
         };
     }
 
-    function pickByObj (obj){
-        return function (key){
+    function pickByObj(obj) {
+        return function (key) {
             return pick(key)(obj);
         };
     }
@@ -733,9 +755,9 @@ var jfp = (function(){
         var keyTokens = key.split('.');
 
         return function (obj) {
-            return j.foldl(pickKey, obj)(keyTokens);
+            return j.foldl(getNext, obj)(keyTokens);
 
-            function pickKey(result, key) {
+            function getNext(result, key) {
                 return pick(key)(result);
             }
         };
@@ -754,7 +776,7 @@ var jfp = (function(){
         };
     }
 
-    function shallowClone(obj){
+    function shallowClone(obj) {
         var cloneTo = j.isArray(obj) ? [] : {};
         return mergeToUnsafe(cloneTo)(obj);
     }

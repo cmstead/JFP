@@ -4,13 +4,14 @@ var timer = require('../timer/test-timer')();
 describe('jfp array', function () {
 
     beforeEach(function () {
+        timer.setMaxAcceptableTime(0);
         timer.reset();
         timer.start();
     });
 
     afterEach(function () {
         timer.stop();
-        console.log('total runtime: ' + timer.getTotal());
+        timer.report();
     });
 
     describe('nth', function () {

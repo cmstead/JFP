@@ -4,13 +4,14 @@ var timer = require('../timer/test-timer')();
 describe('jfp object', function () {
     
     beforeEach(function () {
+        timer.setMaxAcceptableTime(0);
         timer.reset();
         timer.start();
     });
 
     afterEach(function () {
         timer.stop();
-        console.log('total runtime: ' + timer.getTotal());
+        timer.report();
     });
 
     describe('pick', function () {
@@ -48,11 +49,11 @@ describe('jfp object', function () {
             expect(j.deref('foo')(testObj)).toBe(testObj.foo);
         });
         
-        it('should return a value for a single layer dereference', function () {
-            expect(j.isTypeOf('null')(j.deref('blar')(testObj))).toBe(true);
+        it('should return a null for a bad reference', function () {
+            expect(j.deref('blar')(testObj)).toBe(null);
         });
         
-        it('should return a value for a single layer dereference', function () {
+        it('should return a value for a multiple layer dereference', function () {
             expect(j.deref('foo.bar.baz.1')(testObj)).toBe(2);
         });
         

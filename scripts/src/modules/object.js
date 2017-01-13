@@ -7,8 +7,8 @@
         };
     }
 
-    function pickByObj (obj){
-        return function (key){
+    function pickByObj(obj) {
+        return function (key) {
             return pick(key)(obj);
         };
     }
@@ -17,9 +17,9 @@
         var keyTokens = key.split('.');
 
         return function (obj) {
-            return j.foldl(pickKey, obj)(keyTokens);
+            return j.foldl(getNext, obj)(keyTokens);
 
-            function pickKey(result, key) {
+            function getNext(result, key) {
                 return pick(key)(result);
             }
         };
@@ -38,7 +38,7 @@
         };
     }
 
-    function shallowClone(obj){
+    function shallowClone(obj) {
         var cloneTo = j.isArray(obj) ? [] : {};
         return mergeToUnsafe(cloneTo)(obj);
     }

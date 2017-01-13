@@ -125,7 +125,30 @@
         };
     }
 
-    var curry = directionalCurry(concat);
+    //var curry = directionalCurry(concat);
+
+
+    function buildCurriable(fn, count, args){
+        var curryCount = j.eitherNatural(fn.length)(count);
+        var initialArgs = j.eitherArray([])(args);
+
+        function curriable (){
+            var args = concat(curriable.args, slice(0)(arguments));
+            var argsFulfilled = args.length >= curriable.count;
+
+            return argsFulfilled ? apply(curriable.fn, args) : buildCurriable(curriable.fn, curriable.count, args);
+        }
+
+        curriable.fn = fn;
+        curriable.count = curryCount;
+        curriable.args = initialArgs;
+
+        return curriable;
+    }
+
+    function curry(fn, count, args){
+        return buildCurriable(fn, count, args);
+    }
 
     function directionalPartial(directionalConcat) {
         return function (fn) {

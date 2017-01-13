@@ -4,14 +4,16 @@ var timer = require('../timer/test-timer')();
 describe('jfp cond', function () {
 
     beforeEach(function () {
+        timer.setMaxAcceptableTime(0);
         timer.reset();
         timer.start();
     });
 
     afterEach(function () {
         timer.stop();
-        console.log('total runtime: ' + timer.getTotal());
+        timer.report();
     });
+
 
     function condTest1(value) {
         return j.cond(function (when, then) {
@@ -30,7 +32,7 @@ describe('jfp cond', function () {
         });
     }
 
-    var fac = j.recur(function fac (recur, n, result) {
+    var fac = j.recur(function fac(recur, n, result) {
         result = j.either('number')(1)(result);
 
         return j.cond(function (when, then, _default) {
@@ -40,7 +42,7 @@ describe('jfp cond', function () {
     });
 
     it('should work as an expression', function () {
-       expect(condTest1(1)).toBe('one');
+        expect(condTest1(1)).toBe('one');
         expect(condTest1(2)).toBe('two');
         expect(condTest1(3)).toBe('three');
     });
