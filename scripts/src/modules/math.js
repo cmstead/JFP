@@ -43,19 +43,26 @@
         };
     }
 
+    function pushImpure (values) {
+        return function (value) {
+            values.push(value);
+            return values;
+        };
+    }
+
     function range(min, increment) {
-        var offset = j.isUndefined(increment) ? 1 : increment;
+        var offset = j.eitherNumber(1)(increment);
         
         return function (max) {
             return j.recur(buildRange)(min, []);
 
-            function buildRange(recur, value, output) {
-                return value > max ? output : recur(value + offset, j.conj(value, output));
+            function buildRange(recur, value, result) {
+                return value > max ? result : recur(value + offset, pushImpure(result)(value));
             }
         };
     }
 
-    function extrema (comparator){
+    function extremum (comparator){
         return function (a, b) {
             return comparator(a)(b) ? a : b;
         };
@@ -84,8 +91,8 @@
     j.multiplyBy = j.enforce('number => number => number', operateBy('*'));
     j.subtractBy = j.enforce('number => number => number', operateBy('-'));
 
-    j.min = j.enforce('number, number => number', extrema(compare('<')));
-    j.max = j.enforce('number, number => number', extrema(compare('>')));
+    j.min = j.enforce('number, number => number', extremum(compare('<')));
+    j.max = j.enforce('number, number => number', extremum(compare('>')));
 
     j.inc = j.enforce('int => int', function (a) { return a + 1; });
     j.dec = j.enforce('int => int', function (a) { return a - 1; });

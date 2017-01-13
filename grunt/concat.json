@@ -8,8 +8,8 @@
             "scripts/src/modules/types.js",
             "scripts/src/modules/predicates.js",
             "scripts/src/modules/core.js",
-            "scripts/src/modules/array.js",
             "scripts/src/modules/math.js",
+            "scripts/src/modules/array.js",
             "scripts/src/modules/object.js",
             "scripts/src/modules/cond.js",
             "scripts/src/jfp.expose.js"

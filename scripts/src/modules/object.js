@@ -32,9 +32,19 @@
         };
     }
 
+    function mergeToUnsafe(objA) {
+        return function (objB) {
+            return j.foldl(setValue(objB), objA)(Object.keys(objB));
+        };
+    }
+
+    function shallowClone(obj){
+        var cloneTo = j.isArray(obj) ? [] : {};
+        return mergeToUnsafe(cloneTo)(obj);
+    }
+
     function merge(objA, objB) {
-        var newObj = j.foldl(setValue(objA), {})(Object.keys(objA));
-        return j.foldl(setValue(objB), newObj)(Object.keys(objB));
+        return mergeToUnsafe(shallowClone(objA))(objB);
     }
 
     function toArray(obj) {
@@ -50,8 +60,6 @@
         return j.map(pickByObj(obj))(Object.keys(obj));
     }
 
-    var second = j.nth(1);
-
     function addProperty(obj, propertyPair) {
         obj[propertyPair[0]] = propertyPair[1];
         return obj;
@@ -64,6 +72,8 @@
     j.pick = j.enforce('string => * => maybe<defined>', pick);
     j.deref = j.enforce('string => * => maybe<defined>', deref);
     j.merge = j.enforce('object, object => object', merge);
+    j.mergeToUnsafe = j.enforce('object => object => object', mergeToUnsafe);
+    j.shallowClone = j.enforce('object => object => object', shallowClone);
     j.toArray = j.enforce('object => array<tuple<objectKey;*>>', toArray);
     j.toObject = j.enforce('array<tuple<objectKey;*>> => object', toObject);
     j.toValues = j.enforce('object => array<*>', toValues);

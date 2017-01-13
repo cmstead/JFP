@@ -1,4 +1,4 @@
-var j = require('../../dist/jfp.min');
+var j = require('../../dist/jfp');
 var timer = require('../timer/test-timer')();
 
 describe('jfp array', function () {
@@ -72,6 +72,20 @@ describe('jfp array', function () {
             expect(JSON.stringify(result)).toBe('[1,2,3,4]');
         });
 
+    });
+
+    describe('takeUntil', function () {
+        it('should take elements until it hits an even number', function () {
+            var isEven = j.compose(j.equal(0), j.modBy(2));
+            var result = j.takeUntil(isEven)([1,3,5,6,7,8,9]);
+            expect(JSON.stringify(result)).toBe('[1,3,5]');
+        });
+
+        it('should take all elements if predicate is never satisfied', function () {
+            var isEven = j.compose(j.equal(0), j.modBy(2));
+            var result = j.takeUntil(isEven)([1,3,5,7,9]);
+            expect(JSON.stringify(result)).toBe('[1,3,5,7,9]');
+        });
     });
 
     describe('dropNth', function () {
@@ -231,11 +245,11 @@ describe('jfp array', function () {
             expect(j.all(isInt)([1, 2, 3, 4])).toBe(true);
         });
 
-        it('should return true if no elements of array match predicate', function () {
+        it('should return false if no elements of array match predicate', function () {
             expect(j.all(isInt)([1.1, 2.2, 3.3, 4.4])).toBe(false);
         });
 
-        it('should return true if some, but not all elements of array match predicate', function () {
+        it('should return false if some, but not all elements of array match predicate', function () {
             expect(j.all(isInt)([1.1, 2, 3.3, 4.4])).toBe(false);
         });
 

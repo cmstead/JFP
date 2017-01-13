@@ -7,25 +7,28 @@
         };
     }
 
-
     function lastIndexOf(values) {
         return j.eitherNatural(0)(values.length - 1);
     }
 
     function dropNth(index) {
-        return function (values) {
-            var result = j.slice(0)(values);
-            result.splice(index, 1);
-            return result;
-        };
+        return j.splice(index, 1);
     }
 
     var first = nth(0);
     var rest = j.slice(1);
 
+    function last(values) {
+        return j.nth(lastIndexOf(values))(values);
+    }
+
+    function dropLast(values) {
+        return j.dropNth(lastIndexOf(values))(values);
+    }
+
     function isFoldBreak(value) {
-        return typeof value === 'undefined' || 
-            value === null || 
+        return typeof value === 'undefined' ||
+            value === null ||
             value === false;
     }
 
@@ -33,24 +36,25 @@
         return j.slice(0)(values).reverse();
     }
 
-    function folder(fn) {
+    function folder(fn, takeValue, takeRest) {
         return j.recur(function (recur, result, values) {
-            return j.isNil(values) || isFoldBreak(result) ? result : recur(fn(result, first(values)), rest(values));
+            return j.isNil(values) || isFoldBreak(result) ? result : recur(fn(result, takeValue(values)), takeRest(values));
         });
     }
 
-    function fold(directionProcess) {
+    function fold(takeValue, takeRest) {
         return function (fn, initial) {
             return function (values) {
-                var valueSet = directionProcess(values);
+                var value = j.isUndefined(initial) ? takeValue(values) : initial;
+                var list = j.isUndefined(initial) ? takeRest(values) : values;
 
-                var value = j.isUndefined(initial) ? first(valueSet) : initial;
-                var list = j.isUndefined(initial) ? rest(valueSet) : valueSet;
-
-                return folder(fn)(value, list);
+                return folder(fn, takeValue, takeRest)(value, list);
             };
         };
     }
+
+    var foldl = fold(first, rest);
+    var foldr = fold(last, dropLast);
 
     function operationApplicator(operation) {
         return function (behavior, initial) {
@@ -93,12 +97,12 @@
         };
     }
 
-    var foldApplicator = operationApplicator(fold(j.identity));
-    var filter = foldApplicator(filterer, []);
-    var map = foldApplicator(mapper, []);
-    var partition = foldApplicator(partitioner, [[], []]);
+    var foldlApplicator = operationApplicator(foldl);
+    var filter = foldlApplicator(filterer, []);
+    var map = foldlApplicator(mapper, []);
+    var partition = foldlApplicator(partitioner, [[], []]);
 
-    function rreduceRecur (recur, fn, lastResult, values) {
+    function rreduceRecur(recur, fn, lastResult, values) {
         var firstValue = first(values);
         var restValues = rest(values);
         var firstIsArray = j.isArray(firstValue);
@@ -131,27 +135,70 @@
         };
     }
 
-    function some(pred) {
-        return function (values) {
-            return filter(pred)(values).length > 0;
+    function existence(methodBuilder) {
+        return function (pred) {
+            var method = methodBuilder(pred);
+
+            return function (values) {
+                return j.recur(method)(values);
+            }
         };
     }
 
-    function none(pred) { return j.compose(j.invert, some)(pred); }
-    function all(pred) { return j.compose(none, j.invert)(pred); }
-    function take(count) { return j.slice(0, count); }
+    function buildEvery(pred) {
+        return function every(recur, values) {
+            return !pred(first(values)) ? j.isNil(values) : recur(rest(values));
+        }
+    }
 
-    j.all = j.enforce('function => array<*> => boolean', all);
+    function buildNever(pred) {
+        return function never(recur, values) {
+            var result = pred(first(values))
+            return j.isNil(values) || result ? !result : recur(rest(values));
+        }
+    }
+
+    function buildAtLeastOne(pred) {
+        return function atLeastOne(recur, values) {
+            var result = pred(first(values))
+            return j.isNil(values) || result ? result : recur(rest(values));
+        }
+    }
+
+    function take(count) {
+        return j.slice(0, count);
+    }
+
+    function pushUnsafe(values) {
+        return function (value) {
+            values.push(value);
+            return values;
+        }
+    }
+
+    function takeUntil(pred) {
+        return function (values) {
+            return j.recur(takeNext)(values, []);
+
+            function takeNext(recur, values, result) {
+                var value = first(values);
+                return j.isNil(values) || pred(value) ? result : recur(rest(values), pushUnsafe(result)(value));
+            }
+        };
+    }
+
+    j.all = j.enforce('function => array<*> => boolean', existence(buildEvery));
     j.compact = j.enforce('[array] => array<*>', filter(Boolean));
+    j.dropLast = j.enforce('array<*> => array<*>', dropLast);
     j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
     j.filter = j.enforce('function => array<*> => array<*>', filter);
     j.first = j.enforce('array<*> => maybe<defined>', first);
     j.find = j.enforce('function<*> => array<*> => maybe<defined>', find);
-    j.foldl = j.enforce('function, [*] => array<*> => *', fold(j.identity));
-    j.foldr = j.enforce('function, [*] => array<*> => *', fold(reverse));
+    j.foldl = j.enforce('function, [*] => array<*> => *', foldl);
+    j.foldr = j.enforce('function, [*] => array<*> => *', foldr);
     j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
     j.map = j.enforce('function => array<*> => array<*>', map);
-    j.none = j.enforce('function => array<*> => boolean', none);
+    j.none = j.enforce('function => array<*> => boolean', existence(buildNever));
     j.nth = j.enforce('index => array<*> => maybe<defined>', nth);
     j.partition = j.enforce('function => array<*> => array<array<*>;array<*>>', partition);
     j.rest = rest;
@@ -160,8 +207,9 @@
     j.rmap = j.enforce('function => array<*> => array<*>', rmap);
     j.rpartition = j.enforce('function => array<*> => array<array<*>;array<*>>', rpartition);
     j.rreduce = j.enforce('function, [*] => array<*> => *', rreduce);
-    j.some = j.enforce('function => array<*> => boolean', some);
+    j.some = j.enforce('function => array<*> => boolean', existence(buildAtLeastOne));
     j.sort = j.enforce('[*] => array<*> => array<*>', sort);
     j.take = j.enforce('[index] => function<array<*>>', take);
+    j.takeUntil = j.enforce('predicate => array<*> => array<*>', takeUntil);
 
 })(jfp);

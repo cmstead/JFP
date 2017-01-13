@@ -100,7 +100,7 @@
     });
 
     function either(typeDef) {
-        var checkType = isFunction(typeDef) ? typeDef : _signet.isTypeOf(typeDef);
+        var checkType = _signet.isTypeOf(typeDef);
 
         return function (defaultValue) {
             return function (value) {
@@ -133,6 +133,7 @@
     j.eitherString = either('string');
     
     j.eitherConcatable = either('concatable');
+    j.eitherObjectInstance = either('objectInstance');
     j.eitherReferencible = either('referencible');
 
     j.eitherDefined = either('defined');

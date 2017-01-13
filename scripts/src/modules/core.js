@@ -27,18 +27,35 @@
         };
     }
 
+    function splice(index, length) {        
+        return function (values) {
+            var result = j.slice(0)(values);
+            var count = j.eitherNatural(values.length - index)(length);
+
+            result.splice(index, count);
+
+            return result;
+        }
+    }
+
     function apply(fn, args) {
         return fn.apply(null, args);
     }
 
-    function RecurObj(id, args) {
-        this.id = id;
-        this.args = args;
-    }
-
     function recursor(id) {
         return function () {
-            return new RecurObj(id, slice(0)(arguments));
+            return {
+                id: id,
+                args: slice(0)(arguments)
+            };
+        };
+    }
+
+    function checkRecurResult(id) {
+        return function (result) {
+            var safeResult = j.eitherObjectInstance({})(result);
+
+            return j.isNumber(safeResult.id) && j.isArray(safeResult.args) && result.id === id;
         };
     }
 
@@ -46,16 +63,21 @@
         // Each recursion needs to be signed to avoid collisions
         var id = Math.floor(Math.random() * 1000000);
         var signedRecursor = recursor(id);
+        var checkResult = checkRecurResult(id);
 
         return function () {
             var result = apply(signedRecursor, slice(0)(arguments));
 
-            while (result instanceof RecurObj && result.id === id) {
+            while (checkResult(result)) {
                 result = apply(fn, cons(signedRecursor, result.args));
             }
 
             return result;
         };
+    }
+
+    function lastIndexOf(values) {
+        return values.length - 1;
     }
 
     function compose() {
@@ -118,7 +140,7 @@
     var partial = directionalPartial(concat);
 
     function repeat(fn) {
-        function repeater (recur, count, value) {
+        function repeater(recur, count, value) {
             return count < 1 ? value : recur(count - 1, fn(value));
         }
 
@@ -141,5 +163,6 @@
     j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
+    j.splice = j.enforce('int, [int] => array<*> => array<*>', splice);
 
 })(jfp);
