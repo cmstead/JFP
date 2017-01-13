@@ -23,7 +23,7 @@
     }
 
     function dropLast(values) {
-        return j.dropNth(lastIndexOf(values))(values);
+        return j.slice(0, lastIndexOf(values))(values);
     }
 
     function isFoldBreak(value) {
@@ -176,15 +176,25 @@
         }
     }
 
-    function takeUntil(pred) {
-        return function (values) {
-            return j.recur(takeNext)(values, []);
+    function until(pred){
+        return function (action, initial){
+            return function (values) {
+                return j.recur(actUntil)(initial, values);
 
-            function takeNext(recur, values, result) {
-                var value = first(values);
-                return j.isNil(values) || pred(value) ? result : recur(rest(values), pushUnsafe(result)(value));
-            }
+                function actUntil (recur, result, values) {
+                    var value = first(values);
+                    return j.isNil(values) || pred(value) ? result : recur(action(result, value), rest(values));
+                };
+            };
         };
+    }
+
+    function takeUntil(pred) {
+        return until(pred)(j.reverseArgs(j.conj), []);
+
+        function takeValue(result, value) {
+            return j.pushUnsafe(result)(value);
+        }
     }
 
     j.all = j.enforce('function => array<*> => boolean', existence(buildEvery));
@@ -211,5 +221,6 @@
     j.sort = j.enforce('[*] => array<*> => array<*>', sort);
     j.take = j.enforce('[index] => function<array<*>>', take);
     j.takeUntil = j.enforce('predicate => array<*> => array<*>', takeUntil);
+    j.until = j.enforce('predicate => function, * => *', until);
 
 })(jfp);

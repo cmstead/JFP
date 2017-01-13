@@ -99,36 +99,7 @@
         };
     }
 
-    function attachCurryData(curriable, fn, count, args) {
-        Object.defineProperty(curriable, 'fnLength', {
-            value: j.eitherInt(fn.length)(count),
-            writeable: false
-        });
-
-        curriable.fn = fn;
-        curriable.args = j.eitherArray([])(args);
-
-        return curriable;
-    }
-
-    function directionalCurry(directedConcat) {
-        return function curry(fn, count, args) {
-
-            var curriable = function () {
-                var args = directedConcat(curriable.args, slice(0)(arguments));
-                var done = curriable.fnLength <= args.length;
-
-                return done ? apply(curriable.fn, args) : directionalCurry(directedConcat)(fn, curriable.fnLength, args);
-            };
-
-            return attachCurryData(curriable, fn, count, args);
-        };
-    }
-
-    //var curry = directionalCurry(concat);
-
-
-    function buildCurriable(fn, count, args){
+    function buildCurriable(fn, count, args, concat){
         var curryCount = j.eitherNatural(fn.length)(count);
         var initialArgs = j.eitherArray([])(args);
 
@@ -136,7 +107,7 @@
             var args = concat(curriable.args, slice(0)(arguments));
             var argsFulfilled = args.length >= curriable.count;
 
-            return argsFulfilled ? apply(curriable.fn, args) : buildCurriable(curriable.fn, curriable.count, args);
+            return argsFulfilled ? apply(curriable.fn, args) : buildCurriable(curriable.fn, curriable.count, args, concat);
         }
 
         curriable.fn = fn;
@@ -147,7 +118,11 @@
     }
 
     function curry(fn, count, args){
-        return buildCurriable(fn, count, args);
+        return buildCurriable(fn, count, args, concat);
+    }
+
+    function rcurry(fn, count, args){
+        return buildCurriable(fn, count, args, reverseArgs(concat));
     }
 
     function directionalPartial(directionalConcat) {
@@ -178,7 +153,7 @@
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
-    j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', directionalCurry(reverseArgs(concat)));
+    j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', rcurry);
     j.identity = j.enforce('* => *', identity);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.recur = j.enforce('function => function', recur);

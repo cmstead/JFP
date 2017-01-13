@@ -1,11 +1,12 @@
 var j = require('../../dist/jfp');
-var timer = require('../timer/test-timer')();
+var timerFactory = require('../timer/test-timer');
 
 describe('jfp array', function () {
 
+    var timer;
+
     beforeEach(function () {
-        timer.setMaxAcceptableTime(0);
-        timer.reset();
+        timer = timerFactory();
         timer.start();
     });
 
@@ -76,15 +77,18 @@ describe('jfp array', function () {
     });
 
     describe('takeUntil', function () {
+
         it('should take elements until it hits an even number', function () {
             var isEven = j.compose(j.equal(0), j.modBy(2));
             var result = j.takeUntil(isEven)([1,3,5,6,7,8,9]);
+
             expect(JSON.stringify(result)).toBe('[1,3,5]');
         });
 
         it('should take all elements if predicate is never satisfied', function () {
             var isEven = j.compose(j.equal(0), j.modBy(2));
             var result = j.takeUntil(isEven)([1,3,5,7,9]);
+
             expect(JSON.stringify(result)).toBe('[1,3,5,7,9]');
         });
     });
