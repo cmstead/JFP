@@ -793,16 +793,35 @@ var jfp = (function(){
         return j.foldl(addProperty, {})(tupleArray);
     }
 
-    j.pick = j.enforce('string => * => maybe<defined>', pick);
+    function clone(obj) {
+        var result = j.isArray(obj) ? [] : {};
+        var keys = Object.keys(obj);
+
+        try {
+            return j.foldl(copyKeys, result)(keys);
+        } catch (e) {
+            throw new Error('Object is circular or too deep to clone.');
+        }
+
+        function copyKeys(result, key) {
+            var value = obj[key];
+            result[key] = j.isObject(value) ? clone(value) : value;
+            return result;
+        }
+    }
+
+    j.clone = j.enforce('object => object', clone);
     j.deref = j.enforce('string => * => maybe<defined>', deref);
     j.merge = j.enforce('object, object => object', merge);
     j.mergeToUnsafe = j.enforce('object => object => object', mergeToUnsafe);
+    j.pick = j.enforce('string => * => maybe<defined>', pick);
     j.shallowClone = j.enforce('object => object => object', shallowClone);
     j.toArray = j.enforce('object => array<tuple<objectKey;*>>', toArray);
     j.toObject = j.enforce('array<tuple<objectKey;*>> => object', toObject);
     j.toValues = j.enforce('object => array<*>', toValues);
 
 })(jfp);
+
 
 (function (j) {
     'use strict';
