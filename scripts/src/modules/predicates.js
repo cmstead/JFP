@@ -28,15 +28,40 @@
         };
     }
 
+    function curryCompare(comparator) {
+        return function (a) {
+            return function (b) {
+                return comparator(a, b);
+            };
+        };
+    }
+
+    function and (a, b) {
+        return Boolean(a && b);
+    }
+
+    function or (a, b) {
+        return Boolean(a || b);
+    }
+
+
+    function xor (a, b) {
+        return Boolean(a ? !b : b);
+    }
+
+    function equal (a, b){
+        return a === b;
+    }
+
     var currySignature = 'comparable => comparable => boolean';
 
     j.invert = j.enforce('function => function', invert);
     j.not = j.enforce('comparable => boolean', not);
 
-    j.equal = j.enforce(currySignature, compare('==='));
-    j.and = j.enforce(currySignature, compare('&&'));
-    j.or = j.enforce(currySignature, compare('||'));
-    j.xor = j.enforce(currySignature, compare('xor'));
+    j.equal = j.enforce(currySignature, curryCompare(equal));
+    j.and = j.enforce(currySignature, curryCompare(and));
+    j.or = j.enforce(currySignature, curryCompare(or));
+    j.xor = j.enforce(currySignature, curryCompare(xor));
 
     // Type functions (for speed and reuse)
 

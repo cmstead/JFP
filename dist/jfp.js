@@ -121,10 +121,10 @@ var jfp = (function(){
     }
 
     // Type system behaviors
-    j.either = either;
+    j.either = _signet.enforce('type => * => *', either);
     j.enforce = _signet.enforce;
     j.isTypeOf = _signet.isTypeOf;
-    j.maybe = maybe;
+    j.maybe = _signet.enforce('* => maybe<defined>', maybe);
     j.setJfpTypes = _signet.enforce('signet => signet', setJfpTypes);
     j.typeChain = _signet.typeChain;
 
@@ -181,15 +181,40 @@ var jfp = (function(){
         };
     }
 
+    function curryCompare(comparator) {
+        return function (a) {
+            return function (b) {
+                return comparator(a, b);
+            };
+        };
+    }
+
+    function and (a, b) {
+        return Boolean(a && b);
+    }
+
+    function or (a, b) {
+        return Boolean(a || b);
+    }
+
+
+    function xor (a, b) {
+        return Boolean(a ? !b : b);
+    }
+
+    function equal (a, b){
+        return a === b;
+    }
+
     var currySignature = 'comparable => comparable => boolean';
 
     j.invert = j.enforce('function => function', invert);
     j.not = j.enforce('comparable => boolean', not);
 
-    j.equal = j.enforce(currySignature, compare('==='));
-    j.and = j.enforce(currySignature, compare('&&'));
-    j.or = j.enforce(currySignature, compare('||'));
-    j.xor = j.enforce(currySignature, compare('xor'));
+    j.equal = j.enforce(currySignature, curryCompare(equal));
+    j.and = j.enforce(currySignature, curryCompare(and));
+    j.or = j.enforce(currySignature, curryCompare(or));
+    j.xor = j.enforce(currySignature, curryCompare(xor));
 
     // Type functions (for speed and reuse)
 
@@ -498,6 +523,10 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
+    function isUndefined(value) {
+        return typeof value === 'undefined';
+    }
+
     function nth(index) {
         return function (values) {
             return j.maybeDefined(values[index]);
@@ -694,30 +723,30 @@ var jfp = (function(){
         }
     }
 
-    j.all = j.enforce('function => array<*> => boolean', existence(buildEvery));
-    j.compact = j.enforce('[array] => array<*>', filter(Boolean));
-    j.dropLast = j.enforce('array<*> => array<*>', dropLast);
-    j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
-    j.filter = j.enforce('function => array<*> => array<*>', filter);
-    j.first = j.enforce('array<*> => maybe<defined>', first);
-    j.find = j.enforce('function<*> => array<*> => maybe<defined>', find);
-    j.foldl = j.enforce('function, [*] => array<*> => *', foldl);
-    j.foldr = j.enforce('function, [*] => array<*> => *', foldr);
-    j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
-    j.map = j.enforce('function => array<*> => array<*>', map);
-    j.none = j.enforce('function => array<*> => boolean', existence(buildNever));
-    j.nth = j.enforce('index => array<*> => maybe<defined>', nth);
-    j.partition = j.enforce('function => array<*> => array<array<*>;array<*>>', partition);
+    j.all = j.enforce('function => array => boolean', existence(buildEvery));
+    j.compact = j.enforce('[array] => array', filter(Boolean));
+    j.dropLast = j.enforce('array => array', dropLast);
+    j.dropNth = j.enforce('index => array => array', dropNth);
+    j.filter = j.enforce('function => array => array', filter);
+    j.first = j.enforce('array => maybe<defined>', first);
+    j.find = j.enforce('function<*> => array => maybe<defined>', find);
+    j.foldl = j.enforce('function, [*] => array => *', foldl);
+    j.foldr = j.enforce('function, [*] => array => *', foldr);
+    j.lastIndexOf = j.enforce('array => index', lastIndexOf);
+    j.map = j.enforce('function => array => array', map);
+    j.none = j.enforce('function => array => boolean', existence(buildNever));
+    j.nth = j.enforce('index => array => maybe<defined>', nth);
+    j.partition = j.enforce('function => array => tuple<array;array>', partition);
     j.rest = rest;
-    j.reverse = j.enforce('array<*> => array<*>', reverse);
-    j.rfilter = j.enforce('function => array<*> => array<*>', rfilter);
-    j.rmap = j.enforce('function => array<*> => array<*>', rmap);
-    j.rpartition = j.enforce('function => array<*> => array<array<*>;array<*>>', rpartition);
-    j.rreduce = j.enforce('function, [*] => array<*> => *', rreduce);
-    j.some = j.enforce('function => array<*> => boolean', existence(buildAtLeastOne));
-    j.sort = j.enforce('[*] => array<*> => array<*>', sort);
-    j.take = j.enforce('[index] => function<array<*>>', take);
-    j.takeUntil = j.enforce('predicate => array<*> => array<*>', takeUntil);
+    j.reverse = j.enforce('array => array', reverse);
+    j.rfilter = j.enforce('function => array => array', rfilter);
+    j.rmap = j.enforce('function => array => array', rmap);
+    j.rpartition = j.enforce('function => array => array<array;array>', rpartition);
+    j.rreduce = j.enforce('function, [*] => array => *', rreduce);
+    j.some = j.enforce('function => array => boolean', existence(buildAtLeastOne));
+    j.sort = j.enforce('[*] => array => array', sort);
+    j.take = j.enforce('[index] => function<array>', take);
+    j.takeUntil = j.enforce('predicate => array => array', takeUntil);
     j.until = j.enforce('predicate => function, * => *', until);
 
 })(jfp);

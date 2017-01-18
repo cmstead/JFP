@@ -1,6 +1,10 @@
 (function (j) {
     'use strict';
 
+    function isUndefined(value) {
+        return typeof value === 'undefined';
+    }
+
     function nth(index) {
         return function (values) {
             return j.maybeDefined(values[index]);
@@ -197,30 +201,30 @@
         }
     }
 
-    j.all = j.enforce('function => array<*> => boolean', existence(buildEvery));
-    j.compact = j.enforce('[array] => array<*>', filter(Boolean));
-    j.dropLast = j.enforce('array<*> => array<*>', dropLast);
-    j.dropNth = j.enforce('index => array<*> => array<*>', dropNth);
-    j.filter = j.enforce('function => array<*> => array<*>', filter);
-    j.first = j.enforce('array<*> => maybe<defined>', first);
-    j.find = j.enforce('function<*> => array<*> => maybe<defined>', find);
-    j.foldl = j.enforce('function, [*] => array<*> => *', foldl);
-    j.foldr = j.enforce('function, [*] => array<*> => *', foldr);
-    j.lastIndexOf = j.enforce('array<*> => index', lastIndexOf);
-    j.map = j.enforce('function => array<*> => array<*>', map);
-    j.none = j.enforce('function => array<*> => boolean', existence(buildNever));
-    j.nth = j.enforce('index => array<*> => maybe<defined>', nth);
-    j.partition = j.enforce('function => array<*> => array<array<*>;array<*>>', partition);
+    j.all = j.enforce('function => array => boolean', existence(buildEvery));
+    j.compact = j.enforce('[array] => array', filter(Boolean));
+    j.dropLast = j.enforce('array => array', dropLast);
+    j.dropNth = j.enforce('index => array => array', dropNth);
+    j.filter = j.enforce('function => array => array', filter);
+    j.first = j.enforce('array => maybe<defined>', first);
+    j.find = j.enforce('function<*> => array => maybe<defined>', find);
+    j.foldl = j.enforce('function, [*] => array => *', foldl);
+    j.foldr = j.enforce('function, [*] => array => *', foldr);
+    j.lastIndexOf = j.enforce('array => index', lastIndexOf);
+    j.map = j.enforce('function => array => array', map);
+    j.none = j.enforce('function => array => boolean', existence(buildNever));
+    j.nth = j.enforce('index => array => maybe<defined>', nth);
+    j.partition = j.enforce('function => array => tuple<array;array>', partition);
     j.rest = rest;
-    j.reverse = j.enforce('array<*> => array<*>', reverse);
-    j.rfilter = j.enforce('function => array<*> => array<*>', rfilter);
-    j.rmap = j.enforce('function => array<*> => array<*>', rmap);
-    j.rpartition = j.enforce('function => array<*> => array<array<*>;array<*>>', rpartition);
-    j.rreduce = j.enforce('function, [*] => array<*> => *', rreduce);
-    j.some = j.enforce('function => array<*> => boolean', existence(buildAtLeastOne));
-    j.sort = j.enforce('[*] => array<*> => array<*>', sort);
-    j.take = j.enforce('[index] => function<array<*>>', take);
-    j.takeUntil = j.enforce('predicate => array<*> => array<*>', takeUntil);
+    j.reverse = j.enforce('array => array', reverse);
+    j.rfilter = j.enforce('function => array => array', rfilter);
+    j.rmap = j.enforce('function => array => array', rmap);
+    j.rpartition = j.enforce('function => array => array<array;array>', rpartition);
+    j.rreduce = j.enforce('function, [*] => array => *', rreduce);
+    j.some = j.enforce('function => array => boolean', existence(buildAtLeastOne));
+    j.sort = j.enforce('[*] => array => array', sort);
+    j.take = j.enforce('[index] => function<array>', take);
+    j.takeUntil = j.enforce('predicate => array => array', takeUntil);
     j.until = j.enforce('predicate => function, * => *', until);
 
 })(jfp);

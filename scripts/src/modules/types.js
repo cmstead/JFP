@@ -114,10 +114,10 @@
     }
 
     // Type system behaviors
-    j.either = either;
+    j.either = _signet.enforce('type => * => *', either);
     j.enforce = _signet.enforce;
     j.isTypeOf = _signet.isTypeOf;
-    j.maybe = maybe;
+    j.maybe = _signet.enforce('* => maybe<defined>', maybe);
     j.setJfpTypes = _signet.enforce('signet => signet', setJfpTypes);
     j.typeChain = _signet.typeChain;
 

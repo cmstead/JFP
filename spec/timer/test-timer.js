@@ -1,17 +1,17 @@
 'use strict';
 
 function timerFactory () {
-    var max = 0;
+    var max = 1;
     var total = 0;
     var startTime = 0;
 
 
     function start() {
-        startTime = Date.now();
+        startTime = process.hrtime();
     }
 
     function stop() {
-        total += Date.now() - startTime;
+        total += parseInt(process.hrtime(startTime)[1], 10) / 1000000;
         startTime = 0;
     }
 
