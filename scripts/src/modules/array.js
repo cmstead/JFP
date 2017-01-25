@@ -183,21 +183,23 @@
     function until(pred){
         return function (action, initial){
             return function (values) {
-                return j.recur(actUntil)(initial, values);
+                var result = initial;
 
-                function actUntil (recur, result, values) {
-                    var value = first(values);
-                    return j.isNil(values) || pred(value) ? result : recur(action(result, value), rest(values));
-                };
+                for(var i = 0; i < values.length; i++) {
+                    if(pred(values[i])) { break; }
+                    result = action(result, values[i]);
+                }
+
+                return result;
             };
         };
     }
 
     function takeUntil(pred) {
-        return until(pred)(j.reverseArgs(j.conj), []);
+        return until(pred)(takeValue, []);
 
         function takeValue(result, value) {
-            return j.pushUnsafe(result)(value);
+            return pushUnsafe(result)(value);
         }
     }
 
@@ -215,6 +217,7 @@
     j.none = j.enforce('function => array => boolean', existence(buildNever));
     j.nth = j.enforce('index => array => maybe<defined>', nth);
     j.partition = j.enforce('function => array => tuple<array;array>', partition);
+    j.pushUnsafe = j.enforce('array => * => array', pushUnsafe);
     j.rest = rest;
     j.reverse = j.enforce('array => array', reverse);
     j.rfilter = j.enforce('function => array => array', rfilter);

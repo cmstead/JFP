@@ -224,6 +224,7 @@ var jfp = (function(){
     j.isNull = j.isTypeOf('null');
     j.isNumber = j.isTypeOf('number');
     j.isObject = j.isTypeOf('object');
+    j.isObjectInstance = j.isTypeOf('objectInstance');
     j.isString = j.isTypeOf('string');
     j.isUndefined = j.isTypeOf('undefined');
 
@@ -252,7 +253,9 @@ var jfp = (function(){
     }
 
     function always(value) {
-        return identity.bind(null, value);
+        return function () {
+            return value;
+        };
     }
 
     function concat(valuesA, valuesB) {
@@ -273,9 +276,11 @@ var jfp = (function(){
         };
     }
 
-    function splice(index, length) {        
+    var argumentsToArray = slice(0);
+
+    function splice(index, length) {
         return function (values) {
-            var result = j.slice(0)(values);
+            var result = argumentsToArray(values);
             var count = j.eitherNatural(values.length - index)(length);
 
             result.splice(index, count);
@@ -288,20 +293,22 @@ var jfp = (function(){
         return fn.apply(null, args);
     }
 
+    function buildResult(id, args) {
+        return {
+            id: id,
+            args: args
+        };
+    }
+
     function recursor(id) {
         return function () {
-            return {
-                id: id,
-                args: slice(0)(arguments)
-            };
+            return buildResult(id, argumentsToArray(arguments));
         };
     }
 
     function checkRecurResult(id) {
         return function (result) {
-            var safeResult = j.eitherObjectInstance({})(result);
-
-            return j.isNumber(safeResult.id) && j.isArray(safeResult.args) && result.id === id;
+            return j.isObjectInstance(result) && result.id === id;
         };
     }
 
@@ -312,7 +319,7 @@ var jfp = (function(){
         var checkResult = checkRecurResult(id);
 
         return function () {
-            var result = apply(signedRecursor, slice(0)(arguments));
+            var result = buildResult(id, argumentsToArray(arguments));
 
             while (checkResult(result)) {
                 result = apply(fn, cons(signedRecursor, result.args));
@@ -326,75 +333,71 @@ var jfp = (function(){
         return values.length - 1;
     }
 
-    function compose() {
-        var fns = slice(0)(arguments).reverse();
-        var fn = fns.shift();
-
+    function compose(f, g) {
         return function () {
-            return recur(execCompose)(apply(fn, slice(0)(arguments)), fns);
-
-            function execCompose(recur, result, fns) {
-                return j.isNil(fns) ? result : recur(fns[0](result), slice(1)(fns));
-            }
+            var args = argumentsToArray(arguments);
+            return f(g.apply(null, args));
         };
     }
 
     function reverseArgs(fn) {
         return function () {
-            return apply(fn, slice(0)(arguments).reverse());
+            return apply(fn, argumentsToArray(arguments).reverse());
         };
     }
 
-    function buildCurriable(fn, count, args, concat){
-        var curryCount = j.eitherNatural(fn.length)(count);
-        var initialArgs = j.eitherArray([])(args);
-
-        function curriable (){
-            var args = concat(curriable.args, slice(0)(arguments));
-            var argsFulfilled = args.length >= curriable.count;
-
-            return argsFulfilled ? apply(curriable.fn, args) : buildCurriable(curriable.fn, curriable.count, args, concat);
+    function buildCurriable(fn, count, initialArgs, concat) {
+        function curriable() {
+            var args = concat(initialArgs, argumentsToArray(arguments));
+            return args.length >= count ? apply(fn, args) : buildCurriable(fn, count, args, concat);
         }
-
-        curriable.fn = fn;
-        curriable.count = curryCount;
-        curriable.args = initialArgs;
 
         return curriable;
     }
 
-    function curry(fn, count, args){
-        return buildCurriable(fn, count, args, concat);
+    function directionalCurry(concat) {
+        return function (fn, count, args) {
+            return buildCurriable(fn, j.eitherNatural(fn.length)(count), j.eitherArray([])(args), concat);
+        };
     }
 
-    function rcurry(fn, count, args){
-        return buildCurriable(fn, count, args, reverseArgs(concat));
-    }
+    var curry = directionalCurry(concat);
+    var rcurry = directionalCurry(reverseArgs(concat));
 
-    function directionalPartial(directionalConcat) {
+    function directionalPartial(concat) {
+        var sliceRest = slice(1);
+
         return function (fn) {
-            var args = slice(1)(arguments);
+            var args = sliceRest(arguments);
 
             return function () {
-                return apply(fn, directionalConcat(args, slice(0)(arguments)));
+                return apply(fn, concat(args, argumentsToArray(arguments)));
             };
         };
     }
 
     var partial = directionalPartial(concat);
+    var rpartial = directionalPartial(reverseArgs(concat));
 
     function repeat(fn) {
         function repeater(recur, count, value) {
             return count < 1 ? value : recur(count - 1, fn(value));
         }
 
-        return curry(partial, 2)(recur(repeater));
+        var repeat = recur(repeater);
+
+        return function (count) {
+            return function (value) {
+                return repeat(count, value);
+            }
+        }
     }
 
     // JFP core functions
     j.always = j.enforce('* => [*] => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
-    j.compose = j.enforce('[function] => function', compose);
+    j.argumentsToArray = j.enforce('arguments => array', argumentsToArray);
+    j.compose = j.enforce('function, function => function', compose);
     j.concat = curry(j.enforce('concatable, concatable => concatable', concat), 2);
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
@@ -404,7 +407,7 @@ var jfp = (function(){
     j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.recur = j.enforce('function => function', recur);
     j.repeat = j.enforce('function => int => * => *', repeat);
-    j.rpartial = j.enforce('function, [*] => [*] => *', directionalPartial(reverseArgs(concat)));
+    j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
     j.splice = j.enforce('int, [int] => array<*> => array<*>', splice);
@@ -414,7 +417,7 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    function operation (operator){
+    function operation(operator) {
         return function (a, b) {
             switch (operator) {
                 case '+':
@@ -431,61 +434,53 @@ var jfp = (function(){
         };
     }
 
-    function compare (operator){
+    function greater(a, b) { return a > b; }
+    function less(a, b) { return a < b; }
+
+    function greaterOrEqual(a, b) { return !less(a, b); }
+    function lessOrEqual(a, b) { return !greater(a, b); }
+
+    function curryOperation(operation) {
         return function (a) {
             return function (b) {
-                switch(operator) {
-                    case '>':
-                        return a > b;
-                    case '<':
-                        return a < b;
-                    case '>=':
-                        return a >= b;
-                    case '<=':
-                        return a <= b;
-                }
+                return operation(a, b);
             };
         };
     }
 
-    function operateBy (operator){
+    function operateBy(operator) {
         return function (a) {
-            return function (b){
+            return function (b) {
                 return operation(operator)(b, a);
             };
         };
     }
 
-    function pushImpure (values) {
-        return function (value) {
-            values.push(value);
-            return values;
-        };
-    }
-
     function range(min, increment) {
         var offset = j.eitherNumber(1)(increment);
-        
+
         return function (max) {
-            return j.recur(buildRange)(min, []);
+            var result = [];
 
-            function buildRange(recur, value, result) {
-                return value > max ? result : recur(value + offset, pushImpure(result)(value));
+            for (var i = min; i <= max; i += offset) {
+                result.push(i)
             }
+
+            return result;
         };
     }
 
-    function extremum (comparator){
+    function extremum(comparator) {
         return function (a, b) {
-            return comparator(a)(b) ? a : b;
+            return comparator(a, b) ? a : b;
         };
     }
 
-    function between (min, max){
-        if(min >= max) {
+    function between(min, max) {
+        if (min >= max) {
             throw new Error('Invalid range, ' + min + ' is not less than ' + max);
         }
-        
+
         return function (value) {
             return min <= value && value <= max;
         };
@@ -504,18 +499,18 @@ var jfp = (function(){
     j.multiplyBy = j.enforce('number => number => number', operateBy('*'));
     j.subtractBy = j.enforce('number => number => number', operateBy('-'));
 
-    j.min = j.enforce('number, number => number', extremum(compare('<')));
-    j.max = j.enforce('number, number => number', extremum(compare('>')));
+    j.min = j.enforce('number, number => number', extremum(less));
+    j.max = j.enforce('number, number => number', extremum(greater));
 
     j.inc = j.enforce('int => int', function (a) { return a + 1; });
     j.dec = j.enforce('int => int', function (a) { return a - 1; });
 
     j.range = j.enforce('int, [int] => int => array<int>', range);
-    
-    j.gt = j.enforce('number => number => boolean', compare('>'));
-    j.geq = j.enforce('number => number => boolean', compare('>='));
-    j.lt = j.enforce('number => number => boolean', compare('<'));
-    j.leq = j.enforce('number => number => boolean', compare('<='));
+
+    j.gt = j.enforce('number => number => boolean', curryOperation(greater));
+    j.geq = j.enforce('number => number => boolean', curryOperation(greaterOrEqual));
+    j.lt = j.enforce('number => number => boolean', curryOperation(less));
+    j.leq = j.enforce('number => number => boolean', curryOperation(lessOrEqual));
     j.between = j.enforce('number, number => number => boolean', between);
 
 })(jfp);
@@ -705,21 +700,23 @@ var jfp = (function(){
     function until(pred){
         return function (action, initial){
             return function (values) {
-                return j.recur(actUntil)(initial, values);
+                var result = initial;
 
-                function actUntil (recur, result, values) {
-                    var value = first(values);
-                    return j.isNil(values) || pred(value) ? result : recur(action(result, value), rest(values));
-                };
+                for(var i = 0; i < values.length; i++) {
+                    if(pred(values[i])) { break; }
+                    result = action(result, values[i]);
+                }
+
+                return result;
             };
         };
     }
 
     function takeUntil(pred) {
-        return until(pred)(j.reverseArgs(j.conj), []);
+        return until(pred)(takeValue, []);
 
         function takeValue(result, value) {
-            return j.pushUnsafe(result)(value);
+            return pushUnsafe(result)(value);
         }
     }
 
@@ -737,6 +734,7 @@ var jfp = (function(){
     j.none = j.enforce('function => array => boolean', existence(buildNever));
     j.nth = j.enforce('index => array => maybe<defined>', nth);
     j.partition = j.enforce('function => array => tuple<array;array>', partition);
+    j.pushUnsafe = j.enforce('array => * => array', pushUnsafe);
     j.rest = rest;
     j.reverse = j.enforce('array => array', reverse);
     j.rfilter = j.enforce('function => array => array', rfilter);
@@ -756,7 +754,7 @@ var jfp = (function(){
 
     function pick(key) {
         return function (obj) {
-            return j.maybeDefined(j.eitherReferencible({})(obj)[key]);
+            return j.isDefined(obj) ? j.maybeDefined(obj[key]) : null;
         };
     }
 
@@ -770,11 +768,13 @@ var jfp = (function(){
         var keyTokens = key.split('.');
 
         return function (obj) {
-            return j.foldl(getNext, obj)(keyTokens);
+            var result = obj;
 
-            function getNext(result, key) {
-                return pick(key)(result);
+            for(var i = 0; i < keyTokens.length && result !== null; i++){
+                result = pick(keyTokens[i])(result);
             }
+
+            return result;
         };
     }
 
@@ -801,16 +801,26 @@ var jfp = (function(){
     }
 
     function toArray(obj) {
-        var pickKey = pickByObj(obj);
-        return j.map(captureTuple)(Object.keys(obj));
+        var keys = Object.keys(obj);
+        var result = [];
 
-        function captureTuple(key) {
-            return [key, pickKey(key)];
+        for(var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            result.push([key, obj[key]]);
         }
+
+        return result;
     }
 
     function toValues(obj) {
-        return j.map(pickByObj(obj))(Object.keys(obj));
+        var keys = Object.keys(obj);
+        var result = [];
+
+        for(var i = 0; i < keys.length; i++) {
+            result.push(obj[keys[i]]);
+        }
+
+        return result;
     }
 
     function addProperty(obj, propertyPair) {
@@ -819,7 +829,14 @@ var jfp = (function(){
     }
 
     function toObject(tupleArray) {
-        return j.foldl(addProperty, {})(tupleArray);
+        var result = {};
+
+        for(var i = 0; i < tupleArray.length; i++) {
+            var tuple = tupleArray[i];
+            result[tuple[0]] = tuple[1];
+        }
+
+        return result;
     }
 
     function clone(obj) {

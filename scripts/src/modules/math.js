@@ -1,7 +1,7 @@
 (function (j) {
     'use strict';
 
-    function operation (operator){
+    function operation(operator) {
         return function (a, b) {
             switch (operator) {
                 case '+':
@@ -18,61 +18,53 @@
         };
     }
 
-    function compare (operator){
+    function greater(a, b) { return a > b; }
+    function less(a, b) { return a < b; }
+
+    function greaterOrEqual(a, b) { return !less(a, b); }
+    function lessOrEqual(a, b) { return !greater(a, b); }
+
+    function curryOperation(operation) {
         return function (a) {
             return function (b) {
-                switch(operator) {
-                    case '>':
-                        return a > b;
-                    case '<':
-                        return a < b;
-                    case '>=':
-                        return a >= b;
-                    case '<=':
-                        return a <= b;
-                }
+                return operation(a, b);
             };
         };
     }
 
-    function operateBy (operator){
+    function operateBy(operator) {
         return function (a) {
-            return function (b){
+            return function (b) {
                 return operation(operator)(b, a);
             };
         };
     }
 
-    function pushImpure (values) {
-        return function (value) {
-            values.push(value);
-            return values;
-        };
-    }
-
     function range(min, increment) {
         var offset = j.eitherNumber(1)(increment);
-        
+
         return function (max) {
-            return j.recur(buildRange)(min, []);
+            var result = [];
 
-            function buildRange(recur, value, result) {
-                return value > max ? result : recur(value + offset, pushImpure(result)(value));
+            for (var i = min; i <= max; i += offset) {
+                result.push(i)
             }
+
+            return result;
         };
     }
 
-    function extremum (comparator){
+    function extremum(comparator) {
         return function (a, b) {
-            return comparator(a)(b) ? a : b;
+            return comparator(a, b) ? a : b;
         };
     }
 
-    function between (min, max){
-        if(min >= max) {
+    function between(min, max) {
+        if (min >= max) {
             throw new Error('Invalid range, ' + min + ' is not less than ' + max);
         }
-        
+
         return function (value) {
             return min <= value && value <= max;
         };
@@ -91,18 +83,18 @@
     j.multiplyBy = j.enforce('number => number => number', operateBy('*'));
     j.subtractBy = j.enforce('number => number => number', operateBy('-'));
 
-    j.min = j.enforce('number, number => number', extremum(compare('<')));
-    j.max = j.enforce('number, number => number', extremum(compare('>')));
+    j.min = j.enforce('number, number => number', extremum(less));
+    j.max = j.enforce('number, number => number', extremum(greater));
 
     j.inc = j.enforce('int => int', function (a) { return a + 1; });
     j.dec = j.enforce('int => int', function (a) { return a - 1; });
 
     j.range = j.enforce('int, [int] => int => array<int>', range);
-    
-    j.gt = j.enforce('number => number => boolean', compare('>'));
-    j.geq = j.enforce('number => number => boolean', compare('>='));
-    j.lt = j.enforce('number => number => boolean', compare('<'));
-    j.leq = j.enforce('number => number => boolean', compare('<='));
+
+    j.gt = j.enforce('number => number => boolean', curryOperation(greater));
+    j.geq = j.enforce('number => number => boolean', curryOperation(greaterOrEqual));
+    j.lt = j.enforce('number => number => boolean', curryOperation(less));
+    j.leq = j.enforce('number => number => boolean', curryOperation(lessOrEqual));
     j.between = j.enforce('number, number => number => boolean', between);
 
 })(jfp);

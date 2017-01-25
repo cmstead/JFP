@@ -3,7 +3,7 @@
 
     function pick(key) {
         return function (obj) {
-            return j.maybeDefined(j.eitherReferencible({})(obj)[key]);
+            return j.isDefined(obj) ? j.maybeDefined(obj[key]) : null;
         };
     }
 
@@ -17,11 +17,13 @@
         var keyTokens = key.split('.');
 
         return function (obj) {
-            return j.foldl(getNext, obj)(keyTokens);
+            var result = obj;
 
-            function getNext(result, key) {
-                return pick(key)(result);
+            for(var i = 0; i < keyTokens.length && result !== null; i++){
+                result = pick(keyTokens[i])(result);
             }
+
+            return result;
         };
     }
 
@@ -48,16 +50,26 @@
     }
 
     function toArray(obj) {
-        var pickKey = pickByObj(obj);
-        return j.map(captureTuple)(Object.keys(obj));
+        var keys = Object.keys(obj);
+        var result = [];
 
-        function captureTuple(key) {
-            return [key, pickKey(key)];
+        for(var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            result.push([key, obj[key]]);
         }
+
+        return result;
     }
 
     function toValues(obj) {
-        return j.map(pickByObj(obj))(Object.keys(obj));
+        var keys = Object.keys(obj);
+        var result = [];
+
+        for(var i = 0; i < keys.length; i++) {
+            result.push(obj[keys[i]]);
+        }
+
+        return result;
     }
 
     function addProperty(obj, propertyPair) {
@@ -66,7 +78,14 @@
     }
 
     function toObject(tupleArray) {
-        return j.foldl(addProperty, {})(tupleArray);
+        var result = {};
+
+        for(var i = 0; i < tupleArray.length; i++) {
+            var tuple = tupleArray[i];
+            result[tuple[0]] = tuple[1];
+        }
+
+        return result;
     }
 
     function clone(obj) {

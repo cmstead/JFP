@@ -71,6 +71,7 @@
     j.isNull = j.isTypeOf('null');
     j.isNumber = j.isTypeOf('number');
     j.isObject = j.isTypeOf('object');
+    j.isObjectInstance = j.isTypeOf('objectInstance');
     j.isString = j.isTypeOf('string');
     j.isUndefined = j.isTypeOf('undefined');
 

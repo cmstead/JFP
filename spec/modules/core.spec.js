@@ -126,6 +126,10 @@ describe('jfp core', function () {
             expect(j.recur(fac)(0)).toBe(1);
         });
         
+        it('should evaluate fac 1 correctly', function () {
+            expect(j.recur(fac)(1)).toBe(1);
+        });
+        
         it('should evaluate fac 2 correctly', function () {
             expect(j.recur(fac)(2)).toBe(2);
         });
@@ -142,24 +146,11 @@ describe('jfp core', function () {
             return value + 1;
         }
         
-        it('should compose one function', function () {
-            var add1 = j.compose(inc);
-            
-            expect(add1(5)).toBe(6);
-        });
-        
         it('should compose two functions', function () {
             var add2 = j.compose(inc, inc);
             
             expect(add2(5)).toBe(7);
         });
-        
-        it('should compose multiple functions', function () {
-            var addMany = j.compose(inc, inc, inc, inc, inc, inc);
-            
-            expect(addMany(5)).toBe(11);
-        });
-        
     });
     
     describe('curry', function () {

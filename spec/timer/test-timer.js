@@ -1,7 +1,7 @@
 'use strict';
 
 function timerFactory () {
-    var max = 1;
+    var max = 0.5;
     var total = 0;
     var startTime = 0;
 
