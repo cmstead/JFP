@@ -1,57 +1,26 @@
 (function (j) {
     'use strict';
 
-    function not(a) {
-        return !a;
-    }
 
     function invert(pred) {
         return function (value) {
-            return !pred(value);
-        };
-    }
-
-    function compare (operator){
-        return function (a) {
-            return function (b) {
-                switch(operator) {
-                    case '===':
-                        return a === b;
-                    case '&&':
-                        return Boolean(a && b);
-                    case '||':
-                        return Boolean(a || b);
-                    case 'xor':
-                        return Boolean(a ? !b : b);
-                }
-            };
+            return not(pred(value));
         };
     }
 
     function curryCompare(comparator) {
         return function (a) {
             return function (b) {
-                return comparator(a, b);
+                return Boolean(comparator(a, b));
             };
         };
     }
 
-    function and (a, b) {
-        return Boolean(a && b);
-    }
-
-    function or (a, b) {
-        return Boolean(a || b);
-    }
-
-
-    function xor (a, b) {
-        return Boolean(a ? !b : b);
-    }
-
-    function equal (a, b){
-        return a === b;
-    }
+    function not(a) { return !a; }
+    function and (a, b) { return a && b; }
+    function or (a, b) { return a || b; }
+    function xor (a, b) { return a ? !b : b; }
+    function equal (a, b){ return a === b; }
 
     var currySignature = 'comparable => comparable => boolean';
 

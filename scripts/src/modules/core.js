@@ -132,16 +132,16 @@
     var partial = directionalPartial(concat);
     var rpartial = directionalPartial(reverseArgs(concat));
 
-    function repeat(fn) {
-        function repeater(recur, count, value) {
-            return count < 1 ? value : recur(count - 1, fn(value));
-        }
-
-        var repeat = recur(repeater);
+    function repeat(fn, optionalPred) {
+        var pred = j.eitherFunction(always(true))(optionalPred);
 
         return function (count) {
             return function (value) {
-                return repeat(count, value);
+                var result = value;
+                for(var i = 0; i < count; i++) {
+                    result = fn(result);
+                }
+                return result;
             }
         }
     }

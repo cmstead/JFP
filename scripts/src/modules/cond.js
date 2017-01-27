@@ -10,9 +10,10 @@
     }
 
     function when(condArray) {
+        var pushToCondArray = j.pushUnsafe(condArray);
         return function (prop, behavior) {
             if (Boolean(prop)) {
-                condArray.push(behavior);
+                pushToCondArray(behavior);
             }
         };
     }

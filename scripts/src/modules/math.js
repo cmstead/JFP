@@ -21,8 +21,8 @@
     function greater(a, b) { return a > b; }
     function less(a, b) { return a < b; }
 
-    function greaterOrEqual(a, b) { return !less(a, b); }
-    function lessOrEqual(a, b) { return !greater(a, b); }
+    function greaterOrEqual(a, b) { return !(a < b); }
+    function lessOrEqual(a, b) { return !(a > b); }
 
     function curryOperation(operation) {
         return function (a) {
@@ -66,7 +66,7 @@
         }
 
         return function (value) {
-            return min <= value && value <= max;
+            return !(value < min) && !(value > max);
         };
     }
 

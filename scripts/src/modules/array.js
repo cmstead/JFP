@@ -5,6 +5,7 @@
         return typeof value === 'undefined';
     }
 
+
     function nth(index) {
         return function (values) {
             return j.maybeDefined(values[index]);
@@ -40,31 +41,43 @@
         return j.slice(0)(values).reverse();
     }
 
-    function folder(fn, takeValue, takeRest) {
-        return j.recur(function (recur, result, values) {
-            return j.isNil(values) || isFoldBreak(result) ? result : recur(fn(result, takeValue(values)), takeRest(values));
-        });
-    }
+    function foldl(fn, initial) {
+        return function (values) {
+            var initialIsDefined = !j.isUndefined(initial);
+            var result = initialIsDefined ? initial : first(values);
+            var listLen = values.length;
+            var i = initialIsDefined ? 0 : 1;
 
-    function fold(takeValue, takeRest) {
-        return function (fn, initial) {
-            return function (values) {
-                var value = j.isUndefined(initial) ? takeValue(values) : initial;
-                var list = j.isUndefined(initial) ? takeRest(values) : values;
+            for (i; i < listLen; i++) {
+                result = fn(result, values[i]);
+            }
 
-                return folder(fn, takeValue, takeRest)(value, list);
-            };
+            return result;
         };
     }
 
-    var foldl = fold(first, rest);
-    var foldr = fold(last, dropLast);
+    function foldr(fn, initial) {
+        return function (values) {
+            var initialIsDefined = !j.isUndefined(initial);
+            var result = initialIsDefined ? initial : last(values);
+            var listLen = values.length;
+            var offset = initialIsDefined ? 0 : 1;
+
+            for (var i = offset + 1; i <= listLen; i++) {
+                result = fn(result, values[listLen - i]);
+            }
+
+            return result;
+        };
+    }
 
     function operationApplicator(operation) {
         return function (behavior, initial) {
             return function (fn) {
+                var appliedOperation = operation(behavior(fn), initial);
+
                 return function (values) {
-                    return operation(behavior(fn), initial)(values);
+                    return appliedOperation(values);
                 };
             };
         };
@@ -180,13 +193,13 @@
         }
     }
 
-    function until(pred){
-        return function (action, initial){
+    function until(pred) {
+        return function (action, initial) {
             return function (values) {
                 var result = initial;
 
-                for(var i = 0; i < values.length; i++) {
-                    if(pred(values[i])) { break; }
+                for (var i = 0; i < values.length; i++) {
+                    if (pred(values[i])) { break; }
                     result = action(result, values[i]);
                 }
 

@@ -154,57 +154,26 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    function not(a) {
-        return !a;
-    }
 
     function invert(pred) {
         return function (value) {
-            return !pred(value);
-        };
-    }
-
-    function compare (operator){
-        return function (a) {
-            return function (b) {
-                switch(operator) {
-                    case '===':
-                        return a === b;
-                    case '&&':
-                        return Boolean(a && b);
-                    case '||':
-                        return Boolean(a || b);
-                    case 'xor':
-                        return Boolean(a ? !b : b);
-                }
-            };
+            return not(pred(value));
         };
     }
 
     function curryCompare(comparator) {
         return function (a) {
             return function (b) {
-                return comparator(a, b);
+                return Boolean(comparator(a, b));
             };
         };
     }
 
-    function and (a, b) {
-        return Boolean(a && b);
-    }
-
-    function or (a, b) {
-        return Boolean(a || b);
-    }
-
-
-    function xor (a, b) {
-        return Boolean(a ? !b : b);
-    }
-
-    function equal (a, b){
-        return a === b;
-    }
+    function not(a) { return !a; }
+    function and (a, b) { return a && b; }
+    function or (a, b) { return a || b; }
+    function xor (a, b) { return a ? !b : b; }
+    function equal (a, b){ return a === b; }
 
     var currySignature = 'comparable => comparable => boolean';
 
@@ -379,16 +348,16 @@ var jfp = (function(){
     var partial = directionalPartial(concat);
     var rpartial = directionalPartial(reverseArgs(concat));
 
-    function repeat(fn) {
-        function repeater(recur, count, value) {
-            return count < 1 ? value : recur(count - 1, fn(value));
-        }
-
-        var repeat = recur(repeater);
+    function repeat(fn, optionalPred) {
+        var pred = j.eitherFunction(always(true))(optionalPred);
 
         return function (count) {
             return function (value) {
-                return repeat(count, value);
+                var result = value;
+                for(var i = 0; i < count; i++) {
+                    result = fn(result);
+                }
+                return result;
             }
         }
     }
@@ -437,8 +406,8 @@ var jfp = (function(){
     function greater(a, b) { return a > b; }
     function less(a, b) { return a < b; }
 
-    function greaterOrEqual(a, b) { return !less(a, b); }
-    function lessOrEqual(a, b) { return !greater(a, b); }
+    function greaterOrEqual(a, b) { return !(a < b); }
+    function lessOrEqual(a, b) { return !(a > b); }
 
     function curryOperation(operation) {
         return function (a) {
@@ -482,7 +451,7 @@ var jfp = (function(){
         }
 
         return function (value) {
-            return min <= value && value <= max;
+            return !(value < min) && !(value > max);
         };
     }
 
@@ -522,6 +491,7 @@ var jfp = (function(){
         return typeof value === 'undefined';
     }
 
+
     function nth(index) {
         return function (values) {
             return j.maybeDefined(values[index]);
@@ -557,31 +527,43 @@ var jfp = (function(){
         return j.slice(0)(values).reverse();
     }
 
-    function folder(fn, takeValue, takeRest) {
-        return j.recur(function (recur, result, values) {
-            return j.isNil(values) || isFoldBreak(result) ? result : recur(fn(result, takeValue(values)), takeRest(values));
-        });
-    }
+    function foldl(fn, initial) {
+        return function (values) {
+            var initialIsDefined = !j.isUndefined(initial);
+            var result = initialIsDefined ? initial : first(values);
+            var listLen = values.length;
+            var i = initialIsDefined ? 0 : 1;
 
-    function fold(takeValue, takeRest) {
-        return function (fn, initial) {
-            return function (values) {
-                var value = j.isUndefined(initial) ? takeValue(values) : initial;
-                var list = j.isUndefined(initial) ? takeRest(values) : values;
+            for (i; i < listLen; i++) {
+                result = fn(result, values[i]);
+            }
 
-                return folder(fn, takeValue, takeRest)(value, list);
-            };
+            return result;
         };
     }
 
-    var foldl = fold(first, rest);
-    var foldr = fold(last, dropLast);
+    function foldr(fn, initial) {
+        return function (values) {
+            var initialIsDefined = !j.isUndefined(initial);
+            var result = initialIsDefined ? initial : last(values);
+            var listLen = values.length;
+            var offset = initialIsDefined ? 0 : 1;
+
+            for (var i = offset + 1; i <= listLen; i++) {
+                result = fn(result, values[listLen - i]);
+            }
+
+            return result;
+        };
+    }
 
     function operationApplicator(operation) {
         return function (behavior, initial) {
             return function (fn) {
+                var appliedOperation = operation(behavior(fn), initial);
+
                 return function (values) {
-                    return operation(behavior(fn), initial)(values);
+                    return appliedOperation(values);
                 };
             };
         };
@@ -697,13 +679,13 @@ var jfp = (function(){
         }
     }
 
-    function until(pred){
-        return function (action, initial){
+    function until(pred) {
+        return function (action, initial) {
             return function (values) {
                 var result = initial;
 
-                for(var i = 0; i < values.length; i++) {
-                    if(pred(values[i])) { break; }
+                for (var i = 0; i < values.length; i++) {
+                    if (pred(values[i])) { break; }
                     result = action(result, values[i]);
                 }
 
@@ -881,9 +863,10 @@ var jfp = (function(){
     }
 
     function when(condArray) {
+        var pushToCondArray = j.pushUnsafe(condArray);
         return function (prop, behavior) {
             if (Boolean(prop)) {
-                condArray.push(behavior);
+                pushToCondArray(behavior);
             }
         };
     }
