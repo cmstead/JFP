@@ -12,7 +12,11 @@
     }
 
     function concat(valuesA, valuesB) {
-        return j.eitherConcatable([])(valuesA).concat(valuesB);
+        return valuesA.concat(valuesB);
+    }
+
+    function rconcat(valuesA, valuesB) {
+        return valuesB.concat(valuesA);
     }
 
     function cons(value, values) {
@@ -100,12 +104,10 @@
     }
 
     function buildCurriable(fn, count, initialArgs, concat) {
-        function curriable() {
+        return function curriable() {
             var args = concat(initialArgs, argumentsToArray(arguments));
-            return args.length >= count ? apply(fn, args) : buildCurriable(fn, count, args, concat);
+            return !(args.length < count) ? apply(fn, args) : buildCurriable(fn, count, args, concat);
         }
-
-        return curriable;
     }
 
     function directionalCurry(concat) {
@@ -115,7 +117,7 @@
     }
 
     var curry = directionalCurry(concat);
-    var rcurry = directionalCurry(reverseArgs(concat));
+    var rcurry = directionalCurry(rconcat);
 
     function directionalPartial(concat) {
         var sliceRest = slice(1);
@@ -130,7 +132,7 @@
     }
 
     var partial = directionalPartial(concat);
-    var rpartial = directionalPartial(reverseArgs(concat));
+    var rpartial = directionalPartial(rconcat);
 
     function repeat(fn, optionalPred) {
         var pred = j.eitherFunction(always(true))(optionalPred);
@@ -138,7 +140,7 @@
         return function (count) {
             return function (value) {
                 var result = value;
-                for(var i = 0; i < count; i++) {
+                for (var i = 0; i < count; i++) {
                     result = fn(result);
                 }
                 return result;
@@ -158,6 +160,7 @@
     j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', rcurry);
     j.identity = j.enforce('* => *', identity);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
+    j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', rcurry);
     j.recur = j.enforce('function => function', recur);
     j.repeat = j.enforce('function => int => * => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);

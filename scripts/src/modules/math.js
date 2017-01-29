@@ -54,11 +54,8 @@
         };
     }
 
-    function extremum(comparator) {
-        return function (a, b) {
-            return comparator(a, b) ? a : b;
-        };
-    }
+    function min (a, b) { return less(a, b) ? a : b; }
+    function max (a, b) { return greater(a, b) ? a : b; }
 
     function between(min, max) {
         if (min >= max) {
@@ -83,8 +80,8 @@
     j.multiplyBy = j.enforce('number => number => number', operateBy('*'));
     j.subtractBy = j.enforce('number => number => number', operateBy('-'));
 
-    j.min = j.enforce('number, number => number', extremum(less));
-    j.max = j.enforce('number, number => number', extremum(greater));
+    j.min = j.enforce('number, number => number', min);
+    j.max = j.enforce('number, number => number', max);
 
     j.inc = j.enforce('int => int', function (a) { return a + 1; });
     j.dec = j.enforce('int => int', function (a) { return a - 1; });

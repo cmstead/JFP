@@ -5,7 +5,6 @@ var signet = require('signet')();
 describe('jfp array', function () {
 
     beforeEach(function () {
-        timer.setMaxAcceptableTime(0.5);
         timer.reset();
         timer.start();
     });
@@ -276,7 +275,7 @@ describe('jfp array', function () {
 
         it('should return null if no element is found', function () {
             var result = j.find(isEven)([1, 3, 5, 7]);
-            expect(j.isTypeOf('null')(result)).toBe(true);
+            expect(result).toBe(null);
         });
 
     });

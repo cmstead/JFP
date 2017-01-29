@@ -19,7 +19,7 @@
         return function (obj) {
             var result = obj;
 
-            for(var i = 0; i < keyTokens.length && result !== null; i++){
+            for (var i = 0; i < keyTokens.length && !j.isNull(result); i++) {
                 result = pick(keyTokens[i])(result);
             }
 
@@ -49,23 +49,21 @@
         return mergeToUnsafe(shallowClone(objA))(objB);
     }
 
+    function getKeys(obj) {
+        return Object.keys(obj);
+    }
+
     function toArray(obj) {
-        var keys = Object.keys(obj);
-        var result = [];
-
-        for(var i = 0; i < keys.length; i++) {
-            var key = keys[i];
-            result.push([key, obj[key]]);
-        }
-
-        return result;
+        return j.map(function (key) {
+            return [key, obj[key]];
+        })(getKeys(obj));
     }
 
     function toValues(obj) {
-        var keys = Object.keys(obj);
+        var keys = getKeys(obj);
         var result = [];
 
-        for(var i = 0; i < keys.length; i++) {
+        for (var i = 0; i < keys.length; i++) {
             result.push(obj[keys[i]]);
         }
 
@@ -80,7 +78,7 @@
     function toObject(tupleArray) {
         var result = {};
 
-        for(var i = 0; i < tupleArray.length; i++) {
+        for (var i = 0; i < tupleArray.length; i++) {
             var tuple = tupleArray[i];
             result[tuple[0]] = tuple[1];
         }

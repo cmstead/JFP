@@ -228,7 +228,11 @@ var jfp = (function(){
     }
 
     function concat(valuesA, valuesB) {
-        return j.eitherConcatable([])(valuesA).concat(valuesB);
+        return valuesA.concat(valuesB);
+    }
+
+    function rconcat(valuesA, valuesB) {
+        return valuesB.concat(valuesA);
     }
 
     function cons(value, values) {
@@ -316,12 +320,10 @@ var jfp = (function(){
     }
 
     function buildCurriable(fn, count, initialArgs, concat) {
-        function curriable() {
+        return function curriable() {
             var args = concat(initialArgs, argumentsToArray(arguments));
-            return args.length >= count ? apply(fn, args) : buildCurriable(fn, count, args, concat);
+            return !(args.length < count) ? apply(fn, args) : buildCurriable(fn, count, args, concat);
         }
-
-        return curriable;
     }
 
     function directionalCurry(concat) {
@@ -331,7 +333,7 @@ var jfp = (function(){
     }
 
     var curry = directionalCurry(concat);
-    var rcurry = directionalCurry(reverseArgs(concat));
+    var rcurry = directionalCurry(rconcat);
 
     function directionalPartial(concat) {
         var sliceRest = slice(1);
@@ -346,7 +348,7 @@ var jfp = (function(){
     }
 
     var partial = directionalPartial(concat);
-    var rpartial = directionalPartial(reverseArgs(concat));
+    var rpartial = directionalPartial(rconcat);
 
     function repeat(fn, optionalPred) {
         var pred = j.eitherFunction(always(true))(optionalPred);
@@ -354,7 +356,7 @@ var jfp = (function(){
         return function (count) {
             return function (value) {
                 var result = value;
-                for(var i = 0; i < count; i++) {
+                for (var i = 0; i < count; i++) {
                     result = fn(result);
                 }
                 return result;
@@ -374,6 +376,7 @@ var jfp = (function(){
     j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', rcurry);
     j.identity = j.enforce('* => *', identity);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
+    j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', rcurry);
     j.recur = j.enforce('function => function', recur);
     j.repeat = j.enforce('function => int => * => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);
@@ -439,11 +442,8 @@ var jfp = (function(){
         };
     }
 
-    function extremum(comparator) {
-        return function (a, b) {
-            return comparator(a, b) ? a : b;
-        };
-    }
+    function min (a, b) { return less(a, b) ? a : b; }
+    function max (a, b) { return greater(a, b) ? a : b; }
 
     function between(min, max) {
         if (min >= max) {
@@ -468,8 +468,8 @@ var jfp = (function(){
     j.multiplyBy = j.enforce('number => number => number', operateBy('*'));
     j.subtractBy = j.enforce('number => number => number', operateBy('-'));
 
-    j.min = j.enforce('number, number => number', extremum(less));
-    j.max = j.enforce('number, number => number', extremum(greater));
+    j.min = j.enforce('number, number => number', min);
+    j.max = j.enforce('number, number => number', max);
 
     j.inc = j.enforce('int => int', function (a) { return a + 1; });
     j.dec = j.enforce('int => int', function (a) { return a - 1; });
@@ -543,18 +543,10 @@ var jfp = (function(){
     }
 
     function foldr(fn, initial) {
+        var foldPredef = foldl(fn, initial);
         return function (values) {
-            var initialIsDefined = !j.isUndefined(initial);
-            var result = initialIsDefined ? initial : last(values);
-            var listLen = values.length;
-            var offset = initialIsDefined ? 0 : 1;
-
-            for (var i = offset + 1; i <= listLen; i++) {
-                result = fn(result, values[listLen - i]);
-            }
-
-            return result;
-        };
+            return foldPredef(reverse(values));
+        }
     }
 
     function operationApplicator(operation) {
@@ -571,39 +563,57 @@ var jfp = (function(){
 
     function filterer(pred) {
         return function (result, value) {
-            return pred(value) ? j.conj(value, result) : result;
+            return pred(value) ? pushUnsafe(result)(value) : result; //j.conj(value, result) : result;
         };
     }
 
     function mapper(fn) {
         return function (result, value) {
-            return j.conj(fn(value), result);
+            return pushUnsafe(result)(fn(value));
+        };
+    }
+
+    function buildGetPartitionIndex (pred) {
+        return function (value) {
+            return pred(value) ? 0 : 1;
         };
     }
 
     function partitioner(pred) {
+        var getIndex = buildGetPartitionIndex(pred);
         return function (result, value) {
-            var index = pred(value) ? 0 : 1;
-            result[index] = j.conj(value, result[index]);
+            pushUnsafe(result[getIndex(value)])(value);
             return result;
         };
     }
 
     function find(pred) {
         return function (values) {
-            return j.recur(finder)(values);
+            var result = values[0];
+            var listLen = values.length;
 
-            function finder(recur, values) {
-                var value = first(values);
-                return j.isNil(values) || pred(value) ? value : recur(rest(values));
+            for (var i = 1; !(i > listLen); i++) {
+                if(pred(result)){ return result; }
+                result = values[i];
             }
+
+            return j.maybeDefined(result);
         };
     }
 
     var foldlApplicator = operationApplicator(foldl);
-    var filter = foldlApplicator(filterer, []);
-    var map = foldlApplicator(mapper, []);
-    var partition = foldlApplicator(partitioner, [[], []]);
+
+    function filter (pred) {
+        return foldlApplicator(filterer, [])(pred);
+    }
+
+    function map (fn) {
+        return foldlApplicator(mapper, [])(fn);
+    }
+
+    function partition (pred) {
+        return foldlApplicator(partitioner, [[], []])(pred);
+    }
 
     function rreduceRecur(recur, fn, lastResult, values) {
         var firstValue = first(values);
@@ -683,10 +693,13 @@ var jfp = (function(){
         return function (action, initial) {
             return function (values) {
                 var result = initial;
+                var value;
 
                 for (var i = 0; i < values.length; i++) {
-                    if (pred(values[i])) { break; }
-                    result = action(result, values[i]);
+                    value = values[i];
+
+                    if(pred(value)) { return result; }
+                    result = action(result, value);
                 }
 
                 return result;
@@ -695,14 +708,40 @@ var jfp = (function(){
     }
 
     function takeUntil(pred) {
-        return until(pred)(takeValue, []);
+        var untilPred = until(pred)
+
+        return function (values) {
+            return untilPred(takeValue, [])(values);
+        };
 
         function takeValue(result, value) {
             return pushUnsafe(result)(value);
         }
     }
 
-    j.all = j.enforce('function => array => boolean', existence(buildEvery));
+    function some(pred) {
+        return function (values) {
+            var exists = false;
+            var listLen = values.length;
+
+            for (var i = 0; i < listLen && !exists; i++) {
+                exists = pred(values[i]);
+            }
+
+            return exists;
+        };
+    }
+
+    function none(pred) {
+        return some(j.invert(pred));
+    }
+
+    function all(pred) {
+        return j.invert(some(j.invert(pred)));
+    }
+
+
+    j.all = j.enforce('function => array => boolean', all);
     j.compact = j.enforce('[array] => array', filter(Boolean));
     j.dropLast = j.enforce('array => array', dropLast);
     j.dropNth = j.enforce('index => array => array', dropNth);
@@ -713,7 +752,7 @@ var jfp = (function(){
     j.foldr = j.enforce('function, [*] => array => *', foldr);
     j.lastIndexOf = j.enforce('array => index', lastIndexOf);
     j.map = j.enforce('function => array => array', map);
-    j.none = j.enforce('function => array => boolean', existence(buildNever));
+    j.none = j.enforce('function => array => boolean', none);
     j.nth = j.enforce('index => array => maybe<defined>', nth);
     j.partition = j.enforce('function => array => tuple<array;array>', partition);
     j.pushUnsafe = j.enforce('array => * => array', pushUnsafe);
@@ -723,7 +762,7 @@ var jfp = (function(){
     j.rmap = j.enforce('function => array => array', rmap);
     j.rpartition = j.enforce('function => array => array<array;array>', rpartition);
     j.rreduce = j.enforce('function, [*] => array => *', rreduce);
-    j.some = j.enforce('function => array => boolean', existence(buildAtLeastOne));
+    j.some = j.enforce('function => array => boolean', some);
     j.sort = j.enforce('[*] => array => array', sort);
     j.take = j.enforce('[index] => function<array>', take);
     j.takeUntil = j.enforce('predicate => array => array', takeUntil);
@@ -752,7 +791,7 @@ var jfp = (function(){
         return function (obj) {
             var result = obj;
 
-            for(var i = 0; i < keyTokens.length && result !== null; i++){
+            for (var i = 0; i < keyTokens.length && !j.isNull(result); i++) {
                 result = pick(keyTokens[i])(result);
             }
 
@@ -782,23 +821,21 @@ var jfp = (function(){
         return mergeToUnsafe(shallowClone(objA))(objB);
     }
 
+    function getKeys(obj) {
+        return Object.keys(obj);
+    }
+
     function toArray(obj) {
-        var keys = Object.keys(obj);
-        var result = [];
-
-        for(var i = 0; i < keys.length; i++) {
-            var key = keys[i];
-            result.push([key, obj[key]]);
-        }
-
-        return result;
+        return j.map(function (key) {
+            return [key, obj[key]];
+        })(getKeys(obj));
     }
 
     function toValues(obj) {
-        var keys = Object.keys(obj);
+        var keys = getKeys(obj);
         var result = [];
 
-        for(var i = 0; i < keys.length; i++) {
+        for (var i = 0; i < keys.length; i++) {
             result.push(obj[keys[i]]);
         }
 
@@ -813,7 +850,7 @@ var jfp = (function(){
     function toObject(tupleArray) {
         var result = {};
 
-        for(var i = 0; i < tupleArray.length; i++) {
+        for (var i = 0; i < tupleArray.length; i++) {
             var tuple = tupleArray[i];
             result[tuple[0]] = tuple[1];
         }
@@ -865,7 +902,7 @@ var jfp = (function(){
     function when(condArray) {
         var pushToCondArray = j.pushUnsafe(condArray);
         return function (prop, behavior) {
-            if (Boolean(prop)) {
+            if (prop) {
                 pushToCondArray(behavior);
             }
         };
@@ -882,9 +919,9 @@ var jfp = (function(){
     }
 
     function handleResult(resultSet, throwOnNil) {
-        throwOnNil(result);
-
         var result = j.first(resultSet);
+
+        throwOnNil(result);
 
         var action = result[0];
         var args = result[1];

@@ -57,18 +57,10 @@
     }
 
     function foldr(fn, initial) {
+        var foldPredef = foldl(fn, initial);
         return function (values) {
-            var initialIsDefined = !j.isUndefined(initial);
-            var result = initialIsDefined ? initial : last(values);
-            var listLen = values.length;
-            var offset = initialIsDefined ? 0 : 1;
-
-            for (var i = offset + 1; i <= listLen; i++) {
-                result = fn(result, values[listLen - i]);
-            }
-
-            return result;
-        };
+            return foldPredef(reverse(values));
+        }
     }
 
     function operationApplicator(operation) {
@@ -85,39 +77,57 @@
 
     function filterer(pred) {
         return function (result, value) {
-            return pred(value) ? j.conj(value, result) : result;
+            return pred(value) ? pushUnsafe(result)(value) : result; //j.conj(value, result) : result;
         };
     }
 
     function mapper(fn) {
         return function (result, value) {
-            return j.conj(fn(value), result);
+            return pushUnsafe(result)(fn(value));
+        };
+    }
+
+    function buildGetPartitionIndex (pred) {
+        return function (value) {
+            return pred(value) ? 0 : 1;
         };
     }
 
     function partitioner(pred) {
+        var getIndex = buildGetPartitionIndex(pred);
         return function (result, value) {
-            var index = pred(value) ? 0 : 1;
-            result[index] = j.conj(value, result[index]);
+            pushUnsafe(result[getIndex(value)])(value);
             return result;
         };
     }
 
     function find(pred) {
         return function (values) {
-            return j.recur(finder)(values);
+            var result = values[0];
+            var listLen = values.length;
 
-            function finder(recur, values) {
-                var value = first(values);
-                return j.isNil(values) || pred(value) ? value : recur(rest(values));
+            for (var i = 1; !(i > listLen); i++) {
+                if(pred(result)){ return result; }
+                result = values[i];
             }
+
+            return j.maybeDefined(result);
         };
     }
 
     var foldlApplicator = operationApplicator(foldl);
-    var filter = foldlApplicator(filterer, []);
-    var map = foldlApplicator(mapper, []);
-    var partition = foldlApplicator(partitioner, [[], []]);
+
+    function filter (pred) {
+        return foldlApplicator(filterer, [])(pred);
+    }
+
+    function map (fn) {
+        return foldlApplicator(mapper, [])(fn);
+    }
+
+    function partition (pred) {
+        return foldlApplicator(partitioner, [[], []])(pred);
+    }
 
     function rreduceRecur(recur, fn, lastResult, values) {
         var firstValue = first(values);
@@ -197,10 +207,13 @@
         return function (action, initial) {
             return function (values) {
                 var result = initial;
+                var value;
 
                 for (var i = 0; i < values.length; i++) {
-                    if (pred(values[i])) { break; }
-                    result = action(result, values[i]);
+                    value = values[i];
+
+                    if(pred(value)) { return result; }
+                    result = action(result, value);
                 }
 
                 return result;
@@ -209,14 +222,40 @@
     }
 
     function takeUntil(pred) {
-        return until(pred)(takeValue, []);
+        var untilPred = until(pred)
+
+        return function (values) {
+            return untilPred(takeValue, [])(values);
+        };
 
         function takeValue(result, value) {
             return pushUnsafe(result)(value);
         }
     }
 
-    j.all = j.enforce('function => array => boolean', existence(buildEvery));
+    function some(pred) {
+        return function (values) {
+            var exists = false;
+            var listLen = values.length;
+
+            for (var i = 0; i < listLen && !exists; i++) {
+                exists = pred(values[i]);
+            }
+
+            return exists;
+        };
+    }
+
+    function none(pred) {
+        return some(j.invert(pred));
+    }
+
+    function all(pred) {
+        return j.invert(some(j.invert(pred)));
+    }
+
+
+    j.all = j.enforce('function => array => boolean', all);
     j.compact = j.enforce('[array] => array', filter(Boolean));
     j.dropLast = j.enforce('array => array', dropLast);
     j.dropNth = j.enforce('index => array => array', dropNth);
@@ -227,7 +266,7 @@
     j.foldr = j.enforce('function, [*] => array => *', foldr);
     j.lastIndexOf = j.enforce('array => index', lastIndexOf);
     j.map = j.enforce('function => array => array', map);
-    j.none = j.enforce('function => array => boolean', existence(buildNever));
+    j.none = j.enforce('function => array => boolean', none);
     j.nth = j.enforce('index => array => maybe<defined>', nth);
     j.partition = j.enforce('function => array => tuple<array;array>', partition);
     j.pushUnsafe = j.enforce('array => * => array', pushUnsafe);
@@ -237,7 +276,7 @@
     j.rmap = j.enforce('function => array => array', rmap);
     j.rpartition = j.enforce('function => array => array<array;array>', rpartition);
     j.rreduce = j.enforce('function, [*] => array => *', rreduce);
-    j.some = j.enforce('function => array => boolean', existence(buildAtLeastOne));
+    j.some = j.enforce('function => array => boolean', some);
     j.sort = j.enforce('[*] => array => array', sort);
     j.take = j.enforce('[index] => function<array>', take);
     j.takeUntil = j.enforce('predicate => array => array', takeUntil);

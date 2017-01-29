@@ -12,7 +12,7 @@
     function when(condArray) {
         var pushToCondArray = j.pushUnsafe(condArray);
         return function (prop, behavior) {
-            if (Boolean(prop)) {
+            if (prop) {
                 pushToCondArray(behavior);
             }
         };
@@ -29,9 +29,9 @@
     }
 
     function handleResult(resultSet, throwOnNil) {
-        throwOnNil(result);
-
         var result = j.first(resultSet);
+
+        throwOnNil(result);
 
         var action = result[0];
         var args = result[1];

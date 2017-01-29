@@ -1,7 +1,7 @@
 'use strict';
 
 function timerFactory () {
-    var max = 0.5;
+    var maxMilliseconds = 0.75;
     var total = 0;
     var startTime = 0;
 
@@ -24,13 +24,13 @@ function timerFactory () {
     }
 
     function report() {
-        if(total > max) {
+        if(total > maxMilliseconds) {
             console.log('Long run detected: ' + total + 'ms');
         }
     }
 
     function setMaxAcceptableTime (maxMs) {
-        max = maxMs;
+        maxMilliseconds = maxMs;
     }
 
     return {
