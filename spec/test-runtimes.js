@@ -2,6 +2,18 @@ var timer = require('./timer/test-timer')();
 var j = require('../dist/jfp');
 var myArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
+var testObj = {
+    foo: {
+        bar: {
+            baz: [
+                {
+                    quux: 'done'
+                }
+            ]
+        }
+    }
+};
+
 function identity(x) {
     return x;
 }
@@ -22,10 +34,10 @@ function timerStopAndReport() {
     return timer.getTotal();
 }
 
-function run1000times (fn) {
+function run1000times(fn) {
     var totalTime = 0;
 
-    for(var i = 0; i < 1000; i++) {
+    for (var i = 0; i < 1000; i++) {
         timerStart();
         fn();
         totalTime += timerStopAndReport();
@@ -34,7 +46,7 @@ function run1000times (fn) {
     return totalTime;
 }
 
-function testMap () {
+function testMap() {
     var appliedIdentityMap = j.map(identity);
     var time = 0;
 
@@ -49,9 +61,9 @@ function testMap () {
 
 }
 
-function testFilter () {
+function testFilter() {
     var vowels = ['a', 'e', 'i', 'o', 'u'];
-    function isVowel (value) {
+    function isVowel(value) {
         return !(vowels.indexOf(value) < 0);
     }
 
@@ -59,16 +71,114 @@ function testFilter () {
     console.log('Array.prototype.filter', time);
 
     time = run1000times(function () { var result = j.filter(isVowel)(myArray); });
-    console.log('j.filter', time);    
+    console.log('j.filter', time);
 }
 
-function always (value) {
+function testDeref() {
+
+    function getRef() {
+        if (testObj && testObj.foo && testObj.foo.bar && testObj.foo.bar.baz && testObj.foo.bar.baz[1] && testObj.foo.bar.baz[1].quux) {
+            return testObj.foo.bar.baz[1].quux;
+        }
+
+        return null;
+    }
+
+    function tryGetRef() {
+        try {
+            return testObj.foo.bar.baz[1].quux;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function tryDeref(key) {
+        var tokens = key.split('.');
+
+        return function (obj) {
+            var result;
+            var tokenLen = tokens.length;
+
+            for (var i = 0; i < tokenLen; i++) {
+                try {
+                    result = obj[tokens[i]];
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            return result;
+        };
+    }
+
+    var jderef = j.deref('foo.bar.baz.1.quux');
+    var jtryDeref = tryDeref('foo.bar.baz.1.quux');
+
+    time = run1000times(getRef);
+    console.log('getRef', time);
+
+    time = run1000times(tryGetRef);
+    console.log('tryGetRef', time);
+
+    time = run1000times(function () { jtryDeref(testObj); });
+    console.log('tryDeref', time);
+
+    time = run1000times(function () { jderef(testObj); });
+    console.log('j.deref', time);
+
+}
+
+function testPick(value) {
+    function rawPick(key) {
+        return function (obj) {
+            return j.isDefined(obj) ? j.maybeDefined(obj[key]) : null;
+        }
+    }
+
+    function tryPick(key) {
+        return function (obj) {
+            try {
+                return j.maybeDefined(obj[key]);
+            } catch (e) {
+                return null;
+            }
+        }
+    }
+
+    time = run1000times(function () { rawPick('foo')(testObj); });
+    console.log('rawPick', time);
+
+    time = run1000times(function () { tryPick('foo')(testObj); });
+    console.log('tryPick', time);
+
+    time = run1000times(function () { j.pick('foo')(testObj); });
+    console.log('j.pick', time);
+
+}
+
+function testEither() {
+    time = run1000times(function () { j.either('defined')({})({}); });
+    console.log('j.either success', time);
+
+    time = run1000times(function () { j.either('defined')({})(undefined); });
+    console.log('j.either fail', time);
+}
+
+function testMaybe() {
+    time = run1000times(function () { j.maybe('defined')({}); });
+    console.log('j.maybe success', time);
+
+    time = run1000times(function () { j.maybe('defined')(undefined); });
+    console.log('j.maybe fail', time);
+}
+
+function always(value) {
     return function () {
         return value;
     }
 }
 
-function testAlways () {
+function testAlways() {
     var time = 0;
 
     time = run1000times(function () { var result = always(true)(); });
@@ -80,4 +190,8 @@ function testAlways () {
 
 testMap();
 testFilter();
+testDeref();
+testPick();
+testEither();
+testMaybe();
 testAlways();
