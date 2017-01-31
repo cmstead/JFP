@@ -16,7 +16,7 @@
     }
 
     function rconcat(valuesA, valuesB) {
-        return valuesB.concat(valuesA);
+        return concat(valuesB, valuesA);
     }
 
     function cons(value, values) {
@@ -52,13 +52,6 @@
         return fn.apply(null, args);
     }
 
-    function buildRecursor(result) {
-        return function () {
-            result.args = argumentsToArray(arguments);
-            return result;
-        };
-    }
-
     function pick(key) {
         return function (obj) {
             try {
@@ -80,10 +73,14 @@
                 id: id,
                 args: argumentsToArray(arguments)
             };
-            var recursor = buildRecursor(result);
+
+            function recursor () {
+                result.args = argumentsToArray(arguments);
+                return result;
+            }
 
             while (pickId(result) === id) {
-                result = apply(fn, cons(recursor, result.args));
+                result = apply(fn, [recursor].concat(result.args));
             }
 
             return result;
@@ -119,7 +116,7 @@
     };
 
     var sliceRest = slice(1);
-    
+
     function directionalPartial(concat) {
         return function (fn) {
             var args = sliceRest(arguments);

@@ -172,6 +172,34 @@ function testMaybe() {
     console.log('j.maybe fail', time);
 }
 
+function testRecur() {
+    function fac(recur, n, current) {
+        var result = typeof current !== 'undefined' ? current : 1;
+        return n === 0 ? result : recur(n - 1, result * n);
+    }
+
+    time = run1000times(function () { j.recur(fac)(0); });
+    console.log('recur fac 0', time)
+
+    time = run1000times(function () { j.recur(fac)(2); });
+    console.log('recur fac 2', time)
+
+    time = run1000times(function () { j.recur(fac)(30); });
+    console.log('recur fac 30', time)
+}
+
+function testCurry() {
+    function add3Vals (a, b, c) {
+        return a + b + c;
+    }
+
+    time = run1000times(function () { result = j.curry(add3Vals)(1)(2)(4); });
+    console.log('curry', time);
+
+    time = run1000times(function () { result = j.curry(add3Vals, 4)(1)(2)(4)(5); });
+    console.log('curry 4', time);
+}
+
 function always(value) {
     return function () {
         return value;
@@ -189,9 +217,19 @@ function testAlways() {
 }
 
 testMap();
+console.log();
 testFilter();
+console.log();
 testDeref();
+console.log();
 testPick();
+console.log();
 testEither();
+console.log();
 testMaybe();
+console.log();
+testRecur();
+console.log();
+testCurry();
+console.log();
 testAlways();
