@@ -2,7 +2,9 @@ var cleanConfig = require('./grunt/clean.json'),
     concatConfig = require('./grunt/concat.json'),
     copyConfig = require('./grunt/copy.json'),
     jasmine = require('./grunt/jasmine.json'),
-    uglifyConfig = require('./grunt/uglify.json');
+    uglifyConfig = require('./grunt/uglify.json'),
+    
+    testRuntimes = require('./spec/test-runtimes');
 
 module.exports = function(grunt){
     grunt.initConfig({
@@ -25,7 +27,9 @@ module.exports = function(grunt){
 
     /* Register composite grunt tasks */
 
-    grunt.registerTask('test', ['clean', 'concat', 'uglify', 'jasmine_nodejs']);
+    grunt.registerTask('build-only', ['clean', 'concat', 'uglify']);
+    grunt.registerTask('test', ['build-only', 'jasmine_nodejs']);
+    grunt.registerTask('test-runtimes', testRuntimes);
     grunt.registerTask('build', ['test', 'copy:nuget']);
 
     grunt.registerTask('default', ['build']);

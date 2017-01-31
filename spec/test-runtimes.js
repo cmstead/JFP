@@ -1,4 +1,5 @@
-var timer = require('./timer/test-timer')();
+var testTimer = require('./timer/test-timer');
+var timer = testTimer();
 var j = require('../dist/jfp');
 var myArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
@@ -67,11 +68,18 @@ function testFilter() {
         return !(vowels.indexOf(value) < 0);
     }
 
+    var appliedVowelFilter = j.filter(isVowel);
+
     time = run1000times(function () { var result = myArray.filter(isVowel); });
     console.log('Array.prototype.filter', time);
 
     time = run1000times(function () { var result = j.filter(isVowel)(myArray); });
     console.log('j.filter', time);
+
+    time = run1000times(function () { var result = appliedVowelFilter(myArray); });
+    console.log('appliedVowelFilter', time);
+
+
 }
 
 function testDeref() {
@@ -170,6 +178,12 @@ function testMaybe() {
 
     time = run1000times(function () { j.maybe('defined')(undefined); });
     console.log('j.maybe fail', time);
+
+    time = run1000times(function () { j.either('defined')(null)({}); });
+    console.log('j.either defined success', time);
+
+    time = run1000times(function () { j.either('defined')(null)(undefined); });
+    console.log('j.either defined', time);
 }
 
 function testRecur() {
@@ -189,7 +203,7 @@ function testRecur() {
 }
 
 function testCurry() {
-    function add3Vals (a, b, c) {
+    function add3Vals(a, b, c) {
         return a + b + c;
     }
 
@@ -216,20 +230,37 @@ function testAlways() {
     console.log('j.always', time);
 }
 
-testMap();
-console.log();
-testFilter();
-console.log();
-testDeref();
-console.log();
-testPick();
-console.log();
-testEither();
-console.log();
-testMaybe();
-console.log();
-testRecur();
-console.log();
-testCurry();
-console.log();
-testAlways();
+function runTests () {
+    console.log();
+    console.log('***** These numbers are a result of 1000 runs *****');
+    console.log();
+
+    testMap();
+    console.log();
+
+    testFilter();
+    console.log();
+
+    testDeref();
+    console.log();
+
+    testPick();
+    console.log();
+
+    testEither();
+    console.log();
+
+    testMaybe();
+    console.log();
+
+    testRecur();
+    console.log();
+
+    testCurry();
+    console.log();
+
+    testAlways();
+    console.log();
+}
+
+module.exports = runTests;

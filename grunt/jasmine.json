@@ -17,7 +17,13 @@
 
   "dist": {
     "specs": [
-      "spec/modules/core.spec.js"
+      "spec/modules/types.spec.js",
+      "spec/modules/predicate.spec.js",
+      "spec/modules/core.spec.js",
+      "spec/modules/math.spec.js",
+      "spec/modules/array.spec.js",
+      "spec/modules/object.spec.js",
+      "spec/modules/cond.spec.js"
     ]
   }
 }

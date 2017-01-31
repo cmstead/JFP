@@ -110,7 +110,11 @@
     }
 
     function maybe(typeDef) {
-        return either(typeDef)(null);
+        var checkType = _signet.isTypeOf(typeDef);
+        
+        return function (value) {
+            return checkType(value) ? value : null;
+        };
     }
 
     // Type system behaviors

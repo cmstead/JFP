@@ -46,9 +46,9 @@
             var initialIsDefined = !j.isUndefined(initial);
             var result = initialIsDefined ? initial : first(values);
             var listLen = values.length;
-            var i = initialIsDefined ? 0 : 1;
+            var i = initialIsDefined ? -1 : 0;
 
-            for (i; i < listLen; i++) {
+            while (++i < listLen) {
                 result = fn(result, values[i]);
             }
 
