@@ -3,7 +3,7 @@
 
     var _signet = typeof signet !== 'undefined' ? signet : null;
 
-    if(typeof require === 'function') {
+    if (typeof require === 'function') {
         _signet = require('signet')();
     }
 
@@ -37,7 +37,7 @@
         return !checkNil(value);
     }
 
-    function checkDefined (value){
+    function checkDefined(value) {
         return !isUndefined(value) && checkNotNull(value);
     }
 
@@ -47,19 +47,19 @@
             checkDefined(value);
     }
 
-    function checkNatural (value){
+    function checkNatural(value) {
         return value >= 0;
     }
 
-    function checkPair (value){
+    function checkPair(value) {
         return value.length > 0;
     }
 
-    function checkConcatable (value) {
+    function checkConcatable(value) {
         return checkDefined(value) && checkNotNull(value) && isFunction(value.concat);
     }
 
-    function checkObjectInstance (value) {
+    function checkObjectInstance(value) {
         return value !== null;
     }
 
@@ -131,7 +131,7 @@
     j.eitherNumber = either('number');
     j.eitherObject = either('object');
     j.eitherString = either('string');
-    
+
     j.eitherConcatable = either('concatable');
     j.eitherObjectInstance = either('objectInstance');
     j.eitherReferencible = either('referencible');

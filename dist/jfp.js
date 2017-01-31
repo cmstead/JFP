@@ -10,7 +10,7 @@ var jfp = (function(){
 
     var _signet = typeof signet !== 'undefined' ? signet : null;
 
-    if(typeof require === 'function') {
+    if (typeof require === 'function') {
         _signet = require('signet')();
     }
 
@@ -44,7 +44,7 @@ var jfp = (function(){
         return !checkNil(value);
     }
 
-    function checkDefined (value){
+    function checkDefined(value) {
         return !isUndefined(value) && checkNotNull(value);
     }
 
@@ -54,19 +54,19 @@ var jfp = (function(){
             checkDefined(value);
     }
 
-    function checkNatural (value){
+    function checkNatural(value) {
         return value >= 0;
     }
 
-    function checkPair (value){
+    function checkPair(value) {
         return value.length > 0;
     }
 
-    function checkConcatable (value) {
+    function checkConcatable(value) {
         return checkDefined(value) && checkNotNull(value) && isFunction(value.concat);
     }
 
-    function checkObjectInstance (value) {
+    function checkObjectInstance(value) {
         return value !== null;
     }
 
@@ -138,7 +138,7 @@ var jfp = (function(){
     j.eitherNumber = either('number');
     j.eitherObject = either('object');
     j.eitherString = either('string');
-    
+
     j.eitherConcatable = either('concatable');
     j.eitherObjectInstance = either('objectInstance');
     j.eitherReferencible = either('referencible');
@@ -236,16 +236,18 @@ var jfp = (function(){
     }
 
     function cons(value, values) {
-        return j.isUndefined(value) ? values : concat([value], values);
+        return typeof value === 'undefined' ? values : [value].concat(values);
     }
 
     function conj(value, values) {
-        return j.isUndefined(value) ? values : concat(values, [value]);
+        return typeof value === 'undefined' ? values : values.concat([value]);
     }
 
     function slice(start, end) {
+        var bounds = typeof end === 'undefined' ? [start] : [start, end];
+
         return function (valueSet) {
-            return Array.prototype.slice.apply(valueSet, cons(start, cons(end, j.nil)));
+            return Array.prototype.slice.apply(valueSet, bounds);
         };
     }
 
@@ -266,36 +268,38 @@ var jfp = (function(){
         return fn.apply(null, args);
     }
 
-    function buildResult(id, args) {
-        return {
-            id: id,
-            args: args
-        };
-    }
-
-    function recursor(id) {
+    function buildRecursor(result) {
         return function () {
-            return buildResult(id, argumentsToArray(arguments));
+            result.args = argumentsToArray(arguments);
+            return result;
         };
     }
 
-    function checkRecurResult(id) {
-        return function (result) {
-            return j.isObjectInstance(result) && result.id === id;
+    function pick(key) {
+        return function (obj) {
+            try {
+                return j.maybeDefined(obj[key]);
+            } catch (e) {
+                return null;
+            }
         };
     }
+
+    var pickId = pick('id');
 
     function recur(fn) {
         // Each recursion needs to be signed to avoid collisions
         var id = Math.floor(Math.random() * 1000000);
-        var signedRecursor = recursor(id);
-        var checkResult = checkRecurResult(id);
 
         return function () {
-            var result = buildResult(id, argumentsToArray(arguments));
+            var result = {
+                id: id,
+                args: argumentsToArray(arguments)
+            };
+            var recursor = buildRecursor(result);
 
-            while (checkResult(result)) {
-                result = apply(fn, cons(signedRecursor, result.args));
+            while (pickId(result) === id) {
+                result = apply(fn, cons(recursor, result.args));
             }
 
             return result;
@@ -319,25 +323,20 @@ var jfp = (function(){
         };
     }
 
-    function buildCurriable(fn, count, initialArgs, concat) {
+    function buildCurriable(fn, count, initialArgs) {
         return function curriable() {
             var args = concat(initialArgs, argumentsToArray(arguments));
-            return !(args.length < count) ? apply(fn, args) : buildCurriable(fn, count, args, concat);
+            return !(args.length < count) ? apply(fn, args) : buildCurriable(fn, count, args);
         }
     }
 
-    function directionalCurry(concat) {
-        return function (fn, count, args) {
-            return buildCurriable(fn, j.eitherNatural(fn.length)(count), j.eitherArray([])(args), concat);
-        };
-    }
+    function curry(fn, count, args) {
+        return buildCurriable(fn, j.eitherNatural(fn.length)(count), j.eitherArray([])(args));
+    };
 
-    var curry = directionalCurry(concat);
-    var rcurry = directionalCurry(rconcat);
-
+    var sliceRest = slice(1);
+    
     function directionalPartial(concat) {
-        var sliceRest = slice(1);
-
         return function (fn) {
             var args = sliceRest(arguments);
 
@@ -365,7 +364,7 @@ var jfp = (function(){
     }
 
     // JFP core functions
-    j.always = j.enforce('* => [*] => *', always);
+    j.always = j.enforce('* => * => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
     j.argumentsToArray = j.enforce('arguments => array', argumentsToArray);
     j.compose = j.enforce('function, function => function', compose);
@@ -373,10 +372,9 @@ var jfp = (function(){
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
-    j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', rcurry);
     j.identity = j.enforce('* => *', identity);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
-    j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', rcurry);
+    j.pick = j.enforce('string => * => maybe<defined>', pick);
     j.recur = j.enforce('function => function', recur);
     j.repeat = j.enforce('function => int => * => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);
@@ -773,12 +771,6 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    function pick(key) {
-        return function (obj) {
-            return j.isDefined(obj) ? j.maybeDefined(obj[key]) : null;
-        };
-    }
-
     function pickByObj(obj) {
         return function (key) {
             return pick(key)(obj);
@@ -786,16 +778,21 @@ var jfp = (function(){
     }
 
     function deref(key) {
-        var keyTokens = key.split('.');
+        var tokens = key.split('.');
 
         return function (obj) {
             var result = obj;
+            var tokenLen = tokens.length;
 
-            for (var i = 0; i < keyTokens.length && !j.isNull(result); i++) {
-                result = pick(keyTokens[i])(result);
+            for (var i = 0; i < tokenLen && result !== null; i++) {
+                try {
+                    result = result[tokens[i]];
+                } catch (e) {
+                    return null;
+                }
             }
 
-            return result;
+            return j.maybeDefined(result);
         };
     }
 
@@ -879,7 +876,6 @@ var jfp = (function(){
     j.deref = j.enforce('string => * => maybe<defined>', deref);
     j.merge = j.enforce('object, object => object', merge);
     j.mergeToUnsafe = j.enforce('object => object => object', mergeToUnsafe);
-    j.pick = j.enforce('string => * => maybe<defined>', pick);
     j.shallowClone = j.enforce('object => object => object', shallowClone);
     j.toArray = j.enforce('object => array<tuple<objectKey;*>>', toArray);
     j.toObject = j.enforce('array<tuple<objectKey;*>> => object', toObject);

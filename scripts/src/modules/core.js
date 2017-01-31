@@ -20,16 +20,18 @@
     }
 
     function cons(value, values) {
-        return j.isUndefined(value) ? values : concat([value], values);
+        return typeof value === 'undefined' ? values : [value].concat(values);
     }
 
     function conj(value, values) {
-        return j.isUndefined(value) ? values : concat(values, [value]);
+        return typeof value === 'undefined' ? values : values.concat([value]);
     }
 
     function slice(start, end) {
+        var bounds = typeof end === 'undefined' ? [start] : [start, end];
+
         return function (valueSet) {
-            return Array.prototype.slice.apply(valueSet, cons(start, cons(end, j.nil)));
+            return Array.prototype.slice.apply(valueSet, bounds);
         };
     }
 
@@ -50,36 +52,38 @@
         return fn.apply(null, args);
     }
 
-    function buildResult(id, args) {
-        return {
-            id: id,
-            args: args
-        };
-    }
-
-    function recursor(id) {
+    function buildRecursor(result) {
         return function () {
-            return buildResult(id, argumentsToArray(arguments));
+            result.args = argumentsToArray(arguments);
+            return result;
         };
     }
 
-    function checkRecurResult(id) {
-        return function (result) {
-            return j.isObjectInstance(result) && result.id === id;
+    function pick(key) {
+        return function (obj) {
+            try {
+                return j.maybeDefined(obj[key]);
+            } catch (e) {
+                return null;
+            }
         };
     }
+
+    var pickId = pick('id');
 
     function recur(fn) {
         // Each recursion needs to be signed to avoid collisions
         var id = Math.floor(Math.random() * 1000000);
-        var signedRecursor = recursor(id);
-        var checkResult = checkRecurResult(id);
 
         return function () {
-            var result = buildResult(id, argumentsToArray(arguments));
+            var result = {
+                id: id,
+                args: argumentsToArray(arguments)
+            };
+            var recursor = buildRecursor(result);
 
-            while (checkResult(result)) {
-                result = apply(fn, cons(signedRecursor, result.args));
+            while (pickId(result) === id) {
+                result = apply(fn, cons(recursor, result.args));
             }
 
             return result;
@@ -103,25 +107,20 @@
         };
     }
 
-    function buildCurriable(fn, count, initialArgs, concat) {
+    function buildCurriable(fn, count, initialArgs) {
         return function curriable() {
             var args = concat(initialArgs, argumentsToArray(arguments));
-            return !(args.length < count) ? apply(fn, args) : buildCurriable(fn, count, args, concat);
+            return !(args.length < count) ? apply(fn, args) : buildCurriable(fn, count, args);
         }
     }
 
-    function directionalCurry(concat) {
-        return function (fn, count, args) {
-            return buildCurriable(fn, j.eitherNatural(fn.length)(count), j.eitherArray([])(args), concat);
-        };
-    }
+    function curry(fn, count, args) {
+        return buildCurriable(fn, j.eitherNatural(fn.length)(count), j.eitherArray([])(args));
+    };
 
-    var curry = directionalCurry(concat);
-    var rcurry = directionalCurry(rconcat);
-
+    var sliceRest = slice(1);
+    
     function directionalPartial(concat) {
-        var sliceRest = slice(1);
-
         return function (fn) {
             var args = sliceRest(arguments);
 
@@ -149,7 +148,7 @@
     }
 
     // JFP core functions
-    j.always = j.enforce('* => [*] => *', always);
+    j.always = j.enforce('* => * => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
     j.argumentsToArray = j.enforce('arguments => array', argumentsToArray);
     j.compose = j.enforce('function, function => function', compose);
@@ -157,10 +156,9 @@
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
-    j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', rcurry);
     j.identity = j.enforce('* => *', identity);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
-    j.rcurry = j.enforce('function, [int], [array<*>] => [*] => *', rcurry);
+    j.pick = j.enforce('string => * => maybe<defined>', pick);
     j.recur = j.enforce('function => function', recur);
     j.repeat = j.enforce('function => int => * => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);

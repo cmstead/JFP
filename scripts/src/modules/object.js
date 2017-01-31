@@ -1,12 +1,6 @@
 (function (j) {
     'use strict';
 
-    function pick(key) {
-        return function (obj) {
-            return j.isDefined(obj) ? j.maybeDefined(obj[key]) : null;
-        };
-    }
-
     function pickByObj(obj) {
         return function (key) {
             return pick(key)(obj);
@@ -14,16 +8,21 @@
     }
 
     function deref(key) {
-        var keyTokens = key.split('.');
+        var tokens = key.split('.');
 
         return function (obj) {
             var result = obj;
+            var tokenLen = tokens.length;
 
-            for (var i = 0; i < keyTokens.length && !j.isNull(result); i++) {
-                result = pick(keyTokens[i])(result);
+            for (var i = 0; i < tokenLen && result !== null; i++) {
+                try {
+                    result = result[tokens[i]];
+                } catch (e) {
+                    return null;
+                }
             }
 
-            return result;
+            return j.maybeDefined(result);
         };
     }
 
@@ -107,7 +106,6 @@
     j.deref = j.enforce('string => * => maybe<defined>', deref);
     j.merge = j.enforce('object, object => object', merge);
     j.mergeToUnsafe = j.enforce('object => object => object', mergeToUnsafe);
-    j.pick = j.enforce('string => * => maybe<defined>', pick);
     j.shallowClone = j.enforce('object => object => object', shallowClone);
     j.toArray = j.enforce('object => array<tuple<objectKey;*>>', toArray);
     j.toObject = j.enforce('array<tuple<objectKey;*>> => object', toObject);
