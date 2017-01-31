@@ -5,6 +5,7 @@ var timer = require('../timer/test-timer')();
 describe('jfp core', function () {
     
     beforeEach(function () {
+        timer.setMaxAcceptableTime(0.2);
         timer.reset();
         timer.start();
     });
@@ -173,23 +174,6 @@ describe('jfp core', function () {
         it('should curry to a specified length', function () {
             expect(typeof j.curry(add3Vals, 4)(1, 2, 3)).toBe('function');
             expect(typeof j.curry(add3Vals, 4)(1, 2, 3, 4)).toBe('number');
-        });
-
-    });
-    
-    describe('rcurry', function () {
-        
-        function div (a, b){
-            return a / b;
-        }
-        
-        it('should return a curried function', function () {
-            expect(j.rcurry(div)(3)(12)).toBe(4);
-            expect(j.rcurry(div)(12, 4)).toBe(3);
-        });
-
-        it('should curry to a specified length', function () {
-            expect(typeof j.rcurry(div, 3)(1, 2)).toBe('function');
         });
 
     });
