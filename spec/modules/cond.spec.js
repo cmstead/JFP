@@ -35,19 +35,19 @@ describe('jfp cond', function () {
         result = j.either('number')(1)(result);
 
         return j.cond(function (when, then, _default) {
-            when(n === 0, then(result));
-            when(_default, then(recur, j.dec(n), (result * n)));
+            when(n === 0,
+                then(result));
+            when(_default,
+                then(recur, j.dec(n), (result * n)));
         });
     });
 
     it('should work as an expression', function () {
-        expect(condTest1(1)).toBe('one');
         expect(condTest1(2)).toBe('two');
-        expect(condTest1(3)).toBe('three');
     });
 
     it('should throw an error if value is out of bounds and no default is set', function () {
-        expect(condTest1.bind(null, 5)).toThrow();
+        expect(j.partial(condTest1, 5)).toThrow();
     });
 
     it('should execute default if no other condition is satisfied', function () {

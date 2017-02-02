@@ -5,7 +5,7 @@ var timer = require('../timer/test-timer')();
 describe('jfp core', function () {
 
     beforeEach(function () {
-        timer.setMaxAcceptableTime(0.2);
+        timer.setMaxAcceptableTime(0.3);
         timer.reset();
         timer.start();
     });
@@ -109,7 +109,7 @@ describe('jfp core', function () {
             expect(JSON.stringify(result)).toBe('[2,3,4]');
         });
 
-        it('should slice starting at an initial index', function () {
+        it('should slice slice from index to length', function () {
             var result = j.slice(1, 3)([1, 2, 3, 4]);
             expect(JSON.stringify(result)).toBe('[2,3]');
         });
