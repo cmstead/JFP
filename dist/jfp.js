@@ -130,6 +130,7 @@ var jfp = (function(){
     j.isTypeOf = _signet.isTypeOf;
     j.maybe = _signet.enforce('* => maybe<defined>', maybe);
     j.setJfpTypes = _signet.enforce('signet => signet', setJfpTypes);
+    j.sign = _signet.sign;
     j.typeChain = _signet.typeChain;
 
     // Prefab either checks
@@ -248,10 +249,8 @@ var jfp = (function(){
     }
 
     function slice(start, end) {
-        var bounds = typeof end === 'undefined' ? [start] : [start, end];
-
         return function (valueSet) {
-            return Array.prototype.slice.apply(valueSet, bounds);
+            return Array.prototype.slice.call(valueSet, start, end);
         };
     }
 
@@ -268,6 +267,8 @@ var jfp = (function(){
         }
     }
 
+    var sliceFrom0 = slice(0);
+
     function apply(fn, args) {
         return fn.apply(null, args);
     }
@@ -275,14 +276,23 @@ var jfp = (function(){
     function pick(key) {
         return function (obj) {
             try {
-                return j.maybeDefined(obj[key]);
+                var result = j.maybeDefined(obj[key]);
             } catch (e) {
-                return null;
+                var result = null;
             }
+
+            return result;
         };
     }
 
     var pickId = pick('id');
+
+    function buildRecursor(result) {
+        return function () {
+            result.args = sliceFrom0(arguments);
+            return result;
+        }
+    }
 
     function recur(fn) {
         // Each recursion needs to be signed to avoid collisions
@@ -291,13 +301,9 @@ var jfp = (function(){
         return function () {
             var result = {
                 id: id,
-                args: argumentsToArray(arguments)
+                args: sliceFrom0(arguments)
             };
-
-            function recursor () {
-                result.args = argumentsToArray(arguments);
-                return result;
-            }
+            var recursor = buildRecursor(result);
 
             while (pickId(result) === id) {
                 result = apply(fn, [recursor].concat(result.args));
@@ -313,20 +319,19 @@ var jfp = (function(){
 
     function compose(f, g) {
         return function () {
-            var args = argumentsToArray(arguments);
-            return f(g.apply(null, args));
+            return f(g.apply(null, sliceFrom0(arguments)));
         };
     }
 
     function reverseArgs(fn) {
         return function () {
-            return apply(fn, argumentsToArray(arguments).reverse());
+            return apply(fn, sliceFrom0(arguments).reverse());
         };
     }
 
     function buildCurriable(fn, count, initialArgs) {
         return function curriable() {
-            var args = concat(initialArgs, argumentsToArray(arguments));
+            var args = concat(initialArgs, sliceFrom0(arguments));
             return !(args.length < count) ? apply(fn, args) : buildCurriable(fn, count, args);
         }
     }
@@ -342,7 +347,7 @@ var jfp = (function(){
             var args = sliceRest(arguments);
 
             return function () {
-                return apply(fn, concat(args, argumentsToArray(arguments)));
+                return apply(fn, concat(args, sliceFrom0(arguments)));
             };
         };
     }
@@ -365,15 +370,15 @@ var jfp = (function(){
     }
 
     // JFP core functions
-    j.always = j.enforce('* => * => *', always);
+    j.always = j.sign('* => * => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
-    j.argumentsToArray = j.enforce('arguments => array', argumentsToArray);
+    j.argumentsToArray = j.enforce('arguments => array', sliceFrom0);
     j.compose = j.enforce('function, function => function', compose);
     j.concat = curry(j.enforce('concatable, concatable => concatable', concat), 2);
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
-    j.identity = j.enforce('* => *', identity);
+    j.identity = j.sign('* => *', identity);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.pick = j.enforce('string => * => maybe<defined>', pick);
     j.recur = j.enforce('function => function', recur);
@@ -381,7 +386,7 @@ var jfp = (function(){
     j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
-    j.splice = j.enforce('int, [int] => array<*> => array<*>', splice);
+    j.splice = j.enforce('int, [int] => variant<array;arguments> => array', splice);
 
 })(jfp);
 
@@ -433,8 +438,9 @@ var jfp = (function(){
 
         return function (max) {
             var result = [];
+            var i = min - offset;
 
-            for (var i = min; i <= max; i += offset) {
+            while (!((i += offset) > max)) {
                 result.push(i)
             }
 
@@ -451,7 +457,7 @@ var jfp = (function(){
         }
 
         return function (value) {
-            return !(value < min) && !(value > max);
+            return !(min > value || value > max);
         };
     }
 
@@ -807,13 +813,18 @@ var jfp = (function(){
 
     function mergeToUnsafe(objA) {
         return function (objB) {
-            return j.foldl(setValue(objB), objA)(Object.keys(objB));
+            var keys = Object.keys(objB);
+
+            for(var i = 0; i < keys.length; i++) {
+                objA[keys[i]] = objB[keys[i]];
+            }
+
+            return objA;
         };
     }
 
     function shallowClone(obj) {
-        var cloneTo = j.isArray(obj) ? [] : {};
-        return mergeToUnsafe(cloneTo)(obj);
+        return mergeToUnsafe(j.isArray(obj) ? [] : {})(obj);
     }
 
     function merge(objA, objB) {
@@ -889,18 +900,28 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    function then(fn) {
-        var isFunction = j.isFunction(fn);
-        var action = isFunction ? fn : j.identity;
-        var index = isFunction ? 1 : 0;
+    function buildThen(condArray) {
+        return function (fn) {
+            var result = null;
 
-        return [action, j.slice(index)(arguments)];
+            if (condArray.length === 0) {
+                var isFunction = typeof fn === 'function';
+
+                result = { 
+                    action: isFunction ? fn : j.identity, 
+                    args: j.slice(isFunction ? 1 : 0)(arguments)
+                };
+            }
+
+            return result;
+        }
     }
 
-    function when(condArray) {
+    function buildWhen(condArray) {
         var pushToCondArray = j.pushUnsafe(condArray);
+
         return function (prop, behavior) {
-            if (prop) {
+            if (prop && behavior) {
                 pushToCondArray(behavior);
             }
         };
@@ -909,29 +930,25 @@ var jfp = (function(){
     function throwOnNil(condFn) {
         var condSource = condFn.toString();
 
-        return function (result) {
-            if (j.isNil(result)) {
+        return function (resultSet) {
+            if (resultSet.length === 0) {
                 throw new Error('All possible conditions were not represented in ' + condSource);
             }
         };
     }
 
     function handleResult(resultSet, throwOnNil) {
-        var result = j.first(resultSet);
+        throwOnNil(resultSet);
 
-        throwOnNil(result);
-
-        var action = result[0];
-        var args = result[1];
-
-        return j.apply(action, args);
+        var result = resultSet[0];
+        
+        return j.apply(result.action, result.args);
     }
 
     function cond(condFn) {
         var condArray = [];
-        var _default = true;
 
-        condFn(when(condArray), then, _default);
+        condFn(buildWhen(condArray), buildThen(condArray), true);
 
         return handleResult(condArray, throwOnNil(condFn));
     }

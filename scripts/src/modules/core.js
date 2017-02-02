@@ -28,10 +28,8 @@
     }
 
     function slice(start, end) {
-        var bounds = typeof end === 'undefined' ? [start] : [start, end];
-
         return function (valueSet) {
-            return Array.prototype.slice.apply(valueSet, bounds);
+            return Array.prototype.slice.call(valueSet, start, end);
         };
     }
 
@@ -48,6 +46,8 @@
         }
     }
 
+    var sliceFrom0 = slice(0);
+
     function apply(fn, args) {
         return fn.apply(null, args);
     }
@@ -55,14 +55,23 @@
     function pick(key) {
         return function (obj) {
             try {
-                return j.maybeDefined(obj[key]);
+                var result = j.maybeDefined(obj[key]);
             } catch (e) {
-                return null;
+                var result = null;
             }
+
+            return result;
         };
     }
 
     var pickId = pick('id');
+
+    function buildRecursor(result) {
+        return function () {
+            result.args = sliceFrom0(arguments);
+            return result;
+        }
+    }
 
     function recur(fn) {
         // Each recursion needs to be signed to avoid collisions
@@ -71,13 +80,9 @@
         return function () {
             var result = {
                 id: id,
-                args: argumentsToArray(arguments)
+                args: sliceFrom0(arguments)
             };
-
-            function recursor () {
-                result.args = argumentsToArray(arguments);
-                return result;
-            }
+            var recursor = buildRecursor(result);
 
             while (pickId(result) === id) {
                 result = apply(fn, [recursor].concat(result.args));
@@ -93,20 +98,19 @@
 
     function compose(f, g) {
         return function () {
-            var args = argumentsToArray(arguments);
-            return f(g.apply(null, args));
+            return f(g.apply(null, sliceFrom0(arguments)));
         };
     }
 
     function reverseArgs(fn) {
         return function () {
-            return apply(fn, argumentsToArray(arguments).reverse());
+            return apply(fn, sliceFrom0(arguments).reverse());
         };
     }
 
     function buildCurriable(fn, count, initialArgs) {
         return function curriable() {
-            var args = concat(initialArgs, argumentsToArray(arguments));
+            var args = concat(initialArgs, sliceFrom0(arguments));
             return !(args.length < count) ? apply(fn, args) : buildCurriable(fn, count, args);
         }
     }
@@ -122,7 +126,7 @@
             var args = sliceRest(arguments);
 
             return function () {
-                return apply(fn, concat(args, argumentsToArray(arguments)));
+                return apply(fn, concat(args, sliceFrom0(arguments)));
             };
         };
     }
@@ -145,15 +149,15 @@
     }
 
     // JFP core functions
-    j.always = j.enforce('* => * => *', always);
+    j.always = j.sign('* => * => *', always);
     j.apply = j.enforce('function, array<*> => *', apply);
-    j.argumentsToArray = j.enforce('arguments => array', argumentsToArray);
+    j.argumentsToArray = j.enforce('arguments => array', sliceFrom0);
     j.compose = j.enforce('function, function => function', compose);
     j.concat = curry(j.enforce('concatable, concatable => concatable', concat), 2);
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
-    j.identity = j.enforce('* => *', identity);
+    j.identity = j.sign('* => *', identity);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.pick = j.enforce('string => * => maybe<defined>', pick);
     j.recur = j.enforce('function => function', recur);
@@ -161,6 +165,6 @@
     j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
-    j.splice = j.enforce('int, [int] => array<*> => array<*>', splice);
+    j.splice = j.enforce('int, [int] => variant<array;arguments> => array', splice);
 
 })(jfp);

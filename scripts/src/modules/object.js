@@ -35,13 +35,18 @@
 
     function mergeToUnsafe(objA) {
         return function (objB) {
-            return j.foldl(setValue(objB), objA)(Object.keys(objB));
+            var keys = Object.keys(objB);
+
+            for(var i = 0; i < keys.length; i++) {
+                objA[keys[i]] = objB[keys[i]];
+            }
+
+            return objA;
         };
     }
 
     function shallowClone(obj) {
-        var cloneTo = j.isArray(obj) ? [] : {};
-        return mergeToUnsafe(cloneTo)(obj);
+        return mergeToUnsafe(j.isArray(obj) ? [] : {})(obj);
     }
 
     function merge(objA, objB) {

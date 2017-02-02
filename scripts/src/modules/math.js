@@ -45,8 +45,9 @@
 
         return function (max) {
             var result = [];
+            var i = min - offset;
 
-            for (var i = min; i <= max; i += offset) {
+            while (!((i += offset) > max)) {
                 result.push(i)
             }
 
@@ -63,7 +64,7 @@
         }
 
         return function (value) {
-            return !(value < min) && !(value > max);
+            return !(min > value || value > max);
         };
     }
 

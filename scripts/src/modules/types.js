@@ -123,6 +123,7 @@
     j.isTypeOf = _signet.isTypeOf;
     j.maybe = _signet.enforce('* => maybe<defined>', maybe);
     j.setJfpTypes = _signet.enforce('signet => signet', setJfpTypes);
+    j.sign = _signet.sign;
     j.typeChain = _signet.typeChain;
 
     // Prefab either checks
