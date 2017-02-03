@@ -836,9 +836,14 @@ var jfp = (function(){
     }
 
     function toArray(obj) {
-        return j.map(function (key) {
-            return [key, obj[key]];
-        })(getKeys(obj));
+        var keys = getKeys(obj);
+        var result = [];
+
+        for (var i = 0; i < keys.length; i++) {
+            result.push([keys[i], obj[keys[i]]]);
+        }
+
+        return result;
     }
 
     function toValues(obj) {
@@ -900,57 +905,40 @@ var jfp = (function(){
 (function (j) {
     'use strict';
 
-    function buildThen(condArray) {
+    function buildThen(condResult) {
         return function (fn) {
-            var result = null;
+            var args = arguments;
 
-            if (condArray.length === 0) {
+            return function () {
                 var isFunction = typeof fn === 'function';
-
-                result = { 
-                    action: isFunction ? fn : j.identity, 
-                    args: j.slice(isFunction ? 1 : 0)(arguments)
-                };
-            }
-
-            return result;
+                
+                condResult.action = isFunction ? fn : j.identity;
+                condResult.args = j.slice(isFunction ? 1 : 0)(args);
+            };
         }
     }
 
-    function buildWhen(condArray) {
-        var pushToCondArray = j.pushUnsafe(condArray);
-
-        return function (prop, behavior) {
-            if (prop && behavior) {
-                pushToCondArray(behavior);
+    function buildWhen(condResult) {
+        return function (prop, captureBehavior) {
+            if (condResult.action === null && prop) {
+                captureBehavior();
             }
         };
-    }
-
-    function throwOnNil(condFn) {
-        var condSource = condFn.toString();
-
-        return function (resultSet) {
-            if (resultSet.length === 0) {
-                throw new Error('All possible conditions were not represented in ' + condSource);
-            }
-        };
-    }
-
-    function handleResult(resultSet, throwOnNil) {
-        throwOnNil(resultSet);
-
-        var result = resultSet[0];
-        
-        return j.apply(result.action, result.args);
     }
 
     function cond(condFn) {
-        var condArray = [];
+        var condResult = {
+            action: null,
+            args: []
+        };
 
-        condFn(buildWhen(condArray), buildThen(condArray), true);
+        condFn(buildWhen(condResult), buildThen(condResult), true);
 
-        return handleResult(condArray, throwOnNil(condFn));
+        if (condResult.action === null) {
+            throw new Error('All possible conditions were not represented in ' + condFn.toString());
+        }
+
+        return j.apply(condResult.action, condResult.args);
     }
 
     j.cond = j.enforce('function<function;function;boolean> => *', cond);

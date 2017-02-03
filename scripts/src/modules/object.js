@@ -58,9 +58,14 @@
     }
 
     function toArray(obj) {
-        return j.map(function (key) {
-            return [key, obj[key]];
-        })(getKeys(obj));
+        var keys = getKeys(obj);
+        var result = [];
+
+        for (var i = 0; i < keys.length; i++) {
+            result.push([keys[i], obj[keys[i]]]);
+        }
+
+        return result;
     }
 
     function toValues(obj) {

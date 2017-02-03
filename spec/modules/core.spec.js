@@ -5,7 +5,7 @@ var timer = require('../timer/test-timer')();
 describe('jfp core', function () {
 
     beforeEach(function () {
-        timer.setMaxAcceptableTime(0.3);
+        timer.setMaxAcceptableTime(0.5);
         timer.reset();
         timer.start();
     });
