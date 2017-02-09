@@ -141,16 +141,49 @@ describe('jfp core', function () {
 
     });
 
+    function inc(value) {
+        return value + 1;
+    }
+
+    function multiplyBy(n) {
+        return function (m) {
+            return n * m;
+        };
+    }
+
     describe('compose', function () {
 
-        function inc(value) {
-            return value + 1;
-        }
-
         it('should compose two functions', function () {
-            var add2 = j.compose(inc, inc);
+            var compute = j.compose(inc, multiplyBy(2));
 
-            expect(add2(5)).toBe(7);
+            expect(compute(5)).toBe(11);
+        });
+    });
+
+    describe('foldlCompose', function () {
+
+        it('should compose multiple functions', function () {
+            var compute = j.foldlCompose(inc, multiplyBy(3), multiplyBy(1/2));
+
+            expect(compute(6)).toBe(10);
+        });
+    });
+
+    describe('rcompose', function () {
+
+        it('should compose two functions in reading order', function () {
+            var compute = j.rcompose(inc, multiplyBy(2));
+
+            expect(compute(5)).toBe(12);
+        });
+    });
+
+    describe('foldrCompose', function () {
+
+        it('should compose multiple functions in reading order', function () {
+            var compute = j.foldrCompose(inc, multiplyBy(3), multiplyBy(1/2));
+
+            expect(compute(6)).toBe(10.5);
         });
     });
 

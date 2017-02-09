@@ -102,6 +102,23 @@
         };
     }
 
+    function rcompose(g, f) {
+        return compose(f, g);
+    }
+
+    function directionalCompose(composer) {
+        return function (f, g) {
+            var fns = sliceFrom0(arguments);
+            var result = f;
+
+            for (var i = 1; i < fns.length; i++) {
+                result = composer(result, fns[i]);
+            }
+
+            return result;
+        };
+    }
+
     function reverseArgs(fn) {
         return function () {
             return apply(fn, sliceFrom0(arguments).reverse());
@@ -157,9 +174,12 @@
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
+    j.foldlCompose = j.enforce('function, function => function', directionalCompose(compose));
+    j.foldrCompose = j.enforce('function, function => function', directionalCompose(rcompose));
     j.identity = j.sign('* => *', identity);
     j.partial = j.enforce('function, [*] => [*] => *', partial);
     j.pick = j.enforce('string => * => maybe<defined>', pick);
+    j.rcompose = j.enforce('function, function => function', rcompose);
     j.recur = j.enforce('function => function', recur);
     j.repeat = j.enforce('function => int => * => *', repeat);
     j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);
