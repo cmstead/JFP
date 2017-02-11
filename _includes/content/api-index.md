@@ -580,6 +580,16 @@ j.all(j.isTypeOf('string'), ['foo', 'bar', 42]); // false
 j.compact([1, 2, 0, '', false, null, 3]); // [1, 2, 3]
 ~~~~
 
+### dropLast
+
+- Performance: O(n) (based on the performance of slice)
+- Signature: `array<*> => array<*>`
+- Description: Drops last value of array
+
+~~~~
+j.dropLast([1, 2, 3, 4]); // [1, 2, 3];
+~~~~
+
 ### dropNth
 
 - Performance: O(n) (based on the performance of splice)
@@ -681,6 +691,32 @@ j.none(j.isTypeOf('number'), ['foo', 'bar', 51]); // false
 j.nth(2)([1, 2, 3, 4]); // 3;
 ~~~~
 
+### partition
+
+- Performance: O(n)
+- Signature: `predicate => array => tuple<array;array>`
+- Description: Partitions an array on a predicate
+
+~~~~
+var isEven = j.compose(j.equal(0), j.modBy(2));
+
+j.partition(isEven)([1, 2, 3, 4]); // [[2, 4], [1, 3]]
+~~~~
+
+### pushUnsafe
+
+- Performance: unknown
+- Signature: `array => * => array`
+- Description: Pushes value into array
+
+** Warning: This function will mutate your array **
+
+~~~
+var myArray = [1, 2, 3, 4];
+j.pushUnsafe(myArray)(5); // [1, 2, 3, 4, 5]
+console.log(myArray); // [1, 2, 3, 4, 5]
+~~~
+
 ### rest
 
 - Performance: O(n) (based on performance of slice)
@@ -757,6 +793,33 @@ j.sort(j.reverseArgs(j.subtract))([2, 4, 1, 3, 5]); // [5, 4, 3, 2, 1]
 ~~~~
 j.take(3)([1, 2, 3, 4, 5]); // [1, 2, 3];
 ~~~~
+
+### takeUntil
+
+- Performance: O(n);
+- Signature: `predicate => array => array`
+- Description: Takes values from source array and adds them to returned array until predicate is satisfied
+
+~~~
+var isEven = j.compose(j.equal(0), j.modBy(2));
+j.takeUntil(isEven)([1, 3, 5, 6, 7, 9]); // [1, 3, 5]
+~~~
+
+### until
+
+- Performance: O(n);
+- Signature: `predicate => function, * => array => *`
+- Description: Performs action until predicate is satisified
+
+~~~
+var isEven = j.compose(j.equal(0), j.modBy(2));
+
+function takeAndDouble(result, value){
+    return j.conj(result, value * 2);
+}
+
+j.until(isEven)(takeAndDouble, [])([1, 3, 5, 6, 7, 9]); // [2, 6, 10]
+~~~
 
 ## Math
 
@@ -958,6 +1021,16 @@ j.between(1, 5)(10); // false
 
 ## Object
 
+### clone
+
+- Performance: O(n) for n = leaves on object tree
+- Signature: `object => object`
+- Description: Deep clones an object, fails on particularly deep or circular objects
+
+~~~
+j.clone({foo: 'bar', baz: 'quux'}); {foo: 'bar', baz: 'quux'}
+~~~
+
 ### deref
 
 - Performance: O(n) (depends on key token length)
@@ -1002,6 +1075,25 @@ j.merge(testObj1, testObj2);
 // }
 ~~~~
 
+### mergeToUnsafe
+
+- Performance: O(n) for n = key count in source object
+- Signature: `object => object => object`
+- Description: Merges properties from right object onto left, modifies original object
+
+~~~
+var myObj = {};
+
+j.mergeToUnsafe(myObj)({foo: 'bar'}); // {foo: 'bar'};
+console.log(myObj); // {foo: 'bar'}
+~~~
+
+### shallowClone
+
+- Performance: O(n) for n = key count in source object
+- Signature: `object => object`
+- Description: Creates a shallow clone of original object, deep pointers are preserved
+
 ### toArray
 
 - Performance: O(n) (for n = number of keys)
@@ -1026,3 +1118,19 @@ var testArray = [['foo', 'bar'], ['baz', 'quux']];
 
 j.toObject(testArray); // { foo: 'bar', baz: 'quux' }
 ~~~~
+
+### toValues
+
+- Performance: O(n) (for n = number of keys)
+- Signature: `object => array`
+- Description: Returns top-level values in object as array
+
+~~~~
+var testObj = {
+foo: 'bar',
+baz: 'quux'
+};
+
+j.toValues(testObj); // ['bar', 'quux']
+~~~~
+
