@@ -1,10 +1,62 @@
 <h3>Types</h3>
 
 <ul>
+    <li><a href="{{ "/api/#either" | prepend: site.baseurl }}">either</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherArray</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherBoolean</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherFunction</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherInt</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherNatural</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherNumber</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherObject</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherString</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherConcatable</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherObjectInstance</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherReferencible</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherDefined</a></li>
+    <li><a href="{{ "/api/#either-built-ins" | prepend: site.baseurl }}">eitherNotNull</a></li>
     <li><a href="{{ "/api/#enforce" | prepend: site.baseurl }}">enforce</a></li>
     <li><a href="{{ "/api/#istypeof" | prepend: site.baseurl }}">isTypeOf</a></li>
+    <li><a href="{{ "/api/#maybe" | prepend: site.baseurl }}">maybe</a></li>
+    <li><a href="{{ "/api/#maybeDefined" | prepend: site.baseurl }}">maybeDefined</a></li>
     <li><a href="{{ "/api/#setjfptypes" | prepend: site.baseurl }}">setJfpTypes</a></li>
+    <li><a href="{{ "/api/#sign" | prepend: site.baseurl }}">sign</a></li>
+    <li><a href="{{ "/api/#typeChain" | prepend: site.baseurl }}">typeChain</a></li>
     <li><a href="{{ "/api/#type-list" | prepend: site.baseurl }}">type list</a></li>
+</ul>
+
+<h3>Predicates</h3>
+
+<ul>
+    <li><a href="{{ "/api/#and" | prepend: site.baseurl }}">and</a></li>
+    <li><a href="{{ "/api/#equal" | prepend: site.baseurl }}">equal</a></li>
+    <li><a href="{{ "/api/#exists" | prepend: site.baseurl }}">exists</a></li>
+    <li><a href="{{ "/api/#invert" | prepend: site.baseurl }}">invert</a></li>
+    <li><a href="{{ "/api/#isArray" | prepend: site.baseurl }}">isArray</a></li>
+    <li><a href="{{ "/api/#isBoolean" | prepend: site.baseurl }}">isBoolean</a></li>
+    <li><a href="{{ "/api/#isFunction" | prepend: site.baseurl }}">isFunction</a></li>
+    <li><a href="{{ "/api/#isNull" | prepend: site.baseurl }}">isNull</a></li>
+    <li><a href="{{ "/api/#isNumber" | prepend: site.baseurl }}">isNumber</a></li>
+    <li><a href="{{ "/api/#isObject" | prepend: site.baseurl }}">isObject</a></li>
+    <li><a href="{{ "/api/#isObjectInstance" | prepend: site.baseurl }}">isObjectInstance</a></li>
+    <li><a href="{{ "/api/#isString" | prepend: site.baseurl }}">isString</a></li>
+    <li><a href="{{ "/api/#isUndefined" | prepend: site.baseurl }}">isUndefined</a></li>
+    <li><a href="{{ "/api/#isNil" | prepend: site.baseurl }}">isNil</a></li>
+    <li><a href="{{ "/api/#isPair" | prepend: site.baseurl }}">isPair</a></li>
+    <li><a href="{{ "/api/#isPredicate" | prepend: site.baseurl }}">isPredicate</a></li>
+    <li><a href="{{ "/api/#isInt" | prepend: site.baseurl }}">isInt</a></li>
+    <li><a href="{{ "/api/#isNatural" | prepend: site.baseurl }}">isNatural</a></li>
+    <li><a href="{{ "/api/#isObjectInstance" | prepend: site.baseurl }}">isObjectInstance</a></li>
+    <li><a href="{{ "/api/#isNotNull" | prepend: site.baseurl }}">isNotNull</a></li>
+    <li><a href="{{ "/api/#isNotNil" | prepend: site.baseurl }}">isNotNil</a></li>
+    <li><a href="{{ "/api/#isConcatable" | prepend: site.baseurl }}">isConcatable</a></li>
+    <li><a href="{{ "/api/#isDefined" | prepend: site.baseurl }}">isDefined</a></li>
+    <li><a href="{{ "/api/#isComparable" | prepend: site.baseurl }}">isComparable</a></li>
+    <li><a href="{{ "/api/#isNumeric" | prepend: site.baseurl }}">isNumeric</a></li>
+    <li><a href="{{ "/api/#isReferencible" | prepend: site.baseurl }}">isReferencible</a></li>
+    <li><a href="{{ "/api/#not" | prepend: site.baseurl }}">not</a></li>
+    <li><a href="{{ "/api/#or" | prepend: site.baseurl }}">or</a></li>
+    <li><a href="{{ "/api/#xor" | prepend: site.baseurl }}">xor</a></li>
 </ul>
 
 <h3>Core</h3>
@@ -12,22 +64,50 @@
 <ul>
     <li><a href="{{ "/api/#always" | prepend: site.baseurl }}">always</a></li>
     <li><a href="{{ "/api/#apply" | prepend: site.baseurl }}">apply</a></li>
+    <li><a href="{{ "/api/#argumentsToArray" | prepend: site.baseurl }}">argumentsToArray</a></li>
     <li><a href="{{ "/api/#compose" | prepend: site.baseurl }}">compose</a></li>
     <li><a href="{{ "/api/#concat" | prepend: site.baseurl }}">concat</a></li>
+    <li><a href="{{ "/api/#cond" | prepend: site.baseurl }}">cond</a></li>
     <li><a href="{{ "/api/#conj" | prepend: site.baseurl }}">conj</a></li>
     <li><a href="{{ "/api/#cons" | prepend: site.baseurl }}">cons</a></li>
     <li><a href="{{ "/api/#curry" | prepend: site.baseurl }}">curry</a></li>
-    <li><a href="{{ "/api/#rcurry" | prepend: site.baseurl }}">rcurry</a></li>
-    <li><a href="{{ "/api/#either" | prepend: site.baseurl }}">either</a></li>
+    <li><a href="{{ "/api/#foldlCompose" | prepend: site.baseurl }}">foldlCompose</a></li>
+    <li><a href="{{ "/api/#foldrCompose" | prepend: site.baseurl }}">foldrCompose</a></li>
     <li><a href="{{ "/api/#identity" | prepend: site.baseurl }}">identity</a></li>
-    <li><a href="{{ "/api/#maybe" | prepend: site.baseurl }}">maybe</a></li>
     <li><a href="{{ "/api/#partial" | prepend: site.baseurl }}">partial</a></li>
+    <li><a href="{{ "/api/#pick" | prepend: site.baseurl }}">pick</a></li>
+    <li><a href="{{ "/api/#rcompose" | prepend: site.baseurl }}">rcompose</a></li>
     <li><a href="{{ "/api/#recur" | prepend: site.baseurl }}">recur</a></li>
     <li><a href="{{ "/api/#repeat" | prepend: site.baseurl }}">repeat</a></li>
-    <li><a href="{{ "/api/#reverseargs" | prepend: site.baseurl }}">reverseArgs</a></li>
+    <li><a href="{{ "/api/#reverseArgs" | prepend: site.baseurl }}">reverseArgs</a></li>
     <li><a href="{{ "/api/#rpartial" | prepend: site.baseurl }}">rpartial</a></li>
     <li><a href="{{ "/api/#slice" | prepend: site.baseurl }}">slice</a></li>
-    <li><a href="{{ "/api/#cond" | prepend: site.baseurl }}">cond</a></li>
+    <li><a href="{{ "/api/#splice" | prepend: site.baseurl }}">splice</a></li>
+</ul>
+
+<h3>Math</h3>
+
+<ul>
+    <li><a href="{{ "/api/#add" | prepend: site.baseurl }}">add</a></li>
+    <li><a href="{{ "/api/#addBy" | prepend: site.baseurl }}">addBy</a></li>
+    <li><a href="{{ "/api/#between" | prepend: site.baseurl }}">between</a></li>
+    <li><a href="{{ "/api/#divide" | prepend: site.baseurl }}">divide</a></li>
+    <li><a href="{{ "/api/#divideBy" | prepend: site.baseurl }}">divideBy</a></li>
+    <li><a href="{{ "/api/#dec" | prepend: site.baseurl }}">dec</a></li>
+    <li><a href="{{ "/api/#geq" | prepend: site.baseurl }}">geq</a></li>
+    <li><a href="{{ "/api/#gt" | prepend: site.baseurl }}">gt</a></li>
+    <li><a href="{{ "/api/#inc" | prepend: site.baseurl }}">inc</a></li>
+    <li><a href="{{ "/api/#leq" | prepend: site.baseurl }}">leq</a></li>
+    <li><a href="{{ "/api/#lt" | prepend: site.baseurl }}">lt</a></li>
+    <li><a href="{{ "/api/#max" | prepend: site.baseurl }}">max</a></li>
+    <li><a href="{{ "/api/#min" | prepend: site.baseurl }}">min</a></li>
+    <li><a href="{{ "/api/#mod" | prepend: site.baseurl }}">mod</a></li>
+    <li><a href="{{ "/api/#modBy" | prepend: site.baseurl }}">modBy</a></li>
+    <li><a href="{{ "/api/#multiply" | prepend: site.baseurl }}">multiply</a></li>
+    <li><a href="{{ "/api/#multiplyBy" | prepend: site.baseurl }}">multiplyBy</a></li>
+    <li><a href="{{ "/api/#range" | prepend: site.baseurl }}">range</a></li>
+    <li><a href="{{ "/api/#subtract" | prepend: site.baseurl }}">subtract</a></li>
+    <li><a href="{{ "/api/#subtractBy" | prepend: site.baseurl }}">subtractBy</a></li>
 </ul>
 
 <h3>Array</h3>
@@ -35,67 +115,42 @@
 <ul>
     <li><a href="{{ "/api/#all" | prepend: site.baseurl }}">all</a></li>
     <li><a href="{{ "/api/#compact" | prepend: site.baseurl }}">compact</a></li>
-    <li><a href="{{ "/api/#dropnth" | prepend: site.baseurl }}">dropNth</a></li>
+    <li><a href="{{ "/api/#dropLast" | prepend: site.baseurl }}">dropLast</a></li>
+    <li><a href="{{ "/api/#dropNth" | prepend: site.baseurl }}">dropNth</a></li>
     <li><a href="{{ "/api/#filter" | prepend: site.baseurl }}">filter</a></li>
     <li><a href="{{ "/api/#first" | prepend: site.baseurl }}">first</a></li>
     <li><a href="{{ "/api/#find" | prepend: site.baseurl }}">find</a></li>
     <li><a href="{{ "/api/#foldl" | prepend: site.baseurl }}">foldl</a></li>
     <li><a href="{{ "/api/#foldr" | prepend: site.baseurl }}">foldr</a></li>
-    <li><a href="{{ "/api/#lastindexof" | prepend: site.baseurl }}">lastIndexOf</a></li>
+    <li><a href="{{ "/api/#lastIndexOf" | prepend: site.baseurl }}">lastIndexOf</a></li>
     <li><a href="{{ "/api/#map" | prepend: site.baseurl }}">map</a></li>
     <li><a href="{{ "/api/#none" | prepend: site.baseurl }}">none</a></li>
     <li><a href="{{ "/api/#nth" | prepend: site.baseurl }}">nth</a></li>
+    <li><a href="{{ "/api/#partition" | prepend: site.baseurl }}">partition</a></li>
+    <li><a href="{{ "/api/#pushUnsafe" | prepend: site.baseurl }}">pushUnsafe</a></li>
     <li><a href="{{ "/api/#rest" | prepend: site.baseurl }}">rest</a></li>
     <li><a href="{{ "/api/#reverse" | prepend: site.baseurl }}">reverse</a></li>
+    <li><a href="{{ "/api/#rfilter" | prepend: site.baseurl }}">rfilter</a></li>
+    <li><a href="{{ "/api/#rmap" | prepend: site.baseurl }}">rmap</a></li>
+    <li><a href="{{ "/api/#rpartition" | prepend: site.baseurl }}">rpartition</a></li>
+    <li><a href="{{ "/api/#rreduce" | prepend: site.baseurl }}">rreduce</a></li>
     <li><a href="{{ "/api/#some" | prepend: site.baseurl }}">some</a></li>
     <li><a href="{{ "/api/#sort" | prepend: site.baseurl }}">sort</a></li>
     <li><a href="{{ "/api/#take" | prepend: site.baseurl }}">take</a></li>
-</ul>
+    <li><a href="{{ "/api/#takeUntil" | prepend: site.baseurl }}">takeUntil</a></li>
+    <li><a href="{{ "/api/#until" | prepend: site.baseurl }}">until</a></li>
 
-<h3>Math</h3>
-
-<ul>
-    <li><a href="{{ "/api/#add" | prepend: site.baseurl }}">add</a></li>
-    <li><a href="{{ "/api/#divide" | prepend: site.baseurl }}">divide</a></li>
-    <li><a href="{{ "/api/#mod" | prepend: site.baseurl }}">mod</a></li>
-    <li><a href="{{ "/api/#multiply" | prepend: site.baseurl }}">multiply</a></li>
-    <li><a href="{{ "/api/#subtract" | prepend: site.baseurl }}">subtract</a></li>
-    <li><a href="{{ "/api/#addby" | prepend: site.baseurl }}">addBy</a></li>
-    <li><a href="{{ "/api/#divideby" | prepend: site.baseurl }}">divideBy</a></li>
-    <li><a href="{{ "/api/#modby" | prepend: site.baseurl }}">modBy</a></li>
-    <li><a href="{{ "/api/#multiplyby" | prepend: site.baseurl }}">multiplyBy</a></li>
-    <li><a href="{{ "/api/#subtractby" | prepend: site.baseurl }}">subtractBy</a></li>
-    <li><a href="{{ "/api/#min" | prepend: site.baseurl }}">min</a></li>
-    <li><a href="{{ "/api/#max" | prepend: site.baseurl }}">max</a></li>
-    <li><a href="{{ "/api/#inc" | prepend: site.baseurl }}">inc</a></li>
-    <li><a href="{{ "/api/#dec" | prepend: site.baseurl }}">dec</a></li>
-    <li><a href="{{ "/api/#range" | prepend: site.baseurl }}">range</a></li>
-    <li><a href="{{ "/api/#gt" | prepend: site.baseurl }}">gt</a></li>
-    <li><a href="{{ "/api/#geq" | prepend: site.baseurl }}">geq</a></li>
-    <li><a href="{{ "/api/#lt" | prepend: site.baseurl }}">lt</a></li>
-    <li><a href="{{ "/api/#leq" | prepend: site.baseurl }}">leq</a></li>
-    <li><a href="{{ "/api/#between" | prepend: site.baseurl }}">between</a></li>
 </ul>
 
 <h3>Object</h3>
 
 <ul>
-    <li><a href="{{ "/api/#pick" | prepend: site.baseurl }}">pick</a></li>
+    <li><a href="{{ "/api/#clone" | prepend: site.baseurl }}">clone</a></li>
     <li><a href="{{ "/api/#deref" | prepend: site.baseurl }}">deref</a></li>
     <li><a href="{{ "/api/#merge" | prepend: site.baseurl }}">merge</a></li>
-    <li><a href="{{ "/api/#toarray" | prepend: site.baseurl }}">toArray</a></li>
-    <li><a href="{{ "/api/#toobject" | prepend: site.baseurl }}">toObject</a></li>
-</ul>
-
-<h3>Predicate</h3>
-
-<ul>
-    <li><a href="{{ "/api/#invert" | prepend: site.baseurl }}">invert</a></li>
-    <li><a href="{{ "/api/#equal" | prepend: site.baseurl }}">equal</a></li>
-    <li><a href="{{ "/api/#and" | prepend: site.baseurl }}">and</a></li>
-    <li><a href="{{ "/api/#or" | prepend: site.baseurl }}">or</a></li>
-    <li><a href="{{ "/api/#xor" | prepend: site.baseurl }}">xor</a></li>
-    <li><a href="{{ "/api/#not" | prepend: site.baseurl }}">not</a></li>
-    <li><a href="{{ "/api/#isnil" | prepend: site.baseurl }}">isNil</a></li>
-    <li><a href="{{ "/api/#isundefined" | prepend: site.baseurl }}">isUndefined</a></li>
+    <li><a href="{{ "/api/#mergeToUnsafe" | prepend: site.baseurl }}">mergeToUnsafe</a></li>
+    <li><a href="{{ "/api/#shallowClone" | prepend: site.baseurl }}">shallowClone</a></li>
+    <li><a href="{{ "/api/#toArray" | prepend: site.baseurl }}">toArray</a></li>
+    <li><a href="{{ "/api/#toObject" | prepend: site.baseurl }}">toObject</a></li>
+    <li><a href="{{ "/api/#toValues" | prepend: site.baseurl }}">toValues</a></li>
 </ul>

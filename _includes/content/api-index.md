@@ -14,18 +14,45 @@ j.slice.signature; // index => array<*> => array<*>
 
 - Performance: O(n) (for n = number of leaves in type tree)
 - Signature: `string, function => function`
-- Behavior: `contract string, function to enforce => enforced function`
 - Description: Enforces intended function contract
 
 ~~~~
 var add = j.enforce('number, number => number', function add (a, b) { return a + b; });
 ~~~~
 
+### either
+
+- Performance: O(1)
+- Signature: `taggedUnion<typeString;predicate> => * => * => *`
+- Description: Tests type of test value and returns test value if true and default value if false 
+
+~~~~
+j.either('number')(5)(0); // 0
+j.either('number')(5)('foo'); // 5
+~~~~
+
+### either built-ins
+
+JFP provides several pre-loaded either type functions both for speed and to help keep your code slim and trim
+
+- eitherArray -- `j.either('array')`
+- eitherBoolean -- `j.either('boolean')`
+- eitherFunction -- `j.either('function')`
+- eitherInt -- `j.either('int')`
+- eitherNatural -- `j.either('natural')`
+- eitherNumber -- `j.either('number')`
+- eitherObject -- `j.either('object')`
+- eitherString -- `j.either('string')`
+- eitherConcatable -- `j.either('concatable')`
+- eitherObjectInstance -- `j.either('objectInstance')`
+- eitherReferencible -- `j.either('referencible')`
+- eitherDefined -- `j.either('defined')`
+- eitherNotNull -- `j.either('notNull')`
+
 ### isTypeOf
 
 - Performance: O(1)
 - Signature: `string => * => boolean`
-- Behavior: `type string => test value => boolean`
 - Description: Checks the type of a value
 
 ~~~~
@@ -33,17 +60,62 @@ j.isTypeOf('string')(5); // false
 j.isTypeOf('nil')(j.nil); // true
 ~~~~
 
+### maybe
+
+- Performance: O(1)
+- Signature: `taggedUnion<typeString;predicate> => * => maybe<defined>`
+- Description: Tests type of test value and returns test value if true and nil if false
+
+~~~~
+j.maybe('string')('foo'); // 'foo'
+j.maybe('number')('foo'); // j.nil
+
+function isEven (x) {
+    return j.isTypeOf('number')(x) && x % 2 === 0;
+}
+
+j.maybe(isEven)(5); // nill
+j.maybe(isEven)(5); // nill
+~~~~
+
+### maybe built-ins
+
+JFP provides a pre-loaded maybe defined type function both for speed and to help keep your code slim and trim
+
+- maybeDefined -- `j.maybe('defined')`
+
 ### setJfpTypes
 
 - Performance: O(1)
 - Signature: `signet => signet`
-- Behavior: `local signet object => local signet object`
 - Description: Sets all JFP types on a local instance of signet
 
 ~~~~
 var signetFactory = require('signet');
 
 var signet = setJfpTypes(signetFactory());
+~~~~
+
+### sign
+
+- Performance: O(n) (for n = number of leaves in type tree)
+- Signature: `string, function => function`
+- Description: Signs function with contract string
+
+~~~~
+var add = j.sign('number, number => number', function add (a, b) { return a + b; });
+~~~~
+
+
+### typeChain
+
+- Performance: O(n) -- linear performance based on the depth of the type chain
+- Signature: `string => string`
+- Description: Provides an API to view the inheritance chain for a specified type
+
+~~~~
+typeChain('boundedInt'); // * -> number -> int -> boundedInt
+typeChain('array'); // * -> object -> array
 ~~~~
 
 ### Type List
@@ -81,13 +153,116 @@ var signet = setJfpTypes(signetFactory());
 - `typeString`
 - `undefined`
 
+## Predicates
+
+### and
+
+- Performance: O(1)
+- Signature: `comparable => comparable => boolean`
+
+~~~~
+j.and(true, true); // true
+j.and(true, false); // false
+~~~~
+
+### equal
+
+- Performance: O(1)
+- Signature: `comparable => comparable => boolean`
+
+~~~~
+j.equal(5, 5); // true;
+j.equal(5, 7); // false;
+j.equal(5)(7); // false;
+~~~~
+
+### exists
+
+- Performance: O(1)
+- Signature: `* => boolean`
+- Description: Returns true if value is not undefined and not null
+
+~~~~
+j.exists('a string); // true
+j.exists(0); // true
+j.exists(null); // false
+j.exists(undefined); // false
+~~~~
+
+### invert
+
+- Performance: O(1)
+- Signature: `function => function`
+
+~~~~
+j.invert(j.isTypeOf('string')('foo')); // false
+~~~~
+
+### or
+
+- Performance: O(1)
+- Signature: `comparable => comparable => boolean`
+
+~~~~
+j.or(true, true); // true
+j.or(true, false); // true
+j.or(false, false); // false
+~~~~
+
+### xor
+
+- Performance: O(1)
+- Signature: `comparable => comparable => boolean`
+
+~~~~
+j.xor(true, true); // false
+j.xor(true, false); // true
+j.xor(false, false); // false
+~~~~
+
+### not
+
+- Performance: O(1)
+- Signature: `comparable => boolean`
+
+~~~~
+j.not(true); // false
+j.not(5); // false
+~~~~
+
+### Type Predicates
+
+JFP provides several type type predicates, all of which are pre-loaded isTypeOf function returns:
+
+- isArray -- `j.isTypeOf('array')`
+- isBoolean -- `j.isTypeOf('boolean')`
+- isFunction -- `j.isTypeOf('function')`
+- isNull -- `j.isTypeOf('null')`
+- isNumber -- `j.isTypeOf('number')`
+- isObject -- `j.isTypeOf('object')`
+- isObjectInstance -- `j.isTypeOf('objectInstance')`
+- isString -- `j.isTypeOf('string')`
+- isUndefined -- `j.isTypeOf('undefined')`
+- isNil -- `j.isTypeOf('nil')`
+- isPair -- `j.isTypeOf('pair')`
+- isPredicate -- `j.isTypeOf('predicate')`
+- isInt -- `j.isTypeOf('int')`
+- isNatural -- `j.isTypeOf('natural')`
+- isNotNull -- `j.isTypeOf('notNull')`
+- isNotNil -- `j.isTypeOf('notNil')`
+- isConcatable -- `j.isTypeOf('concatable')`
+- isDefined -- `j.isTypeOf('defined')`
+- isComparable -- `j.isTypeOf('comparable')`
+- isNumeric -- `j.isTypeOf('numeric')`
+- isReferencible -- `j.isTypeOf('referencible')`
+
+
 ## Core
 
 ### always
 
 - Performance: O(1)
 - Signature: `* => [*] => *`
-- Behavior: `value a => [ignored argument, [ignored argument, ...]] => value a`
 - Description: Returns a function which always returns the originally provided value
 
 ~~~~
@@ -101,22 +276,30 @@ alwaysTrue('over 9000'); // true
 
 - Performance: O(1)
 - Signature: `function, array<*> => *`
-- Behavior: `function to apply arguments to, arguments array => result`
 - Description: Applies array of arguments to a function
 
 ~~~~
 j.apply(add, [1, 2]); // 3
 ~~~~
 
+### argumentsToArray
+
+- Performance: O(1)
+- Signature: `variant<array; arguments> => array`
+- Description: Slices arguments or array at 0
+
+~~~~
+j.argumentsToArray(arguments); // [object Array]
+~~~~
+
 ### compose
 
 - Performance: O(n) (for n = length of function list)
-- Signature: `[function] => function`
-- Behavior: `[function, [function, ...]] => composed function`
-- Description: Composes functions mathematically; i.e. compose(f, g)(x) = f(g(x))
+- Signature: `function, function => function`
+- Description: Composes two functions: compose(f, g)(x) = f(g(x))
 
 ~~~~
-var isNotNumber = j.compose(j.not, j.isTypeOf('number'));
+var isNotNumber = j.compose(j.not, j.isNumber);
 
 isNotNumber(5); // false
 isNotNumber('string'); // true
@@ -126,7 +309,6 @@ isNotNumber('string'); // true
 
 - Performance: O(n)
 - Signature: `array<*>, array<*> => array<*>`
-- Behavior: `base array, array to concat => new concatenated values array`
 - Description: Concatenates two arrays together; good for reducing over multiple arrays to concatenate them all
 
 ~~~~
@@ -142,7 +324,6 @@ arr2 === newArr; // false
 
 - Performance: O(n) (based on slice performance)
 - Signature: `*, array<*> => array<*>`
-- Behavior: `value to postpend, array to update => new extended array`
 - Description: Postpends value onto array of original values; this is a non-destructive action
 
 ~~~~
@@ -156,7 +337,6 @@ newArray === originalArray; // false
 
 - Performance: O(n) (based on slice performance)
 - Signature: `*, array<*> => array<*>`
-- Behavior: `value to prepend, array to update => new extended array`
 - Description: Prepends value onto array of original values; this is a non-destructive action
 
 ~~~~
@@ -170,7 +350,6 @@ newArray === originalArray; // false
 
 - Performance: O(1)
 - Signature: `function, [int], [array<*>] => [*] => *`
-- Description: `function to curry, [number of expected arguments], [array of initial arguments] => [argument, [argument, ...]] => result`
 - Description: Converts function into an optionally curried function
 
 ~~~~
@@ -183,11 +362,42 @@ j.curry(add)(1, 2); // 3
 j.curry(add, 3)(1)(2)(3); // 3
 ~~~~
 
+### foldlCompose
+
+- Performance: O(n)
+- Signature: `function, function, ... => function`
+- Description: Composes multiple functions together left to right: foldlCompose(f, g, h)(x) = f(g(h(x)))
+
+~~~
+var compute = j.foldlCompose(
+    j.addBy(1),
+    j.multiplyBy(3),
+    j.divideBy(2)
+);
+
+compute(12); // 19
+~~~
+
+### foldrCompose
+
+- Performance: O(n)
+- Signature: `function, function, ... => function`
+- Description: Composes multiple functions together right to left: foldrCompose(f, g, h)(x) = h(g(f(x)))
+
+~~~
+var compute = j.foldrCompose(
+    j.addBy(1),
+    j.multiplyBy(3),
+    j.divideBy(2)
+);
+
+compute(5); // 9
+~~~
+
 ### rcurry
 
 - Performance: O(1)
 - Signature: `function, [int], [array<*>] => [*] => *`
-- Behavior: `function to curry, [number of expected arguments], [array of initial arguments] => [argument, [argument, ...]] => result`
 - Description: Curries function as above, but each value in the original function is filled right to left instead of left to right; Multiple arguments are inserted in left to right order as received
 
 ~~~~
@@ -200,23 +410,11 @@ j.rcurry(divide)(1, 2); // 0.5
 j.rcurry(divide)(2)(1); // 0.5
 ~~~~
 
-### either
-
-- Performance: O(1)
-- Signature: `taggedUnion<typeString;predicate> => * => * => *`
-- Behavior: `type string or predicate function => default value => test value => test value or default value`
-- Description: Tests type of test value and returns test value if true and default value if false 
-
-~~~~
-j.either('number')(5)(0); // 0
-j.either('number')(5)('foo'); // 5
-~~~~
-
 ### identity
 
 - Performance: O(1)
 - Signature: `* => *`
-- Behavior: `value a => value a`
+
 - Description: Accepts value `a` and returns value `a`
 
 ~~~~
@@ -224,30 +422,10 @@ j.identity('foo'); // foo
 j.identity(42); // 42
 ~~~~
 
-### maybe
-
-- Performance: O(1)
-- Signature: `taggedUnion<typeString;predicate> => * => maybe<defined>`
-- Behavior: `type string or predicate function => test value => test value or nil`
-- Description: Tests type of test value and returns test value if true and nil if false
-
-~~~~
-j.maybe('string')('foo'); // 'foo'
-j.maybe('number')('foo'); // j.nil
-
-function isEven (x) {
-    return j.isTypeOf('number')(x) && x % 2 === 0;
-}
-
-j.maybe(isEven)(5); // nill
-j.maybe(isEven)(5); // nill
-~~~~
-
 ### partial
 
 - Performance: O(1)
 - Signature: `function, [*] => [*] => *`
-- Behavior: `function for application, [argument, [argument, ...]] => [argument, [argument, ...]] => result`
 - Description: Accepts a function and values to apply, returns a function which will apply remaining arguments and return a result
 
 ~~~~
@@ -263,11 +441,30 @@ inc(5); // 6
 inc(inc(inc(inc(1)))); // 4
 ~~~~
 
+### pick
+
+- Performance: O(1)
+- Signature: `string => object => maybe<defined>`
+
+~~~~
+j.pick('foo')({ foo: 'bar' }); // bar
+j.pick('foo')({ baz: 'bar' }); // j.nil
+~~~~
+
+### rcompose
+
+- Performance: O(1);
+- Signature: `function, function => function`
+- Description: Composes two functions right to left: compose(f, g)(x) = g(f(x))
+
+~~~
+j.compose(j.addBy(1), j.divideBy(3))(8); // 3
+~~~
+
 ### recur
 
 - Performance: O(1)
 - Signature: `function => function`
-- Behavior: `recursive function => executable function`
 - Description: Tail-optimized recursion function which allows for the writing of recursive, over looping, algorithms
 
 ~~~~
@@ -284,7 +481,6 @@ return isNil(values) ? total : recur(j.rest(values), total + j.first(values));
 
 - Performance: O(n)
 - Signature: `function => number => * => *`
-- Behavior: `function to repeat => times to repeat => initial value => result`
 - Description: Repeats provided function n times applying the result from the previous operation
 
 ~~~~
@@ -304,7 +500,6 @@ j.repeat(j.concat('foo'))(3)(''); // "foofoofoo"
 
 - Performance: O(n)
 - Signature: `function => [*] => *`
-- Behavior: `function (takes arguments a, b) => function (takes args b, a) => result`
 - Description: Accepts a function and returns a function which takes arguments in reverse order
 
 ~~~~
@@ -319,7 +514,6 @@ j.reverseArgs(divide)(2, 12); // 6
 
 - Performance: O(1)
 - Signature: `function, [*] => [*] => *`
-- Behavior: `function for application, [argument, [argument, ...]] => [argument, [argument, ...]] => result`
 - Description: Similar to partial, but applies arguments in groups from right to left
 
 ~~~~
@@ -339,7 +533,6 @@ divBy2(divBy2(divBy2(divBy2(12)))); // 0.75
 
 - Performance: O(n) (estimated JS performance characteristic)
 - Signature: `int, [int] => taggedUnion<array<*>;arguments> => array<*>`
-- Behavior: `start, end (optional) => array or arguments => array`
 - Description: Partial application implementation of slice with optional start and end values applied at beginning of function call
 
 ~~~~
@@ -355,13 +548,12 @@ var args = j.slice(0)(arguments);
 
 - Performance: O(n) (for n = number of conditions)
 - Signature: `function<function;function;boolean> => *`
-- Behavior: `cond expression function (taking condition function, action function, default boolean) => result`
 - Description: Conditional expression which uses where, then and default to express conditional behaviors
 
 ~~~~
 j.cond(function(where, then, _default){
-when(j.isTypeOf(number)(a), then(j.multiplyBy(3), a));
-when(_default, then(j.always(a)));
+    when(j.isTypeOf(number)(a), then(j.multiplyBy(3), a));
+    when(_default, then(j.always(a)));
 });
 ~~~~
 
@@ -371,7 +563,6 @@ when(_default, then(j.always(a)));
 
 - Performance: O(n)
 - Signature: `function => array<*> => boolean`
-- Behavior: `predicate function => value array for check => boolean output`
 - Description: Verify all values in array satisfy predicate
 
 ~~~~
@@ -383,7 +574,6 @@ j.all(j.isTypeOf('string'), ['foo', 'bar', 42]); // false
 
 - Performance: O(n)
 - Signature: `[array] => array<*>`
-- Behavior: `array of values => array with falsey values removed`
 - Description: Removes falsey values from array
 
 ~~~~
@@ -394,7 +584,6 @@ j.compact([1, 2, 0, '', false, null, 3]); // [1, 2, 3]
 
 - Performance: O(n) (based on the performance of splice)
 - Signature: `index => array<*> => array<*>`
-- Behavior: `index to drop value at => array to remove value from => resulting array`
 - Description: Drops value at nth index from array
 
 ~~~~
@@ -406,7 +595,6 @@ j.dropNth(2)([1, 2, 3, 4]); // [1, 2, 4];
 
 - Performance: O(n)
 - Signature: `function => array<*> => array<*>`
-- Behavior: `filtering predicate => array to filter => filtered array`
 - Description: Filters values from array which fail to pass predicate check
 
 ~~~~
@@ -418,7 +606,6 @@ j.filter(isEven)([1, 2, 3, 4]); // [2, 4]
 
 - Performance: O(1)
 - Signature: `array<*> => maybe<defined>`
-- Behavior: `array of values => first value from array or nil`
 - Description: Returns first value of an array if it exists, otherwise returns nil
 
 ~~~~
@@ -429,7 +616,6 @@ j.first([1, 2, 3, 4]); // 1
 
 - Performance: O(n)
 - Signature: `function<*> => array<*> => maybe<defined>`
-- Behavior: `find predicate => array of values => found value or nil`
 - Description: finds first value satisfying predicate or 
 
 ~~~~
@@ -517,7 +703,6 @@ j.reverse([1, 2, 3, 4]); // [4, 3, 2, 1]
 
 - Performance: O(n)
 - Signature: `function => array<*> => array<*>`
-- Behavior: `filtering predicate => array to filter => filtered array`
 - Description: Filters values from multi-dimensional array which fail to pass predicate check
 
 ~~~~
@@ -773,16 +958,6 @@ j.between(1, 5)(10); // false
 
 ## Object
 
-### pick
-
-- Performance: O(1)
-- Signature: `string => object => maybe<defined>`
-
-~~~~
-j.pick('foo')({ foo: 'bar' }); // bar
-j.pick('foo')({ baz: 'bar' }); // j.nil
-~~~~
-
 ### deref
 
 - Performance: O(n) (depends on key token length)
@@ -850,89 +1025,4 @@ j.toArray(testObj); // [['foo', 'bar'], ['baz', 'quux']]
 var testArray = [['foo', 'bar'], ['baz', 'quux']];
 
 j.toObject(testArray); // { foo: 'bar', baz: 'quux' }
-~~~~
-
-## Predicates
-
-### invert
-
-- Performance: O(1)
-- Signature: `function => function`
-
-~~~~
-j.invert(j.isTypeOf('string')('foo')); // false
-~~~~
-
-### equal
-
-- Performance: O(1)
-- Signature: `comparable => comparable => boolean`
-
-~~~~
-j.equal(5, 5); // true;
-j.equal(5, 7); // false;
-j.equal(5)(7); // false;
-~~~~
-
-### and
-
-- Performance: O(1)
-- Signature: `comparable => comparable => boolean`
-
-~~~~
-j.and(true, true); // true
-j.and(true, false); // false
-~~~~
-
-### or
-
-- Performance: O(1)
-- Signature: `comparable => comparable => boolean`
-
-~~~~
-j.or(true, true); // true
-j.or(true, false); // true
-j.or(false, false); // false
-~~~~
-
-### xor
-
-- Performance: O(1)
-- Signature: `comparable => comparable => boolean`
-
-~~~~
-j.xor(true, true); // false
-j.xor(true, false); // true
-j.xor(false, false); // false
-~~~~
-
-### not
-
-- Performance: O(1)
-- Signature: `comparable => boolean`
-
-~~~~
-j.not(true); // false
-j.not(5); // false
-~~~~
-
-### isNil
-
-- Performance: O(1)
-- Signature: `* => boolean`
-
-~~~~
-j.isNil(j.nil); // true
-j.isNil([]); // true
-j.isNil({}); // false
-~~~~
-
-### isUndefined
-
-- Performance: O(1)
-- Signature: `* => boolean`
-
-~~~~
-j.isUndefined(undefined); // true
-j.isUndefined(null); // false
 ~~~~
