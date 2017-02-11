@@ -17,7 +17,13 @@
     }
 
     function dropNth(index) {
-        return j.splice(index, 1);
+        return function (values) {
+            var result = j.argumentsToArray(values);
+
+            result.splice(index, 1);
+
+            return result;
+        };
     }
 
     var first = nth(0);

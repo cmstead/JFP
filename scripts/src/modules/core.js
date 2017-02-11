@@ -35,17 +35,6 @@
 
     var argumentsToArray = slice(0);
 
-    function splice(index, length) {
-        return function (values) {
-            var result = argumentsToArray(values);
-            var count = j.eitherNatural(values.length - index)(length);
-
-            result.splice(index, count);
-
-            return result;
-        }
-    }
-
     var sliceFrom0 = slice(0);
 
     function apply(fn, args) {
@@ -185,6 +174,5 @@
     j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);
     j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
     j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
-    j.splice = j.enforce('int, [int] => variant<array;arguments> => array', splice);
 
 })(jfp);
