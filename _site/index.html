@@ -16,8 +16,8 @@
 
   <link rel="stylesheet" href="/JFP/page-includes/prism.css">
 
-  <link rel="canonical" href="http://cmstead.github.io/JFP/">
-  <link rel="alternate" type="application/rss+xml" title="JFP - Javascript Function Processor" href="http://cmstead.github.io/JFP/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/JFP/">
+  <link rel="alternate" type="application/rss+xml" title="JFP - Javascript Function Processor" href="http://localhost:4000/JFP/feed.xml" />
 </head>
 
 
@@ -45,10 +45,62 @@
     <h3>Types</h3>
 
 <ul>
+    <li><a href="/JFP/api/#either">either</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherArray</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherBoolean</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherFunction</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherInt</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherNatural</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherNumber</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherObject</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherString</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherConcatable</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherObjectInstance</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherReferencible</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherDefined</a></li>
+    <li><a href="/JFP/api/#either-built-ins">eitherNotNull</a></li>
     <li><a href="/JFP/api/#enforce">enforce</a></li>
     <li><a href="/JFP/api/#istypeof">isTypeOf</a></li>
+    <li><a href="/JFP/api/#maybe">maybe</a></li>
+    <li><a href="/JFP/api/#maybeDefined">maybeDefined</a></li>
     <li><a href="/JFP/api/#setjfptypes">setJfpTypes</a></li>
+    <li><a href="/JFP/api/#sign">sign</a></li>
+    <li><a href="/JFP/api/#typeChain">typeChain</a></li>
     <li><a href="/JFP/api/#type-list">type list</a></li>
+</ul>
+
+<h3>Predicates</h3>
+
+<ul>
+    <li><a href="/JFP/api/#and">and</a></li>
+    <li><a href="/JFP/api/#equal">equal</a></li>
+    <li><a href="/JFP/api/#exists">exists</a></li>
+    <li><a href="/JFP/api/#invert">invert</a></li>
+    <li><a href="/JFP/api/#type-predicates">isArray</a></li>
+    <li><a href="/JFP/api/#type-predicates">isBoolean</a></li>
+    <li><a href="/JFP/api/#type-predicates">isFunction</a></li>
+    <li><a href="/JFP/api/#type-predicates">isNull</a></li>
+    <li><a href="/JFP/api/#type-predicates">isNumber</a></li>
+    <li><a href="/JFP/api/#type-predicates">isObject</a></li>
+    <li><a href="/JFP/api/#type-predicates">isObjectInstance</a></li>
+    <li><a href="/JFP/api/#type-predicates">isString</a></li>
+    <li><a href="/JFP/api/#type-predicates">isUndefined</a></li>
+    <li><a href="/JFP/api/#type-predicates">isNil</a></li>
+    <li><a href="/JFP/api/#type-predicates">isPair</a></li>
+    <li><a href="/JFP/api/#type-predicates">isPredicate</a></li>
+    <li><a href="/JFP/api/#type-predicates">isInt</a></li>
+    <li><a href="/JFP/api/#type-predicates">isNatural</a></li>
+    <li><a href="/JFP/api/#type-predicates">isObjectInstance</a></li>
+    <li><a href="/JFP/api/#type-predicates">isNotNull</a></li>
+    <li><a href="/JFP/api/#type-predicates">isNotNil</a></li>
+    <li><a href="/JFP/api/#type-predicates">isConcatable</a></li>
+    <li><a href="/JFP/api/#type-predicates">isDefined</a></li>
+    <li><a href="/JFP/api/#type-predicates">isComparable</a></li>
+    <li><a href="/JFP/api/#type-predicates">isNumeric</a></li>
+    <li><a href="/JFP/api/#type-predicates">isReferencible</a></li>
+    <li><a href="/JFP/api/#not">not</a></li>
+    <li><a href="/JFP/api/#or">or</a></li>
+    <li><a href="/JFP/api/#xor">xor</a></li>
 </ul>
 
 <h3>Core</h3>
@@ -56,21 +108,49 @@
 <ul>
     <li><a href="/JFP/api/#always">always</a></li>
     <li><a href="/JFP/api/#apply">apply</a></li>
+    <li><a href="/JFP/api/#argumentsToArray">argumentsToArray</a></li>
     <li><a href="/JFP/api/#compose">compose</a></li>
     <li><a href="/JFP/api/#concat">concat</a></li>
+    <li><a href="/JFP/api/#cond">cond</a></li>
     <li><a href="/JFP/api/#conj">conj</a></li>
     <li><a href="/JFP/api/#cons">cons</a></li>
     <li><a href="/JFP/api/#curry">curry</a></li>
-    <li><a href="/JFP/api/#rcurry">rcurry</a></li>
-    <li><a href="/JFP/api/#either">either</a></li>
+    <li><a href="/JFP/api/#foldlCompose">foldlCompose</a></li>
+    <li><a href="/JFP/api/#foldrCompose">foldrCompose</a></li>
     <li><a href="/JFP/api/#identity">identity</a></li>
-    <li><a href="/JFP/api/#maybe">maybe</a></li>
     <li><a href="/JFP/api/#partial">partial</a></li>
+    <li><a href="/JFP/api/#pick">pick</a></li>
+    <li><a href="/JFP/api/#rcompose">rcompose</a></li>
     <li><a href="/JFP/api/#recur">recur</a></li>
-    <li><a href="/JFP/api/#reverseargs">reverseArgs</a></li>
+    <li><a href="/JFP/api/#repeat">repeat</a></li>
+    <li><a href="/JFP/api/#reverseArgs">reverseArgs</a></li>
     <li><a href="/JFP/api/#rpartial">rpartial</a></li>
     <li><a href="/JFP/api/#slice">slice</a></li>
-    <li><a href="/JFP/api/#cond">cond</a></li>
+</ul>
+
+<h3>Math</h3>
+
+<ul>
+    <li><a href="/JFP/api/#add">add</a></li>
+    <li><a href="/JFP/api/#addBy">addBy</a></li>
+    <li><a href="/JFP/api/#between">between</a></li>
+    <li><a href="/JFP/api/#divide">divide</a></li>
+    <li><a href="/JFP/api/#divideBy">divideBy</a></li>
+    <li><a href="/JFP/api/#dec">dec</a></li>
+    <li><a href="/JFP/api/#geq">geq</a></li>
+    <li><a href="/JFP/api/#gt">gt</a></li>
+    <li><a href="/JFP/api/#inc">inc</a></li>
+    <li><a href="/JFP/api/#leq">leq</a></li>
+    <li><a href="/JFP/api/#lt">lt</a></li>
+    <li><a href="/JFP/api/#max">max</a></li>
+    <li><a href="/JFP/api/#min">min</a></li>
+    <li><a href="/JFP/api/#mod">mod</a></li>
+    <li><a href="/JFP/api/#modBy">modBy</a></li>
+    <li><a href="/JFP/api/#multiply">multiply</a></li>
+    <li><a href="/JFP/api/#multiplyBy">multiplyBy</a></li>
+    <li><a href="/JFP/api/#range">range</a></li>
+    <li><a href="/JFP/api/#subtract">subtract</a></li>
+    <li><a href="/JFP/api/#subtractBy">subtractBy</a></li>
 </ul>
 
 <h3>Array</h3>
@@ -78,73 +158,50 @@
 <ul>
     <li><a href="/JFP/api/#all">all</a></li>
     <li><a href="/JFP/api/#compact">compact</a></li>
-    <li><a href="/JFP/api/#dropnth">dropNth</a></li>
+    <li><a href="/JFP/api/#dropLast">dropLast</a></li>
+    <li><a href="/JFP/api/#dropNth">dropNth</a></li>
     <li><a href="/JFP/api/#filter">filter</a></li>
     <li><a href="/JFP/api/#first">first</a></li>
     <li><a href="/JFP/api/#find">find</a></li>
     <li><a href="/JFP/api/#foldl">foldl</a></li>
     <li><a href="/JFP/api/#foldr">foldr</a></li>
-    <li><a href="/JFP/api/#lastindexof">lastIndexOf</a></li>
+    <li><a href="/JFP/api/#lastIndexOf">lastIndexOf</a></li>
     <li><a href="/JFP/api/#map">map</a></li>
     <li><a href="/JFP/api/#none">none</a></li>
     <li><a href="/JFP/api/#nth">nth</a></li>
+    <li><a href="/JFP/api/#partition">partition</a></li>
+    <li><a href="/JFP/api/#pushUnsafe">pushUnsafe</a></li>
     <li><a href="/JFP/api/#rest">rest</a></li>
     <li><a href="/JFP/api/#reverse">reverse</a></li>
+    <li><a href="/JFP/api/#rfilter">rfilter</a></li>
+    <li><a href="/JFP/api/#rmap">rmap</a></li>
+    <li><a href="/JFP/api/#rpartition">rpartition</a></li>
+    <li><a href="/JFP/api/#rreduce">rreduce</a></li>
     <li><a href="/JFP/api/#some">some</a></li>
     <li><a href="/JFP/api/#sort">sort</a></li>
     <li><a href="/JFP/api/#take">take</a></li>
-</ul>
+    <li><a href="/JFP/api/#takeUntil">takeUntil</a></li>
+    <li><a href="/JFP/api/#until">until</a></li>
 
-<h3>Math</h3>
-
-<ul>
-    <li><a href="/JFP/api/#add">add</a></li>
-    <li><a href="/JFP/api/#divide">divide</a></li>
-    <li><a href="/JFP/api/#mod">mod</a></li>
-    <li><a href="/JFP/api/#multiply">multiply</a></li>
-    <li><a href="/JFP/api/#subtract">subtract</a></li>
-    <li><a href="/JFP/api/#addby">addBy</a></li>
-    <li><a href="/JFP/api/#divideby">divideBy</a></li>
-    <li><a href="/JFP/api/#modby">modBy</a></li>
-    <li><a href="/JFP/api/#multiplyby">multiplyBy</a></li>
-    <li><a href="/JFP/api/#subtractby">subtractBy</a></li>
-    <li><a href="/JFP/api/#min">min</a></li>
-    <li><a href="/JFP/api/#max">max</a></li>
-    <li><a href="/JFP/api/#inc">inc</a></li>
-    <li><a href="/JFP/api/#dec">dec</a></li>
-    <li><a href="/JFP/api/#range">range</a></li>
-    <li><a href="/JFP/api/#gt">gt</a></li>
-    <li><a href="/JFP/api/#geq">geq</a></li>
-    <li><a href="/JFP/api/#lt">lt</a></li>
-    <li><a href="/JFP/api/#leq">leq</a></li>
-    <li><a href="/JFP/api/#between">between</a></li>
 </ul>
 
 <h3>Object</h3>
 
 <ul>
-    <li><a href="/JFP/api/#pick">pick</a></li>
+    <li><a href="/JFP/api/#clone">clone</a></li>
     <li><a href="/JFP/api/#deref">deref</a></li>
     <li><a href="/JFP/api/#merge">merge</a></li>
-    <li><a href="/JFP/api/#toarray">toArray</a></li>
-    <li><a href="/JFP/api/#toobject">toObject</a></li>
+    <li><a href="/JFP/api/#mergeToUnsafe">mergeToUnsafe</a></li>
+    <li><a href="/JFP/api/#shallowClone">shallowClone</a></li>
+    <li><a href="/JFP/api/#toArray">toArray</a></li>
+    <li><a href="/JFP/api/#toObject">toObject</a></li>
+    <li><a href="/JFP/api/#toValues">toValues</a></li>
 </ul>
 
-<h3>Predicate</h3>
-
-<ul>
-    <li><a href="/JFP/api/#invert">invert</a></li>
-    <li><a href="/JFP/api/#equal">equal</a></li>
-    <li><a href="/JFP/api/#and">and</a></li>
-    <li><a href="/JFP/api/#or">or</a></li>
-    <li><a href="/JFP/api/#xor">xor</a></li>
-    <li><a href="/JFP/api/#not">not</a></li>
-    <li><a href="/JFP/api/#isnil">isNil</a></li>
-    <li><a href="/JFP/api/#isundefined">isUndefined</a></li>
-</ul>
 </div>
 
 <div id="function-info">
+    
     <p>JFP is an opinionated functional programming library written for Javascript. The core of JFP is 
 built to honor the Scheme heritage Javascript carries with it, while drawing programming practices
 from other functional languages like Scala for API definition and Clojure for things like
@@ -167,6 +224,7 @@ act as a cohesive, well-defined whole.</p>
 
 <p>In the end, JFP is a functional programming system which is built around solving problems and chooses
 clarity through clear definitions over optional behaviors and confusing APIs.</p>
+
 
 </div>
 
