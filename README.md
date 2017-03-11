@@ -37,6 +37,14 @@ If the text file has been removed, please visit:
 
 https://www.mozilla.org/MPL/
 
+### v4.0.0
+
+Important breaking changes:
+
+- Compose now only composes two functions
+- Large number of predicates added
+- Removed all nil returns on non-array functions
+
 ### v3.5.0
 
 Added notNil and exists types

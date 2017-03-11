@@ -786,7 +786,7 @@ var jfp = (function(){
     j.sort = j.enforce('[*] => array => array', sort);
     j.take = j.enforce('[index] => function<array>', take);
     j.takeUntil = j.enforce('predicate => array => array', takeUntil);
-    j.until = j.enforce('predicate => function, * => *', until);
+    j.until = j.enforce('predicate => function, * => array => *', until);
 
 })(jfp);
 
