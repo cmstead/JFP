@@ -88,6 +88,8 @@
         __signet.alias('objectKey', 'variant<string;symbol>');
         __signet.alias('referencible', 'variant<objectInstance;string;function>');
 
+        __signet.defineDependentOperatorOn('concatable')('isTypeOf', function (a, b){ return typeof a === typeof b; });
+
         return __signet;
     }
 

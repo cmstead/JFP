@@ -37,6 +37,12 @@ If the text file has been removed, please visit:
 
 https://www.mozilla.org/MPL/
 
+### v4.1.0
+
+- Added dependent type definitions to concat and between
+- Added isTypeOf operator to concatable type definition
+- Added notBetween function
+
 ### v4.0.0
 
 Important breaking changes:

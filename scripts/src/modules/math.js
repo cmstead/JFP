@@ -59,12 +59,16 @@
     function max (a, b) { return greater(a, b) ? a : b; }
 
     function between(min, max) {
-        if (min >= max) {
-            throw new Error('Invalid range, ' + min + ' is not less than ' + max);
-        }
-
         return function (value) {
             return !(min > value || value > max);
+        };
+    }
+
+    function notBetween(min, max) {
+        var betweenVals = between(min, max);
+
+        return function (value) {
+            return !betweenVals(value);
         };
     }
 
@@ -93,6 +97,8 @@
     j.geq = j.enforce('number => number => boolean', curryOperation(greaterOrEqual));
     j.lt = j.enforce('number => number => boolean', curryOperation(less));
     j.leq = j.enforce('number => number => boolean', curryOperation(lessOrEqual));
-    j.between = j.enforce('number, number => number => boolean', between);
+
+    j.between = j.enforce('A < B :: A:number, B:number => number => boolean', between);
+    j.notBetween = j.enforce('A < B :: A:number, B:number => number => boolean', notBetween);
 
 })(jfp);

@@ -159,7 +159,7 @@
     j.apply = j.enforce('function, array<*> => *', apply);
     j.argumentsToArray = j.enforce('arguments => array', sliceFrom0);
     j.compose = j.enforce('function, function => function', compose);
-    j.concat = curry(j.enforce('concatable, concatable => concatable', concat), 2);
+    j.concat = curry(j.enforce('A isTypeOf B :: A:concatable, B:concatable => concatable', concat), 2);
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);

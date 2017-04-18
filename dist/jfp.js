@@ -95,6 +95,8 @@ var jfp = (function(){
         __signet.alias('objectKey', 'variant<string;symbol>');
         __signet.alias('referencible', 'variant<objectInstance;string;function>');
 
+        __signet.defineDependentOperatorOn('concatable')('isTypeOf', function (a, b){ return typeof a === typeof b; });
+
         return __signet;
     }
 
@@ -380,7 +382,7 @@ var jfp = (function(){
     j.apply = j.enforce('function, array<*> => *', apply);
     j.argumentsToArray = j.enforce('arguments => array', sliceFrom0);
     j.compose = j.enforce('function, function => function', compose);
-    j.concat = curry(j.enforce('concatable, concatable => concatable', concat), 2);
+    j.concat = curry(j.enforce('A isTypeOf B :: A:concatable, B:concatable => concatable', concat), 2);
     j.conj = j.enforce('*, array<*> => array<*>', conj);
     j.cons = j.enforce('*, array<*> => array<*>', cons);
     j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
@@ -460,12 +462,16 @@ var jfp = (function(){
     function max (a, b) { return greater(a, b) ? a : b; }
 
     function between(min, max) {
-        if (min >= max) {
-            throw new Error('Invalid range, ' + min + ' is not less than ' + max);
-        }
-
         return function (value) {
             return !(min > value || value > max);
+        };
+    }
+
+    function notBetween(min, max) {
+        var betweenVals = between(min, max);
+
+        return function (value) {
+            return !betweenVals(value);
         };
     }
 
@@ -494,7 +500,9 @@ var jfp = (function(){
     j.geq = j.enforce('number => number => boolean', curryOperation(greaterOrEqual));
     j.lt = j.enforce('number => number => boolean', curryOperation(less));
     j.leq = j.enforce('number => number => boolean', curryOperation(lessOrEqual));
-    j.between = j.enforce('number, number => number => boolean', between);
+
+    j.between = j.enforce('A < B :: A:number, B:number => number => boolean', between);
+    j.notBetween = j.enforce('A < B :: A:number, B:number => number => boolean', notBetween);
 
 })(jfp);
 
