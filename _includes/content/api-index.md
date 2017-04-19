@@ -1011,12 +1011,23 @@ j.geq(5)(7); // true
 ### between
 
 - Performance: O(1)
-- Signature: `number, number => number => boolean`
+- Signature: `A < B :: A:number, B:number => number => boolean`
 
 ~~~~
 j.between(1, 5)(4); // true
 j.between(1, 5)(5); // true
 j.between(1, 5)(10); // false
+~~~~
+
+### notBetween
+
+- Performance: O(1)
+- Signature: `A < B :: A:number, B:number => number => boolean`
+
+~~~~
+j.notBetween(1, 5)(4); // false
+j.notBetween(1, 5)(5); // false
+j.notBetween(1, 5)(10); // true
 ~~~~
 
 ## Object
@@ -1038,11 +1049,11 @@ j.clone({foo: 'bar', baz: 'quux'}); {foo: 'bar', baz: 'quux'}
 
 ~~~~
 var testObj = {
-foo: {
-bar: {
-baz: [1, 2, 3]
-}
-}
+    foo: {
+        bar: {
+            baz: [1, 2, 3]
+        }
+    }
 };
 
 j.deref('foo.bar.baz')(testObj); // [1, 2, 3]
@@ -1057,13 +1068,13 @@ j.deref('foo.bar.baz.4')(testObj); // j.nil
 
 ~~~~
 var testObj1 = {
-foo: 'bar',
-baz: 'quux'
+    foo: 'bar',
+    baz: 'quux'
 };
 
 var testObj2 = {
-baz: 'foo',
-quux: 'bar'
+    baz: 'foo',
+    quux: 'bar'
 };
 
 j.merge(testObj1, testObj2);
@@ -1101,8 +1112,8 @@ console.log(myObj); // {foo: 'bar'}
 
 ~~~~
 var testObj = {
-foo: 'bar',
-baz: 'quux'
+    foo: 'bar',
+    baz: 'quux'
 };
 
 j.toArray(testObj); // [['foo', 'bar'], ['baz', 'quux']]
@@ -1127,8 +1138,8 @@ j.toObject(testArray); // { foo: 'bar', baz: 'quux' }
 
 ~~~~
 var testObj = {
-foo: 'bar',
-baz: 'quux'
+    foo: 'bar',
+    baz: 'quux'
 };
 
 j.toValues(testObj); // ['bar', 'quux']
