@@ -127,13 +127,14 @@ var jfp = (function(){
     }
 
     // Type system behaviors
-    j.either = _signet.enforce('type => * => *', either);
     j.enforce = _signet.enforce;
     j.isTypeOf = _signet.isTypeOf;
-    j.maybe = _signet.enforce('* => maybe<defined>', maybe);
-    j.setJfpTypes = _signet.enforce('signet => signet', setJfpTypes);
     j.sign = _signet.sign;
     j.typeChain = _signet.typeChain;
+
+    j.either = _signet.enforce('type => * => *', either);
+    j.maybe = _signet.enforce('* => maybe<defined>', maybe);
+    j.setJfpTypes = _signet.enforce('signet => signet', setJfpTypes);
 
     // Prefab either checks
 
