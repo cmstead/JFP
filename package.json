@@ -24,6 +24,6 @@
     "uglify-js": "^2.4.15"
   },
   "dependencies": {
-    "signet": "2.0.3"
+    "signet": "3.2.0"
   }
 }
