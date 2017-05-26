@@ -155,24 +155,24 @@
     }
 
     // JFP core functions
-    j.always = j.sign('* => * => *', always);
-    j.apply = j.enforce('function, array<*> => *', apply);
+    j.always = j.sign('value:* => [*] => value:*', always);
+    j.apply = j.enforce('application:function, arguments:array<*> => result:*', apply);
     j.argumentsToArray = j.enforce('arguments => array', sliceFrom0);
-    j.compose = j.enforce('function, function => function', compose);
-    j.concat = curry(j.enforce('A isTypeOf B :: A:concatable, B:concatable => concatable', concat), 2);
-    j.conj = j.enforce('*, array<*> => array<*>', conj);
-    j.cons = j.enforce('*, array<*> => array<*>', cons);
-    j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
-    j.foldlCompose = j.enforce('function, function => function', directionalCompose(compose));
-    j.foldrCompose = j.enforce('function, function => function', directionalCompose(rcompose));
-    j.identity = j.sign('* => *', identity);
-    j.partial = j.enforce('function, [*] => [*] => *', partial);
-    j.pick = j.enforce('string => * => maybe<defined>', pick);
-    j.rcompose = j.enforce('function, function => function', rcompose);
-    j.recur = j.enforce('function => function', recur);
-    j.repeat = j.enforce('function => int => * => *', repeat);
-    j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);
-    j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
-    j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
+    j.compose = j.enforce('f:function, g:function => fog:function', compose);
+    j.concat = curry(j.enforce('A isTypeOf B :: A:concatable, B:concatable => concatenation:concatable', concat), 2);
+    j.conj = j.enforce('value:*, values:array<*> => result:array<*>', conj);
+    j.cons = j.enforce('value:*, values:array<*> => result:array<*>', cons);
+    j.curry = j.enforce('toCurry:function, arity:[int], initialArgs:[array<*>] => additionalArgs:[*] => result:*', curry);
+    j.foldlCompose = j.enforce('f:function, g:function => fog:function', directionalCompose(compose));
+    j.foldrCompose = j.enforce('f:function, g:function => gof:function', directionalCompose(rcompose));
+    j.identity = j.sign('value:* => value:*', identity);
+    j.partial = j.enforce('application:function, applicationArguments:[*] => additionalArgs:[*] => result:*', partial);
+    j.pick = j.enforce('key:string => value:* => result:maybe<defined>', pick);
+    j.rcompose = j.enforce('f:function, g:function => gof:function', rcompose);
+    j.recur = j.enforce('recursiveFn:function => recursorFn:function', recur);
+    j.repeat = j.enforce('application:function => repeatCount:int => value:* => result:*', repeat);
+    j.rpartial = j.enforce('application:function, applicationArguments:[*] => additionalArgs:[*] => result:*', rpartial);
+    j.reverseArgs = j.enforce('originalFunction:function => reversedArgs:[*] => result:*', reverseArgs);
+    j.slice = j.enforce('startIndex:int, endIndex:[int] => objectToSlice:variant<array;arguments> => result:array', slice);
 
 })(jfp);

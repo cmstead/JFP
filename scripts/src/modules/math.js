@@ -73,32 +73,32 @@
     }
 
     // Arithmetic
-    j.add = j.enforce('number, number => number', operation('+'));
-    j.divide = j.enforce('number, number => number', operation('/'));
-    j.mod = j.enforce('number, number => number', operation('%'));
-    j.multiply = j.enforce('number, number => number', operation('*'));
-    j.subtract = j.enforce('number, number => number', operation('-'));
+    j.add = j.enforce('a:number, b:number => sum:number', operation('+'));
+    j.divide = j.enforce('a:number, b:number => quotient:number', operation('/'));
+    j.mod = j.enforce('a:number, b:number => modulo:number', operation('%'));
+    j.multiply = j.enforce('a:number, b:number => product:number', operation('*'));
+    j.subtract = j.enforce('a:number, b:number => difference:number', operation('-'));
 
-    j.addBy = j.enforce('number => number => number', operateBy('+'));
-    j.divideBy = j.enforce('number => number => number', operateBy('/'));
-    j.modBy = j.enforce('number => number => number', operateBy('%'));
-    j.multiplyBy = j.enforce('number => number => number', operateBy('*'));
-    j.subtractBy = j.enforce('number => number => number', operateBy('-'));
+    j.addBy = j.enforce('a:number => b:number => sum:number', operateBy('+'));
+    j.divideBy = j.enforce('b:number => a:number => quotient:number', operateBy('/'));
+    j.modBy = j.enforce('b:number => a:number => modulo:number', operateBy('%'));
+    j.multiplyBy = j.enforce('a:number => b:number => product:number', operateBy('*'));
+    j.subtractBy = j.enforce('b:number => a:number => quotient:number', operateBy('-'));
 
-    j.min = j.enforce('number, number => number', min);
-    j.max = j.enforce('number, number => number', max);
+    j.min = j.enforce('a:number, b:number => minimum:number', min);
+    j.max = j.enforce('a:number, b:number => maximum:number', max);
 
-    j.inc = j.enforce('int => int', function (a) { return a + 1; });
-    j.dec = j.enforce('int => int', function (a) { return a - 1; });
+    j.inc = j.enforce('a:int => sum:int', function (a) { return a + 1; });
+    j.dec = j.enforce('a:int => difference:int', function (a) { return a - 1; });
 
-    j.range = j.enforce('int, [int] => int => array<int>', range);
+    j.range = j.enforce('start:int, increment:[int] => end:int => range:array<int>', range);
 
-    j.gt = j.enforce('number => number => boolean', curryOperation(greater));
-    j.geq = j.enforce('number => number => boolean', curryOperation(greaterOrEqual));
-    j.lt = j.enforce('number => number => boolean', curryOperation(less));
-    j.leq = j.enforce('number => number => boolean', curryOperation(lessOrEqual));
+    j.gt = j.enforce('a:number => b:number => result:boolean', curryOperation(greater));
+    j.geq = j.enforce('a:number => b:number => result:boolean', curryOperation(greaterOrEqual));
+    j.lt = j.enforce('a:number => b:number => result:boolean', curryOperation(less));
+    j.leq = j.enforce('a:number => b:number => result:boolean', curryOperation(lessOrEqual));
 
-    j.between = j.enforce('A < B :: A:number, B:number => number => boolean', between);
-    j.notBetween = j.enforce('A < B :: A:number, B:number => number => boolean', notBetween);
+    j.between = j.enforce('min < max :: min:number, max:number => value:number => result:boolean', between);
+    j.notBetween = j.enforce('min < max :: min:number, max:number => value:number => result:boolean', notBetween);
 
 })(jfp);

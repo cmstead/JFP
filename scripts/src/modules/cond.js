@@ -37,6 +37,6 @@
         return j.apply(condResult.action, condResult.args);
     }
 
-    j.cond = j.enforce('function<function;function;boolean> => *', cond);
+    j.cond = j.enforce('condFunction:function<function;function;boolean> => result:*', cond);
 
 })(jfp);

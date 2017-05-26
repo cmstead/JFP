@@ -112,13 +112,13 @@
         }
     }
 
-    j.clone = j.enforce('object => object', clone);
-    j.deref = j.enforce('string => * => maybe<defined>', deref);
-    j.merge = j.enforce('object, object => object', merge);
-    j.mergeToUnsafe = j.enforce('object => object => object', mergeToUnsafe);
-    j.shallowClone = j.enforce('object => object => object', shallowClone);
-    j.toArray = j.enforce('object => array<tuple<objectKey;*>>', toArray);
-    j.toObject = j.enforce('array<tuple<objectKey;*>> => object', toObject);
-    j.toValues = j.enforce('object => array<*>', toValues);
+    j.clone = j.enforce('original:object => clone:object', clone);
+    j.deref = j.enforce('dataPath:string => object:* => result:maybe<defined>', deref);
+    j.merge = j.enforce('A != B :: A:object, B:object => result:object', merge);
+    j.mergeToUnsafe = j.enforce('a:object => b:object => a:object', mergeToUnsafe);
+    j.shallowClone = j.enforce('original:object => clone:object', shallowClone);
+    j.toArray = j.enforce('original:object => valuePairs:array<tuple<objectKey;*>>', toArray);
+    j.toObject = j.enforce('valuePairs:array<tuple<objectKey;*>> => newObject:object', toObject);
+    j.toValues = j.enforce('original:object => values:array<*>', toValues);
 
 })(jfp);

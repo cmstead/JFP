@@ -261,31 +261,31 @@
     }
 
 
-    j.all = j.enforce('function => array => boolean', all);
-    j.compact = j.enforce('[array] => array', filter(Boolean));
-    j.dropLast = j.enforce('array => array', dropLast);
-    j.dropNth = j.enforce('index => array => array', dropNth);
-    j.filter = j.enforce('function => array => array', filter);
-    j.first = j.enforce('array => maybe<defined>', first);
-    j.find = j.enforce('function<*> => array => maybe<defined>', find);
-    j.foldl = j.enforce('function, [*] => array => *', foldl);
-    j.foldr = j.enforce('function, [*] => array => *', foldr);
-    j.lastIndexOf = j.enforce('array => index', lastIndexOf);
-    j.map = j.enforce('function => array => array', map);
-    j.none = j.enforce('function => array => boolean', none);
-    j.nth = j.enforce('index => array => maybe<defined>', nth);
-    j.partition = j.enforce('function => array => tuple<array;array>', partition);
-    j.pushUnsafe = j.enforce('array => * => array', pushUnsafe);
+    j.all = j.enforce('predicate:function => values:array => result:boolean', all);
+    j.compact = j.enforce('values:[array] => result:array', filter(Boolean));
+    j.dropLast = j.enforce('values:array => result:array', dropLast);
+    j.dropNth = j.enforce('dropIndex:index => values:array => result:array', dropNth);
+    j.filter = j.enforce('predicate:function => values:array => result:array', filter);
+    j.first = j.enforce('values:array => firstValue:maybe<defined>', first);
+    j.find = j.enforce('predicate:function => values:array => foundValue:maybe<defined>', find);
+    j.foldl = j.enforce('application:function, initialValue:[*] => values:array => result:*', foldl);
+    j.foldr = j.enforce('application:function, initialValue:[*] => values:array => result:*', foldr);
+    j.lastIndexOf = j.enforce('values:array => lastIndex:index', lastIndexOf);
+    j.map = j.enforce('application:function => values:array => result:array', map);
+    j.none = j.enforce('predicate:function => values:array => result:boolean', none);
+    j.nth = j.enforce('valueIndex:index => values:array => result:maybe<defined>', nth);
+    j.partition = j.enforce('predicate:function => values:array => partitionedValues:tuple<array;array>', partition);
+    j.pushUnsafe = j.enforce('valueArray:array => pushValue:* => valueArray:array', pushUnsafe);
     j.rest = rest;
-    j.reverse = j.enforce('array => array', reverse);
-    j.rfilter = j.enforce('function => array => array', rfilter);
-    j.rmap = j.enforce('function => array => array', rmap);
-    j.rpartition = j.enforce('function => array => array<array;array>', rpartition);
-    j.rreduce = j.enforce('function, [*] => array => *', rreduce);
-    j.some = j.enforce('function => array => boolean', some);
-    j.sort = j.enforce('[*] => array => array', sort);
-    j.take = j.enforce('[index] => function<array>', take);
-    j.takeUntil = j.enforce('predicate => array => array', takeUntil);
-    j.until = j.enforce('predicate => function, * => array => *', until);
+    j.reverse = j.enforce('values:array => result:array', reverse);
+    j.rfilter = j.enforce('predicate:function => values:array => result:array', rfilter);
+    j.rmap = j.enforce('application:function => values:array => result:array', rmap);
+    j.rpartition = j.enforce('predicate:function => values:array => partitionedValues:array<array;array>', rpartition);
+    j.rreduce = j.enforce('application:function, initialValue:[*] => values:array => result:*', rreduce);
+    j.some = j.enforce('predicate:function => values:array => result:boolean', some);
+    j.sort = j.enforce('comparator:[*] => values:array => sortedValues:array', sort);
+    j.take = j.enforce('endIndex:[index] => function<array>', take);
+    j.takeUntil = j.enforce('predicate:function => values:array => result:array', takeUntil);
+    j.until = j.enforce('predicate:function => application:function, initialValue:[*] => values:array => result:*', until);
 
 })(jfp);

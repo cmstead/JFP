@@ -379,25 +379,25 @@ var jfp = (function(){
     }
 
     // JFP core functions
-    j.always = j.sign('* => * => *', always);
-    j.apply = j.enforce('function, array<*> => *', apply);
+    j.always = j.sign('value:* => [*] => value:*', always);
+    j.apply = j.enforce('application:function, arguments:array<*> => result:*', apply);
     j.argumentsToArray = j.enforce('arguments => array', sliceFrom0);
-    j.compose = j.enforce('function, function => function', compose);
-    j.concat = curry(j.enforce('A isTypeOf B :: A:concatable, B:concatable => concatable', concat), 2);
-    j.conj = j.enforce('*, array<*> => array<*>', conj);
-    j.cons = j.enforce('*, array<*> => array<*>', cons);
-    j.curry = j.enforce('function, [int], [array<*>] => [*] => *', curry);
-    j.foldlCompose = j.enforce('function, function => function', directionalCompose(compose));
-    j.foldrCompose = j.enforce('function, function => function', directionalCompose(rcompose));
-    j.identity = j.sign('* => *', identity);
-    j.partial = j.enforce('function, [*] => [*] => *', partial);
-    j.pick = j.enforce('string => * => maybe<defined>', pick);
-    j.rcompose = j.enforce('function, function => function', rcompose);
-    j.recur = j.enforce('function => function', recur);
-    j.repeat = j.enforce('function => int => * => *', repeat);
-    j.rpartial = j.enforce('function, [*] => [*] => *', rpartial);
-    j.reverseArgs = j.enforce('function => [*] => *', reverseArgs);
-    j.slice = j.enforce('int, [int] => variant<array;arguments> => array', slice);
+    j.compose = j.enforce('f:function, g:function => fog:function', compose);
+    j.concat = curry(j.enforce('A isTypeOf B :: A:concatable, B:concatable => concatenation:concatable', concat), 2);
+    j.conj = j.enforce('value:*, values:array<*> => result:array<*>', conj);
+    j.cons = j.enforce('value:*, values:array<*> => result:array<*>', cons);
+    j.curry = j.enforce('toCurry:function, arity:[int], initialArgs:[array<*>] => additionalArgs:[*] => result:*', curry);
+    j.foldlCompose = j.enforce('f:function, g:function => fog:function', directionalCompose(compose));
+    j.foldrCompose = j.enforce('f:function, g:function => gof:function', directionalCompose(rcompose));
+    j.identity = j.sign('value:* => value:*', identity);
+    j.partial = j.enforce('application:function, applicationArguments:[*] => additionalArgs:[*] => result:*', partial);
+    j.pick = j.enforce('key:string => value:* => result:maybe<defined>', pick);
+    j.rcompose = j.enforce('f:function, g:function => gof:function', rcompose);
+    j.recur = j.enforce('recursiveFn:function => recursorFn:function', recur);
+    j.repeat = j.enforce('application:function => repeatCount:int => value:* => result:*', repeat);
+    j.rpartial = j.enforce('application:function, applicationArguments:[*] => additionalArgs:[*] => result:*', rpartial);
+    j.reverseArgs = j.enforce('originalFunction:function => reversedArgs:[*] => result:*', reverseArgs);
+    j.slice = j.enforce('startIndex:int, endIndex:[int] => objectToSlice:variant<array;arguments> => result:array', slice);
 
 })(jfp);
 
@@ -477,33 +477,33 @@ var jfp = (function(){
     }
 
     // Arithmetic
-    j.add = j.enforce('number, number => number', operation('+'));
-    j.divide = j.enforce('number, number => number', operation('/'));
-    j.mod = j.enforce('number, number => number', operation('%'));
-    j.multiply = j.enforce('number, number => number', operation('*'));
-    j.subtract = j.enforce('number, number => number', operation('-'));
+    j.add = j.enforce('a:number, b:number => sum:number', operation('+'));
+    j.divide = j.enforce('a:number, b:number => quotient:number', operation('/'));
+    j.mod = j.enforce('a:number, b:number => modulo:number', operation('%'));
+    j.multiply = j.enforce('a:number, b:number => product:number', operation('*'));
+    j.subtract = j.enforce('a:number, b:number => difference:number', operation('-'));
 
-    j.addBy = j.enforce('number => number => number', operateBy('+'));
-    j.divideBy = j.enforce('number => number => number', operateBy('/'));
-    j.modBy = j.enforce('number => number => number', operateBy('%'));
-    j.multiplyBy = j.enforce('number => number => number', operateBy('*'));
-    j.subtractBy = j.enforce('number => number => number', operateBy('-'));
+    j.addBy = j.enforce('a:number => b:number => sum:number', operateBy('+'));
+    j.divideBy = j.enforce('b:number => a:number => quotient:number', operateBy('/'));
+    j.modBy = j.enforce('b:number => a:number => modulo:number', operateBy('%'));
+    j.multiplyBy = j.enforce('a:number => b:number => product:number', operateBy('*'));
+    j.subtractBy = j.enforce('b:number => a:number => quotient:number', operateBy('-'));
 
-    j.min = j.enforce('number, number => number', min);
-    j.max = j.enforce('number, number => number', max);
+    j.min = j.enforce('a:number, b:number => minimum:number', min);
+    j.max = j.enforce('a:number, b:number => maximum:number', max);
 
-    j.inc = j.enforce('int => int', function (a) { return a + 1; });
-    j.dec = j.enforce('int => int', function (a) { return a - 1; });
+    j.inc = j.enforce('a:int => sum:int', function (a) { return a + 1; });
+    j.dec = j.enforce('a:int => difference:int', function (a) { return a - 1; });
 
-    j.range = j.enforce('int, [int] => int => array<int>', range);
+    j.range = j.enforce('start:int, increment:[int] => end:int => range:array<int>', range);
 
-    j.gt = j.enforce('number => number => boolean', curryOperation(greater));
-    j.geq = j.enforce('number => number => boolean', curryOperation(greaterOrEqual));
-    j.lt = j.enforce('number => number => boolean', curryOperation(less));
-    j.leq = j.enforce('number => number => boolean', curryOperation(lessOrEqual));
+    j.gt = j.enforce('a:number => b:number => result:boolean', curryOperation(greater));
+    j.geq = j.enforce('a:number => b:number => result:boolean', curryOperation(greaterOrEqual));
+    j.lt = j.enforce('a:number => b:number => result:boolean', curryOperation(less));
+    j.leq = j.enforce('a:number => b:number => result:boolean', curryOperation(lessOrEqual));
 
-    j.between = j.enforce('A < B :: A:number, B:number => number => boolean', between);
-    j.notBetween = j.enforce('A < B :: A:number, B:number => number => boolean', notBetween);
+    j.between = j.enforce('min < max :: min:number, max:number => value:number => result:boolean', between);
+    j.notBetween = j.enforce('min < max :: min:number, max:number => value:number => result:boolean', notBetween);
 
 })(jfp);
 
@@ -770,32 +770,32 @@ var jfp = (function(){
     }
 
 
-    j.all = j.enforce('function => array => boolean', all);
-    j.compact = j.enforce('[array] => array', filter(Boolean));
-    j.dropLast = j.enforce('array => array', dropLast);
-    j.dropNth = j.enforce('index => array => array', dropNth);
-    j.filter = j.enforce('function => array => array', filter);
-    j.first = j.enforce('array => maybe<defined>', first);
-    j.find = j.enforce('function<*> => array => maybe<defined>', find);
-    j.foldl = j.enforce('function, [*] => array => *', foldl);
-    j.foldr = j.enforce('function, [*] => array => *', foldr);
-    j.lastIndexOf = j.enforce('array => index', lastIndexOf);
-    j.map = j.enforce('function => array => array', map);
-    j.none = j.enforce('function => array => boolean', none);
-    j.nth = j.enforce('index => array => maybe<defined>', nth);
-    j.partition = j.enforce('function => array => tuple<array;array>', partition);
-    j.pushUnsafe = j.enforce('array => * => array', pushUnsafe);
+    j.all = j.enforce('predicate:function => values:array => result:boolean', all);
+    j.compact = j.enforce('values:[array] => result:array', filter(Boolean));
+    j.dropLast = j.enforce('values:array => result:array', dropLast);
+    j.dropNth = j.enforce('dropIndex:index => values:array => result:array', dropNth);
+    j.filter = j.enforce('predicate:function => values:array => result:array', filter);
+    j.first = j.enforce('values:array => firstValue:maybe<defined>', first);
+    j.find = j.enforce('predicate:function => values:array => foundValue:maybe<defined>', find);
+    j.foldl = j.enforce('application:function, initialValue:[*] => values:array => result:*', foldl);
+    j.foldr = j.enforce('application:function, initialValue:[*] => values:array => result:*', foldr);
+    j.lastIndexOf = j.enforce('values:array => lastIndex:index', lastIndexOf);
+    j.map = j.enforce('application:function => values:array => result:array', map);
+    j.none = j.enforce('predicate:function => values:array => result:boolean', none);
+    j.nth = j.enforce('valueIndex:index => values:array => result:maybe<defined>', nth);
+    j.partition = j.enforce('predicate:function => values:array => partitionedValues:tuple<array;array>', partition);
+    j.pushUnsafe = j.enforce('valueArray:array => pushValue:* => valueArray:array', pushUnsafe);
     j.rest = rest;
-    j.reverse = j.enforce('array => array', reverse);
-    j.rfilter = j.enforce('function => array => array', rfilter);
-    j.rmap = j.enforce('function => array => array', rmap);
-    j.rpartition = j.enforce('function => array => array<array;array>', rpartition);
-    j.rreduce = j.enforce('function, [*] => array => *', rreduce);
-    j.some = j.enforce('function => array => boolean', some);
-    j.sort = j.enforce('[*] => array => array', sort);
-    j.take = j.enforce('[index] => function<array>', take);
-    j.takeUntil = j.enforce('predicate => array => array', takeUntil);
-    j.until = j.enforce('predicate => function, * => array => *', until);
+    j.reverse = j.enforce('values:array => result:array', reverse);
+    j.rfilter = j.enforce('predicate:function => values:array => result:array', rfilter);
+    j.rmap = j.enforce('application:function => values:array => result:array', rmap);
+    j.rpartition = j.enforce('predicate:function => values:array => partitionedValues:array<array;array>', rpartition);
+    j.rreduce = j.enforce('application:function, initialValue:[*] => values:array => result:*', rreduce);
+    j.some = j.enforce('predicate:function => values:array => result:boolean', some);
+    j.sort = j.enforce('comparator:[*] => values:array => sortedValues:array', sort);
+    j.take = j.enforce('endIndex:[index] => function<array>', take);
+    j.takeUntil = j.enforce('predicate:function => values:array => result:array', takeUntil);
+    j.until = j.enforce('predicate:function => application:function, initialValue:[*] => values:array => result:*', until);
 
 })(jfp);
 
@@ -913,14 +913,14 @@ var jfp = (function(){
         }
     }
 
-    j.clone = j.enforce('object => object', clone);
-    j.deref = j.enforce('string => * => maybe<defined>', deref);
-    j.merge = j.enforce('object, object => object', merge);
-    j.mergeToUnsafe = j.enforce('object => object => object', mergeToUnsafe);
-    j.shallowClone = j.enforce('object => object => object', shallowClone);
-    j.toArray = j.enforce('object => array<tuple<objectKey;*>>', toArray);
-    j.toObject = j.enforce('array<tuple<objectKey;*>> => object', toObject);
-    j.toValues = j.enforce('object => array<*>', toValues);
+    j.clone = j.enforce('original:object => clone:object', clone);
+    j.deref = j.enforce('dataPath:string => object:* => result:maybe<defined>', deref);
+    j.merge = j.enforce('A != B :: A:object, B:object => result:object', merge);
+    j.mergeToUnsafe = j.enforce('a:object => b:object => a:object', mergeToUnsafe);
+    j.shallowClone = j.enforce('original:object => clone:object', shallowClone);
+    j.toArray = j.enforce('original:object => valuePairs:array<tuple<objectKey;*>>', toArray);
+    j.toObject = j.enforce('valuePairs:array<tuple<objectKey;*>> => newObject:object', toObject);
+    j.toValues = j.enforce('original:object => values:array<*>', toValues);
 
 })(jfp);
 
@@ -964,7 +964,7 @@ var jfp = (function(){
         return j.apply(condResult.action, condResult.args);
     }
 
-    j.cond = j.enforce('function<function;function;boolean> => *', cond);
+    j.cond = j.enforce('condFunction:function<function;function;boolean> => result:*', cond);
 
 })(jfp);
 
