@@ -37,6 +37,11 @@ If the text file has been removed, please visit:
 
 https://www.mozilla.org/MPL/
 
+### 4.2.1 ###
+
+- Enhanced type error output
+- Updated type signatures with names for type identifiers
+
 ### v4.1.0
 
 - Added dependent type definitions to concat and between

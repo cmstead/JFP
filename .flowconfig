@@ -1,0 +1,11 @@
+[ignore]
+./spec
+./dist
+
+[include]
+./scripts/modules/*.js
+
+[libs]
+
+[options]
+suppress_comment= \\(.\\|\n\\)*\\@flowSuppress

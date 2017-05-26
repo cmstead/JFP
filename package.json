@@ -8,10 +8,20 @@
     "url": "https://github.com/cmstead/JFP.git"
   },
   "scripts": {
-    "build": "node build-scripts/build-all.js"
+    "build": "node build-scripts/build-all.js",
+    "flow": "flow"
+  },
+  "quokka": {
+    "plugins": [
+      "quokka-mocha-bdd"
+    ],
+    "quokka-mocha-bdd": {
+      "interface": "bdd"
+    }
   },
   "devDependencies": {
     "async": "^1.5.0",
+    "flow-bin": "^0.47.0",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-concat": "^0.5.0",
@@ -20,6 +30,7 @@
     "grunt-contrib-uglify": "^0.6.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-jasmine-nodejs": "^1.4.0",
+    "quokka-mocha-bdd": "^1.1.0",
     "sinon": "^1.17.5",
     "uglify-js": "^2.4.15"
   },

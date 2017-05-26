@@ -321,3 +321,7 @@ describe('jfp array', function () {
     });
 
 });
+
+if(typeof global.runQuokkaMochaBdd === 'function') {
+    runQuokkaMochaBdd();
+}
