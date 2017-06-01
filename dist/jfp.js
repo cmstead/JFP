@@ -793,7 +793,7 @@ var jfp = (function(){
     j.rreduce = j.enforce('application:function, initialValue:[*] => values:array => result:*', rreduce);
     j.some = j.enforce('predicate:function => values:array => result:boolean', some);
     j.sort = j.enforce('comparator:[*] => values:array => sortedValues:array', sort);
-    j.take = j.enforce('endIndex:[index] => function<array>', take);
+    j.take = j.enforce('endIndex:[index] => function', take);
     j.takeUntil = j.enforce('predicate:function => values:array => result:array', takeUntil);
     j.until = j.enforce('predicate:function => application:function, initialValue:[*] => values:array => result:*', until);
 
@@ -964,7 +964,7 @@ var jfp = (function(){
         return j.apply(condResult.action, condResult.args);
     }
 
-    j.cond = j.enforce('condFunction:function<function;function;boolean> => result:*', cond);
+    j.cond = j.enforce('condFunction:function => result:*', cond);
 
 })(jfp);
 
