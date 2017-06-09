@@ -1,5 +1,6 @@
 var j = require('../../dist/jfp.min');
 var timer = require('../timer/test-timer')();
+var assert = require('chai').assert
 
 describe('jfp object', function () {
 
@@ -17,16 +18,16 @@ describe('jfp object', function () {
 
         it('should pick a value from an object by key', function () {
             var testObj = { foo: 'bar' };
-            expect(j.pick('foo')(testObj)).toBe('bar');
+            assert.equal(j.pick('foo')(testObj), 'bar');
         });
 
         it('should return null if value does not exist', function () {
             var testObj = { foo: 'bar' };
-            expect(j.isTypeOf('null')(j.pick('bar')(testObj))).toBe(true);
+            assert.equal(j.isTypeOf('null')(j.pick('bar')(testObj)), true);
         });
 
         it('should return null if object is null', function () {
-            expect(j.isTypeOf('null')(j.pick('bar')(null))).toBe(true);
+            assert.equal(j.isTypeOf('null')(j.pick('bar')(null)), true);
         });
 
     });
@@ -45,15 +46,15 @@ describe('jfp object', function () {
         });
 
         it('should return a value for a single layer dereference', function () {
-            expect(j.deref('foo')(testObj)).toBe(testObj.foo);
+            assert.equal(j.deref('foo')(testObj), testObj.foo);
         });
 
         it('should return a null for a bad reference', function () {
-            expect(j.deref('blar')(testObj)).toBe(null);
+            assert.equal(j.deref('blar')(testObj), null);
         });
 
         it('should return a value for a multiple layer dereference', function () {
-            expect(j.deref('foo.bar.baz.1')(testObj)).toBe(2);
+            assert.equal(j.deref('foo.bar.baz.1')(testObj), 2);
         });
 
     });
@@ -80,9 +81,9 @@ describe('jfp object', function () {
 
             var result = j.merge(objA, objB);
 
-            expect(result).not.toBe(objA);
-            expect(result).not.toBe(objB);
-            expect(JSON.stringify(result)).toBe(JSON.stringify(expected));
+            assert.notEqual(result, objA);
+            assert.notEqual(result, objB);
+            assert.equal(JSON.stringify(result), JSON.stringify(expected));
 
         });
 
@@ -92,12 +93,12 @@ describe('jfp object', function () {
 
         it('should convert an empty object to an empty array', function () {
             var result = j.toArray({});
-            expect(JSON.stringify(result)).toBe('[]')
+            assert.equal(JSON.stringify(result), '[]')
         });
 
         it('should convert an object to an array of tuples', function () {
             var result = j.toArray({ foo: 'bar', baz: 'quux' });
-            expect(JSON.stringify(result)).toBe('[["foo","bar"],["baz","quux"]]')
+            assert.equal(JSON.stringify(result), '[["foo","bar"],["baz","quux"]]')
         });
 
     });
@@ -106,12 +107,12 @@ describe('jfp object', function () {
 
         it('should convert an empty array to an empty object', function () {
             var result = j.toObject([]);
-            expect(JSON.stringify(result)).toBe('{}')
+            assert.equal(JSON.stringify(result), '{}')
         });
 
         it('should convert an array of tuples to object', function () {
             var result = j.toObject([['foo', 'bar'], ['baz', 'quux']]);
-            expect(JSON.stringify(result)).toBe('{"foo":"bar","baz":"quux"}');
+            assert.equal(JSON.stringify(result), '{"foo":"bar","baz":"quux"}');
         });
 
     });
@@ -120,7 +121,7 @@ describe('jfp object', function () {
 
         it('should convert an object to an array of values', function () {
             var result = j.toValues({ foo: 'bar', baz: 'quux' });
-            expect(JSON.stringify(result)).toBe('["bar","quux"]');
+            assert.equal(JSON.stringify(result), '["bar","quux"]');
         });
 
     });
@@ -136,11 +137,11 @@ describe('jfp object', function () {
             };
             var result = j.clone(obj);
 
-            expect(obj).not.toBe(result);
-            expect(obj.baz).not.toBe(result.baz);
-            expect(obj.baz.quux).not.toBe(result.baz.quux);
+            assert.notEqual(obj, result);
+            assert.notEqual(obj.baz, result.baz);
+            assert.notEqual(obj.baz.quux, result.baz.quux);
 
-            expect(JSON.stringify(obj)).toBe(JSON.stringify(result));
+            assert.equal(JSON.stringify(obj), JSON.stringify(result));
         });
 
         it('should throw an error if object is circular or too deep', function () {
@@ -150,9 +151,13 @@ describe('jfp object', function () {
 
             obj.foo.bar = obj;
 
-            expect(j.partial(j.clone, obj)).toThrow(new Error('Object is circular or too deep to clone.'));
+            assert.throws(j.partial(j.clone, obj), 'Object is circular or too deep to clone.');
         });
 
     });
 
 });
+
+if(typeof global.runQuokkaMochaBdd === 'function') {
+    runQuokkaMochaBdd();
+}

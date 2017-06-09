@@ -1,12 +1,6 @@
 (function (j) {
     'use strict';
 
-    function pickByObj(obj) {
-        return function (key) {
-            return pick(key)(obj);
-        };
-    }
-
     function deref(key) {
         var tokens = key.split('.');
 
@@ -23,13 +17,6 @@
             }
 
             return j.maybeDefined(result);
-        };
-    }
-
-    function setValue(obj) {
-        return function (result, key) {
-            result[key] = obj[key];
-            return result;
         };
     }
 
@@ -77,11 +64,6 @@
         }
 
         return result;
-    }
-
-    function addProperty(obj, propertyPair) {
-        obj[propertyPair[0]] = propertyPair[1];
-        return obj;
     }
 
     function toObject(tupleArray) {

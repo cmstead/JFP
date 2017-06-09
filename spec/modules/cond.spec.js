@@ -1,5 +1,7 @@
 var j = require('../../dist/jfp.min');
 var timer = require('../timer/test-timer')();
+var assert = require('chai').assert;
+
 
 describe('jfp cond', function () {
 
@@ -43,19 +45,23 @@ describe('jfp cond', function () {
     });
 
     it('should work as an expression', function () {
-        expect(condTest1(2)).toBe('two');
+        assert.equal(condTest1(2), 'two');
     });
 
     it('should throw an error if value is out of bounds and no default is set', function () {
-        expect(j.partial(condTest1, 5)).toThrow();
+        assert.throws(j.partial(condTest1, 5));
     });
 
     it('should execute default if no other condition is satisfied', function () {
-        expect(condTest2(5)).toBe('too big!');
+        assert.equal(condTest2(5), 'too big!');
     });
 
     it('should compute factorial properly', function () {
-        expect(fac(5)).toBe(120);
+        assert.equal(fac(5), 120);
     });
 
 });
+
+if(typeof global.runQuokkaMochaBdd === 'function') {
+    runQuokkaMochaBdd();
+}

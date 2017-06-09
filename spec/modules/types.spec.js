@@ -1,6 +1,7 @@
 var j = require('../../dist/jfp.min');
 var signet = require('signet');
 var timer = require('../timer/test-timer')();
+var assert = require('chai').assert;
 
 describe('jfp types', function () {
     
@@ -17,7 +18,7 @@ describe('jfp types', function () {
     describe('isTypeOf', function () {
         
         it('should perform a curried type check', function () {
-            expect(j.isTypeOf('array')([])).toBe(true);
+            assert.equal(j.isTypeOf('array')([]), true);
         });
         
     });
@@ -25,11 +26,11 @@ describe('jfp types', function () {
     describe('nil', function () {
         
         it('Should return a nil value', function () {
-            expect(j.isTypeOf('nil')(j.nil)).toBe(true);
+            assert.equal(j.isTypeOf('nil')(j.nil), true);
         });
         
         it('Should return new nil value every time', function () {
-            expect(j.nil).not.toBe(j.nil);
+            assert.notEqual(j.nil, j.nil);
         });
         
     });
@@ -37,15 +38,15 @@ describe('jfp types', function () {
     describe('maybe', function () {
         
         it('should always verify null', function () {
-            expect(j.isTypeOf('maybe<number>')(null)).toBe(true);
+            assert.equal(j.isTypeOf('maybe<number>')(null), true);
         });
         
         it('should always verify specified type', function () {
-            expect(j.isTypeOf('maybe<number>')(42)).toBe(true);
+            assert.equal(j.isTypeOf('maybe<number>')(42), true);
         });
         
         it('should always fail on bad value', function () {
-            expect(j.isTypeOf('maybe<number>')('foo')).toBe(false);
+            assert.equal(j.isTypeOf('maybe<number>')('foo'), false);
         });
         
     });
@@ -53,11 +54,11 @@ describe('jfp types', function () {
     describe('signet', function () {
         
         it('should verify a duck-typed signet instance', function () {
-            expect(j.isTypeOf('signet')(signet())).toBe(true);
+            assert.equal(j.isTypeOf('signet')(signet()), true);
         });
         
         it('should fail a bad object', function () {
-            expect(j.isTypeOf('signet')({})).toBe(false);
+            assert.equal(j.isTypeOf('signet')({}), false);
         });
         
     });
@@ -65,17 +66,21 @@ describe('jfp types', function () {
     describe('numeric', function () {
         
         it('should verify numbers', function () {
-            expect(j.isTypeOf('numeric')(42)).toBe(true);
+            assert.equal(j.isTypeOf('numeric')(42), true);
         });
         
         it('should verify numeric strings', function () {
-            expect(j.isTypeOf('numeric')('1234.567')).toBe(true);
+            assert.equal(j.isTypeOf('numeric')('1234.567'), true);
         });
         
         it('should fail non-numeric strings', function () {
-            expect(j.isTypeOf('numeric')('aaa1234.567')).toBe(false);
+            assert.equal(j.isTypeOf('numeric')('aaa1234.567'), false);
         });
         
     });
     
 });
+
+if(typeof global.runQuokkaMochaBdd === 'function') {
+    runQuokkaMochaBdd();
+}

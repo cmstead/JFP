@@ -7,60 +7,29 @@
         _signet = require('signet')();
     }
 
-    var isFunction = _signet.isTypeOf('function');
-    var isNull = _signet.isTypeOf('null');
-    var isUndefined = _signet.isTypeOf('undefined');
+    var signetDefinition = {
+        alias: 'function',
+        defineDependentOperatorOn: 'function',
+        defineDuckType: 'function',
+        extend: 'function',
+        isTypeOf: 'function',
+        subtype: 'function'
+    };
+
+    function checkConcatable(value) {
+        return typeof value.concat === 'function';
+    }
 
     function checkNil(value) {
         return value.length === 0;
-    }
-
-    function checkMaybe(value, typeObj) {
-        return _signet.isTypeOf(typeObj[0])(value) || isNull(value);
-    }
-
-    function checkSignet(value) {
-        return isFunction(value.subtype) &&
-            isFunction(value.extend) &&
-            isFunction(_signet.isTypeOf);
-    }
-
-    function checkNull(value) {
-        return value === null;
-    }
-
-    function checkNotNull(value) {
-        return !checkNull(value);
-    }
-
-    function checkNotNil(value) {
-        return !checkNil(value);
-    }
-
-    function checkDefined(value) {
-        return !isUndefined(value) && checkNotNull(value);
-    }
-
-    function checkExists(value) {
-        return checkNotNull(value) &&
-            checkNotNil(value) &&
-            checkDefined(value);
-    }
-
-    function checkNatural(value) {
-        return value >= 0;
     }
 
     function checkPair(value) {
         return value.length > 0;
     }
 
-    function checkConcatable(value) {
-        return checkDefined(value) && checkNotNull(value) && isFunction(value.concat);
-    }
-
-    function checkObjectInstance(value) {
-        return value !== null;
+    function isSameType(a, b) {
+        return typeof a === typeof b;
     }
 
     function setJfpTypes(__signet) {
@@ -68,27 +37,27 @@
 
         __signet.subtype('array')('nil', checkNil);
         __signet.subtype('array')('pair', checkPair);
-        __signet.subtype('int')('natural', checkNatural);
-        __signet.subtype('object')('signet', checkSignet);
-        __signet.subtype('object')('objectInstance', checkObjectInstance);
+        __signet.defineDuckType('signet', signetDefinition);
 
-        __signet.extend('maybe', checkMaybe);
-        __signet.extend('notNull', checkNotNull);
-        __signet.extend('notNil', checkNotNil);
-        __signet.extend('exists', checkExists);
-        __signet.extend('concatable', checkConcatable);
+        __signet.alias('defined', 'not<undefined>');
+        __signet.subtype('defined')('concatable', checkConcatable);
 
-        __signet.extend('defined', checkDefined);
-
+        __signet.alias('natural', 'leftBoundedInt<0>')
         __signet.alias('index', 'natural');
-        __signet.alias('typeString', 'string');
-        __signet.alias('predicate', 'function');
-        __signet.alias('comparable', 'variant<boolean;number;string>');
-        __signet.alias('numeric', 'variant<number;formattedString<' + numberPattern + '>>');
-        __signet.alias('objectKey', 'variant<string;symbol>');
-        __signet.alias('referencible', 'variant<objectInstance;string;function>');
 
-        __signet.defineDependentOperatorOn('concatable')('isTypeOf', function (a, b){ return typeof a === typeof b; });
+        __signet.alias('comparable', 'variant<boolean, number, string>');
+        __signet.alias('exists', 'not<variant<nil, null, undefined>>');
+        __signet.alias('maybe', 'variant<null, _>');
+        __signet.alias('notNull', 'not<null>');
+        __signet.alias('notNil', 'not<nil>');
+        __signet.alias('numeric', 'variant<number, formattedString<' + numberPattern + '>>');
+        __signet.alias('objectInstance', 'composite<not<null>, object>')
+        __signet.alias('objectKey', 'variant<string, symbol>');
+        __signet.alias('predicate', 'function');
+        __signet.alias('referencible', 'variant<objectInstance, string, function>');
+        __signet.alias('typeString', 'string');
+
+        __signet.defineDependentOperatorOn('concatable')('isTypeOf', isSameType);
 
         return __signet;
     }
@@ -113,7 +82,7 @@
 
     function maybe(typeDef) {
         var checkType = _signet.isTypeOf(typeDef);
-        
+
         return function (value) {
             return checkType(value) ? value : null;
         };
@@ -123,10 +92,9 @@
     j.enforce = _signet.enforce;
     j.isTypeOf = _signet.isTypeOf;
     j.sign = _signet.sign;
-    j.typeChain = _signet.typeChain;
 
-    j.either = _signet.enforce('type => * => *', either);
-    j.maybe = _signet.enforce('* => maybe<defined>', maybe);
+    j.either = _signet.enforce('type => defaultValue:* => value:* => *', either);
+    j.maybe = _signet.enforce('type => value:* => maybe<defined>', maybe);
     j.setJfpTypes = _signet.enforce('signet => signet', setJfpTypes);
 
     // Prefab either checks

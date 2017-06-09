@@ -33,8 +33,6 @@
         };
     }
 
-    var argumentsToArray = slice(0);
-
     var sliceFrom0 = slice(0);
 
     function apply(fn, args) {
@@ -43,10 +41,12 @@
 
     function pick(key) {
         return function (obj) {
+            var result;
+
             try {
-                var result = j.maybeDefined(obj[key]);
+                result = j.maybeDefined(obj[key]);
             } catch (e) {
-                var result = null;
+                result = null;
             }
 
             return result;
@@ -79,10 +79,6 @@
 
             return result;
         };
-    }
-
-    function lastIndexOf(values) {
-        return values.length - 1;
     }
 
     function compose(f, g) {
@@ -123,7 +119,7 @@
 
     function curry(fn, count, args) {
         return buildCurriable(fn, j.eitherNatural(fn.length)(count), j.eitherArray([])(args));
-    };
+    }
 
     var sliceRest = slice(1);
 
@@ -140,9 +136,7 @@
     var partial = directionalPartial(concat);
     var rpartial = directionalPartial(rconcat);
 
-    function repeat(fn, optionalPred) {
-        var pred = j.eitherFunction(always(true))(optionalPred);
-
+    function repeat(fn) {
         return function (count) {
             return function (value) {
                 var result = value;

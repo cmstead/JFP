@@ -1,11 +1,6 @@
 (function (j) {
     'use strict';
 
-    function isUndefined(value) {
-        return typeof value === 'undefined';
-    }
-
-
     function nth(index) {
         return function (values) {
             return j.maybeDefined(values[index]);
@@ -29,18 +24,8 @@
     var first = nth(0);
     var rest = j.slice(1);
 
-    function last(values) {
-        return j.nth(lastIndexOf(values))(values);
-    }
-
     function dropLast(values) {
         return j.slice(0, lastIndexOf(values))(values);
-    }
-
-    function isFoldBreak(value) {
-        return typeof value === 'undefined' ||
-            value === null ||
-            value === false;
     }
 
     function reverse(values) {
@@ -166,36 +151,6 @@
         return function (values) {
             return j.slice(0)(values).sort(j.eitherFunction(j.subtract)(comparator));
         };
-    }
-
-    function existence(methodBuilder) {
-        return function (pred) {
-            var method = methodBuilder(pred);
-
-            return function (values) {
-                return j.recur(method)(values);
-            }
-        };
-    }
-
-    function buildEvery(pred) {
-        return function every(recur, values) {
-            return !pred(first(values)) ? j.isNil(values) : recur(rest(values));
-        }
-    }
-
-    function buildNever(pred) {
-        return function never(recur, values) {
-            var result = pred(first(values))
-            return j.isNil(values) || result ? !result : recur(rest(values));
-        }
-    }
-
-    function buildAtLeastOne(pred) {
-        return function atLeastOne(recur, values) {
-            var result = pred(first(values))
-            return j.isNil(values) || result ? result : recur(rest(values));
-        }
     }
 
     function take(count) {

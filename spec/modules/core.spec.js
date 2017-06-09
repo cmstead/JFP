@@ -1,6 +1,7 @@
 var j = require('../../dist/jfp.min');
 var sinon = require('sinon');
 var timer = require('../timer/test-timer')();
+var assert = require('chai').assert;
 
 describe('jfp core', function () {
 
@@ -22,20 +23,20 @@ describe('jfp core', function () {
         it('should return null if value is not a type match', function () {
             var result = j.maybe('number')('foo');
 
-            expect(isNull(result)).toBe(true);
+            assert.equal(isNull(result), true);
         });
 
         it('should return value if value is a type match', function () {
             var result = j.maybe('string')('foo');
 
-            expect(result).toBe('foo');
+            assert.equal(result, 'foo');
         });
 
         it('should take a predicate function in place of a type', function () {
             var isEven = j.compose(j.equal(0), j.modBy(2));
 
-            expect(isNull(j.maybe(isEven)(3))).toBe(true);
-            expect(j.maybe(isEven)(4)).toBe(4);
+            assert.equal(isNull(j.maybe(isEven)(3)), true);
+            assert.equal(j.maybe(isEven)(4), 4);
         });
 
     });
@@ -43,17 +44,17 @@ describe('jfp core', function () {
     describe('either', function () {
 
         it('should return value if value matches type', function () {
-            expect(j.either('number')(0)(42)).toBe(42);
+            assert.equal(j.either('number')(0)(42), 42);
         });
 
         it('should return default value if value does not match type', function () {
-            expect(j.either('number')(0)('foo')).toBe(0);
+            assert.equal(j.either('number')(0)('foo'), 0);
         });
 
         it('should take a predicate function in place of a type', function () {
             var isEven = j.compose(j.equal(0), j.modBy(2));
-            expect(j.either(isEven)(0)(3)).toBe(0);
-            expect(j.either(isEven)(0)(4)).toBe(4);
+            assert.equal(j.either(isEven)(0)(3), 0);
+            assert.equal(j.either(isEven)(0)(4), 4);
         });
 
     });
@@ -61,7 +62,7 @@ describe('jfp core', function () {
     describe('identity', function () {
 
         it('should return passed value', function () {
-            expect(j.identity('foo')).toBe('foo');
+            assert.equal(j.identity('foo'), 'foo');
         });
 
     });
@@ -69,7 +70,7 @@ describe('jfp core', function () {
     describe('always', function () {
 
         it('should return bound value ', function () {
-            expect(j.always('foo')()).toBe('foo');
+            assert.equal(j.always('foo')(), 'foo');
         });
 
     });
@@ -78,12 +79,12 @@ describe('jfp core', function () {
 
         it('should return new array with value prepended', function () {
             var result = j.cons(1, [2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[1,2,3,4]');
+            assert.equal(JSON.stringify(result), '[1,2,3,4]');
         });
 
         it('should return new array without undefined prepended', function () {
             var result = j.cons(undefined, [2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[2,3,4]');
+            assert.equal(JSON.stringify(result), '[2,3,4]');
         });
 
     });
@@ -92,12 +93,12 @@ describe('jfp core', function () {
 
         it('should return new array with value prepended', function () {
             var result = j.conj(1, [2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[2,3,4,1]');
+            assert.equal(JSON.stringify(result), '[2,3,4,1]');
         });
 
         it('should return new array without undefined prepended', function () {
             var result = j.conj(undefined, [2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[2,3,4]');
+            assert.equal(JSON.stringify(result), '[2,3,4]');
         });
 
     });
@@ -106,12 +107,12 @@ describe('jfp core', function () {
 
         it('should slice starting at an initial index', function () {
             var result = j.slice(1)([1, 2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[2,3,4]');
+            assert.equal(JSON.stringify(result), '[2,3,4]');
         });
 
         it('should slice slice from index to length', function () {
             var result = j.slice(1, 3)([1, 2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[2,3]');
+            assert.equal(JSON.stringify(result), '[2,3]');
         });
 
     });
@@ -124,19 +125,19 @@ describe('jfp core', function () {
         }
 
         it('should evaluate fac 0 correctly', function () {
-            expect(j.recur(fac)(0)).toBe(1);
+            assert.equal(j.recur(fac)(0), 1);
         });
 
         it('should evaluate fac 1 correctly', function () {
-            expect(j.recur(fac)(1)).toBe(1);
+            assert.equal(j.recur(fac)(1), 1);
         });
 
         it('should evaluate fac 2 correctly', function () {
-            expect(j.recur(fac)(2)).toBe(2);
+            assert.equal(j.recur(fac)(2), 2);
         });
 
         it('should evaluate fac 30 correctly', function () {
-            expect(j.recur(fac)(30)).toBe(2.652528598121911e+32);
+            assert.equal(j.recur(fac)(30), 2.652528598121911e+32);
         });
 
     });
@@ -156,7 +157,7 @@ describe('jfp core', function () {
         it('should compose two functions', function () {
             var compute = j.compose(inc, multiplyBy(2));
 
-            expect(compute(5)).toBe(11);
+            assert.equal(compute(5), 11);
         });
     });
 
@@ -165,7 +166,7 @@ describe('jfp core', function () {
         it('should compose multiple functions', function () {
             var compute = j.foldlCompose(inc, multiplyBy(3), multiplyBy(1/2));
 
-            expect(compute(6)).toBe(10);
+            assert.equal(compute(6), 10);
         });
     });
 
@@ -174,7 +175,7 @@ describe('jfp core', function () {
         it('should compose two functions in reading order', function () {
             var compute = j.rcompose(inc, multiplyBy(2));
 
-            expect(compute(5)).toBe(12);
+            assert.equal(compute(5), 12);
         });
     });
 
@@ -183,7 +184,7 @@ describe('jfp core', function () {
         it('should compose multiple functions in reading order', function () {
             var compute = j.foldrCompose(inc, multiplyBy(3), multiplyBy(1/2));
 
-            expect(compute(6)).toBe(10.5);
+            assert.equal(compute(6), 10.5);
         });
     });
 
@@ -194,19 +195,19 @@ describe('jfp core', function () {
         }
 
         it('should return a function which can be called as usual', function () {
-            expect(j.curry(add3Vals)(1, 2, 3)).toBe(6);
+            assert.equal(j.curry(add3Vals)(1, 2, 3), 6);
         });
 
         it('should return a curried function', function () {
-            expect(j.curry(add3Vals)(1)(2)(4)).toBe(7);
-            expect(j.curry(add3Vals)(1, 2)(5)).toBe(8);
-            expect(j.curry(add3Vals)(1)(2, 6)).toBe(9);
-            expect(j.curry(add3Vals)()()()(1)(2, 4)).toBe(7);
+            assert.equal(j.curry(add3Vals)(1)(2)(4), 7);
+            assert.equal(j.curry(add3Vals)(1, 2)(5), 8);
+            assert.equal(j.curry(add3Vals)(1)(2, 6), 9);
+            assert.equal(j.curry(add3Vals)()()()(1)(2, 4), 7);
         });
 
         it('should curry to a specified length', function () {
-            expect(typeof j.curry(add3Vals, 4)(1, 2, 3)).toBe('function');
-            expect(typeof j.curry(add3Vals, 4)(1, 2, 3, 4)).toBe('number');
+            assert.equal(typeof j.curry(add3Vals, 4)(1, 2, 3), 'function');
+            assert.equal(typeof j.curry(add3Vals, 4)(1, 2, 3, 4), 'number');
         });
 
     });
@@ -218,9 +219,9 @@ describe('jfp core', function () {
         }
 
         it('should partially apply arguments to a function', function () {
-            expect(j.partial(add, 5, 6)()).toBe(11);
-            expect(j.partial(add, 6)(7)).toBe(13);
-            expect(j.partial(add)(7, 8)).toBe(15);
+            assert.equal(j.partial(add, 5, 6)(), 11);
+            assert.equal(j.partial(add, 6)(7), 13);
+            assert.equal(j.partial(add)(7, 8), 15);
         });
 
     });
@@ -236,9 +237,9 @@ describe('jfp core', function () {
         }
 
         it('should partially apply arguments to a function from right to left', function () {
-            expect(j.rpartial(divide, 6, 12)()).toBe(0.5);
-            expect(j.rpartial(divide, 3)(12)).toBe(4);
-            expect(truncate(j.rpartial(divide)(4, 12))).toBe(0.333);
+            assert.equal(j.rpartial(divide, 6, 12)(), 0.5);
+            assert.equal(j.rpartial(divide, 3)(12), 4);
+            assert.equal(truncate(j.rpartial(divide)(4, 12)), 0.333);
         });
 
     });
@@ -254,7 +255,7 @@ describe('jfp core', function () {
 
             j.repeat(spy)(1)();
 
-            expect(callCount).toBe(1);
+            assert.equal(callCount, 1);
         });
 
         it('should repeat an operation multiple times', function () {
@@ -266,7 +267,7 @@ describe('jfp core', function () {
 
             j.repeat(spy)(5)();
 
-            expect(callCount).toBe(5);
+            assert.equal(callCount, 5);
         });
 
         it('should repeat with previous result', function () {
@@ -276,10 +277,14 @@ describe('jfp core', function () {
                 };
             }
 
-            expect(j.repeat(j.inc)(5)(2)).toBe(7);
-            expect(repeatStr('a')(5)).toBe('aaaaa');
+            assert.equal(j.repeat(j.inc)(5)(2), 7);
+            assert.equal(repeatStr('a')(5), 'aaaaa');
         });
 
     });
 
 });
+
+if(typeof global.runQuokkaMochaBdd === 'function') {
+    runQuokkaMochaBdd();
+}

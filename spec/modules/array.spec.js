@@ -1,6 +1,7 @@
 var j = require('../../dist/jfp');
 var timer = require('../timer/test-timer')();
 var signet = require('signet')();
+var assert = require('chai').assert;
 
 describe('jfp array', function () {
 
@@ -22,13 +23,13 @@ describe('jfp array', function () {
 
             var result = nth(1)(values);
 
-            expect(result).toBe(2);
+            assert.equal(result, 2);
         });
 
         it('should return null if value is undefined', function () {
             var result = j.nth(1)([]);
 
-            expect(j.isTypeOf('null')(result)).toBe(true);
+            assert.equal(j.isTypeOf('null')(result), true);
         });
 
     });
@@ -36,12 +37,12 @@ describe('jfp array', function () {
     describe('first', function () {
 
         it('should return first element of an array', function () {
-            expect(j.first([1, 2, 3])).toBe(1);
+            assert.equal(j.first([1, 2, 3]), 1);
         });
 
         it('should return null if first element does not exist', function () {
             var result = j.first([]);
-            expect(j.isTypeOf('null')(result)).toBe(true);
+            assert.equal(j.isTypeOf('null')(result), true);
         });
 
     });
@@ -50,7 +51,7 @@ describe('jfp array', function () {
 
         it('should return a new array without the first element', function () {
             var result = j.rest([1, 2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[2,3,4]');
+            assert.equal(JSON.stringify(result), '[2,3,4]');
         });
 
     });
@@ -58,11 +59,11 @@ describe('jfp array', function () {
     describe('lastIndexOf', function () {
 
         it('should return final index of an array', function () {
-            expect(j.lastIndexOf([1, 2, 3, 4])).toBe(3);
+            assert.equal(j.lastIndexOf([1, 2, 3, 4]), 3);
         });
 
         it('should return correct final index of an array', function () {
-            expect(j.lastIndexOf([])).toBe(0);
+            assert.equal(j.lastIndexOf([]), 0);
         });
 
     });
@@ -71,12 +72,12 @@ describe('jfp array', function () {
 
         it('should take the first 1 elements', function () {
             var result = j.take(1)([1, 2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[1]');
+            assert.equal(JSON.stringify(result), '[1]');
         });
 
         it('should take the all elements if length is too big', function () {
             var result = j.take(9)([1, 2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[1,2,3,4]');
+            assert.equal(JSON.stringify(result), '[1,2,3,4]');
         });
 
     });
@@ -87,14 +88,14 @@ describe('jfp array', function () {
             var isEven = j.compose(j.equal(0), j.modBy(2));
             var result = j.takeUntil(isEven)([1, 3, 5, 6, 7, 8, 9]);
 
-            expect(JSON.stringify(result)).toBe('[1,3,5]');
+            assert.equal(JSON.stringify(result), '[1,3,5]');
         });
 
         it('should take all elements if predicate is never satisfied', function () {
             var isEven = j.compose(j.equal(0), j.modBy(2));
             var result = j.takeUntil(isEven)([1, 3, 5, 7, 9]);
 
-            expect(JSON.stringify(result)).toBe('[1,3,5,7,9]');
+            assert.equal(JSON.stringify(result), '[1,3,5,7,9]');
         });
     });
 
@@ -102,12 +103,12 @@ describe('jfp array', function () {
 
         it('should drop 0th element', function () {
             var result = j.dropNth(0)([1, 2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[2,3,4]');
+            assert.equal(JSON.stringify(result), '[2,3,4]');
         });
 
         it('should drop 3rd element', function () {
             var result = j.dropNth(2)([1, 2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[1,2,4]');
+            assert.equal(JSON.stringify(result), '[1,2,4]');
         });
 
     });
@@ -116,13 +117,13 @@ describe('jfp array', function () {
 
         it('should return a reversed array', function () {
             var result = j.reverse([1, 2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[4,3,2,1]');
+            assert.equal(JSON.stringify(result), '[4,3,2,1]');
         });
 
         it('should not reverse array in place', function () {
             var original = [1, 2, 3, 4];
             var result = j.reverse(original);
-            expect(JSON.stringify(original)).toBe('[1,2,3,4]');
+            assert.equal(JSON.stringify(original), '[1,2,3,4]');
         });
 
     });
@@ -134,15 +135,15 @@ describe('jfp array', function () {
         }
 
         it('should add no values', function () {
-            expect(j.foldl(add, 0)([])).toBe(0);
+            assert.equal(j.foldl(add, 0)([]), 0);
         });
 
         it('should add the initial value and a single value', function () {
-            expect(j.foldl(add, 0)([1])).toBe(1);
+            assert.equal(j.foldl(add, 0)([1]), 1);
         });
 
         it('should add the initial value and multiple values', function () {
-            expect(j.foldl(add)([1, 2, 3, 4])).toBe(10);
+            assert.equal(j.foldl(add)([1, 2, 3, 4]), 10);
         });
 
     });
@@ -154,7 +155,7 @@ describe('jfp array', function () {
         }
 
         it('should fold from right to left', function () {
-            expect(j.foldr(reverseDivide, 1)([12, 36, 6, 2])).toBe(1.2);
+            assert.equal(j.foldr(reverseDivide, 1)([12, 36, 6, 2]), 1.2);
         });
 
     });
@@ -165,7 +166,7 @@ describe('jfp array', function () {
 
         it('should remove all non-integer values', function () {
             var result = j.filter(isInt)([1.2, 3, 4.4, 5, 6]);
-            expect(JSON.stringify(result)).toBe('[3,5,6]');
+            assert.equal(JSON.stringify(result), '[3,5,6]');
         });
 
     });
@@ -178,7 +179,7 @@ describe('jfp array', function () {
 
         it('should triple all values', function () {
             var result = j.map(triple)([1, 2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[3,6,9,12]');
+            assert.equal(JSON.stringify(result), '[3,6,9,12]');
         });
 
     });
@@ -186,15 +187,15 @@ describe('jfp array', function () {
     describe('rreduce', function () {
 
         it('should add all values in a 1D array', function () {
-            expect(j.rreduce(j.add)([1, 2, 3, 4])).toBe(10);
+            assert.equal(j.rreduce(j.add)([1, 2, 3, 4]), 10);
         });
 
         it('should add all values with an initial value', function () {
-            expect(j.rreduce(j.add, 5)([3, 4, 5, 6])).toBe(23);
+            assert.equal(j.rreduce(j.add, 5)([3, 4, 5, 6]), 23);
         });
 
         it('should add all values in a nested list', function () {
-            expect(j.rreduce(j.add)([3, [4, [5, 6]]])).toBe(18);
+            assert.equal(j.rreduce(j.add)([3, [4, [5, 6]]]), 18);
         });
 
     });
@@ -205,7 +206,7 @@ describe('jfp array', function () {
 
         it('should filter recursively and return a flat array', function () {
             var result = j.rfilter(isEven)([1, 2, [3, 4, [5, 6, 7]]]);
-            expect(JSON.stringify(result)).toBe('[2,4,6]');
+            assert.equal(JSON.stringify(result), '[2,4,6]');
         });
 
     });
@@ -214,7 +215,7 @@ describe('jfp array', function () {
 
         it('should filter recursively and return a flat array', function () {
             var result = j.rmap(j.multiplyBy(3))([1, 2, [3, 4, [5, 6, 7]]]);
-            expect(JSON.stringify(result)).toBe('[3,6,9,12,15,18,21]');
+            assert.equal(JSON.stringify(result), '[3,6,9,12,15,18,21]');
         });
 
     });
@@ -224,11 +225,11 @@ describe('jfp array', function () {
         var isInt = j.isTypeOf('int');
 
         it('should return true if array contains an element which matches predicate', function () {
-            expect(j.some(isInt)([1, 2, 3, 4])).toBe(true);
+            assert.equal(j.some(isInt)([1, 2, 3, 4]), true);
         });
 
         it('should return false if array contains no an element which matches predicate', function () {
-            expect(j.some(isInt)([1.1, 2.2, 3.3, 4.4])).toBe(false);
+            assert.equal(j.some(isInt)([1.1, 2.2, 3.3, 4.4]), false);
         });
 
     });
@@ -238,11 +239,11 @@ describe('jfp array', function () {
         var isInt = j.isTypeOf('int');
 
         it('should return false if array contains an element which matches predicate', function () {
-            expect(j.none(isInt)([1, 2, 3, 4])).toBe(false);
+            assert.equal(j.none(isInt)([1, 2, 3, 4]), false);
         });
 
         it('should return true if array contains no an element which matches predicate', function () {
-            expect(j.none(isInt)([1.1, 2.2, 3.3, 4.4])).toBe(true);
+            assert.equal(j.none(isInt)([1.1, 2.2, 3.3, 4.4]), true);
         });
 
     });
@@ -252,15 +253,15 @@ describe('jfp array', function () {
         var isInt = j.isTypeOf('int');
 
         it('should return true if all elements of array match predicate', function () {
-            expect(j.all(isInt)([1, 2, 3, 4])).toBe(true);
+            assert.equal(j.all(isInt)([1, 2, 3, 4]), true);
         });
 
         it('should return false if no elements of array match predicate', function () {
-            expect(j.all(isInt)([1.1, 2.2, 3.3, 4.4])).toBe(false);
+            assert.equal(j.all(isInt)([1.1, 2.2, 3.3, 4.4]), false);
         });
 
         it('should return false if some, but not all elements of array match predicate', function () {
-            expect(j.all(isInt)([1.1, 2, 3.3, 4.4])).toBe(false);
+            assert.equal(j.all(isInt)([1.1, 2, 3.3, 4.4]), false);
         });
 
     });
@@ -270,12 +271,12 @@ describe('jfp array', function () {
         var isEven = j.compose(j.equal(0), j.modBy(2));
 
         it('should return a found element', function () {
-            expect(j.find(isEven)([1, 2, 3, 4])).toBe(2);
+            assert.equal(j.find(isEven)([1, 2, 3, 4]), 2);
         });
 
         it('should return null if no element is found', function () {
             var result = j.find(isEven)([1, 3, 5, 7]);
-            expect(result).toBe(null);
+            assert.equal(result, null);
         });
 
     });
@@ -283,7 +284,7 @@ describe('jfp array', function () {
     describe('compact', function () {
 
         it('should remove all falsey values from an array', function () {
-            expect(JSON.stringify(j.compact([1, 2, 0, false, '', null, 3]))).toBe('[1,2,3]');
+            assert.equal(JSON.stringify(j.compact([1, 2, 0, false, '', null, 3])), '[1,2,3]');
         });
 
     });
@@ -291,12 +292,12 @@ describe('jfp array', function () {
     describe('sort', function () {
         it('should sort using standard sort', function () {
             var result = j.sort()([2, 3, 1, 5, 4]);
-            expect(JSON.stringify(result)).toBe('[1,2,3,4,5]');
+            assert.equal(JSON.stringify(result), '[1,2,3,4,5]');
         });
 
         it('should sort using standard sort', function () {
             var result = j.sort(j.reverseArgs(j.subtract))([2, 3, 1, 5, 4]);
-            expect(JSON.stringify(result)).toBe('[5,4,3,2,1]');
+            assert.equal(JSON.stringify(result), '[5,4,3,2,1]');
         });
     });
 
@@ -305,7 +306,7 @@ describe('jfp array', function () {
         it('should partition array on predicate', function () {
             var isEven = j.compose(j.equal(0), j.modBy(2));
             var result = j.partition(isEven)([1, 2, 3, 4]);
-            expect(JSON.stringify(result)).toBe('[[2,4],[1,3]]');
+            assert.equal(JSON.stringify(result), '[[2,4],[1,3]]');
         });
 
     });
@@ -315,7 +316,7 @@ describe('jfp array', function () {
         it('should partition array on predicate', function () {
             var isEven = j.compose(j.equal(0), j.modBy(2));
             var result = j.rpartition(isEven)([1, [2, [3, [4]]]]);
-            expect(JSON.stringify(result)).toBe('[[2,4],[1,3]]');
+            assert.equal(JSON.stringify(result), '[[2,4],[1,3]]');
         });
 
     });

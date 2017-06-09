@@ -2,7 +2,7 @@
   "name": "jfp",
   "description": "A language as a library borrowing concepts from Lisp, Haskell and Scala. JFP contains functions which allow for gentle adoption of functional programming ideas for developers who are new to the functional paradigm. JFP embraces the dynamic nature of Javascript while supporting safe data typing.",
   "main": "dist/jfp.js",
-  "version": "4.2.2",
+  "version": "4.3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/cmstead/JFP.git"
@@ -13,14 +13,23 @@
   },
   "quokka": {
     "plugins": [
-      "quokka-mocha-bdd"
+      "quokka-mocha-bdd",
+      "quokka-signet-explorer",
+      "quokka-prerun"
     ],
     "quokka-mocha-bdd": {
       "interface": "bdd"
+    },
+    "quokka-prerun": {
+      "prerunCommands": [
+        "grunt build-only"
+      ]
     }
   },
   "devDependencies": {
     "async": "^1.5.0",
+    "chai": "^4.0.2",
+    "eslint": "^3.19.0",
     "flow-bin": "^0.47.0",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
@@ -31,10 +40,12 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-jasmine-nodejs": "^1.4.0",
     "quokka-mocha-bdd": "^1.1.0",
+    "quokka-prerun": "^1.0.0",
+    "quokka-signet-explorer": "^1.0.1",
     "sinon": "^1.17.5",
     "uglify-js": "^2.4.15"
   },
   "dependencies": {
-    "signet": "3.11.3"
+    "signet": "3.11.5"
   }
 }

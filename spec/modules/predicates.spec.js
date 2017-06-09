@@ -1,5 +1,6 @@
 var j = require('../../dist/jfp.min');
 var timer = require('../timer/test-timer')();
+var assert = require('chai').assert;
 
 describe('jfp predicates', function () {
 
@@ -17,11 +18,11 @@ describe('jfp predicates', function () {
     describe('equal', function () {
 
         it('should return true when two values are equal', function () {
-            expect(j.equal(10)(10)).toBe(true);
+            assert.equal(j.equal(10)(10), true);
         });
 
         it('should return false when two values are not equal', function () {
-            expect(j.equal(10)(12)).toBe(false);
+            assert.equal(j.equal(10)(12), false);
         });
 
     });
@@ -29,11 +30,11 @@ describe('jfp predicates', function () {
     describe('not', function () {
 
         it('should return false when passed true', function () {
-            expect(j.not(true)).toBe(false);
+            assert.equal(j.not(true), false);
         });
 
         it('should return true when passed false', function () {
-            expect(j.not(false)).toBe(true);
+            assert.equal(j.not(false), true);
         });
 
     });
@@ -41,13 +42,13 @@ describe('jfp predicates', function () {
     describe('and', function () {
 
         it('should perform a positive conjunction', function () {
-            expect(j.and(true)(true)).toBe(true);
-            expect(j.and(5)('foo')).toBe(true);
+            assert.equal(j.and(true)(true), true);
+            assert.equal(j.and(5)('foo'), true);
         });
 
         it('should perform a negative conjunction', function () {
-            expect(j.and(true)(false)).toBe(false);
-            expect(j.and(5)('')).toBe(false);
+            assert.equal(j.and(true)(false), false);
+            assert.equal(j.and(5)(''), false);
         });
 
     });
@@ -55,13 +56,13 @@ describe('jfp predicates', function () {
     describe('or', function () {
 
         it('should perform a positive disjunction', function () {
-            expect(j.or(true)(false)).toBe(true);
-            expect(j.or(5)('')).toBe(true);
+            assert.equal(j.or(true)(false), true);
+            assert.equal(j.or(5)(''), true);
         });
 
         it('should perform a negative disjunction', function () {
-            expect(j.or(false)(false)).toBe(false);
-            expect(j.or(0)('')).toBe(false);
+            assert.equal(j.or(false)(false), false);
+            assert.equal(j.or(0)(''), false);
         });
 
     });
@@ -69,16 +70,20 @@ describe('jfp predicates', function () {
     describe('xor', function () {
 
         it('should perform a positive exclusive or behavior', function () {
-            expect(j.xor(true)(false)).toBe(true);
-            expect(j.xor(5)('')).toBe(true);
+            assert.equal(j.xor(true)(false), true);
+            assert.equal(j.xor(5)(''), true);
         });
 
         it('should perform a negative exclusive or behavior', function () {
-            expect(j.xor(true)(true)).toBe(false);
-            expect(j.xor(false)(false)).toBe(false);
-            expect(j.xor(0)('')).toBe(false);
+            assert.equal(j.xor(true)(true), false);
+            assert.equal(j.xor(false)(false), false);
+            assert.equal(j.xor(0)(''), false);
         });
 
     });
 
 });
+
+if(typeof global.runQuokkaMochaBdd === 'function') {
+    runQuokkaMochaBdd();
+}
