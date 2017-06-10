@@ -68,7 +68,7 @@
 
     function filterer(pred) {
         return function (result, value) {
-            return pred(value) ? pushUnsafe(result)(value) : result; //j.conj(value, result) : result;
+            return pred(value) ? pushUnsafe(result)(value) : result;
         };
     }
 
