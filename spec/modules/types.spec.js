@@ -50,6 +50,14 @@ describe('jfp types', function () {
         });
         
     });
+
+    describe('natural', function () {
+        
+        it('should return true if value is a natural number', function () {
+            assert.equal(j.isTypeOf('natural')(1), true);
+        });
+
+    });
     
     describe('signet', function () {
         
