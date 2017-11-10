@@ -1,0 +1,237 @@
+<html>
+
+<head>
+    <title>Mochadoc Test Documentation</title>
+
+    <link rel="stylesheet" href="../assets/doc-style.css" media="screen">
+    <link rel="stylesheet" href="../assets/github-gist.css" media="screen">
+</head>
+
+<body>
+    <header>
+        <a href="../index.html"><span id="library-name">JFP</span>
+        <span id="subtitle">Mochadoc-Generated Test Documents</span></a>
+    </header>
+
+    <div class="content">
+        <h1>jfp types</h1>
+
+<ul>
+    <li>
+    <h3>isTypeOf</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should perform a curried type check</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;array&#x27;)([]), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>nil</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>Should return a nil value</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;nil&#x27;)(j.nil), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>Should return new nil value every time</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.notEqual(j.nil, j.nil);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>maybe</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should always verify null</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;maybe&lt;number&gt;&#x27;)(null), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should always verify specified type</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;maybe&lt;number&gt;&#x27;)(42), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should always fail on bad value</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;maybe&lt;number&gt;&#x27;)(&#x27;foo&#x27;), false);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>natural</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return true if value is a natural number</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;natural&#x27;)(1), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>signet</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should verify a duck-typed signet instance</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;signet&#x27;)(signet()), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should fail a bad object</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;signet&#x27;)({}), false);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>numeric</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should verify numbers</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;numeric&#x27;)(42), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should verify numeric strings</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;numeric&#x27;)(&#x27;1234.567&#x27;), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should fail non-numeric strings</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/types.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;numeric&#x27;)(&#x27;aaa1234.567&#x27;), false);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+</ul>
+    </div>
+
+    <script src="../assets/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</body>
+
+</html>

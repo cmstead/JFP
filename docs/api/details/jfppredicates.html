@@ -1,0 +1,209 @@
+<html>
+
+<head>
+    <title>Mochadoc Test Documentation</title>
+
+    <link rel="stylesheet" href="../assets/doc-style.css" media="screen">
+    <link rel="stylesheet" href="../assets/github-gist.css" media="screen">
+</head>
+
+<body>
+    <header>
+        <a href="../index.html"><span id="library-name">JFP</span>
+        <span id="subtitle">Mochadoc-Generated Test Documents</span></a>
+    </header>
+
+    <div class="content">
+        <h1>jfp predicates</h1>
+
+<ul>
+    <li>
+    <h3>equal</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return true when two values are equal</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/predicates.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.equal(10)(10), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return false when two values are not equal</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/predicates.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.equal(10)(12), false);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>not</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return false when passed true</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/predicates.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.not(true), false);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return true when passed false</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/predicates.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.not(false), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>and</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should perform a positive conjunction</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/predicates.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.and(true)(true), true);
+            assert.equal(j.and(5)(&#x27;foo&#x27;), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should perform a negative conjunction</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/predicates.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.and(true)(false), false);
+            assert.equal(j.and(5)(&#x27;&#x27;), false);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>or</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should perform a positive disjunction</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/predicates.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.or(true)(false), true);
+            assert.equal(j.or(5)(&#x27;&#x27;), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should perform a negative disjunction</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/predicates.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.or(false)(false), false);
+            assert.equal(j.or(0)(&#x27;&#x27;), false);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>xor</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should perform a positive exclusive or behavior</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/predicates.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.xor(true)(false), true);
+            assert.equal(j.xor(5)(&#x27;&#x27;), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should perform a negative exclusive or behavior</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/predicates.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.xor(true)(true), false);
+            assert.equal(j.xor(false)(false), false);
+            assert.equal(j.xor(0)(&#x27;&#x27;), false);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+</ul>
+    </div>
+
+    <script src="../assets/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</body>
+
+</html>

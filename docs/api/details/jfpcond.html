@@ -1,0 +1,87 @@
+<html>
+
+<head>
+    <title>Mochadoc Test Documentation</title>
+
+    <link rel="stylesheet" href="../assets/doc-style.css" media="screen">
+    <link rel="stylesheet" href="../assets/github-gist.css" media="screen">
+</head>
+
+<body>
+    <header>
+        <a href="../index.html"><span id="library-name">JFP</span>
+        <span id="subtitle">Mochadoc-Generated Test Documents</span></a>
+    </header>
+
+    <div class="content">
+        <h1>jfp cond</h1>
+
+<ul>
+    <ul>
+    <li>
+        <strong>should work as an expression</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/cond.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+        assert.equal(condTest1(2), &#x27;two&#x27;);
+    }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should throw an error if value is out of bounds and no default is set</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/cond.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+        assert.throws(j.partial(condTest1, 5));
+    }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should execute default if no other condition is satisfied</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/cond.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+        assert.equal(condTest2(5), &#x27;too big!&#x27;);
+    }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should compute factorial properly</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/cond.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+        assert.equal(fac(5), 120);
+    }
+            </code>
+        </pre>
+    </li>
+</ul>
+</ul>
+    </div>
+
+    <script src="../assets/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</body>
+
+</html>

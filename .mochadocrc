@@ -1,0 +1,5 @@
+{
+    "projectName": "JFP",
+    "files": "./spec/**/*.spec.js",
+    "dest": "./docs/api/"
+}

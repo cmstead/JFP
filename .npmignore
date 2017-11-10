@@ -4,3 +4,4 @@ spec/
 scripts/
 grunt/
 dist/*.min.js
+docs/

@@ -1,0 +1,611 @@
+<html>
+
+<head>
+    <title>Mochadoc Test Documentation</title>
+
+    <link rel="stylesheet" href="../assets/doc-style.css" media="screen">
+    <link rel="stylesheet" href="../assets/github-gist.css" media="screen">
+</head>
+
+<body>
+    <header>
+        <a href="../index.html"><span id="library-name">JFP</span>
+        <span id="subtitle">Mochadoc-Generated Test Documents</span></a>
+    </header>
+
+    <div class="content">
+        <h1>jfp core</h1>
+
+<ul>
+    <li>
+    <h3>maybe</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return null if value is not a type match</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.maybe(&#x27;number&#x27;)(&#x27;foo&#x27;);
+
+            assert.equal(isNull(result), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return value if value is a type match</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.maybe(&#x27;string&#x27;)(&#x27;foo&#x27;);
+
+            assert.equal(result, &#x27;foo&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should take a predicate function in place of a type</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var isEven &#x3D; j.compose(j.equal(0), j.modBy(2));
+
+            assert.equal(isNull(j.maybe(isEven)(3)), true);
+            assert.equal(j.maybe(isEven)(4), 4);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>either</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return value if value matches type</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.either(&#x27;number&#x27;)(0)(42), 42);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return default value if value does not match type</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.either(&#x27;number&#x27;)(0)(&#x27;foo&#x27;), 0);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should take a predicate function in place of a type</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var isEven &#x3D; j.compose(j.equal(0), j.modBy(2));
+            assert.equal(j.either(isEven)(0)(3), 0);
+            assert.equal(j.either(isEven)(0)(4), 4);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>identity</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return passed value</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.identity(&#x27;foo&#x27;), &#x27;foo&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>always</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return bound value </strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.always(&#x27;foo&#x27;)(), &#x27;foo&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>cons</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return new array with value prepended</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.cons(1, [2, 3, 4]);
+            assert.equal(JSON.stringify(result), &#x27;[1,2,3,4]&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return new array without undefined prepended</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.cons(undefined, [2, 3, 4]);
+            assert.equal(JSON.stringify(result), &#x27;[2,3,4]&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>conj</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return new array with value prepended</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.conj(1, [2, 3, 4]);
+            assert.equal(JSON.stringify(result), &#x27;[2,3,4,1]&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return new array without undefined prepended</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.conj(undefined, [2, 3, 4]);
+            assert.equal(JSON.stringify(result), &#x27;[2,3,4]&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>slice</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should slice starting at an initial index</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.slice(1)([1, 2, 3, 4]);
+            assert.equal(JSON.stringify(result), &#x27;[2,3,4]&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should slice slice from index to length</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.slice(1, 3)([1, 2, 3, 4]);
+            assert.equal(JSON.stringify(result), &#x27;[2,3]&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>recur</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should evaluate fac 0 correctly</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.recur(fac)(0), 1);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should evaluate fac 1 correctly</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.recur(fac)(1), 1);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should evaluate fac 2 correctly</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.recur(fac)(2), 2);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should evaluate fac 30 correctly</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.recur(fac)(30), 2.652528598121911e+32);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>compose</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should compose two functions</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var compute &#x3D; j.compose(inc, multiplyBy(2));
+
+            assert.equal(compute(5), 11);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>foldlCompose</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should compose multiple functions</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var compute &#x3D; j.foldlCompose(inc, multiplyBy(3), multiplyBy(1/2));
+
+            assert.equal(compute(6), 10);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>rcompose</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should compose two functions in reading order</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var compute &#x3D; j.rcompose(inc, multiplyBy(2));
+
+            assert.equal(compute(5), 12);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>foldrCompose</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should compose multiple functions in reading order</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var compute &#x3D; j.foldrCompose(inc, multiplyBy(3), multiplyBy(1/2));
+
+            assert.equal(compute(6), 10.5);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>curry</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return a function which can be called as usual</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.curry(add3Vals)(1, 2, 3), 6);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return a curried function</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.curry(add3Vals)(1)(2)(4), 7);
+            assert.equal(j.curry(add3Vals)(1, 2)(5), 8);
+            assert.equal(j.curry(add3Vals)(1)(2, 6), 9);
+            assert.equal(j.curry(add3Vals)()()()(1)(2, 4), 7);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should curry to a specified length</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(typeof j.curry(add3Vals, 4)(1, 2, 3), &#x27;function&#x27;);
+            assert.equal(typeof j.curry(add3Vals, 4)(1, 2, 3, 4), &#x27;number&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>partial</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should partially apply arguments to a function</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.partial(add, 5, 6)(), 11);
+            assert.equal(j.partial(add, 6)(7), 13);
+            assert.equal(j.partial(add)(7, 8), 15);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>rpartial</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should partially apply arguments to a function from right to left</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.rpartial(divide, 6, 12)(), 0.5);
+            assert.equal(j.rpartial(divide, 3)(12), 4);
+            assert.equal(truncate(j.rpartial(divide)(4, 12)), 0.333);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>repeat</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should repeat an operation one time</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var callCount &#x3D; 0;
+
+            function spy() {
+                callCount++;
+            }
+
+            j.repeat(spy)(1)();
+
+            assert.equal(callCount, 1);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should repeat an operation multiple times</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var callCount &#x3D; 0;
+
+            function spy() {
+                callCount++;
+            }
+
+            j.repeat(spy)(5)();
+
+            assert.equal(callCount, 5);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should repeat with previous result</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/core.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            function repeatStr(astr) {
+                return function (count) {
+                    return j.repeat(j.concat(astr))(count)(&#x27;&#x27;);
+                };
+            }
+
+            assert.equal(j.repeat(j.inc)(5)(2), 7);
+            assert.equal(repeatStr(&#x27;a&#x27;)(5), &#x27;aaaaa&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+</ul>
+    </div>
+
+    <script src="../assets/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</body>
+
+</html>

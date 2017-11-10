@@ -1,0 +1,319 @@
+<html>
+
+<head>
+    <title>Mochadoc Test Documentation</title>
+
+    <link rel="stylesheet" href="../assets/doc-style.css" media="screen">
+    <link rel="stylesheet" href="../assets/github-gist.css" media="screen">
+</head>
+
+<body>
+    <header>
+        <a href="../index.html"><span id="library-name">JFP</span>
+        <span id="subtitle">Mochadoc-Generated Test Documents</span></a>
+    </header>
+
+    <div class="content">
+        <h1>jfp object</h1>
+
+<ul>
+    <li>
+    <h3>pick</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should pick a value from an object by key</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var testObj &#x3D; { foo: &#x27;bar&#x27; };
+            assert.equal(j.pick(&#x27;foo&#x27;)(testObj), &#x27;bar&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return null if value does not exist</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var testObj &#x3D; { foo: &#x27;bar&#x27; };
+            assert.equal(j.isTypeOf(&#x27;null&#x27;)(j.pick(&#x27;bar&#x27;)(testObj)), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return null if object is null</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.isTypeOf(&#x27;null&#x27;)(j.pick(&#x27;bar&#x27;)(null)), true);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>deref</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should return a value for a single layer dereference</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.deref(&#x27;foo&#x27;)(testObj), testObj.foo);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return a null for a bad reference</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.deref(&#x27;blar&#x27;)(testObj), null);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should return a value for a multiple layer dereference</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            assert.equal(j.deref(&#x27;foo.bar.baz.1&#x27;)(testObj), 2);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>merge</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should merge two objects left to right</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+
+            var objA &#x3D; {
+                test1: &#x27;test1a&#x27;,
+                test2: &#x27;test2a&#x27;
+            };
+
+            var objB &#x3D; {
+                test2: &#x27;test2b&#x27;,
+                test3: &#x27;test2c&#x27;
+            };
+
+            var expected &#x3D; {
+                test1: &#x27;test1a&#x27;,
+                test2: &#x27;test2b&#x27;,
+                test3: &#x27;test2c&#x27;
+            };
+
+            var result &#x3D; j.merge(objA, objB);
+
+            assert.notEqual(result, objA);
+            assert.notEqual(result, objB);
+            assert.equal(JSON.stringify(result), JSON.stringify(expected));
+
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>toArray</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should convert an empty object to an empty array</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.toArray({});
+            assert.equal(JSON.stringify(result), &#x27;[]&#x27;)
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should convert an object to an array of tuples</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.toArray({ foo: &#x27;bar&#x27;, baz: &#x27;quux&#x27; });
+            assert.equal(JSON.stringify(result), &#x27;[[&quot;foo&quot;,&quot;bar&quot;],[&quot;baz&quot;,&quot;quux&quot;]]&#x27;)
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>toObject</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should convert an empty array to an empty object</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.toObject([]);
+            assert.equal(JSON.stringify(result), &#x27;{}&#x27;)
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should convert an array of tuples to object</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.toObject([[&#x27;foo&#x27;, &#x27;bar&#x27;], [&#x27;baz&#x27;, &#x27;quux&#x27;]]);
+            assert.equal(JSON.stringify(result), &#x27;{&quot;foo&quot;:&quot;bar&quot;,&quot;baz&quot;:&quot;quux&quot;}&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>toValues</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should convert an object to an array of values</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var result &#x3D; j.toValues({ foo: &#x27;bar&#x27;, baz: &#x27;quux&#x27; });
+            assert.equal(JSON.stringify(result), &#x27;[&quot;bar&quot;,&quot;quux&quot;]&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+<li>
+    <h3>clone</h3>
+    <ul>
+        <ul>
+    <li>
+        <strong>should copy an object</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var obj &#x3D; {
+                foo: &#x27;bar&#x27;,
+                baz: {
+                    quux: [1, 2, 3, 4]
+                }
+            };
+            var result &#x3D; j.clone(obj);
+
+            assert.notEqual(obj, result);
+            assert.notEqual(obj.baz, result.baz);
+            assert.notEqual(obj.baz.quux, result.baz.quux);
+
+            assert.equal(JSON.stringify(obj), JSON.stringify(result));
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+<ul>
+    <li>
+        <strong>should throw an error if object is circular or too deep</strong>
+    </li>
+    <li>File location: <span class="filename">./spec/modules/object.spec.js</span></li>
+    <li>
+        <pre>
+            <code>
+        function () {
+            var obj &#x3D; {
+                foo: {}
+            };
+
+            obj.foo.bar &#x3D; obj;
+
+            assert.throws(j.partial(j.clone, obj), &#x27;Object is circular or too deep to clone.&#x27;);
+        }
+            </code>
+        </pre>
+    </li>
+</ul>
+    </ul>
+</li>
+</ul>
+    </div>
+
+    <script src="../assets/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</body>
+
+</html>
